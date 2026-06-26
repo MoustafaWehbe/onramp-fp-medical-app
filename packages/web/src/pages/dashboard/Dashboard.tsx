@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { Button } from "../../components/ui/button";
 import {
   Card,
   CardContent,
@@ -19,12 +21,41 @@ export function Dashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Getting Started</CardTitle>
+            <CardTitle className="text-base">Current Health Status</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              Your starter kit is ready. Start building your features here.
+              Your latest health snapshot will appear here.
             </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Recent Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              Your most recent log entries will appear here.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <Link to="/log/new">
+              <Button variant="default" className="w-full">
+                New Daily Log
+              </Button>
+            </Link>
+            <Link to="/ai-reports/generate">
+              <Button variant="outline" className="w-full">
+                Generate Report
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </div>

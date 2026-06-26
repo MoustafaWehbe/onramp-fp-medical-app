@@ -14,7 +14,7 @@ export function Settings() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
-        <p className="text-muted-foreground">Manage your account settings.</p>
+        <p className="text-muted-foreground">Manage your account information.</p>
       </div>
 
       <Card>
@@ -35,6 +35,42 @@ export function Settings() {
             <span className="text-muted-foreground">Role</span>
             <span className="capitalize">{user?.role}</span>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Update Email</CardTitle>
+          <CardDescription>Change your email address</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">
+            Email change form will appear here.
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Change Password</CardTitle>
+          <CardDescription>Update your account password</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">
+            Password change form will appear here.
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-destructive">Delete Account</CardTitle>
+          <CardDescription>Permanently delete your account and all data</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">
+            Account deletion controls will appear here.
+          </p>
         </CardContent>
       </Card>
     </div>
