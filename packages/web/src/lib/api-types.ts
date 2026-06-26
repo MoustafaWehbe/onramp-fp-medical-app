@@ -95,6 +95,661 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/users/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the logged-in user's own profile */
+        get: operations["getUsersMe"];
+        put?: never;
+        post?: never;
+        /** Delete the account and cascade all owned data */
+        delete: operations["deleteUsersMe"];
+        options?: never;
+        head?: never;
+        /** Update email and/or password */
+        patch: operations["updateUsersMe"];
+        trace?: never;
+    };
+    "/admin/system-health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Server uptime / status check */
+        get: operations["getSystemHealth"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/metrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Operational metrics — never patient data */
+        get: operations["getAdminMetrics"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/catalog/symptoms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List standard symptoms */
+        get: operations["getCatalogSymptoms"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/catalog/conditions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List standard conditions */
+        get: operations["getCatalogConditions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/catalog/medications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List standard medications */
+        get: operations["getCatalogMedications"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/conditions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List the current user's tracked conditions */
+        get: operations["getConditions"];
+        put?: never;
+        /** Add a condition (catalog-linked or custom) */
+        post: operations["createCondition"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/conditions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Soft-delete a tracked condition */
+        delete: operations["deleteCondition"];
+        options?: never;
+        head?: never;
+        /** Update a tracked condition */
+        patch: operations["updateCondition"];
+        trace?: never;
+    };
+    "/conditions/{conditionId}/symptoms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conditionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Link a symptom to a condition */
+        post: operations["linkSymptomToCondition"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/conditions/{conditionId}/symptoms/{symptomId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conditionId: string;
+                symptomId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Unlink a symptom from a condition */
+        delete: operations["unlinkSymptomFromCondition"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/symptoms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List the current user's tracked symptoms */
+        get: operations["getSymptoms"];
+        put?: never;
+        /** Add a symptom to track (catalog-linked or custom) */
+        post: operations["createSymptom"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/symptoms/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Soft-delete a tracked symptom */
+        delete: operations["deleteSymptom"];
+        options?: never;
+        head?: never;
+        /** Rename or update a tracked symptom */
+        patch: operations["updateSymptom"];
+        trace?: never;
+    };
+    "/medications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List the user's personal medication registry */
+        get: operations["getMedications"];
+        put?: never;
+        /** Add a prescription (catalog-linked or custom) */
+        post: operations["createMedication"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/medications/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        /** Get a single medication detail */
+        get: operations["getMedication"];
+        put?: never;
+        post?: never;
+        /** Soft-delete a medication */
+        delete: operations["deleteMedication"];
+        options?: never;
+        head?: never;
+        /** Edit dosage, frequency, or notes */
+        patch: operations["updateMedication"];
+        trace?: never;
+    };
+    "/clinics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List the user's saved clinics */
+        get: operations["getClinics"];
+        put?: never;
+        /** Add a clinic (catalog-linked or custom) */
+        post: operations["createClinic"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/clinics/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Soft-delete a saved clinic */
+        delete: operations["deleteClinic"];
+        options?: never;
+        head?: never;
+        /** Edit a saved clinic */
+        patch: operations["updateClinic"];
+        trace?: never;
+    };
+    "/doctors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List the user's saved doctors */
+        get: operations["getDoctors"];
+        put?: never;
+        /** Add a doctor (optionally tied to a saved clinic) */
+        post: operations["createDoctor"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/doctors/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Soft-delete a saved doctor */
+        delete: operations["deleteDoctor"];
+        options?: never;
+        head?: never;
+        /** Edit a saved doctor */
+        patch: operations["updateDoctor"];
+        trace?: never;
+    };
+    "/entries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List entries in a date range */
+        get: operations["getEntries"];
+        put?: never;
+        /** Create today's entry with full nested payload */
+        post: operations["createEntry"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/entries/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        /** Full entry detail including nested symptoms/medications/conditions */
+        get: operations["getEntry"];
+        put?: never;
+        post?: never;
+        /** Remove an entry */
+        delete: operations["deleteEntry"];
+        options?: never;
+        head?: never;
+        /** Edit mood / sleep / notes for an entry */
+        patch: operations["updateEntry"];
+        trace?: never;
+    };
+    "/entries/{id}/symptoms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Log a symptom occurrence for an entry */
+        post: operations["createEntrySymptom"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/entries/{id}/symptoms/{entrySymptomId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                entrySymptomId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove a logged symptom */
+        delete: operations["deleteEntrySymptom"];
+        options?: never;
+        head?: never;
+        /** Edit a logged symptom */
+        patch: operations["updateEntrySymptom"];
+        trace?: never;
+    };
+    "/entries/{id}/medications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Check off a medication as taken for an entry */
+        post: operations["createEntryMedication"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/entries/{id}/medications/{entryMedicationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                entryMedicationId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove a logged medication entry */
+        delete: operations["deleteEntryMedication"];
+        options?: never;
+        head?: never;
+        /** Edit a logged medication entry */
+        patch: operations["updateEntryMedication"];
+        trace?: never;
+    };
+    "/entries/{id}/conditions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Log a condition's status for a specific day */
+        post: operations["createEntryCondition"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/entries/{id}/conditions/{entryConditionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                entryConditionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove a day-level condition status */
+        delete: operations["deleteEntryCondition"];
+        options?: never;
+        head?: never;
+        /** Edit a day-level condition status */
+        patch: operations["updateEntryCondition"];
+        trace?: never;
+    };
+    "/visits": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List all doctor visits, most recent first */
+        get: operations["getVisits"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/visits/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        /** Get a single visit detail */
+        get: operations["getVisit"];
+        put?: never;
+        post?: never;
+        /** Remove a logged visit */
+        delete: operations["deleteVisit"];
+        options?: never;
+        head?: never;
+        /** Edit the summary or notes of a visit */
+        patch: operations["updateVisit"];
+        trace?: never;
+    };
+    "/entries/{entryId}/visits": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entryId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Log a visit tied to a specific day's entry */
+        post: operations["createEntryVisit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/analytics/mood-sleep-trend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Time series of mood rating and sleep hours */
+        get: operations["getMoodSleepTrend"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/analytics/symptom-frequency": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tally of symptom occurrences over a time window */
+        get: operations["getSymptomFrequency"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/analytics/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bundled dashboard — mood/sleep trend + symptom frequency */
+        get: operations["getDashboard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/ai-reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List the user's previously generated reports */
+        get: operations["getAIReports"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/ai-reports/generate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Generate a new AI appointment prep report */
+        post: operations["generateAIReport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/ai-reports/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        /** Fetch a specific report formatted for printable view */
+        get: operations["getAIReport"];
+        put?: never;
+        post?: never;
+        /** Delete a saved report */
+        delete: operations["deleteAIReport"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -170,6 +825,542 @@ export interface components {
                 /** @example Invalid email address */
                 message?: string;
             }[];
+        };
+        RefreshBody: {
+            /** @example 8f2c... */
+            refreshToken: string;
+        };
+        LogoutBody: {
+            /** @example 8f2c... */
+            refreshToken: string;
+        };
+        UpdateUserBody: {
+            /**
+             * Format: email
+             * @example newemail@example.com
+             */
+            email?: string;
+            /** @example NewerP@ss1 */
+            password?: string;
+        };
+        UserProfile: {
+            /**
+             * Format: uuid
+             * @example 5b1f...-uuid
+             */
+            id?: string;
+            /**
+             * Format: email
+             * @example patient@example.com
+             */
+            email?: string;
+            /**
+             * Format: uuid
+             * @example owner-role-uuid
+             */
+            roleId?: string;
+            /**
+             * Format: date-time
+             * @example 2026-06-21T09:00:00Z
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @example 2026-06-21T09:00:00Z
+             */
+            updatedAt?: string;
+        };
+        CatalogSymptom: {
+            /** @example cat-sym-001 */
+            id?: string;
+            /** @example Headache */
+            name?: string;
+            /** @example Neurological */
+            category?: string;
+            /**
+             * Format: date-time
+             * @example 2026-01-10T00:00:00Z
+             */
+            createdAt?: string;
+        };
+        CatalogCondition: {
+            /** @example cat-cond-001 */
+            id?: string;
+            /** @example Rheumatoid Arthritis */
+            name?: string;
+            /** @example Autoimmune */
+            category?: string;
+            /**
+             * Format: date-time
+             * @example 2026-01-10T00:00:00Z
+             */
+            createdAt?: string;
+        };
+        CatalogMedication: {
+            /** @example cat-med-001 */
+            id?: string;
+            /** @example Ibuprofen */
+            name?: string;
+            /** @example 200mg */
+            strength?: string;
+            /** @example NSAID */
+            category?: string;
+            /**
+             * Format: date-time
+             * @example 2026-01-10T00:00:00Z
+             */
+            createdAt?: string;
+        };
+        UserCondition: {
+            /** @example ucond-001 */
+            id?: string;
+            /**
+             * Format: uuid
+             * @example 5b1f...-uuid
+             */
+            userId?: string;
+            /** @example cat-cond-001 */
+            conditionId?: string | null;
+            /** @example null */
+            customName?: string | null;
+            /** @example Diagnosed by rheumatologist */
+            description?: string | null;
+            /**
+             * Format: date
+             * @example 2024-03-12
+             */
+            diagnosedDate?: string;
+            /** @example active */
+            status?: string;
+            /** @example null */
+            notes?: string | null;
+            /** @example true */
+            active?: boolean;
+            /**
+             * Format: date-time
+             * @example 2026-01-15T00:00:00Z
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @example 2026-01-15T00:00:00Z
+             */
+            updatedAt?: string;
+        };
+        ConditionBody: {
+            /** @example cat-cond-001 */
+            conditionId?: string | null;
+            /** @example null */
+            customName?: string | null;
+            /** @example Diagnosed by rheumatologist */
+            description?: string | null;
+            /**
+             * Format: date
+             * @example 2024-03-12
+             */
+            diagnosedDate?: string;
+            /** @example active */
+            status?: string;
+            /** @example null */
+            notes?: string | null;
+        };
+        UserSymptom: {
+            /** @example usym-001 */
+            id?: string;
+            /**
+             * Format: uuid
+             * @example 5b1f...-uuid
+             */
+            userId?: string;
+            /** @example cat-sym-002 */
+            catalogId?: string | null;
+            /** @example null */
+            customName?: string | null;
+            /** @example true */
+            active?: boolean;
+            /**
+             * Format: date-time
+             * @example 2026-01-15T00:00:00Z
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @example 2026-01-15T00:00:00Z
+             */
+            updatedAt?: string;
+        };
+        SymptomBody: {
+            /** @example cat-sym-002 */
+            catalogId?: string | null;
+            /** @example null */
+            customName?: string | null;
+        };
+        UserMedication: {
+            /** @example umed-001 */
+            id?: string;
+            /**
+             * Format: uuid
+             * @example 5b1f...-uuid
+             */
+            userId?: string;
+            /** @example cat-med-001 */
+            medicationId?: string | null;
+            /** @example null */
+            customName?: string | null;
+            /** @example Twice daily */
+            frequency?: string;
+            /** @example Take with food */
+            notes?: string | null;
+            /** @example true */
+            active?: boolean;
+            /**
+             * Format: date-time
+             * @example 2026-01-15T00:00:00Z
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @example 2026-01-15T00:00:00Z
+             */
+            updatedAt?: string;
+        };
+        MedicationBody: {
+            /** @example cat-med-001 */
+            medicationId?: string | null;
+            /** @example null */
+            customName?: string | null;
+            /** @example Twice daily */
+            frequency?: string;
+            /** @example Take with food */
+            notes?: string | null;
+        };
+        UserClinic: {
+            /** @example uclinic-001 */
+            id?: string;
+            /**
+             * Format: uuid
+             * @example 5b1f...-uuid
+             */
+            userId?: string;
+            /** @example clinic-catalog-01 */
+            clinicId?: string | null;
+            /** @example Downtown Family Health */
+            customName?: string | null;
+            /** @example null */
+            notes?: string | null;
+            /** @example true */
+            active?: boolean;
+            /**
+             * Format: date-time
+             * @example 2026-02-01T00:00:00Z
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @example 2026-02-01T00:00:00Z
+             */
+            updatedAt?: string;
+        };
+        ClinicBody: {
+            /** @example null */
+            clinicId?: string | null;
+            /** @example Downtown Family Health */
+            customName?: string;
+            /** @example Parking on 4th St */
+            notes?: string | null;
+        };
+        UserDoctor: {
+            /** @example udoc-001 */
+            id?: string;
+            /**
+             * Format: uuid
+             * @example 5b1f...-uuid
+             */
+            userId?: string;
+            /** @example doctor-catalog-01 */
+            doctorId?: string | null;
+            /** @example Dr. Elena Park */
+            customName?: string | null;
+            /** @example uclinic-001 */
+            userClinicId?: string | null;
+            /** @example null */
+            notes?: string | null;
+            /** @example true */
+            active?: boolean;
+            /**
+             * Format: date-time
+             * @example 2026-02-01T00:00:00Z
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @example 2026-02-01T00:00:00Z
+             */
+            updatedAt?: string;
+        };
+        DoctorBody: {
+            /** @example null */
+            doctorId?: string | null;
+            /** @example Dr. Elena Park */
+            customName?: string;
+            /** @example uclinic-001 */
+            userClinicId?: string | null;
+            /** @example Rheumatologist */
+            notes?: string | null;
+        };
+        DailyEntry: {
+            /** @example entry-001 */
+            id?: string;
+            /**
+             * Format: uuid
+             * @example 5b1f...-uuid
+             */
+            userId?: string;
+            /**
+             * Format: date
+             * @example 2026-06-20
+             */
+            entryDate?: string;
+            /** @example 3 */
+            moodRating?: number;
+            /**
+             * Format: float
+             * @example 6.5
+             */
+            sleepHours?: number;
+            /** @example Rough night, knee pain flared up */
+            journalNotes?: string | null;
+            /**
+             * Format: date-time
+             * @example 2026-06-20T21:00:00Z
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @example 2026-06-20T21:00:00Z
+             */
+            updatedAt?: string;
+        };
+        DailyEntryDetail: components["schemas"]["DailyEntry"] & {
+            symptoms?: {
+                /** @example esym-001 */
+                id?: string;
+                /** @example usym-001 */
+                userSymptomId?: string;
+                /** @example 6 */
+                severity?: number;
+                /** @example null */
+                notes?: string | null;
+            }[];
+            medications?: {
+                /** @example emed-001 */
+                id?: string;
+                /** @example umed-001 */
+                userMedicationId?: string;
+                /** @example 1 */
+                quantity?: number;
+                /** @example tablet */
+                unit?: string;
+                /** @example true */
+                taken?: boolean;
+                /**
+                 * Format: date-time
+                 * @example 2026-06-20T08:00:00Z
+                 */
+                takenAt?: string;
+            }[];
+            conditions?: {
+                /** @example econd-001 */
+                id?: string;
+                /** @example ucond-001 */
+                userConditionId?: string;
+                /** @example active */
+                status?: string;
+                /** @example null */
+                notes?: string | null;
+            }[];
+        };
+        EntryBody: {
+            /**
+             * Format: date
+             * @example 2026-06-21
+             */
+            entryDate: string;
+            /** @example 4 */
+            moodRating?: number;
+            /**
+             * Format: float
+             * @example 7
+             */
+            sleepHours?: number;
+            /** @example Better day overall */
+            journalNotes?: string | null;
+            symptoms?: {
+                /** @example usym-001 */
+                userSymptomId?: string;
+                /** @example 3 */
+                severity?: number;
+                /** @example null */
+                notes?: string | null;
+            }[];
+            medications?: {
+                /** @example umed-001 */
+                userMedicationId?: string;
+                /** @example 1 */
+                quantity?: number;
+                /** @example tablet */
+                unit?: string;
+                /** @example true */
+                taken?: boolean;
+                /**
+                 * Format: date-time
+                 * @example 2026-06-21T08:00:00Z
+                 */
+                takenAt?: string;
+            }[];
+            conditions?: {
+                /** @example ucond-001 */
+                userConditionId?: string;
+                /** @example active */
+                status?: string;
+                /** @example null */
+                notes?: string | null;
+            }[];
+        };
+        EntrySymptomBody: {
+            /** @example usym-001 */
+            userSymptomId: string;
+            /** @example 6 */
+            severity: number;
+            /** @example Worse after standing all day */
+            notes?: string | null;
+        };
+        EntryMedicationBody: {
+            /** @example umed-001 */
+            userMedicationId: string;
+            /** @example 1 */
+            quantity?: number;
+            /** @example tablet */
+            unit?: string;
+            /** @example true */
+            taken: boolean;
+            /**
+             * Format: date-time
+             * @example 2026-06-21T08:05:00Z
+             */
+            takenAt?: string;
+            /** @example null */
+            notes?: string | null;
+        };
+        EntryConditionBody: {
+            /** @example ucond-001 */
+            userConditionId: string;
+            /** @example active */
+            status: string;
+            /** @example Flare-up today */
+            notes?: string | null;
+        };
+        DoctorVisit: {
+            /** @example visit-001 */
+            id?: string;
+            /** @example entry-001 */
+            entryId?: string;
+            /** @example udoc-001 */
+            userDoctorId?: string;
+            /** @example uclinic-001 */
+            userClinicId?: string | null;
+            /** @example Discussed knee pain, adjusted dosage */
+            summary?: string;
+            /** @example Follow-up in 6 weeks */
+            notes?: string | null;
+            /**
+             * Format: date-time
+             * @example 2026-06-20T15:00:00Z
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @example 2026-06-20T15:00:00Z
+             */
+            updatedAt?: string;
+        };
+        VisitBody: {
+            /** @example udoc-001 */
+            userDoctorId: string;
+            /** @example uclinic-001 */
+            userClinicId?: string | null;
+            /** @example Discussed knee pain, adjusted dosage */
+            summary: string;
+            /** @example Follow-up in 6 weeks */
+            notes?: string | null;
+        };
+        AIReport: {
+            /** @example report-001 */
+            id?: string;
+            /**
+             * Format: uuid
+             * @example 5b1f...-uuid
+             */
+            userId?: string;
+            /**
+             * Format: date
+             * @example 2026-05-22
+             */
+            dateRangeStart?: string;
+            /**
+             * Format: date
+             * @example 2026-06-21
+             */
+            dateRangeEnd?: string;
+            /** @example physician_ready */
+            reportType?: string;
+            reportContent?: {
+                symptomTimeline?: {
+                    /** @example Fatigue */
+                    symptom?: string;
+                    /** @example 12 */
+                    daysReported?: number;
+                    /** @example worsening */
+                    trend?: string;
+                }[];
+                medicationAdherence?: {
+                    /** @example Ibuprofen 200mg */
+                    medication?: string;
+                    /**
+                     * Format: float
+                     * @example 0.85
+                     */
+                    adherenceRate?: number;
+                }[];
+                notableEvents?: {
+                    /**
+                     * Format: date
+                     * @example 2026-06-10
+                     */
+                    date?: string;
+                    /** @example Severe pain logged, sleep under 4 hours */
+                    note?: string;
+                }[];
+            };
+            /**
+             * Format: date-time
+             * @example 2026-06-21T11:00:00Z
+             */
+            createdAt?: string;
+        };
+        AIReportBody: {
+            /**
+             * Format: date
+             * @example 2026-05-22
+             */
+            startDate: string;
+            /**
+             * Format: date
+             * @example 2026-06-21
+             */
+            endDate: string;
+            /** @example physician_ready */
+            reportType: string;
         };
     };
     responses: never;
@@ -351,6 +1542,2551 @@ export interface operations {
             };
             /** @description Unauthorized */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getUsersMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description User profile */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["UserProfile"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    deleteUsersMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Account deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example Account deleted */
+                            message?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateUsersMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateUserBody"];
+            };
+        };
+        responses: {
+            /** @description User updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /**
+                             * Format: uuid
+                             * @example 5b1f...-uuid
+                             */
+                            id?: string;
+                            /**
+                             * Format: email
+                             * @example newemail@example.com
+                             */
+                            email?: string;
+                            /**
+                             * Format: date-time
+                             * @example 2026-06-21T10:15:00Z
+                             */
+                            updatedAt?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
+    };
+    getSystemHealth: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description System health status */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example ok */
+                            status?: string;
+                            /** @example 542310 */
+                            uptimeSeconds?: number;
+                            /**
+                             * Format: date-time
+                             * @example 2026-06-21T10:00:00Z
+                             */
+                            timestamp?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getAdminMetrics: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Operational metrics */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example 18342 */
+                            requestCount24h?: number;
+                            /**
+                             * Format: float
+                             * @example 0.004
+                             */
+                            errorRate?: number;
+                            /** @example 87 */
+                            avgResponseTimeMs?: number;
+                            /**
+                             * Format: date-time
+                             * @example 2026-06-21T10:00:00Z
+                             */
+                            timestamp?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getCatalogSymptoms: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of catalog symptoms */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogSymptom"][];
+                };
+            };
+        };
+    };
+    getCatalogConditions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of catalog conditions */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogCondition"][];
+                };
+            };
+        };
+    };
+    getCatalogMedications: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of catalog medications */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogMedication"][];
+                };
+            };
+        };
+    };
+    getConditions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of user conditions */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserCondition"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    createCondition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConditionBody"];
+            };
+        };
+        responses: {
+            /** @description Condition created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["UserCondition"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
+    };
+    deleteCondition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Condition soft-deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example ucond-001 */
+                            id?: string;
+                            /** @example false */
+                            active?: boolean;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Condition not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateCondition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example resolved */
+                    status?: string;
+                    /** @example Cleared up after treatment change */
+                    notes?: string | null;
+                    description?: string | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Condition updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["UserCondition"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Condition not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    linkSymptomToCondition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conditionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example usym-001 */
+                    userSymptomId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Symptom linked */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example condsym-001 */
+                            id?: string;
+                            /** @example ucond-001 */
+                            userConditionId?: string;
+                            /** @example usym-001 */
+                            userSymptomId?: string;
+                            /**
+                             * Format: date-time
+                             * @example 2026-06-21T10:07:00Z
+                             */
+                            createdAt?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    unlinkSymptomFromCondition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conditionId: string;
+                symptomId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Symptom unlinked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example Unlinked */
+                            message?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getSymptoms: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of user symptoms */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserSymptom"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    createSymptom: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SymptomBody"];
+            };
+        };
+        responses: {
+            /** @description Symptom created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["UserSymptom"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
+    };
+    deleteSymptom: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Symptom soft-deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example usym-001 */
+                            id?: string;
+                            /** @example false */
+                            active?: boolean;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Symptom not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateSymptom: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example Lower back ache */
+                    customName?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Symptom updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["UserSymptom"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Symptom not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getMedications: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of user medications */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserMedication"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    createMedication: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MedicationBody"];
+            };
+        };
+        responses: {
+            /** @description Medication created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["UserMedication"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
+    };
+    getMedication: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Medication detail */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["UserMedication"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Medication not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    deleteMedication: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Medication soft-deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example umed-001 */
+                            id?: string;
+                            /** @example false */
+                            active?: boolean;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Medication not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateMedication: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example Once daily */
+                    frequency?: string;
+                    /** @example Reduced dose per doctor */
+                    notes?: string | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Medication updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["UserMedication"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Medication not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getClinics: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of saved clinics */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserClinic"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    createClinic: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ClinicBody"];
+            };
+        };
+        responses: {
+            /** @description Clinic created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["UserClinic"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
+    };
+    deleteClinic: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Clinic soft-deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example uclinic-001 */
+                            id?: string;
+                            /** @example false */
+                            active?: boolean;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Clinic not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateClinic: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example Downtown Family Health */
+                    customName?: string;
+                    /** @example New entrance on 5th St */
+                    notes?: string | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Clinic updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["UserClinic"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Clinic not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getDoctors: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of saved doctors */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserDoctor"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    createDoctor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DoctorBody"];
+            };
+        };
+        responses: {
+            /** @description Doctor created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["UserDoctor"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
+    };
+    deleteDoctor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Doctor soft-deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example udoc-001 */
+                            id?: string;
+                            /** @example false */
+                            active?: boolean;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Doctor not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateDoctor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example Dr. Elena Park */
+                    customName?: string;
+                    /** @example uclinic-001 */
+                    userClinicId?: string | null;
+                    /** @example Switched to telehealth visits */
+                    notes?: string | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Doctor updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["UserDoctor"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Doctor not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getEntries: {
+        parameters: {
+            query?: {
+                startDate?: string;
+                endDate?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of daily entries */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyEntry"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    createEntry: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EntryBody"];
+            };
+        };
+        responses: {
+            /** @description Entry created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["DailyEntryDetail"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Entry already exists for this date */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
+    };
+    getEntry: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Entry detail */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["DailyEntryDetail"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Entry not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    deleteEntry: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Entry deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example Entry deleted */
+                            message?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Entry not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateEntry: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example 5 */
+                    moodRating?: number;
+                    /**
+                     * Format: float
+                     * @example 7.5
+                     */
+                    sleepHours?: number;
+                    /** @example Updated note after evening walk */
+                    journalNotes?: string | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Entry updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["DailyEntry"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Entry not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    createEntrySymptom: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EntrySymptomBody"];
+            };
+        };
+        responses: {
+            /** @description Entry symptom logged */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example esym-003 */
+                            id?: string;
+                            /** @example entry-002 */
+                            entryId?: string;
+                            /** @example usym-001 */
+                            userSymptomId?: string;
+                            /** @example 6 */
+                            severity?: number;
+                            /** @example Worse after standing all day */
+                            notes?: string | null;
+                            /**
+                             * Format: date-time
+                             * @example 2026-06-21T21:05:00Z
+                             */
+                            createdAt?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Entry not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    deleteEntrySymptom: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                entrySymptomId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Entry symptom removed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example Removed */
+                            message?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateEntrySymptom: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                entrySymptomId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example 4 */
+                    severity?: number;
+                    notes?: string | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Entry symptom updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example esym-003 */
+                            id?: string;
+                            /** @example 4 */
+                            severity?: number;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    createEntryMedication: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EntryMedicationBody"];
+            };
+        };
+        responses: {
+            /** @description Entry medication logged */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example emed-003 */
+                            id?: string;
+                            /** @example entry-002 */
+                            entryId?: string;
+                            /** @example umed-001 */
+                            userMedicationId?: string;
+                            /** @example 1 */
+                            quantity?: number;
+                            /** @example tablet */
+                            unit?: string;
+                            /** @example true */
+                            taken?: boolean;
+                            /**
+                             * Format: date-time
+                             * @example 2026-06-21T08:05:00Z
+                             */
+                            takenAt?: string;
+                            /**
+                             * Format: date-time
+                             * @example 2026-06-21T21:06:00Z
+                             */
+                            createdAt?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Entry not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    deleteEntryMedication: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                entryMedicationId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Entry medication removed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example Removed */
+                            message?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateEntryMedication: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                entryMedicationId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example false */
+                    taken?: boolean;
+                    /** @example 1 */
+                    quantity?: number;
+                    /** @example Forgot evening dose */
+                    notes?: string | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Entry medication updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example emed-003 */
+                            id?: string;
+                            /** @example false */
+                            taken?: boolean;
+                            /** @example Forgot evening dose */
+                            notes?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    createEntryCondition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EntryConditionBody"];
+            };
+        };
+        responses: {
+            /** @description Entry condition logged */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example econd-003 */
+                            id?: string;
+                            /** @example entry-002 */
+                            entryId?: string;
+                            /** @example ucond-001 */
+                            userConditionId?: string;
+                            /** @example active */
+                            status?: string;
+                            /** @example Flare-up today */
+                            notes?: string | null;
+                            /**
+                             * Format: date-time
+                             * @example 2026-06-21T21:07:00Z
+                             */
+                            createdAt?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Entry not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    deleteEntryCondition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                entryConditionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Entry condition removed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example Removed */
+                            message?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateEntryCondition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                entryConditionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example inactive */
+                    status?: string;
+                    notes?: string | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Entry condition updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example econd-003 */
+                            id?: string;
+                            /** @example inactive */
+                            status?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getVisits: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of doctor visits */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DoctorVisit"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getVisit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Visit detail */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["DoctorVisit"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Visit not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    deleteVisit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Visit deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example Visit deleted */
+                            message?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Visit not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateVisit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example Discussed knee pain, adjusted dosage */
+                    summary?: string;
+                    /** @example Rescheduled follow-up to 4 weeks */
+                    notes?: string | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Visit updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["DoctorVisit"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Visit not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    createEntryVisit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entryId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VisitBody"];
+            };
+        };
+        responses: {
+            /** @description Visit logged */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["DoctorVisit"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Entry not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
+    };
+    getMoodSleepTrend: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Mood and sleep trend data */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example 30 */
+                            days?: number;
+                            series?: {
+                                /**
+                                 * Format: date
+                                 * @example 2026-05-23
+                                 */
+                                date?: string;
+                                /** @example 3 */
+                                moodRating?: number;
+                                /**
+                                 * Format: float
+                                 * @example 6.5
+                                 */
+                                sleepHours?: number;
+                            }[];
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getSymptomFrequency: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Symptom frequency data */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example 30 */
+                            days?: number;
+                            symptoms?: {
+                                /** @example usym-001 */
+                                userSymptomId?: string;
+                                /** @example Fatigue */
+                                name?: string;
+                                /** @example 12 */
+                                count?: number;
+                            }[];
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getDashboard: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Dashboard analytics payload */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example 30 */
+                            days?: number;
+                            moodSleepTrend?: {
+                                /**
+                                 * Format: date
+                                 * @example 2026-05-23
+                                 */
+                                date?: string;
+                                /** @example 3 */
+                                moodRating?: number;
+                                /**
+                                 * Format: float
+                                 * @example 6.5
+                                 */
+                                sleepHours?: number;
+                            }[];
+                            symptomFrequency?: {
+                                /** @example usym-001 */
+                                userSymptomId?: string;
+                                /** @example Fatigue */
+                                name?: string;
+                                /** @example 12 */
+                                count?: number;
+                            }[];
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getAIReports: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of AI reports */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example report-001 */
+                        id?: string;
+                        /**
+                         * Format: date
+                         * @example 2026-05-22
+                         */
+                        dateRangeStart?: string;
+                        /**
+                         * Format: date
+                         * @example 2026-06-21
+                         */
+                        dateRangeEnd?: string;
+                        /** @example physician_ready */
+                        reportType?: string;
+                        /**
+                         * Format: date-time
+                         * @example 2026-06-21T11:00:00Z
+                         */
+                        createdAt?: string;
+                    }[];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    generateAIReport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AIReportBody"];
+            };
+        };
+        responses: {
+            /** @description Report generated and stored */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["AIReport"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
+    };
+    getAIReport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description AI report detail */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["AIReport"];
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Report not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    deleteAIReport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Report deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: {
+                            /** @example Report deleted */
+                            message?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Report not found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -12,6 +12,30 @@ servers:
 tags:
   - name: Auth
     description: Authentication and session management
+  - name: Users
+    description: User account management
+  - name: Admin
+    description: Admin-only system endpoints
+  - name: Catalog
+    description: Global read-only reference tables
+  - name: Conditions
+    description: User-tracked health conditions
+  - name: Symptoms
+    description: User-tracked symptoms
+  - name: Medications
+    description: User medication inventory
+  - name: Clinics
+    description: User-saved clinic registry
+  - name: Doctors
+    description: User-saved doctor registry
+  - name: Entries
+    description: Daily health log entries
+  - name: Visits
+    description: Doctor visit history
+  - name: Analytics
+    description: Trends and dashboard analytics
+  - name: AI Reports
+    description: AI-generated appointment prep reports
 
 # ─── Reusable components ───────────────────────────────────────────────────────
 components:
@@ -116,6 +140,762 @@ components:
               message:
                 type: string
                 example: Invalid email address
+
+    # ── Auth & Account ──────────────────────────────────────────────────────────
+    RefreshBody:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken:
+          type: string
+          example: 8f2c...
+
+    LogoutBody:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken:
+          type: string
+          example: 8f2c...
+
+    UpdateUserBody:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: newemail@example.com
+        password:
+          type: string
+          minLength: 8
+          example: NewerP@ss1
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 5b1f...-uuid
+        email:
+          type: string
+          format: email
+          example: patient@example.com
+        roleId:
+          type: string
+          format: uuid
+          example: owner-role-uuid
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-06-21T09:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-06-21T09:00:00Z"
+
+    # ── Catalog ─────────────────────────────────────────────────────────────────
+    CatalogSymptom:
+      type: object
+      properties:
+        id:
+          type: string
+          example: cat-sym-001
+        name:
+          type: string
+          example: Headache
+        category:
+          type: string
+          example: Neurological
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-01-10T00:00:00Z"
+
+    CatalogCondition:
+      type: object
+      properties:
+        id:
+          type: string
+          example: cat-cond-001
+        name:
+          type: string
+          example: Rheumatoid Arthritis
+        category:
+          type: string
+          example: Autoimmune
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-01-10T00:00:00Z"
+
+    CatalogMedication:
+      type: object
+      properties:
+        id:
+          type: string
+          example: cat-med-001
+        name:
+          type: string
+          example: Ibuprofen
+        strength:
+          type: string
+          example: 200mg
+        category:
+          type: string
+          example: NSAID
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-01-10T00:00:00Z"
+
+    # ── Health Profile ───────────────────────────────────────────────────────────
+    UserCondition:
+      type: object
+      properties:
+        id:
+          type: string
+          example: ucond-001
+        userId:
+          type: string
+          format: uuid
+          example: 5b1f...-uuid
+        conditionId:
+          type: string
+          nullable: true
+          example: cat-cond-001
+        customName:
+          type: string
+          nullable: true
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: Diagnosed by rheumatologist
+        diagnosedDate:
+          type: string
+          format: date
+          example: "2024-03-12"
+        status:
+          type: string
+          example: active
+        notes:
+          type: string
+          nullable: true
+          example: null
+        active:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-01-15T00:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-01-15T00:00:00Z"
+
+    ConditionBody:
+      type: object
+      properties:
+        conditionId:
+          type: string
+          nullable: true
+          example: cat-cond-001
+        customName:
+          type: string
+          nullable: true
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: Diagnosed by rheumatologist
+        diagnosedDate:
+          type: string
+          format: date
+          example: "2024-03-12"
+        status:
+          type: string
+          example: active
+        notes:
+          type: string
+          nullable: true
+          example: null
+
+    UserSymptom:
+      type: object
+      properties:
+        id:
+          type: string
+          example: usym-001
+        userId:
+          type: string
+          format: uuid
+          example: 5b1f...-uuid
+        catalogId:
+          type: string
+          nullable: true
+          example: cat-sym-002
+        customName:
+          type: string
+          nullable: true
+          example: null
+        active:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-01-15T00:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-01-15T00:00:00Z"
+
+    SymptomBody:
+      type: object
+      properties:
+        catalogId:
+          type: string
+          nullable: true
+          example: cat-sym-002
+        customName:
+          type: string
+          nullable: true
+          example: null
+
+    # ── Medication Inventory ─────────────────────────────────────────────────────
+    UserMedication:
+      type: object
+      properties:
+        id:
+          type: string
+          example: umed-001
+        userId:
+          type: string
+          format: uuid
+          example: 5b1f...-uuid
+        medicationId:
+          type: string
+          nullable: true
+          example: cat-med-001
+        customName:
+          type: string
+          nullable: true
+          example: null
+        frequency:
+          type: string
+          example: Twice daily
+        notes:
+          type: string
+          nullable: true
+          example: Take with food
+        active:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-01-15T00:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-01-15T00:00:00Z"
+
+    MedicationBody:
+      type: object
+      properties:
+        medicationId:
+          type: string
+          nullable: true
+          example: cat-med-001
+        customName:
+          type: string
+          nullable: true
+          example: null
+        frequency:
+          type: string
+          example: Twice daily
+        notes:
+          type: string
+          nullable: true
+          example: Take with food
+
+    # ── Doctor & Clinic Registry ─────────────────────────────────────────────────
+    UserClinic:
+      type: object
+      properties:
+        id:
+          type: string
+          example: uclinic-001
+        userId:
+          type: string
+          format: uuid
+          example: 5b1f...-uuid
+        clinicId:
+          type: string
+          nullable: true
+          example: clinic-catalog-01
+        customName:
+          type: string
+          nullable: true
+          example: Downtown Family Health
+        notes:
+          type: string
+          nullable: true
+          example: null
+        active:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-02-01T00:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-02-01T00:00:00Z"
+
+    ClinicBody:
+      type: object
+      properties:
+        clinicId:
+          type: string
+          nullable: true
+          example: null
+        customName:
+          type: string
+          example: Downtown Family Health
+        notes:
+          type: string
+          nullable: true
+          example: Parking on 4th St
+
+    UserDoctor:
+      type: object
+      properties:
+        id:
+          type: string
+          example: udoc-001
+        userId:
+          type: string
+          format: uuid
+          example: 5b1f...-uuid
+        doctorId:
+          type: string
+          nullable: true
+          example: doctor-catalog-01
+        customName:
+          type: string
+          nullable: true
+          example: Dr. Elena Park
+        userClinicId:
+          type: string
+          nullable: true
+          example: uclinic-001
+        notes:
+          type: string
+          nullable: true
+          example: null
+        active:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-02-01T00:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-02-01T00:00:00Z"
+
+    DoctorBody:
+      type: object
+      properties:
+        doctorId:
+          type: string
+          nullable: true
+          example: null
+        customName:
+          type: string
+          example: Dr. Elena Park
+        userClinicId:
+          type: string
+          nullable: true
+          example: uclinic-001
+        notes:
+          type: string
+          nullable: true
+          example: Rheumatologist
+
+    # ── Daily Health Logger ──────────────────────────────────────────────────────
+    DailyEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          example: entry-001
+        userId:
+          type: string
+          format: uuid
+          example: 5b1f...-uuid
+        entryDate:
+          type: string
+          format: date
+          example: "2026-06-20"
+        moodRating:
+          type: integer
+          minimum: 1
+          maximum: 10
+          example: 3
+        sleepHours:
+          type: number
+          format: float
+          example: 6.5
+        journalNotes:
+          type: string
+          nullable: true
+          example: Rough night, knee pain flared up
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-06-20T21:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-06-20T21:00:00Z"
+
+    DailyEntryDetail:
+      allOf:
+        - $ref: "#/components/schemas/DailyEntry"
+        - type: object
+          properties:
+            symptoms:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: esym-001
+                  userSymptomId:
+                    type: string
+                    example: usym-001
+                  severity:
+                    type: integer
+                    example: 6
+                  notes:
+                    type: string
+                    nullable: true
+                    example: null
+            medications:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: emed-001
+                  userMedicationId:
+                    type: string
+                    example: umed-001
+                  quantity:
+                    type: integer
+                    example: 1
+                  unit:
+                    type: string
+                    example: tablet
+                  taken:
+                    type: boolean
+                    example: true
+                  takenAt:
+                    type: string
+                    format: date-time
+                    example: "2026-06-20T08:00:00Z"
+            conditions:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: econd-001
+                  userConditionId:
+                    type: string
+                    example: ucond-001
+                  status:
+                    type: string
+                    example: active
+                  notes:
+                    type: string
+                    nullable: true
+                    example: null
+
+    EntryBody:
+      type: object
+      required: [entryDate]
+      properties:
+        entryDate:
+          type: string
+          format: date
+          example: "2026-06-21"
+        moodRating:
+          type: integer
+          minimum: 1
+          maximum: 10
+          example: 4
+        sleepHours:
+          type: number
+          format: float
+          example: 7
+        journalNotes:
+          type: string
+          nullable: true
+          example: Better day overall
+        symptoms:
+          type: array
+          items:
+            type: object
+            properties:
+              userSymptomId:
+                type: string
+                example: usym-001
+              severity:
+                type: integer
+                example: 3
+              notes:
+                type: string
+                nullable: true
+                example: null
+        medications:
+          type: array
+          items:
+            type: object
+            properties:
+              userMedicationId:
+                type: string
+                example: umed-001
+              quantity:
+                type: integer
+                example: 1
+              unit:
+                type: string
+                example: tablet
+              taken:
+                type: boolean
+                example: true
+              takenAt:
+                type: string
+                format: date-time
+                example: "2026-06-21T08:00:00Z"
+        conditions:
+          type: array
+          items:
+            type: object
+            properties:
+              userConditionId:
+                type: string
+                example: ucond-001
+              status:
+                type: string
+                example: active
+              notes:
+                type: string
+                nullable: true
+                example: null
+
+    EntrySymptomBody:
+      type: object
+      required: [userSymptomId, severity]
+      properties:
+        userSymptomId:
+          type: string
+          example: usym-001
+        severity:
+          type: integer
+          minimum: 1
+          maximum: 10
+          example: 6
+        notes:
+          type: string
+          nullable: true
+          example: Worse after standing all day
+
+    EntryMedicationBody:
+      type: object
+      required: [userMedicationId, taken]
+      properties:
+        userMedicationId:
+          type: string
+          example: umed-001
+        quantity:
+          type: integer
+          example: 1
+        unit:
+          type: string
+          example: tablet
+        taken:
+          type: boolean
+          example: true
+        takenAt:
+          type: string
+          format: date-time
+          example: "2026-06-21T08:05:00Z"
+        notes:
+          type: string
+          nullable: true
+          example: null
+
+    EntryConditionBody:
+      type: object
+      required: [userConditionId, status]
+      properties:
+        userConditionId:
+          type: string
+          example: ucond-001
+        status:
+          type: string
+          example: active
+        notes:
+          type: string
+          nullable: true
+          example: Flare-up today
+
+    # ── Visit History ────────────────────────────────────────────────────────────
+    DoctorVisit:
+      type: object
+      properties:
+        id:
+          type: string
+          example: visit-001
+        entryId:
+          type: string
+          example: entry-001
+        userDoctorId:
+          type: string
+          example: udoc-001
+        userClinicId:
+          type: string
+          nullable: true
+          example: uclinic-001
+        summary:
+          type: string
+          example: Discussed knee pain, adjusted dosage
+        notes:
+          type: string
+          nullable: true
+          example: Follow-up in 6 weeks
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-06-20T15:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-06-20T15:00:00Z"
+
+    VisitBody:
+      type: object
+      required: [userDoctorId, summary]
+      properties:
+        userDoctorId:
+          type: string
+          example: udoc-001
+        userClinicId:
+          type: string
+          nullable: true
+          example: uclinic-001
+        summary:
+          type: string
+          example: Discussed knee pain, adjusted dosage
+        notes:
+          type: string
+          nullable: true
+          example: Follow-up in 6 weeks
+
+    # ── AI Reports ───────────────────────────────────────────────────────────────
+    AIReport:
+      type: object
+      properties:
+        id:
+          type: string
+          example: report-001
+        userId:
+          type: string
+          format: uuid
+          example: 5b1f...-uuid
+        dateRangeStart:
+          type: string
+          format: date
+          example: "2026-05-22"
+        dateRangeEnd:
+          type: string
+          format: date
+          example: "2026-06-21"
+        reportType:
+          type: string
+          example: physician_ready
+        reportContent:
+          type: object
+          properties:
+            symptomTimeline:
+              type: array
+              items:
+                type: object
+                properties:
+                  symptom:
+                    type: string
+                    example: Fatigue
+                  daysReported:
+                    type: integer
+                    example: 12
+                  trend:
+                    type: string
+                    example: worsening
+            medicationAdherence:
+              type: array
+              items:
+                type: object
+                properties:
+                  medication:
+                    type: string
+                    example: Ibuprofen 200mg
+                  adherenceRate:
+                    type: number
+                    format: float
+                    example: 0.85
+            notableEvents:
+              type: array
+              items:
+                type: object
+                properties:
+                  date:
+                    type: string
+                    format: date
+                    example: "2026-06-10"
+                  note:
+                    type: string
+                    example: Severe pain logged, sleep under 4 hours
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-06-21T11:00:00Z"
+
+    AIReportBody:
+      type: object
+      required: [startDate, endDate, reportType]
+      properties:
+        startDate:
+          type: string
+          format: date
+          example: "2026-05-22"
+        endDate:
+          type: string
+          format: date
+          example: "2026-06-21"
+        reportType:
+          type: string
+          example: physician_ready
 
 # ─── Paths ─────────────────────────────────────────────────────────────────────
 paths:
@@ -258,6 +1038,2255 @@ paths:
                     $ref: "#/components/schemas/User"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Users ────────────────────────────────────────────────────────────────────
+  /users/me:
+    get:
+      tags: [Users]
+      summary: Get the logged-in user's own profile
+      operationId: getUsersMe
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserProfile"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      tags: [Users]
+      summary: Update email and/or password
+      operationId: updateUsersMe
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserBody"
+      responses:
+        "200":
+          description: User updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5b1f...-uuid
+                      email:
+                        type: string
+                        format: email
+                        example: newemail@example.com
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: "2026-06-21T10:15:00Z"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+    delete:
+      tags: [Users]
+      summary: Delete the account and cascade all owned data
+      operationId: deleteUsersMe
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Account deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Account deleted
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Admin ────────────────────────────────────────────────────────────────────
+  /admin/system-health:
+    get:
+      tags: [Admin]
+      summary: Server uptime / status check
+      operationId: getSystemHealth
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: System health status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        example: ok
+                      uptimeSeconds:
+                        type: integer
+                        example: 542310
+                      timestamp:
+                        type: string
+                        format: date-time
+                        example: "2026-06-21T10:00:00Z"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /admin/metrics:
+    get:
+      tags: [Admin]
+      summary: Operational metrics — never patient data
+      operationId: getAdminMetrics
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Operational metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      requestCount24h:
+                        type: integer
+                        example: 18342
+                      errorRate:
+                        type: number
+                        format: float
+                        example: 0.004
+                      avgResponseTimeMs:
+                        type: integer
+                        example: 87
+                      timestamp:
+                        type: string
+                        format: date-time
+                        example: "2026-06-21T10:00:00Z"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Catalog ──────────────────────────────────────────────────────────────────
+  /catalog/symptoms:
+    get:
+      tags: [Catalog]
+      summary: List standard symptoms
+      operationId: getCatalogSymptoms
+      responses:
+        "200":
+          description: List of catalog symptoms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CatalogSymptom"
+
+  /catalog/conditions:
+    get:
+      tags: [Catalog]
+      summary: List standard conditions
+      operationId: getCatalogConditions
+      responses:
+        "200":
+          description: List of catalog conditions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CatalogCondition"
+
+  /catalog/medications:
+    get:
+      tags: [Catalog]
+      summary: List standard medications
+      operationId: getCatalogMedications
+      responses:
+        "200":
+          description: List of catalog medications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CatalogMedication"
+
+  # ─── Conditions ───────────────────────────────────────────────────────────────
+  /conditions:
+    get:
+      tags: [Conditions]
+      summary: List the current user's tracked conditions
+      operationId: getConditions
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: List of user conditions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserCondition"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      tags: [Conditions]
+      summary: Add a condition (catalog-linked or custom)
+      operationId: createCondition
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConditionBody"
+      responses:
+        "201":
+          description: Condition created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserCondition"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  /conditions/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ucond-001
+    patch:
+      tags: [Conditions]
+      summary: Update a tracked condition
+      operationId: updateCondition
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: resolved
+                notes:
+                  type: string
+                  nullable: true
+                  example: Cleared up after treatment change
+                description:
+                  type: string
+                  nullable: true
+      responses:
+        "200":
+          description: Condition updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserCondition"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Condition not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [Conditions]
+      summary: Soft-delete a tracked condition
+      operationId: deleteCondition
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Condition soft-deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: ucond-001
+                      active:
+                        type: boolean
+                        example: false
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Condition not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /conditions/{conditionId}/symptoms:
+    parameters:
+      - name: conditionId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ucond-001
+    post:
+      tags: [Conditions]
+      summary: Link a symptom to a condition
+      operationId: linkSymptomToCondition
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userSymptomId]
+              properties:
+                userSymptomId:
+                  type: string
+                  example: usym-001
+      responses:
+        "201":
+          description: Symptom linked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: condsym-001
+                      userConditionId:
+                        type: string
+                        example: ucond-001
+                      userSymptomId:
+                        type: string
+                        example: usym-001
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: "2026-06-21T10:07:00Z"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /conditions/{conditionId}/symptoms/{symptomId}:
+    parameters:
+      - name: conditionId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ucond-001
+      - name: symptomId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: usym-001
+    delete:
+      tags: [Conditions]
+      summary: Unlink a symptom from a condition
+      operationId: unlinkSymptomFromCondition
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Symptom unlinked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Unlinked
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Symptoms ─────────────────────────────────────────────────────────────────
+  /symptoms:
+    get:
+      tags: [Symptoms]
+      summary: List the current user's tracked symptoms
+      operationId: getSymptoms
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: List of user symptoms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserSymptom"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      tags: [Symptoms]
+      summary: Add a symptom to track (catalog-linked or custom)
+      operationId: createSymptom
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SymptomBody"
+      responses:
+        "201":
+          description: Symptom created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserSymptom"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  /symptoms/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: usym-001
+    patch:
+      tags: [Symptoms]
+      summary: Rename or update a tracked symptom
+      operationId: updateSymptom
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customName:
+                  type: string
+                  example: Lower back ache
+      responses:
+        "200":
+          description: Symptom updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserSymptom"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Symptom not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [Symptoms]
+      summary: Soft-delete a tracked symptom
+      operationId: deleteSymptom
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Symptom soft-deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: usym-001
+                      active:
+                        type: boolean
+                        example: false
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Symptom not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Medications ──────────────────────────────────────────────────────────────
+  /medications:
+    get:
+      tags: [Medications]
+      summary: List the user's personal medication registry
+      operationId: getMedications
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: List of user medications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserMedication"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      tags: [Medications]
+      summary: Add a prescription (catalog-linked or custom)
+      operationId: createMedication
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MedicationBody"
+      responses:
+        "201":
+          description: Medication created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserMedication"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  /medications/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: umed-001
+    get:
+      tags: [Medications]
+      summary: Get a single medication detail
+      operationId: getMedication
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Medication detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserMedication"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Medication not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      tags: [Medications]
+      summary: Edit dosage, frequency, or notes
+      operationId: updateMedication
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                frequency:
+                  type: string
+                  example: Once daily
+                notes:
+                  type: string
+                  nullable: true
+                  example: Reduced dose per doctor
+      responses:
+        "200":
+          description: Medication updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserMedication"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Medication not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [Medications]
+      summary: Soft-delete a medication
+      operationId: deleteMedication
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Medication soft-deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: umed-001
+                      active:
+                        type: boolean
+                        example: false
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Medication not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Clinics ──────────────────────────────────────────────────────────────────
+  /clinics:
+    get:
+      tags: [Clinics]
+      summary: List the user's saved clinics
+      operationId: getClinics
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: List of saved clinics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserClinic"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      tags: [Clinics]
+      summary: Add a clinic (catalog-linked or custom)
+      operationId: createClinic
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClinicBody"
+      responses:
+        "201":
+          description: Clinic created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserClinic"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  /clinics/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: uclinic-001
+    patch:
+      tags: [Clinics]
+      summary: Edit a saved clinic
+      operationId: updateClinic
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customName:
+                  type: string
+                  example: Downtown Family Health
+                notes:
+                  type: string
+                  nullable: true
+                  example: New entrance on 5th St
+      responses:
+        "200":
+          description: Clinic updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserClinic"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Clinic not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [Clinics]
+      summary: Soft-delete a saved clinic
+      operationId: deleteClinic
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Clinic soft-deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: uclinic-001
+                      active:
+                        type: boolean
+                        example: false
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Clinic not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Doctors ──────────────────────────────────────────────────────────────────
+  /doctors:
+    get:
+      tags: [Doctors]
+      summary: List the user's saved doctors
+      operationId: getDoctors
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: List of saved doctors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserDoctor"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      tags: [Doctors]
+      summary: Add a doctor (optionally tied to a saved clinic)
+      operationId: createDoctor
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DoctorBody"
+      responses:
+        "201":
+          description: Doctor created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserDoctor"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  /doctors/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: udoc-001
+    patch:
+      tags: [Doctors]
+      summary: Edit a saved doctor
+      operationId: updateDoctor
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customName:
+                  type: string
+                  example: Dr. Elena Park
+                userClinicId:
+                  type: string
+                  nullable: true
+                  example: uclinic-001
+                notes:
+                  type: string
+                  nullable: true
+                  example: Switched to telehealth visits
+      responses:
+        "200":
+          description: Doctor updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserDoctor"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Doctor not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [Doctors]
+      summary: Soft-delete a saved doctor
+      operationId: deleteDoctor
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Doctor soft-deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: udoc-001
+                      active:
+                        type: boolean
+                        example: false
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Doctor not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Entries ──────────────────────────────────────────────────────────────────
+  /entries:
+    get:
+      tags: [Entries]
+      summary: List entries in a date range
+      operationId: getEntries
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+            example: "2026-05-01"
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+            example: "2026-06-21"
+      responses:
+        "200":
+          description: List of daily entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DailyEntry"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      tags: [Entries]
+      summary: Create today's entry with full nested payload
+      operationId: createEntry
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EntryBody"
+      responses:
+        "201":
+          description: Entry created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/DailyEntryDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Entry already exists for this date
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  /entries/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: entry-001
+    get:
+      tags: [Entries]
+      summary: Full entry detail including nested symptoms/medications/conditions
+      operationId: getEntry
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Entry detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/DailyEntryDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Entry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      tags: [Entries]
+      summary: Edit mood / sleep / notes for an entry
+      operationId: updateEntry
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                moodRating:
+                  type: integer
+                  minimum: 1
+                  maximum: 10
+                  example: 5
+                sleepHours:
+                  type: number
+                  format: float
+                  example: 7.5
+                journalNotes:
+                  type: string
+                  nullable: true
+                  example: Updated note after evening walk
+      responses:
+        "200":
+          description: Entry updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/DailyEntry"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Entry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [Entries]
+      summary: Remove an entry
+      operationId: deleteEntry
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Entry deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Entry deleted
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Entry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /entries/{id}/symptoms:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: entry-002
+    post:
+      tags: [Entries]
+      summary: Log a symptom occurrence for an entry
+      operationId: createEntrySymptom
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EntrySymptomBody"
+      responses:
+        "201":
+          description: Entry symptom logged
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: esym-003
+                      entryId:
+                        type: string
+                        example: entry-002
+                      userSymptomId:
+                        type: string
+                        example: usym-001
+                      severity:
+                        type: integer
+                        example: 6
+                      notes:
+                        type: string
+                        nullable: true
+                        example: Worse after standing all day
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: "2026-06-21T21:05:00Z"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Entry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /entries/{id}/symptoms/{entrySymptomId}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: entry-002
+      - name: entrySymptomId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: esym-003
+    patch:
+      tags: [Entries]
+      summary: Edit a logged symptom
+      operationId: updateEntrySymptom
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                severity:
+                  type: integer
+                  minimum: 1
+                  maximum: 10
+                  example: 4
+                notes:
+                  type: string
+                  nullable: true
+      responses:
+        "200":
+          description: Entry symptom updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: esym-003
+                      severity:
+                        type: integer
+                        example: 4
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [Entries]
+      summary: Remove a logged symptom
+      operationId: deleteEntrySymptom
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Entry symptom removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Removed
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /entries/{id}/medications:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: entry-002
+    post:
+      tags: [Entries]
+      summary: Check off a medication as taken for an entry
+      operationId: createEntryMedication
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EntryMedicationBody"
+      responses:
+        "201":
+          description: Entry medication logged
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: emed-003
+                      entryId:
+                        type: string
+                        example: entry-002
+                      userMedicationId:
+                        type: string
+                        example: umed-001
+                      quantity:
+                        type: integer
+                        example: 1
+                      unit:
+                        type: string
+                        example: tablet
+                      taken:
+                        type: boolean
+                        example: true
+                      takenAt:
+                        type: string
+                        format: date-time
+                        example: "2026-06-21T08:05:00Z"
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: "2026-06-21T21:06:00Z"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Entry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /entries/{id}/medications/{entryMedicationId}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: entry-002
+      - name: entryMedicationId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: emed-003
+    patch:
+      tags: [Entries]
+      summary: Edit a logged medication entry
+      operationId: updateEntryMedication
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taken:
+                  type: boolean
+                  example: false
+                quantity:
+                  type: integer
+                  example: 1
+                notes:
+                  type: string
+                  nullable: true
+                  example: Forgot evening dose
+      responses:
+        "200":
+          description: Entry medication updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: emed-003
+                      taken:
+                        type: boolean
+                        example: false
+                      notes:
+                        type: string
+                        nullable: true
+                        example: Forgot evening dose
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [Entries]
+      summary: Remove a logged medication entry
+      operationId: deleteEntryMedication
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Entry medication removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Removed
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /entries/{id}/conditions:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: entry-002
+    post:
+      tags: [Entries]
+      summary: Log a condition's status for a specific day
+      operationId: createEntryCondition
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EntryConditionBody"
+      responses:
+        "201":
+          description: Entry condition logged
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: econd-003
+                      entryId:
+                        type: string
+                        example: entry-002
+                      userConditionId:
+                        type: string
+                        example: ucond-001
+                      status:
+                        type: string
+                        example: active
+                      notes:
+                        type: string
+                        nullable: true
+                        example: Flare-up today
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: "2026-06-21T21:07:00Z"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Entry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /entries/{id}/conditions/{entryConditionId}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: entry-002
+      - name: entryConditionId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: econd-003
+    patch:
+      tags: [Entries]
+      summary: Edit a day-level condition status
+      operationId: updateEntryCondition
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: inactive
+                notes:
+                  type: string
+                  nullable: true
+      responses:
+        "200":
+          description: Entry condition updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: econd-003
+                      status:
+                        type: string
+                        example: inactive
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [Entries]
+      summary: Remove a day-level condition status
+      operationId: deleteEntryCondition
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Entry condition removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Removed
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Visits ───────────────────────────────────────────────────────────────────
+  /visits:
+    get:
+      tags: [Visits]
+      summary: List all doctor visits, most recent first
+      operationId: getVisits
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: List of doctor visits
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DoctorVisit"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /visits/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: visit-001
+    get:
+      tags: [Visits]
+      summary: Get a single visit detail
+      operationId: getVisit
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Visit detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/DoctorVisit"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Visit not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      tags: [Visits]
+      summary: Edit the summary or notes of a visit
+      operationId: updateVisit
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                summary:
+                  type: string
+                  example: Discussed knee pain, adjusted dosage
+                notes:
+                  type: string
+                  nullable: true
+                  example: Rescheduled follow-up to 4 weeks
+      responses:
+        "200":
+          description: Visit updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/DoctorVisit"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Visit not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [Visits]
+      summary: Remove a logged visit
+      operationId: deleteVisit
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Visit deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Visit deleted
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Visit not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /entries/{entryId}/visits:
+    parameters:
+      - name: entryId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: entry-001
+    post:
+      tags: [Visits]
+      summary: Log a visit tied to a specific day's entry
+      operationId: createEntryVisit
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VisitBody"
+      responses:
+        "201":
+          description: Visit logged
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/DoctorVisit"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Entry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  # ─── Analytics ────────────────────────────────────────────────────────────────
+  /analytics/mood-sleep-trend:
+    get:
+      tags: [Analytics]
+      summary: Time series of mood rating and sleep hours
+      operationId: getMoodSleepTrend
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: days
+          in: query
+          schema:
+            type: integer
+            example: 30
+      responses:
+        "200":
+          description: Mood and sleep trend data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      days:
+                        type: integer
+                        example: 30
+                      series:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            date:
+                              type: string
+                              format: date
+                              example: "2026-05-23"
+                            moodRating:
+                              type: integer
+                              example: 3
+                            sleepHours:
+                              type: number
+                              format: float
+                              example: 6.5
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /analytics/symptom-frequency:
+    get:
+      tags: [Analytics]
+      summary: Tally of symptom occurrences over a time window
+      operationId: getSymptomFrequency
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: days
+          in: query
+          schema:
+            type: integer
+            example: 30
+      responses:
+        "200":
+          description: Symptom frequency data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      days:
+                        type: integer
+                        example: 30
+                      symptoms:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            userSymptomId:
+                              type: string
+                              example: usym-001
+                            name:
+                              type: string
+                              example: Fatigue
+                            count:
+                              type: integer
+                              example: 12
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /analytics/dashboard:
+    get:
+      tags: [Analytics]
+      summary: Bundled dashboard — mood/sleep trend + symptom frequency
+      operationId: getDashboard
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: days
+          in: query
+          schema:
+            type: integer
+            example: 30
+      responses:
+        "200":
+          description: Dashboard analytics payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      days:
+                        type: integer
+                        example: 30
+                      moodSleepTrend:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            date:
+                              type: string
+                              format: date
+                              example: "2026-05-23"
+                            moodRating:
+                              type: integer
+                              example: 3
+                            sleepHours:
+                              type: number
+                              format: float
+                              example: 6.5
+                      symptomFrequency:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            userSymptomId:
+                              type: string
+                              example: usym-001
+                            name:
+                              type: string
+                              example: Fatigue
+                            count:
+                              type: integer
+                              example: 12
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── AI Reports ───────────────────────────────────────────────────────────────
+  /ai-reports:
+    get:
+      tags: [AI Reports]
+      summary: List the user's previously generated reports
+      operationId: getAIReports
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: List of AI reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: report-001
+                    dateRangeStart:
+                      type: string
+                      format: date
+                      example: "2026-05-22"
+                    dateRangeEnd:
+                      type: string
+                      format: date
+                      example: "2026-06-21"
+                    reportType:
+                      type: string
+                      example: physician_ready
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: "2026-06-21T11:00:00Z"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /ai-reports/generate:
+    post:
+      tags: [AI Reports]
+      summary: Generate a new AI appointment prep report
+      operationId: generateAIReport
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AIReportBody"
+      responses:
+        "201":
+          description: Report generated and stored
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/AIReport"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  /ai-reports/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: report-001
+    get:
+      tags: [AI Reports]
+      summary: Fetch a specific report formatted for printable view
+      operationId: getAIReport
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: AI report detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/AIReport"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Report not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [AI Reports]
+      summary: Delete a saved report
+      operationId: deleteAIReport
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Report deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Report deleted
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Report not found
           content:
             application/json:
               schema:
