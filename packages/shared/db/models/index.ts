@@ -32,6 +32,11 @@ export * from "./profile";
 export * from "./daily-log";
 export * from "./ai";
 
+/**
+ * Initializes all database models and their associations.
+ *
+ * @param sequelize - The Sequelize instance used to register the models.
+ */
 export function initModels(sequelize: Sequelize): void {
   User.initModel(sequelize);
   Session.initModel(sequelize);
