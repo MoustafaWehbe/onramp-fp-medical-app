@@ -47,3 +47,5 @@ Thumbs.db
 # ─── TypeScript ───────────────────────────────────────────────────────────────
 *.tsbuildinfo
 AGENTS.md
+BACKEND_INTEGRATION_GUIDE.md
+schema.sql
