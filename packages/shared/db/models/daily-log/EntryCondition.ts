@@ -1,5 +1,6 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
 import type { ConditionStatus } from "../../types";
+import { timestampColumns } from "../timestamps";
 
 export interface EntryConditionAttributes {
   id: string;
@@ -8,6 +9,7 @@ export interface EntryConditionAttributes {
   status: ConditionStatus;
   notes?: string;
   createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface EntryConditionCreationAttributes extends Optional<
@@ -25,6 +27,7 @@ export class EntryCondition
   declare status: ConditionStatus;
   declare notes: string | undefined;
   declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 
   static initModel(sequelize: Sequelize): typeof EntryCondition {
     EntryCondition.init(
@@ -55,12 +58,12 @@ export class EntryCondition
           type: DataTypes.TEXT,
           allowNull: true,
         },
+        ...timestampColumns,
       },
       {
         sequelize,
         tableName: "entry_conditions",
         timestamps: true,
-        updatedAt: false,
         underscored: true,
         indexes: [{ unique: true, fields: ["entry_id", "user_condition_id"] }],
       },

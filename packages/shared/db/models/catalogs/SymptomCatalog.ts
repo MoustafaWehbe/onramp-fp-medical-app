@@ -1,10 +1,12 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
+import { timestampColumns } from "../timestamps";
 
 export interface SymptomCatalogAttributes {
   id: string;
   name: string;
   category?: string;
   createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface SymptomCatalogCreationAttributes
@@ -18,6 +20,7 @@ export class SymptomCatalog
   declare name: string;
   declare category: string | undefined;
   declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 
   static initModel(sequelize: Sequelize): typeof SymptomCatalog {
     SymptomCatalog.init(
@@ -30,19 +33,19 @@ export class SymptomCatalog
         name: {
           type: DataTypes.STRING(255),
           allowNull: false,
-          unique: true,
         },
         category: {
           type: DataTypes.STRING(100),
           allowNull: true,
         },
+        ...timestampColumns,
       },
       {
         sequelize,
         tableName: "symptom_catalog",
         timestamps: true,
-        updatedAt: false,
         underscored: true,
+        indexes: [{ unique: true, fields: ["name"] }],
       },
     );
     return SymptomCatalog;

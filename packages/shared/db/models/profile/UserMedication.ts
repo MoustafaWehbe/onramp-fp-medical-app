@@ -1,10 +1,14 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
+import type { DosageMeasurement } from "../../types";
+import { timestampColumns } from "../timestamps";
+import { activeColumn, softDeleteModelOptions } from "../soft-delete";
 
 export interface UserMedicationAttributes {
   id: string;
   userId: string;
-  medicationId?: string;
-  customName?: string;
+  medicationId: string;
+  dosage?: number;
+  dosageMeasurement?: DosageMeasurement;
   frequency?: string;
   notes?: string;
   active: boolean;
@@ -14,7 +18,12 @@ export interface UserMedicationAttributes {
 
 export interface UserMedicationCreationAttributes extends Optional<
   UserMedicationAttributes,
-  "id" | "medicationId" | "customName" | "frequency" | "notes" | "active"
+  | "id"
+  | "dosage"
+  | "dosageMeasurement"
+  | "frequency"
+  | "notes"
+  | "active"
 > {}
 
 export class UserMedication
@@ -23,8 +32,9 @@ export class UserMedication
 {
   declare id: string;
   declare userId: string;
-  declare medicationId: string | undefined;
-  declare customName: string | undefined;
+  declare medicationId: string;
+  declare dosage: number | undefined;
+  declare dosageMeasurement: DosageMeasurement | undefined;
   declare frequency: string | undefined;
   declare notes: string | undefined;
   declare active: boolean;
@@ -47,12 +57,17 @@ export class UserMedication
         },
         medicationId: {
           type: DataTypes.UUID,
-          allowNull: true,
+          allowNull: false,
           references: { model: "medications", key: "id" },
-          onDelete: "SET NULL",
+          onDelete: "NO ACTION",
         },
-        customName: {
-          type: DataTypes.STRING(255),
+        dosage: {
+          type: DataTypes.FLOAT,
+          allowNull: true,
+          validate: { min: 0 },
+        },
+        dosageMeasurement: {
+          type: DataTypes.STRING(50),
           allowNull: true,
         },
         frequency: {
@@ -63,25 +78,31 @@ export class UserMedication
           type: DataTypes.TEXT,
           allowNull: true,
         },
-        active: {
-          type: DataTypes.BOOLEAN,
-          defaultValue: true,
-          allowNull: false,
-        },
+        active: activeColumn,
+        ...timestampColumns,
       },
       {
         sequelize,
         tableName: "user_medications",
         timestamps: true,
         underscored: true,
+        ...softDeleteModelOptions,
+        indexes: [
+          {
+            unique: true,
+            fields: ["user_id", "medication_id"],
+            where: { active: true },
+            name: "user_medications_user_medication_active_unique",
+          },
+        ],
         validate: {
-          hasCatalogOrCustomName(this: UserMedication) {
-            const hasCatalog = this.medicationId != null;
-            const hasCustomName = this.customName != null;
+          hasPairedDosage(this: UserMedication) {
+            const hasDosage = this.dosage != null;
+            const hasMeasurement = this.dosageMeasurement != null;
 
-            if (hasCatalog === hasCustomName) {
+            if (hasDosage !== hasMeasurement) {
               throw new Error(
-                "UserMedication must have either medicationId or customName.",
+                "UserMedication must have both dosage and dosageMeasurement, or neither.",
               );
             }
           },

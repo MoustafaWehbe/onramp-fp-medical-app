@@ -1,4 +1,5 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
+import { timestampColumns } from "../timestamps";
 
 export interface DailyEntryAttributes {
   id: string;
@@ -61,6 +62,7 @@ export class DailyEntry
           type: DataTypes.TEXT,
           allowNull: true,
         },
+        ...timestampColumns,
       },
       {
         sequelize,

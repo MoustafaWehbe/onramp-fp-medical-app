@@ -1,4 +1,5 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
+import { timestampColumns } from "../timestamps";
 
 export interface EntrySymptomAttributes {
   id: string;
@@ -7,6 +8,7 @@ export interface EntrySymptomAttributes {
   severity?: number;
   notes?: string;
   createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface EntrySymptomCreationAttributes extends Optional<
@@ -24,6 +26,7 @@ export class EntrySymptom
   declare severity: number | undefined;
   declare notes: string | undefined;
   declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 
   static initModel(sequelize: Sequelize): typeof EntrySymptom {
     EntrySymptom.init(
@@ -54,12 +57,12 @@ export class EntrySymptom
           type: DataTypes.TEXT,
           allowNull: true,
         },
+        ...timestampColumns,
       },
       {
         sequelize,
         tableName: "entry_symptoms",
         timestamps: true,
-        updatedAt: false,
         underscored: true,
         indexes: [{ unique: true, fields: ["entry_id", "user_symptom_id"] }],
       },

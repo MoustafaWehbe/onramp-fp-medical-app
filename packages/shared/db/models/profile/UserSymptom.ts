@@ -1,10 +1,11 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
+import { timestampColumns } from "../timestamps";
+import { activeColumn, softDeleteModelOptions } from "../soft-delete";
 
 export interface UserSymptomAttributes {
   id: string;
   userId: string;
-  catalogId?: string;
-  customName?: string;
+  catalogId: string;
   active: boolean;
   createdAt?: Date;
   updatedAt?: Date;
@@ -12,7 +13,7 @@ export interface UserSymptomAttributes {
 
 export interface UserSymptomCreationAttributes extends Optional<
   UserSymptomAttributes,
-  "id" | "catalogId" | "customName" | "active"
+  "id" | "active"
 > {}
 
 export class UserSymptom
@@ -21,8 +22,7 @@ export class UserSymptom
 {
   declare id: string;
   declare userId: string;
-  declare catalogId: string | undefined;
-  declare customName: string | undefined;
+  declare catalogId: string;
   declare active: boolean;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
@@ -43,37 +43,27 @@ export class UserSymptom
         },
         catalogId: {
           type: DataTypes.UUID,
-          allowNull: true,
-          references: { model: "symptom_catalog", key: "id" },
-          onDelete: "SET NULL",
-        },
-        customName: {
-          type: DataTypes.STRING(255),
-          allowNull: true,
-        },
-        active: {
-          type: DataTypes.BOOLEAN,
-          defaultValue: true,
           allowNull: false,
+          references: { model: "symptom_catalog", key: "id" },
+          onDelete: "NO ACTION",
         },
+        active: activeColumn,
+        ...timestampColumns,
       },
       {
         sequelize,
         tableName: "user_symptoms",
         timestamps: true,
         underscored: true,
-        validate: {
-          hasCatalogOrCustomName(this: UserSymptom) {
-            const hasCatalog = this.catalogId != null;
-            const hasCustomName = this.customName != null;
-
-            if (hasCatalog === hasCustomName) {
-              throw new Error(
-                "UserSymptom must have either catalogId or customName.",
-              );
-            }
+        ...softDeleteModelOptions,
+        indexes: [
+          {
+            unique: true,
+            fields: ["user_id", "catalog_id"],
+            where: { active: true },
+            name: "user_symptoms_user_catalog_active_unique",
           },
-        },
+        ],
       },
     );
     return UserSymptom;

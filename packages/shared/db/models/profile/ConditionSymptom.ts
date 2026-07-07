@@ -1,10 +1,12 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
+import { timestampColumns } from "../timestamps";
 
 export interface ConditionSymptomAttributes {
   id: string;
   userConditionId: string;
   userSymptomId: string;
   createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface ConditionSymptomCreationAttributes
@@ -18,6 +20,7 @@ export class ConditionSymptom
   declare userConditionId: string;
   declare userSymptomId: string;
   declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 
   static initModel(sequelize: Sequelize): typeof ConditionSymptom {
     ConditionSymptom.init(
@@ -39,12 +42,12 @@ export class ConditionSymptom
           references: { model: "user_symptoms", key: "id" },
           onDelete: "CASCADE",
         },
+        ...timestampColumns,
       },
       {
         sequelize,
         tableName: "condition_symptoms",
         timestamps: true,
-        updatedAt: false,
         underscored: true,
         indexes: [
           {

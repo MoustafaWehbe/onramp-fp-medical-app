@@ -1,4 +1,5 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
+import { timestampColumns } from "../timestamps";
 
 export interface ClinicAttributes {
   id: string;
@@ -6,6 +7,7 @@ export interface ClinicAttributes {
   address?: string;
   phone?: string;
   createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface ClinicCreationAttributes
@@ -20,6 +22,7 @@ export class Clinic
   declare address: string | undefined;
   declare phone: string | undefined;
   declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 
   static initModel(sequelize: Sequelize): typeof Clinic {
     Clinic.init(
@@ -41,13 +44,14 @@ export class Clinic
           type: DataTypes.STRING(50),
           allowNull: true,
         },
+        ...timestampColumns,
       },
       {
         sequelize,
         tableName: "clinics",
         timestamps: true,
-        updatedAt: false,
         underscored: true,
+        indexes: [{ unique: true, fields: ["name", "address"] }],
       },
     );
     return Clinic;
