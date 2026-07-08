@@ -137,11 +137,31 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `
+      DELETE FROM entry_conditions
+      WHERE user_condition_id IN (
+        SELECT id FROM user_conditions WHERE condition_id IS NULL
+      );
+
+      DELETE FROM entry_symptoms
+      WHERE user_symptom_id IN (
+        SELECT id FROM user_symptoms WHERE catalog_id IS NULL
+      );
+
+      DELETE FROM entry_medications
+      WHERE user_medication_id IN (
+        SELECT id FROM user_medications WHERE medication_id IS NULL
+      );
+
+      DELETE FROM entry_doctor_visits
+      WHERE user_doctor_id IN (
+        SELECT id FROM user_doctors WHERE doctor_id IS NULL
+      );
+
       DELETE FROM user_conditions WHERE condition_id IS NULL;
       DELETE FROM user_symptoms WHERE catalog_id IS NULL;
       DELETE FROM user_medications WHERE medication_id IS NULL;
-      DELETE FROM user_clinics WHERE clinic_id IS NULL;
       DELETE FROM user_doctors WHERE doctor_id IS NULL;
+      DELETE FROM user_clinics WHERE clinic_id IS NULL;
     `,
         { transaction },
       );
