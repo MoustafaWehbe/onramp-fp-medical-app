@@ -3,33 +3,41 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const addUpdatedAt = async (table) => {
-      await queryInterface.sequelize.query(`
+    await queryInterface.sequelize.transaction(async (transaction) => {
+      const addUpdatedAt = async (table) => {
+        await queryInterface.sequelize.query(
+          `
         ALTER TABLE ${table}
         ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
-      `);
-    };
+      `,
+          { transaction },
+        );
+      };
 
-    await addUpdatedAt("symptom_catalog");
-    await addUpdatedAt("condition_catalog");
-    await addUpdatedAt("medications");
-    await addUpdatedAt("clinics");
-    await addUpdatedAt("doctors");
-    await addUpdatedAt("condition_symptoms");
-    await addUpdatedAt("entry_conditions");
-    await addUpdatedAt("entry_symptoms");
-    await addUpdatedAt("entry_medications");
-    await addUpdatedAt("ai_reports");
+      await addUpdatedAt("symptom_catalog");
+      await addUpdatedAt("condition_catalog");
+      await addUpdatedAt("medications");
+      await addUpdatedAt("clinics");
+      await addUpdatedAt("doctors");
+      await addUpdatedAt("condition_symptoms");
+      await addUpdatedAt("entry_conditions");
+      await addUpdatedAt("entry_symptoms");
+      await addUpdatedAt("entry_medications");
+      await addUpdatedAt("ai_reports");
 
-    await queryInterface.sequelize.query(`
+      await queryInterface.sequelize.query(
+        `
       ALTER TABLE user_conditions DROP CONSTRAINT IF EXISTS chk_user_condition_source;
       ALTER TABLE user_symptoms DROP CONSTRAINT IF EXISTS chk_user_symptom_source;
       ALTER TABLE user_medications DROP CONSTRAINT IF EXISTS chk_user_medication_source;
       ALTER TABLE user_clinics DROP CONSTRAINT IF EXISTS chk_user_clinic_source;
       ALTER TABLE user_doctors DROP CONSTRAINT IF EXISTS chk_user_doctor_source;
-    `);
+    `,
+        { transaction },
+      );
 
-    await queryInterface.sequelize.query(`
+      await queryInterface.sequelize.query(
+        `
       INSERT INTO condition_catalog (id, name, created_at, updated_at)
       SELECT gen_random_uuid(), uc.custom_name, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
       FROM user_conditions uc
@@ -123,44 +131,60 @@ module.exports = {
         AND d.name = ud.custom_name
         AND COALESCE(d.specialty, '') = ''
         AND COALESCE(d.phone, '') = '';
-    `);
+    `,
+        { transaction },
+      );
 
-    await queryInterface.sequelize.query(`
+      await queryInterface.sequelize.query(
+        `
       DELETE FROM user_conditions WHERE condition_id IS NULL;
       DELETE FROM user_symptoms WHERE catalog_id IS NULL;
       DELETE FROM user_medications WHERE medication_id IS NULL;
       DELETE FROM user_clinics WHERE clinic_id IS NULL;
       DELETE FROM user_doctors WHERE doctor_id IS NULL;
-    `);
+    `,
+        { transaction },
+      );
 
-    await queryInterface.removeColumn("user_conditions", "custom_name");
-    await queryInterface.removeColumn("user_symptoms", "custom_name");
-    await queryInterface.removeColumn("user_medications", "custom_name");
-    await queryInterface.removeColumn("user_clinics", "custom_name");
-    await queryInterface.removeColumn("user_doctors", "custom_name");
+      await queryInterface.removeColumn("user_conditions", "custom_name", {
+        transaction,
+      });
+      await queryInterface.removeColumn("user_symptoms", "custom_name", {
+        transaction,
+      });
+      await queryInterface.removeColumn("user_medications", "custom_name", {
+        transaction,
+      });
+      await queryInterface.removeColumn("user_clinics", "custom_name", {
+        transaction,
+      });
+      await queryInterface.removeColumn("user_doctors", "custom_name", {
+        transaction,
+      });
 
-    const profileFkMigrations = [
-      {
-        table: "user_conditions",
-        column: "condition_id",
-        refTable: "condition_catalog",
-      },
-      {
-        table: "user_symptoms",
-        column: "catalog_id",
-        refTable: "symptom_catalog",
-      },
-      {
-        table: "user_medications",
-        column: "medication_id",
-        refTable: "medications",
-      },
-      { table: "user_clinics", column: "clinic_id", refTable: "clinics" },
-      { table: "user_doctors", column: "doctor_id", refTable: "doctors" },
-    ];
+      const profileFkMigrations = [
+        {
+          table: "user_conditions",
+          column: "condition_id",
+          refTable: "condition_catalog",
+        },
+        {
+          table: "user_symptoms",
+          column: "catalog_id",
+          refTable: "symptom_catalog",
+        },
+        {
+          table: "user_medications",
+          column: "medication_id",
+          refTable: "medications",
+        },
+        { table: "user_clinics", column: "clinic_id", refTable: "clinics" },
+        { table: "user_doctors", column: "doctor_id", refTable: "doctors" },
+      ];
 
-    for (const { table, column, refTable } of profileFkMigrations) {
-      await queryInterface.sequelize.query(`
+      for (const { table, column, refTable } of profileFkMigrations) {
+        await queryInterface.sequelize.query(
+          `
         ALTER TABLE ${table}
           DROP CONSTRAINT IF EXISTS ${table}_${column}_fkey;
         ALTER TABLE ${table}
@@ -168,19 +192,32 @@ module.exports = {
         ALTER TABLE ${table}
           ADD CONSTRAINT ${table}_${column}_fkey
           FOREIGN KEY (${column}) REFERENCES ${refTable}(id) ON DELETE NO ACTION;
-      `);
-    }
+      `,
+          { transaction },
+        );
+      }
 
-    await queryInterface.addColumn("user_medications", "dosage", {
-      type: Sequelize.FLOAT,
-      allowNull: true,
-    });
-    await queryInterface.addColumn("user_medications", "dosage_measurement", {
-      type: Sequelize.STRING(50),
-      allowNull: true,
-    });
+      await queryInterface.addColumn(
+        "user_medications",
+        "dosage",
+        {
+          type: Sequelize.DECIMAL(10, 3),
+          allowNull: true,
+        },
+        { transaction },
+      );
+      await queryInterface.addColumn(
+        "user_medications",
+        "dosage_measurement",
+        {
+          type: Sequelize.STRING(50),
+          allowNull: true,
+        },
+        { transaction },
+      );
 
-    await queryInterface.sequelize.query(`
+      await queryInterface.sequelize.query(
+        `
       ALTER TABLE user_medications
       ADD CONSTRAINT chk_user_medication_dosage
       CHECK (
@@ -232,7 +269,10 @@ module.exports = {
       DROP INDEX IF EXISTS idx_user_doctors_doctor;
       CREATE INDEX IF NOT EXISTS idx_user_doctors_doctor
         ON user_doctors (doctor_id);
-    `);
+    `,
+        { transaction },
+      );
+    });
   },
 
   async down(queryInterface, Sequelize) {

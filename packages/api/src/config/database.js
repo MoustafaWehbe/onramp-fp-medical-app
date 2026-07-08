@@ -27,7 +27,7 @@ const dbUrl =
 module.exports = {
   development: parseDbUrl(dbUrl),
   test: parseDbUrl(
-    process.env.DATABASE_URL ||
+    process.env.DATABASE_URL || 
       "postgresql://postgres:postgres@localhost:5432/starter_kit_test",
   ),
   production: parseDbUrl(process.env.DATABASE_URL || dbUrl),
