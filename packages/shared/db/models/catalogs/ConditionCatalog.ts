@@ -1,9 +1,11 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
+import { timestampColumns } from "../timestamps";
 
 export interface ConditionCatalogAttributes {
   id: string;
   name: string;
   createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface ConditionCatalogCreationAttributes
@@ -16,6 +18,7 @@ export class ConditionCatalog
   declare id: string;
   declare name: string;
   declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 
   static initModel(sequelize: Sequelize): typeof ConditionCatalog {
     ConditionCatalog.init(
@@ -28,15 +31,15 @@ export class ConditionCatalog
         name: {
           type: DataTypes.STRING(255),
           allowNull: false,
-          unique: true,
         },
+        ...timestampColumns,
       },
       {
         sequelize,
         tableName: "condition_catalog",
         timestamps: true,
-        updatedAt: false,
         underscored: true,
+        indexes: [{ unique: true, fields: ["name"] }],
       },
     );
     return ConditionCatalog;

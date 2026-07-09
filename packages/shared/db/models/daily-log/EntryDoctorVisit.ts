@@ -1,4 +1,5 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
+import { timestampColumns } from "../timestamps";
 
 export interface EntryDoctorVisitAttributes {
   id: string;
@@ -63,6 +64,7 @@ export class EntryDoctorVisit
           type: DataTypes.TEXT,
           allowNull: true,
         },
+        ...timestampColumns,
       },
       {
         sequelize,

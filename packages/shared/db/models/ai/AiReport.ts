@@ -1,4 +1,5 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
+import { timestampColumns } from "../timestamps";
 
 export interface AiReportContent {
   summary?: string;
@@ -16,6 +17,7 @@ export interface AiReportAttributes {
   dateRangeEnd: string;
   reportContent: AiReportContent;
   createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface AiReportCreationAttributes
@@ -31,6 +33,7 @@ export class AiReport
   declare dateRangeEnd: string;
   declare reportContent: AiReportContent;
   declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 
   static initModel(sequelize: Sequelize): typeof AiReport {
     AiReport.init(
@@ -58,12 +61,12 @@ export class AiReport
           type: DataTypes.JSONB,
           allowNull: false,
         },
+        ...timestampColumns,
       },
       {
         sequelize,
         tableName: "ai_reports",
         timestamps: true,
-        updatedAt: false,
         underscored: true,
       },
     );

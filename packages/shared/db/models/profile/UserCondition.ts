@@ -1,11 +1,12 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
 import type { ConditionStatus } from "../../types";
+import { timestampColumns } from "../timestamps";
+import { activeColumn, softDeleteModelOptions } from "../soft-delete";
 
 export interface UserConditionAttributes {
   id: string;
   userId: string;
-  conditionId?: string;
-  customName?: string;
+  conditionId: string;
   description?: string;
   diagnosedDate?: string;
   status: ConditionStatus;
@@ -17,7 +18,7 @@ export interface UserConditionAttributes {
 
 export interface UserConditionCreationAttributes extends Optional<
   UserConditionAttributes,
-  "id" | "conditionId" | "customName" | "description" | "diagnosedDate" | "status" | "notes" | "active"
+  "id" | "description" | "diagnosedDate" | "status" | "notes" | "active"
 > {}
 
 export class UserCondition
@@ -26,8 +27,7 @@ export class UserCondition
 {
   declare id: string;
   declare userId: string;
-  declare conditionId: string | undefined;
-  declare customName: string | undefined;
+  declare conditionId: string;
   declare description: string | undefined;
   declare diagnosedDate: string | undefined;
   declare status: ConditionStatus;
@@ -52,13 +52,9 @@ export class UserCondition
         },
         conditionId: {
           type: DataTypes.UUID,
-          allowNull: true,
+          allowNull: false,
           references: { model: "condition_catalog", key: "id" },
-          onDelete: "SET NULL",
-        },
-        customName: {
-          type: DataTypes.STRING(255),
-          allowNull: true,
+          onDelete: "NO ACTION",
         },
         description: {
           type: DataTypes.TEXT,
@@ -77,29 +73,23 @@ export class UserCondition
           type: DataTypes.TEXT,
           allowNull: true,
         },
-        active: {
-          type: DataTypes.BOOLEAN,
-          defaultValue: true,
-          allowNull: false,
-        },
+        active: activeColumn,
+        ...timestampColumns,
       },
       {
         sequelize,
         tableName: "user_conditions",
         timestamps: true,
         underscored: true,
-        validate: {
-          hasCatalogOrCustomName(this: UserCondition) {
-            const hasCatalog = this.conditionId != null;
-            const hasCustomName = this.customName != null;
-
-            if (hasCatalog === hasCustomName) {
-              throw new Error(
-                "UserCondition must have either conditionId or customName.",
-              );
-            }
+        ...softDeleteModelOptions,
+        indexes: [
+          {
+            unique: true,
+            fields: ["user_id", "condition_id"],
+            where: { active: true },
+            name: "user_conditions_user_condition_active_unique",
           },
-        },
+        ],
       },
     );
     return UserCondition;

@@ -1,10 +1,11 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
+import { timestampColumns } from "../timestamps";
+import { activeColumn, softDeleteModelOptions } from "../soft-delete";
 
 export interface UserDoctorAttributes {
   id: string;
   userId: string;
-  doctorId?: string;
-  customName?: string;
+  doctorId: string;
   userClinicId?: string;
   notes?: string;
   active: boolean;
@@ -14,7 +15,7 @@ export interface UserDoctorAttributes {
 
 export interface UserDoctorCreationAttributes extends Optional<
   UserDoctorAttributes,
-  "id" | "doctorId" | "customName" | "userClinicId" | "notes" | "active"
+  "id" | "userClinicId" | "notes" | "active"
 > {}
 
 export class UserDoctor
@@ -23,8 +24,7 @@ export class UserDoctor
 {
   declare id: string;
   declare userId: string;
-  declare doctorId: string | undefined;
-  declare customName: string | undefined;
+  declare doctorId: string;
   declare userClinicId: string | undefined;
   declare notes: string | undefined;
   declare active: boolean;
@@ -47,13 +47,9 @@ export class UserDoctor
         },
         doctorId: {
           type: DataTypes.UUID,
-          allowNull: true,
+          allowNull: false,
           references: { model: "doctors", key: "id" },
-          onDelete: "SET NULL",
-        },
-        customName: {
-          type: DataTypes.STRING(255),
-          allowNull: true,
+          onDelete: "NO ACTION",
         },
         userClinicId: {
           type: DataTypes.UUID,
@@ -65,29 +61,23 @@ export class UserDoctor
           type: DataTypes.TEXT,
           allowNull: true,
         },
-        active: {
-          type: DataTypes.BOOLEAN,
-          defaultValue: true,
-          allowNull: false,
-        },
+        active: activeColumn,
+        ...timestampColumns,
       },
       {
         sequelize,
         tableName: "user_doctors",
         timestamps: true,
         underscored: true,
-        validate: {
-          hasCatalogOrCustomName(this: UserDoctor) {
-            const hasCatalog = this.doctorId != null;
-            const hasCustomName = this.customName != null;
-
-            if (hasCatalog === hasCustomName) {
-              throw new Error(
-                "UserDoctor must have either doctorId or customName.",
-              );
-            }
+        ...softDeleteModelOptions,
+        indexes: [
+          {
+            unique: true,
+            fields: ["user_id", "doctor_id"],
+            where: { active: true },
+            name: "user_doctors_user_doctor_active_unique",
           },
-        },
+        ],
       },
     );
     return UserDoctor;

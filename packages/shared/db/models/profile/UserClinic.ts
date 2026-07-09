@@ -1,10 +1,11 @@
 import { Model, DataTypes, type Sequelize, type Optional } from "sequelize";
+import { timestampColumns } from "../timestamps";
+import { activeColumn, softDeleteModelOptions } from "../soft-delete";
 
 export interface UserClinicAttributes {
   id: string;
   userId: string;
-  clinicId?: string;
-  customName?: string;
+  clinicId: string;
   notes?: string;
   active: boolean;
   createdAt?: Date;
@@ -13,7 +14,7 @@ export interface UserClinicAttributes {
 
 export interface UserClinicCreationAttributes extends Optional<
   UserClinicAttributes,
-  "id" | "clinicId" | "customName" | "notes" | "active"
+  "id" | "notes" | "active"
 > {}
 
 export class UserClinic
@@ -22,8 +23,7 @@ export class UserClinic
 {
   declare id: string;
   declare userId: string;
-  declare clinicId: string | undefined;
-  declare customName: string | undefined;
+  declare clinicId: string;
   declare notes: string | undefined;
   declare active: boolean;
   declare readonly createdAt: Date;
@@ -45,41 +45,31 @@ export class UserClinic
         },
         clinicId: {
           type: DataTypes.UUID,
-          allowNull: true,
+          allowNull: false,
           references: { model: "clinics", key: "id" },
-          onDelete: "SET NULL",
-        },
-        customName: {
-          type: DataTypes.STRING(255),
-          allowNull: true,
+          onDelete: "NO ACTION",
         },
         notes: {
           type: DataTypes.TEXT,
           allowNull: true,
         },
-        active: {
-          type: DataTypes.BOOLEAN,
-          defaultValue: true,
-          allowNull: false,
-        },
+        active: activeColumn,
+        ...timestampColumns,
       },
       {
         sequelize,
         tableName: "user_clinics",
         timestamps: true,
         underscored: true,
-        validate: {
-          hasCatalogOrCustomName(this: UserClinic) {
-            const hasCatalog = this.clinicId != null;
-            const hasCustomName = this.customName != null;
-
-            if (hasCatalog === hasCustomName) {
-              throw new Error(
-                "UserClinic must have either clinicId or customName.",
-              );
-            }
+        ...softDeleteModelOptions,
+        indexes: [
+          {
+            unique: true,
+            fields: ["user_id", "clinic_id"],
+            where: { active: true },
+            name: "user_clinics_user_clinic_active_unique",
           },
-        },
+        ],
       },
     );
     return UserClinic;
