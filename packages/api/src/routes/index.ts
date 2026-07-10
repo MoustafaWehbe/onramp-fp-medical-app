@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { authRouter } from "./auth.routes";
-import { symptomCatalogRouter } from "./symptom-catalog.routes";
+import { symptomCatalogRouter } from "./symptom.routes";
 
 const router = Router();
 
 router.use("/auth", authRouter);
-router.use("/catalog/symptoms", symptomCatalogRouter);
+router.use("/symptoms", symptomCatalogRouter);
 
 export { router };
