@@ -29,13 +29,11 @@ export class ConditionService {
 
     // 4. Not found locally → search external API
     const externalResults = await searchConditionsFromApi(term);
-
     // 5. Nothing found anywhere
     if (externalResults.length === 0) {
       return [];
     }
 
-    // 6. Save new conditions locally
     // 6. Save new conditions locally
     await ConditionCatalog.bulkCreate(
       externalResults.map((condition) => ({
@@ -45,7 +43,6 @@ export class ConditionService {
         ignoreDuplicates: true,
       },
     );
-
     // Re-query to return all conditions matching the external results,
     // including ones that already existed and were skipped by ignoreDuplicates.
     return await ConditionCatalog.findAll({

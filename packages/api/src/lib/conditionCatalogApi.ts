@@ -18,14 +18,10 @@ export async function searchConditionsFromApi(
     params: {
       terms: term,
       maxList: 10,
-  
     },
     timeout: 5_000,
   });
-   
-
   const names: unknown[] = Array.isArray(data) && Array.isArray(data[3]) ? data[3] : [];
-
   return names
     .filter((entry): entry is string[] => Array.isArray(entry) && typeof entry[0] === "string")
     .map((entry) => ({ name: cleanName(entry[0]) }));

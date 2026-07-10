@@ -6,7 +6,6 @@ import { conditionQuerySchema } from "../schemas/catalog/conditions.schema";
 
 const router = Router();
 
-
 // get conditions from external API
 router.get("/catalog",
     rateLimiter,
