@@ -20,6 +20,7 @@ export async function searchConditionsFromApi(
       maxList: 10,
   
     },
+    timeout: 5_000,
   });
    
   console.log("External API response data:", data);
