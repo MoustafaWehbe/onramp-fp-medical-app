@@ -1,9 +1,13 @@
+import { Op } from "sequelize";
 import { SymptomCatalog } from "../models";
 
 
 export class SymptomCatalogService {
-  async list(): Promise<SymptomCatalog[]> {
-    return SymptomCatalog.findAll({ order: [["name", "ASC"]] });
+  async list(search?: string): Promise<SymptomCatalog[]> {
+    const where = search
+      ? { name: { [Op.iLike]: `%${search}%` } }
+      : undefined;
+    return SymptomCatalog.findAll({ where, order: [["name", "ASC"]] });
   } 
 }
 

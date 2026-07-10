@@ -8,7 +8,7 @@ import {validate} from "src/middleware/validate";
 
 const router = Router();
 
-router.get("/catalog", rateLimiter,validate(SymptomQuerySchema, "query"), symptomCatalogController.list);
+router.get("/symptoms", rateLimiter,validate(SymptomQuerySchema, "query"), symptomCatalogController.list);
 
 
 export { router as symptomCatalogRouter };

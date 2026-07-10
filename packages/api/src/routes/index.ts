@@ -5,6 +5,6 @@ import { symptomCatalogRouter } from "./symptom.routes";
 const router = Router();
 
 router.use("/auth", authRouter);
-router.use("/symptoms", symptomCatalogRouter);
+router.use("/catalog", symptomCatalogRouter);
 
 export { router };
