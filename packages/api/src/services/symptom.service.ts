@@ -1,5 +1,6 @@
 import { Op } from "sequelize";
 import { SymptomCatalog } from "../models";
+import { searchSymptomsFromApi } from "../lib/symptoms";
 
 
 export class SymptomCatalogService {
@@ -10,6 +11,11 @@ export class SymptomCatalogService {
     return SymptomCatalog.findAll({ where, order: [["name", "ASC"]] });
   } 
 }
+export class SymptomServiceapi {
+  async searchSymptomsFromApi(term: string): Promise<{ name: string }[]> {
+    return searchSymptomsFromApi(term);
+  }
+}
 
-
+export const symptomServiceapi = new SymptomServiceapi();
 export const symptomCatalogService = new SymptomCatalogService();
