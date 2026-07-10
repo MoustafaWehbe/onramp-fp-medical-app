@@ -36,17 +36,26 @@ export class ConditionService {
     }
 
     // 6. Save new conditions locally
-    const savedConditions = await ConditionCatalog.bulkCreate(
+    // 6. Save new conditions locally
+    await ConditionCatalog.bulkCreate(
       externalResults.map((condition) => ({
         name: condition.name,
-
       })),
       {
         ignoreDuplicates: true,
       },
     );
 
-    return savedConditions;
+    // Re-query to return all conditions matching the external results,
+    // including ones that already existed and were skipped by ignoreDuplicates.
+    return await ConditionCatalog.findAll({
+      where: {
+        name: {
+          [Op.in]: externalResults.map((c) => c.name),
+        },
+      },
+      order: [["name", "ASC"]],
+    });
   }
 }
 
