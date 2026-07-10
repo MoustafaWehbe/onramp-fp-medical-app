@@ -23,7 +23,6 @@ export async function searchConditionsFromApi(
     timeout: 5_000,
   });
    
-  console.log("External API response data:", data);
 
   const names: string[] = data[3] ?? [];
 
