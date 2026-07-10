@@ -24,10 +24,9 @@ export async function searchConditionsFromApi(
   });
    
 
-  const names: string[] = data[3] ?? [];
+  const names: unknown[] = Array.isArray(data) && Array.isArray(data[3]) ? data[3] : [];
 
-  
-  return names.map((nameArray, index) => ({
-    name: cleanName(nameArray[0]),
-    }));
+  return names
+    .filter((entry): entry is string[] => Array.isArray(entry) && typeof entry[0] === "string")
+    .map((entry) => ({ name: cleanName(entry[0]) }));
 }
