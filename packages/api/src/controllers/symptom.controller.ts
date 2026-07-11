@@ -21,11 +21,7 @@ export const symptomCatalogController = {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const term = req.query.term as string;
-      if (!term) {
-        res.status(400).json({ error: "term is required" });
-        return;
-      }
+      const { term } = req.query as { term: string };
       const symptoms = await symptomServiceapi.searchSymptomsFromApi(term);
       res.json({ data: symptoms });
     } catch (err) {

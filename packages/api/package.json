@@ -18,6 +18,7 @@
     "@asteasolutions/zod-to-openapi": "^7.3.4",
     "@starter-kit/shared": "*",
     "@types/cookie-parser": "^1.4.10",
+    "axios": "^1.18.1",
     "bullmq": "^5.12.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

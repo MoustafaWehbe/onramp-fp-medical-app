@@ -1,10 +1,8 @@
-
 import axios from "axios";
 
-const BIOPORTAL_API_KEY =
-  process.env.BIOPORTAL_API_KEY || "8b5b7825-538d-40e0-9e9e-5ab9274a9aeb";
-
 const BASE_URL = "https://data.bioontology.org/search";
+
+const BIOPORTAL_API_KEY = (): string | undefined => process.env.BIOPORTAL_API_KEY;
 
 export interface ExternalSymptom {
   name: string;
@@ -29,6 +27,13 @@ export async function searchSymptomsFromApi(
     return [];
   }
 
+  const apiKey = BIOPORTAL_API_KEY();
+
+  if (!apiKey) {
+    console.error("BIOPORTAL_API_KEY is not set");
+    return [];
+  }
+
   const { data } = await axios.get(BASE_URL, {
     params: {
       q: query,
@@ -37,7 +42,7 @@ export async function searchSymptomsFromApi(
       include: "prefLabel",
       page: 1,
       pagesize: 10,
-      apikey: BIOPORTAL_API_KEY,
+      apikey: apiKey,
     },
     timeout: 5000,
   });

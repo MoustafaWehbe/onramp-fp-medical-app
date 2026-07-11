@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { symptomCatalogController } from "../controllers/symptom.controller";
 import { rateLimiter } from "../middleware/rate-limiter";
-import { SymptomQuerySchema } from "../schemas/symptoms.schemas";
+import { SymptomQuerySchema, SymptomSearchQuerySchema } from "../schemas/symptoms.schemas";
 import {validate} from "../middleware/validate";
 
 const router = Router();
@@ -12,6 +12,8 @@ router.get("/symptoms",
      symptomCatalogController.list
     );
 router.get("/symptoms/search",
+    rateLimiter,
+    validate(SymptomSearchQuerySchema, "query"),
     symptomCatalogController.search
 );
 
