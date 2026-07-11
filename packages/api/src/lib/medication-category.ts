@@ -1,5 +1,6 @@
 const OPEN_FDA_NDC_URL = "https://api.fda.gov/drug/ndc.json";
 const OPEN_FDA_LABEL_URL = "https://api.fda.gov/drug/label.json";
+const OPEN_FDA_FETCH_TIMEOUT_MS = 10_000;
 
 interface OpenFdaNdcResult {
   brand_name?: string;
@@ -178,7 +179,9 @@ async function fetchOpenFdaNdcResults(
   const url =
     `${OPEN_FDA_NDC_URL}?search=${encodeURIComponent(searchQuery)}&limit=20`;
 
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    signal: AbortSignal.timeout(OPEN_FDA_FETCH_TIMEOUT_MS),
+  });
 
   if (response.status === 404) {
     return [];
@@ -204,7 +207,9 @@ async function fetchLabelPurpose(name: string): Promise<string[]> {
   for (const query of queries) {
     const url =
       `${OPEN_FDA_LABEL_URL}?search=${encodeURIComponent(query)}&limit=1`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      signal: AbortSignal.timeout(OPEN_FDA_FETCH_TIMEOUT_MS),
+    });
 
     if (response.status === 404) continue;
     if (!response.ok) {

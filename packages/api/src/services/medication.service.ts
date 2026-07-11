@@ -1,4 +1,4 @@
-import { Op, type WhereOptions } from "sequelize";
+import { Op, UniqueConstraintError, type WhereOptions } from "sequelize";
 import { Medication } from "../models";
 import {
   buildPaginatedResponse,
@@ -70,7 +70,14 @@ export class MedicationService {
       throw createError("Medication already exists", 409);
     }
 
-    return Medication.create(input);
+    try {
+      return await Medication.create(input);
+    } catch (error) {
+      if (error instanceof UniqueConstraintError) {
+        throw createError("Medication already exists", 409);
+      }
+      throw error;
+    }
   }
 
   async searchNames(search: string): Promise<string[]> {

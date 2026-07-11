@@ -1,4 +1,5 @@
 const OPEN_FDA_NDC_URL = "https://api.fda.gov/drug/ndc.json";
+const OPEN_FDA_FETCH_TIMEOUT_MS = 5_000;
 const MEDICATION_SEARCH_LIMIT = 10;
 const MAX_NAME_LENGTH = 60;
 
@@ -90,7 +91,9 @@ async function fetchOpenFdaResults(
   const url =
     `${OPEN_FDA_NDC_URL}?search=${encodeURIComponent(searchQuery)}&limit=100`;
 
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    signal: AbortSignal.timeout(OPEN_FDA_FETCH_TIMEOUT_MS),
+  });
 
   if (response.status === 404) {
     return [];
