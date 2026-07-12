@@ -3,6 +3,7 @@ import { paginationQuerySchema } from "./pagination.schemas";
 
 const symptomNameSchema = z
   .string()
+  .trim()
   .min(1, "Name is required")
   .max(255, "Name must be at most 255 characters");
 
