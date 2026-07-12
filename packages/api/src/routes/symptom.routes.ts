@@ -7,7 +7,7 @@ import {
 } from "../schemas/symptoms.schemas";
 import { validate } from "../middleware/validate";
 import { authenticate } from "../middleware/authenticate";
-import { rateLimiter } from "src/middleware/rate-limiter";
+import { rateLimiter } from "../middleware/rate-limiter";
 
 const router = Router();
 
