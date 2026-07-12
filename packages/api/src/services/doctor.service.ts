@@ -58,6 +58,7 @@ export class DoctorService {
       order: [
         ["name", "ASC"],
         ["specialty", "ASC"],
+        ["id", "ASC"],
       ],
       limit,
       offset,
