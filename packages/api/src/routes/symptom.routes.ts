@@ -3,8 +3,11 @@ import { symptomCatalogController } from "../controllers/symptom.controller";
 import { rateLimiter } from "../middleware/rate-limiter";
 import { SymptomQuerySchema, SymptomSearchQuerySchema } from "../schemas/symptoms.schemas";
 import {validate} from "../middleware/validate";
+import { authenticate } from "src/middleware/authenticate";
 
 const router = Router();
+
+router.use(authenticate);
 
 router.get("/symptoms", 
     rateLimiter, 

@@ -6,7 +6,7 @@ import { searchSymptomsFromApi } from "../lib/symptoms";
 export class SymptomCatalogService {
   async list(search?: string): Promise<SymptomCatalog[]> {
     const where = search
-      ? { name: { [Op.iLike]: `%${search}%` } }
+      ? { name: { [Op.iLike]: `%${search.replace(/[%_]/g, "\\$&")}%` } }
       : undefined;
     return SymptomCatalog.findAll({ where, order: [["name", "ASC"]] });
   } 
