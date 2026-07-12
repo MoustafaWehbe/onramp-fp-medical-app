@@ -1,12 +1,15 @@
 import { Router } from "express";
 import { authRouter } from "./auth.routes";
-import { symptomCatalogRouter } from "./symptom.routes";
 import { medicationRouter } from "./medication.routes";
+import { symptomCatalogRouter } from "./symptom.routes";
 
 const router = Router();
 
 router.use("/auth", authRouter);
-router.use("/catalog", symptomCatalogRouter);
+
+// Add more routers here:
 router.use("/medications", medicationRouter);
+// router.use('/users', usersRouter);
+router.use("/catalog", symptomCatalogRouter);
 
 export { router };

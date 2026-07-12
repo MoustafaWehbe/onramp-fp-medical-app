@@ -4,10 +4,6 @@ const BASE_URL = "https://data.bioontology.org/search";
 
 const BIOPORTAL_API_KEY = (): string | undefined => process.env.BIOPORTAL_API_KEY;
 
-export interface ExternalSymptom {
-  name: string;
-}
-
 interface BioPortalItem {
   prefLabel?: string;
 }
@@ -20,7 +16,7 @@ function cleanName(raw: string): string {
 
 export async function searchSymptomsFromApi(
   term: string,
-): Promise<ExternalSymptom[]> {
+): Promise<string[]> {
   const query = term.trim();
 
   if (!query) {
@@ -51,7 +47,7 @@ export async function searchSymptomsFromApi(
     ? data.collection
     : [];
 
-  const names = [
+  return [
     ...new Set(
       items
         .map((item) =>
@@ -62,8 +58,4 @@ export async function searchSymptomsFromApi(
         .filter((name): name is string => Boolean(name)),
     ),
   ];
-
-  return names.map((name) => ({
-    name,
-  }));
 }

@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { symptomCatalogService, symptomServiceapi } from "../services/symptom.service";
-
+import { symptomCatalogService } from "../services/symptom.service";
 
 export const symptomCatalogController = {
   async list(
@@ -9,23 +8,46 @@ export const symptomCatalogController = {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const symptoms = await symptomCatalogService.list(req.query.search as string | undefined);
-      res.json({ data: symptoms });
+      const { currentPage, pageSize, search } = req.query as unknown as {
+        currentPage: number;
+        pageSize: number;
+        search?: string;
+      };
+      const result = await symptomCatalogService.list({
+        currentPage,
+        pageSize,
+        search,
+      });
+      res.json(result);
     } catch (err) {
       next(err);
     }
   },
-  async search(
+
+  async create(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { term } = req.query as { term: string };
-      const symptoms = await symptomServiceapi.searchSymptomsFromApi(term);
-      res.json({ data: symptoms });
+      const symptom = await symptomCatalogService.create(req.body);
+      res.status(201).json({ data: symptom });
     } catch (err) {
       next(err);
     }
-  }
-}
+  },
+
+  async searchSymptomsOnline(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { search } = req.query as unknown as { search: string };
+      const names = await symptomCatalogService.searchSymptomsOnline(search);
+      res.json(names);
+    } catch (err) {
+      next(err);
+    }
+  },
+};
