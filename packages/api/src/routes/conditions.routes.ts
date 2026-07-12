@@ -3,9 +3,11 @@ import { rateLimiter } from "../middleware/rate-limiter";
 import { ConditionsController } from "../controllers/conditions.controller";
 import { validate } from "../middleware/validate";
 import {createConditionSchema, listConditionsQuerySchema, searchConditionsOnlineQuerySchema} from "../schemas/conditions.schema";
+import { authenticate } from "../middleware/authenticate";
 
 const router = Router();
 
+router.use(authenticate);
 // get all conditions
 router.get("/",
     validate(listConditionsQuerySchema, "query"),

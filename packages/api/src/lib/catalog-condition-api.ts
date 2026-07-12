@@ -13,7 +13,7 @@ function cleanName(raw:string):string{
 
 export async function searchConditionsFromApi(
   term: string,
-): Promise<ExternalCondition[]> {
+): Promise<string[]> {
   const { data } = await axios.get(BASE_URL, {
     params: {
       terms: term,
@@ -24,5 +24,5 @@ export async function searchConditionsFromApi(
   const names: unknown[] = Array.isArray(data) && Array.isArray(data[3]) ? data[3] : [];
   return names
     .filter((entry): entry is string[] => Array.isArray(entry) && typeof entry[0] === "string")
-    .map((entry) => ({ name: cleanName(entry[0]) }));
+    .map((entry) => cleanName(entry[0]));
 }
