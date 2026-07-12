@@ -7,6 +7,7 @@ import {
 } from "../schemas/symptoms.schemas";
 import { validate } from "../middleware/validate";
 import { authenticate } from "../middleware/authenticate";
+import { rateLimiter } from "src/middleware/rate-limiter";
 
 const router = Router();
 
@@ -14,8 +15,9 @@ router.use(authenticate);
 
 router.get(
   "/symptoms/search-online",
+  rateLimiter,
   validate(searchSymptomsOnlineQuerySchema, "query"),
-  symptomCatalogController.open,
+  symptomCatalogController.searchSymptomsOnline,
 );
 router.get(
   "/symptoms",
