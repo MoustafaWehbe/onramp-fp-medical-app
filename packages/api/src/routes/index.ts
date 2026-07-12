@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { authRouter } from "./auth.routes";
+import { conditionsRouter } from "./conditions.routes";
 import { medicationRouter } from "./medication.routes";
 import { symptomCatalogRouter } from "./symptom.routes";
 
@@ -11,5 +12,6 @@ router.use("/auth", authRouter);
 router.use("/medications", medicationRouter);
 // router.use('/users', usersRouter);
 router.use("/catalog", symptomCatalogRouter);
+router.use("/conditions", conditionsRouter);
 
 export { router };
