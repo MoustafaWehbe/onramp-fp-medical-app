@@ -3,7 +3,33 @@ import { conditionService } from "../services/conditions.service";
 import axios from "axios";
 import { NextFunction } from "express";
 
-export class ConditionsController {
+export const ConditionsController = {
+
+  async list(req: Request, res: Response, next: NextFunction): Promise<void> {
+      try {
+        const { currentPage, pageSize, search } = req.query as unknown as {
+          currentPage: number;
+          pageSize: number;
+          search?: string;
+        };
+        const result = await conditionService.list({
+          currentPage,
+          pageSize,
+          search,
+        });
+        res.json(result);
+      } catch (err) {
+        next(err);
+      }
+  },
+  async create(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+          const condition = await conditionService.create(req.body);
+          res.status(201).json({ data: condition });
+        } catch (err) {
+          next(err);
+        }
+  },
   
   async getConditions(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -20,4 +46,3 @@ export class ConditionsController {
     }
   }
 }
-export const conditionsController = new ConditionsController();
