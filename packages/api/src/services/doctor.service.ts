@@ -13,8 +13,8 @@ export interface ListDoctorsInput extends PaginationInput {
 
 export interface CreateDoctorInput {
   name: string;
-  specialty?: string;
-  phone?: string;
+  specialty: string;
+  phone: string;
 }
 
 function escapeLike(value: string): string {
@@ -39,12 +39,7 @@ function buildSearchWhere(search?: string) {
 function buildDuplicateWhere(input: CreateDoctorInput): WhereOptions {
   return {
     name: input.name,
-    specialty:
-      input.specialty !== undefined
-        ? input.specialty
-        : { [Op.is]: null },
-    phone:
-      input.phone !== undefined ? input.phone : { [Op.is]: null },
+    phone: input.phone,
   };
 }
 

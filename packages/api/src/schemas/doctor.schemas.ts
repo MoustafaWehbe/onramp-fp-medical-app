@@ -8,13 +8,13 @@ const doctorNameSchema = z
 
 const doctorSpecialtySchema = z
   .string()
-  .max(255, "Specialty must be at most 255 characters")
-  .optional();
+  .min(1, "Specialty is required")
+  .max(255, "Specialty must be at most 255 characters");
 
 const doctorPhoneSchema = z
   .string()
-  .max(50, "Phone must be at most 50 characters")
-  .optional();
+  .min(1, "Phone is required")
+  .max(50, "Phone must be at most 50 characters");
 
 export const createDoctorSchema = z.object({
   name: doctorNameSchema,

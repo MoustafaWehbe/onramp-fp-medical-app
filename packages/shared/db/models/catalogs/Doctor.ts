@@ -51,7 +51,7 @@ export class Doctor
         tableName: "doctors",
         timestamps: true,
         underscored: true,
-        indexes: [{ unique: true, fields: ["name", "specialty", "phone"] }],
+        indexes: [{ unique: true, fields: ["name", "phone"] }],
       },
     );
     return Doctor;
