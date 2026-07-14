@@ -13,8 +13,8 @@ export interface ListClinicsInput extends PaginationInput {
 
 export interface CreateClinicInput {
   name: string;
-  address?: string;
-  phone?: string;
+  address: string;
+  phone: string;
 }
 
 function escapeLike(value: string): string {
@@ -39,8 +39,7 @@ function buildSearchWhere(search?: string) {
 function buildDuplicateWhere(input: CreateClinicInput): WhereOptions {
   return {
     name: input.name,
-    address:
-      input.address !== undefined ? input.address : { [Op.is]: null },
+    phone: input.phone,
   };
 }
 

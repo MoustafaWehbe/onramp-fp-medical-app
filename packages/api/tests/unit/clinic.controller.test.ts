@@ -129,9 +129,30 @@ describe("POST /api/clinics", () => {
   it("returns 422 when name is missing", async () => {
     const res = await request(app).post("/api/clinics").send({
       address: "123 Main St",
+      phone: "+1234567890",
     });
 
     expect(res.status).toBe(422);
     expect(res.body.errors[0].field).toBe("name");
+  });
+
+  it("returns 422 when address is missing", async () => {
+    const res = await request(app).post("/api/clinics").send({
+      name: "City Medical Center",
+      phone: "+1234567890",
+    });
+
+    expect(res.status).toBe(422);
+    expect(res.body.errors[0].field).toBe("address");
+  });
+
+  it("returns 422 when phone is missing", async () => {
+    const res = await request(app).post("/api/clinics").send({
+      name: "City Medical Center",
+      address: "123 Main St",
+    });
+
+    expect(res.status).toBe(422);
+    expect(res.body.errors[0].field).toBe("phone");
   });
 });

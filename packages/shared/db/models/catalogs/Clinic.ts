@@ -51,7 +51,7 @@ export class Clinic
         tableName: "clinics",
         timestamps: true,
         underscored: true,
-        indexes: [{ unique: true, fields: ["name", "address"] }],
+        indexes: [{ unique: true, fields: ["name", "phone"] }],
       },
     );
     return Clinic;

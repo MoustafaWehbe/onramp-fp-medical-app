@@ -8,13 +8,13 @@ const clinicNameSchema = z
 
 const clinicAddressSchema = z
   .string()
-  .max(5000, "Address must be at most 5000 characters")
-  .optional();
+  .min(1, "Address is required")
+  .max(5000, "Address must be at most 5000 characters");
 
 const clinicPhoneSchema = z
   .string()
-  .max(50, "Phone must be at most 50 characters")
-  .optional();
+  .min(1, "Phone is required")
+  .max(50, "Phone must be at most 50 characters");
 
 export const createClinicSchema = z.object({
   name: clinicNameSchema,
