@@ -4,14 +4,14 @@ import { timestampColumns } from "../timestamps";
 export interface ClinicAttributes {
   id: string;
   name: string;
-  address?: string;
-  phone?: string;
+  address: string;
+  phone: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export interface ClinicCreationAttributes
-  extends Optional<ClinicAttributes, "id" | "address" | "phone"> {}
+  extends Optional<ClinicAttributes, "id"> {}
 
 export class Clinic
   extends Model<ClinicAttributes, ClinicCreationAttributes>
@@ -19,8 +19,8 @@ export class Clinic
 {
   declare id: string;
   declare name: string;
-  declare address: string | undefined;
-  declare phone: string | undefined;
+  declare address: string;
+  declare phone: string;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
 
@@ -38,11 +38,11 @@ export class Clinic
         },
         address: {
           type: DataTypes.TEXT,
-          allowNull: true,
+          allowNull: false,
         },
         phone: {
           type: DataTypes.STRING(50),
-          allowNull: true,
+          allowNull: false,
         },
         ...timestampColumns,
       },
@@ -51,7 +51,7 @@ export class Clinic
         tableName: "clinics",
         timestamps: true,
         underscored: true,
-        indexes: [{ unique: true, fields: ["name", "address"] }],
+        indexes: [{ unique: true, fields: ["name", "phone"] }],
       },
     );
     return Clinic;
