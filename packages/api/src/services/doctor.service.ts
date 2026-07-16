@@ -38,7 +38,6 @@ function buildSearchWhere(search?: string) {
 
 function buildDuplicateWhere(input: CreateDoctorInput): WhereOptions {
   return {
-    name: input.name,
     phone: input.phone,
   };
 }
@@ -52,7 +51,7 @@ export class DoctorService {
       where: buildSearchWhere(input.search),
       order: [
         ["name", "ASC"],
-        ["specialty", "ASC"],
+        ["createdAt", "DESC"],
         ["id", "ASC"],
       ],
       limit,
