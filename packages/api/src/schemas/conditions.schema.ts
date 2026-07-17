@@ -26,3 +26,7 @@ export const listConditionsQuerySchema = paginationQuerySchema.extend({
       .max(255, "Search must be at most 255 characters"),
   });
 
+  export const conditionIdParamSchema = z.object({
+  id: z.string().uuid("Invalid condition id"),
+});
+
