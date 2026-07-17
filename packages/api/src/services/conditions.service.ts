@@ -46,23 +46,45 @@ export class ConditionService {
   
       return buildPaginatedResponse(rows, count, currentPage, pageSize);
     }
+    async searchConditions(term?: string) {
+    if (!term) return [];
+    
+    return await searchConditionsFromApi(term);
+  }
+    
+  async getById(id: string) {
+    const condition = await ConditionCatalog.findByPk(id);
+
+    if (!condition) {
+      throw createError("Condition not found", 404);
+    }
+
+    return condition;
+  }
 
   async create(input: CreateConditionInput) {
+    const name = input.name.trim();
+    const existing = await ConditionCatalog.findOne({
+    where: {
+      name: {
+          [Op.iLike]: name,
+        },
+      },
+      attributes: ["id"],
+    });
+    if (existing) {
+      throw createError("Condition already exists", 409);
+    }
     try {
-      return await ConditionCatalog.create(input);
+      return await ConditionCatalog.create({
+        name,
+      });
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
         throw createError("Condition already exists", 409);
       }
-
-    throw error;
-  }
-}
-  
-  async searchConditions(term?: string) {
-    if (!term) return [];
-    
-    return await searchConditionsFromApi(term);
+      throw error;
+    }
   }
 }
 
