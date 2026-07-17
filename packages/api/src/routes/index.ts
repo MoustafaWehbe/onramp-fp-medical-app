@@ -5,6 +5,7 @@ import { doctorRouter } from "./doctor.routes";
 import { conditionsRouter } from "./conditions.routes";
 import { medicationRouter } from "./medication.routes";
 import { symptomCatalogRouter } from "./symptom.routes";
+import { profileRouter } from "./profile";
 
 const router = Router();
 
@@ -17,5 +18,6 @@ router.use("/medications", medicationRouter);
 // router.use('/users', usersRouter);
 router.use("/catalog", symptomCatalogRouter);
 router.use("/conditions", conditionsRouter);
+router.use("/profile", profileRouter);
 
 export { router };

@@ -27,7 +27,9 @@ tags:
   - name: Clinics
     description: User-saved clinic registry
   - name: Doctors
-    description: User-saved doctor registry
+    description: Global doctor catalog
+  - name: Profile
+    description: Current user's health profile links
   - name: Entries
     description: Daily health log entries
   - name: Visits
@@ -476,27 +478,25 @@ components:
       properties:
         id:
           type: string
-          example: udoc-001
+          format: uuid
+          example: 50000000-0000-0000-0000-000000000001
         userId:
           type: string
           format: uuid
           example: 5b1f...-uuid
         doctorId:
           type: string
-          nullable: true
-          example: doctor-catalog-01
-        customName:
-          type: string
-          nullable: true
-          example: Dr. Elena Park
+          format: uuid
+          example: 40000000-0000-0000-0000-000000000001
         userClinicId:
           type: string
+          format: uuid
           nullable: true
-          example: uclinic-001
+          example: 60000000-0000-0000-0000-000000000001
         notes:
           type: string
           nullable: true
-          example: null
+          example: Primary cardiologist
         active:
           type: boolean
           example: true
@@ -508,25 +508,62 @@ components:
           type: string
           format: date-time
           example: "2026-02-01T00:00:00Z"
+        doctor:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+            specialty:
+              type: string
+            phone:
+              type: string
+        userClinic:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: string
+              format: uuid
+            clinicId:
+              type: string
+              format: uuid
+            notes:
+              type: string
+              nullable: true
 
-    DoctorBody:
+    CreateUserDoctorBody:
       type: object
+      required: [doctorId]
       properties:
         doctorId:
           type: string
-          nullable: true
-          example: null
-        customName:
-          type: string
-          example: Dr. Elena Park
+          format: uuid
+          example: 40000000-0000-0000-0000-000000000001
         userClinicId:
           type: string
+          format: uuid
           nullable: true
-          example: uclinic-001
+          example: 60000000-0000-0000-0000-000000000001
         notes:
           type: string
           nullable: true
           example: Rheumatologist
+
+    UpdateUserDoctorBody:
+      type: object
+      properties:
+        userClinicId:
+          type: string
+          format: uuid
+          nullable: true
+          example: 60000000-0000-0000-0000-000000000001
+        notes:
+          type: string
+          nullable: true
+          example: Switched to telehealth visits
 
     # ── Daily Health Logger ──────────────────────────────────────────────────────
     DailyEntry:
@@ -1962,51 +1999,40 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  # ─── Doctors ──────────────────────────────────────────────────────────────────
+  # ─── Doctors (catalog) ────────────────────────────────────────────────────────
   /doctors:
     get:
       tags: [Doctors]
-      summary: List the user's saved doctors
-      operationId: getDoctors
+      summary: List doctors in the global catalog
+      operationId: listCatalogDoctors
       security:
         - cookieAuth: []
+      parameters:
+        - name: currentPage
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: search
+          in: query
+          schema:
+            type: string
+            maxLength: 255
       responses:
         "200":
-          description: List of saved doctors
+          description: Paginated catalog doctors
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/UserDoctor"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-    post:
-      tags: [Doctors]
-      summary: Add a doctor (optionally tied to a saved clinic)
-      operationId: createDoctor
-      security:
-        - cookieAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DoctorBody"
-      responses:
-        "201":
-          description: Doctor created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: "#/components/schemas/UserDoctor"
+                $ref: "#/components/schemas/PaginatedResponse"
         "401":
           description: Unauthorized
           content:
@@ -2019,19 +2045,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ValidationErrorResponse"
-
-  /doctors/{id}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          example: udoc-001
-    patch:
+    post:
       tags: [Doctors]
-      summary: Edit a saved doctor
-      operationId: updateDoctor
+      summary: Create a doctor in the global catalog
+      operationId: createCatalogDoctor
       security:
         - cookieAuth: []
       requestBody:
@@ -2040,21 +2057,108 @@ paths:
           application/json:
             schema:
               type: object
+              required: [name, specialty, phone]
               properties:
-                customName:
+                name:
                   type: string
-                  example: Dr. Elena Park
-                userClinicId:
+                  example: Dr. Adams
+                specialty:
                   type: string
-                  nullable: true
-                  example: uclinic-001
-                notes:
+                  example: Dermatology
+                phone:
                   type: string
-                  nullable: true
-                  example: Switched to telehealth visits
+                  example: "+1111111111"
+      responses:
+        "201":
+          description: Doctor created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Doctor already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  # ─── Profile doctors ──────────────────────────────────────────────────────────
+  /profile/doctors:
+    get:
+      tags: [Profile]
+      summary: List the current user's linked doctors
+      operationId: listProfileDoctors
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: currentPage
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: search
+          in: query
+          schema:
+            type: string
+            maxLength: 255
       responses:
         "200":
-          description: Doctor updated
+          description: Paginated profile doctors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/UserDoctor"
+                  pagination:
+                    type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      tags: [Profile]
+      summary: Link a catalog doctor to the current user's profile
+      operationId: createProfileDoctor
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserDoctorBody"
+      responses:
+        "201":
+          description: Doctor linked to profile
           content:
             application/json:
               schema:
@@ -2069,20 +2173,109 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: Doctor not found
+          description: Doctor or user clinic not found
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-    delete:
-      tags: [Doctors]
-      summary: Soft-delete a saved doctor
-      operationId: deleteDoctor
+        "409":
+          description: Doctor already linked
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  /profile/doctors/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags: [Profile]
+      summary: Get a linked doctor on the current user's profile
+      operationId: getProfileDoctor
       security:
         - cookieAuth: []
       responses:
         "200":
-          description: Doctor soft-deleted
+          description: Profile doctor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserDoctor"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: User doctor not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      tags: [Profile]
+      summary: Update a linked doctor on the current user's profile
+      operationId: updateProfileDoctor
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserDoctorBody"
+      responses:
+        "200":
+          description: Profile doctor updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserDoctor"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: User doctor or user clinic not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+    delete:
+      tags: [Profile]
+      summary: Soft-delete a linked doctor from the current user's profile
+      operationId: deleteProfileDoctor
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Doctor soft-deleted from profile
           content:
             application/json:
               schema:
@@ -2093,7 +2286,7 @@ paths:
                     properties:
                       id:
                         type: string
-                        example: udoc-001
+                        format: uuid
                       active:
                         type: boolean
                         example: false
@@ -2104,7 +2297,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: Doctor not found
+          description: User doctor not found
           content:
             application/json:
               schema:
