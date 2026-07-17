@@ -528,6 +528,53 @@ components:
           nullable: true
           example: Rheumatologist
 
+    UserSymptom:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 50000000-0000-0000-0000-000000000001
+        userId:
+          type: string
+          format: uuid
+          example: 5b1f...-uuid
+        catalogId:
+          type: string
+          format: uuid
+          example: 40000000-0000-0000-0000-000000000001
+        active:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-02-01T00:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-02-01T00:00:00Z"
+        catalog:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+            category:
+              type: string
+              nullable: true
+
+    CreateUserSymptomBody:
+      type: object
+      required: [catalogId]
+      properties:
+        catalogId:
+          type: string
+          format: uuid
+          example: 40000000-0000-0000-0000-000000000001
+
     # ── Daily Health Logger ──────────────────────────────────────────────────────
     DailyEntry:
       type: object
@@ -3255,6 +3302,172 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
           description: Report not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Profile symptoms ──────────────────────────────────────────────────────────
+  /profile/symptoms:
+    get:
+      tags: [Symptoms]
+      summary: List the current user's linked symptoms
+      operationId: listProfileSymptoms
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: currentPage
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: search
+          in: query
+          schema:
+            type: string
+            maxLength: 255
+      responses:
+        "200":
+          description: Paginated profile symptoms
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/UserSymptom"
+                  pagination:
+                    type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      tags: [Symptoms]
+      summary: Link a catalog symptom to the current user's profile
+      operationId: createProfileSymptom
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserSymptomBody"
+      responses:
+        "201":
+          description: Symptom linked to profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserSymptom"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Symptom catalog entry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Symptom already linked
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  /profile/symptoms/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags: [Symptoms]
+      summary: Get a linked symptom on the current user's profile
+      operationId: getProfileSymptom
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Profile symptom
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UserSymptom"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: User symptom not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [Symptoms]
+      summary: Soft-delete a linked symptom from the current user's profile
+      operationId: deleteProfileSymptom
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Symptom soft-deleted from profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      active:
+                        type: boolean
+                        example: false
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: User symptom not found
           content:
             application/json:
               schema:
