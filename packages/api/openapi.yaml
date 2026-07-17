@@ -549,6 +549,7 @@ components:
           example: 60000000-0000-0000-0000-000000000001
         notes:
           type: string
+          maxLength: 5000
           nullable: true
           example: Rheumatologist
 
@@ -562,8 +563,12 @@ components:
           example: 60000000-0000-0000-0000-000000000001
         notes:
           type: string
+          maxLength: 5000
           nullable: true
           example: Switched to telehealth visits
+      anyOf:
+        - required: [userClinicId]
+        - required: [notes]
 
     # ── Daily Health Logger ──────────────────────────────────────────────────────
     DailyEntry:
@@ -2144,6 +2149,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
     post:
       tags: [Profile]
       summary: Link a catalog doctor to the current user's profile
@@ -2227,6 +2238,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error (invalid UUID)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
     patch:
       tags: [Profile]
       summary: Update a linked doctor on the current user's profile
@@ -2302,6 +2319,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error (invalid UUID)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
 
   # ─── Entries ──────────────────────────────────────────────────────────────────
   /entries:
