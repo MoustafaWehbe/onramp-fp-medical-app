@@ -64,6 +64,9 @@ export class ConditionService {
 
   async create(input: CreateConditionInput) {
     const name = input.name.trim();
+    if (!name) {
+      throw createError("Name is required", 422);
+    }
     const existing = await ConditionCatalog.findOne({
     where: {
       name: {
