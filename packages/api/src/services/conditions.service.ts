@@ -1,6 +1,6 @@
 import { buildPaginatedResponse, getPaginationParams, PaginationInput } from "src/lib/pagination";
 import { searchConditionsFromApi } from "../lib/catalog-condition-api";
-import { Op, UniqueConstraintError, WhereOptions } from "sequelize";
+import { Op, Sequelize, UniqueConstraintError} from "sequelize";
 import { ConditionCatalog } from "src/models/catalogs/ConditionCatalog";
 import { createError } from "src/middleware/error-handler";
 
@@ -65,12 +65,12 @@ export class ConditionService {
   async create(input: CreateConditionInput) {
     const name = input.name.trim();
     const existing = await ConditionCatalog.findOne({
-    where: {
-      name: {
-          [Op.iLike]: name,
-        },
-      },
-      attributes: ["id"],
+    where:
+      Sequelize.where(
+      Sequelize.fn("LOWER", Sequelize.col("name")),
+      name.toLowerCase(),
+    ),
+    attributes: ["id"],
     });
     if (existing) {
       throw createError("Condition already exists", 409);
