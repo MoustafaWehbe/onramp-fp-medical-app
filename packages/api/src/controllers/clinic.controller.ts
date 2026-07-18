@@ -77,8 +77,8 @@ export const clinicController = {
   ): Promise<void> {
     try {
       const userClinic = await userClinicService.create({
-        userId: req.user!.userId,
         ...req.body,
+        userId: req.user!.userId,
       });
       res.status(201).json({ data: userClinic });
     } catch (err) {
