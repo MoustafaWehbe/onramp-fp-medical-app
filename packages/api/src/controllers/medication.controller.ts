@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { medicationService } from "../services/medication.service";
-import { userMedicationService } from "src/services/user-medication.service";
+import { userMedicationService } from "../services/user-medication.service";
 
 export const medicationController = {
   async list(req: Request, res: Response, next: NextFunction): Promise<void> {
