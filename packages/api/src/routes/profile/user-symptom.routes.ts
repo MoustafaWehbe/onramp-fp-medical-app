@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userSymptomController } from "../../controllers/user-symptom.controller";
+import { symptomCatalogController } from "../../controllers/symptom.controller";
 import { validate } from "../../middleware/validate";
 import {
   createUserSymptomSchema,
@@ -12,22 +12,22 @@ const router = Router();
 router.get(
   "/",
   validate(listUserSymptomsQuerySchema, "query"),
-  userSymptomController.listProfile,
+  symptomCatalogController.listProfile,
 );
 router.post(
   "/",
   validate(createUserSymptomSchema),
-  userSymptomController.createProfile,
+  symptomCatalogController.createProfile,
 );
 router.get(
   "/:id",
   validate(userSymptomIdParamSchema, "params"),
-  userSymptomController.getProfileById,
+  symptomCatalogController.getProfileById,
 );
 router.delete(
   "/:id",
   validate(userSymptomIdParamSchema, "params"),
-  userSymptomController.removeProfile,
+  symptomCatalogController.removeProfile,
 );
 
 export { router as userSymptomRouter };
