@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { paginationQuerySchema } from "./pagination.schemas";
-import { CONDITION_STATUSES } from "../../../shared/db/types/enums";
+import { CONDITION_STATUSES } from "@starter-kit/shared/db/types/enums";
 
 
 export const createUserConditionSchema = z.object({

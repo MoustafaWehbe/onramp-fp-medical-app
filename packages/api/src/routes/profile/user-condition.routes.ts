@@ -6,7 +6,7 @@ import {
   listUserConditionsQuerySchema,
   updateUserConditionSchema,
   userConditionIdParamSchema,
-} from "../../schemas/user-doctor.schemas";
+} from "../../schemas/user-condition.schemas";
 
 const router = Router();
 
