@@ -6,6 +6,7 @@ import {
   createMedicationSchema,
   listMedicationsQuerySchema,
   lookupMedicationCategoryOnlineQuerySchema,
+  medicationIdParamSchema,
   searchMedicationsOnlineQuerySchema,
 } from "../schemas/medication.schemas";
 
@@ -27,6 +28,11 @@ router.get(
   "/",
   validate(listMedicationsQuerySchema, "query"),
   medicationController.list,
+);
+router.get(
+  "/:id",
+  validate(medicationIdParamSchema, "params"),
+  medicationController.getById,
 );
 router.post(
   "/",
