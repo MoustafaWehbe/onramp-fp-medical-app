@@ -33,12 +33,22 @@ export const createUserMedicationSchema = z
   })
   .refine(
     (data) => {
-      const hasDosage = data.dosage !== null && data.dosage !== undefined;
-      const hasMeasurement =
-        data.dosageMeasurement !== null &&
-        data.dosageMeasurement !== undefined;
+      const dosageIsUndefined = data.dosage === undefined;
+      const measurementIsUndefined = data.dosageMeasurement === undefined;
+      const dosageIsNull = data.dosage === null;
+      const measurementIsNull = data.dosageMeasurement === null;
 
-      return hasDosage === hasMeasurement;
+      // Both undefined (omitted) - OK
+      if (dosageIsUndefined && measurementIsUndefined) return true;
+
+      // Both null (explicitly cleared) - OK
+      if (dosageIsNull && measurementIsNull) return true;
+
+      // Both have actual values (not null, not undefined) - OK
+      if (!dosageIsUndefined && !dosageIsNull && !measurementIsUndefined && !measurementIsNull) return true;
+
+      // Any other combination (mixed states) - NOT OK
+      return false;
     },
     {
       message:
@@ -85,12 +95,22 @@ export const createUserMedicationSchema = z
   )
   .refine(
     (data) => {
-      const hasDosage = data.dosage !== null && data.dosage !== undefined;
-      const hasMeasurement =
-        data.dosageMeasurement !== null &&
-        data.dosageMeasurement !== undefined;
+      const dosageIsUndefined = data.dosage === undefined;
+      const measurementIsUndefined = data.dosageMeasurement === undefined;
+      const dosageIsNull = data.dosage === null;
+      const measurementIsNull = data.dosageMeasurement === null;
 
-      return hasDosage === hasMeasurement;
+      // Both undefined (omitted) - OK
+      if (dosageIsUndefined && measurementIsUndefined) return true;
+
+      // Both null (explicitly cleared) - OK
+      if (dosageIsNull && measurementIsNull) return true;
+
+      // Both have actual values (not null, not undefined) - OK
+      if (!dosageIsUndefined && !dosageIsNull && !measurementIsUndefined && !measurementIsNull) return true;
+
+      // Any other combination (mixed states) - NOT OK
+      return false;
     },
     {
       message:
