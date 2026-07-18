@@ -321,37 +321,6 @@ components:
           type: string
           nullable: true
           example: null
-
-    UserSymptom:
-      type: object
-      properties:
-        id:
-          type: string
-          example: usym-001
-        userId:
-          type: string
-          format: uuid
-          example: 5b1f...-uuid
-        catalogId:
-          type: string
-          nullable: true
-          example: cat-sym-002
-        customName:
-          type: string
-          nullable: true
-          example: null
-        active:
-          type: boolean
-          example: true
-        createdAt:
-          type: string
-          format: date-time
-          example: "2026-01-15T00:00:00Z"
-        updatedAt:
-          type: string
-          format: date-time
-          example: "2026-01-15T00:00:00Z"
-
     SymptomBody:
       type: object
       properties:
@@ -3300,6 +3269,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
+
+  # ─── Profile symptoms ──────────────────────────────────────────────────────────
+  # ─── Profile symptoms ──────────────────────────────────────────────────────────
+    delete:
+      tags: [AI Reports]
+      summary: Delete a saved report
+      operationId: deleteAIReport
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Report deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Report deleted
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "404":
           description: Report not found
           content:
@@ -3307,7 +3306,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  # ─── Profile symptoms ──────────────────────────────────────────────────────────
   /profile/symptoms:
     get:
       tags: [Symptoms]
@@ -3468,38 +3466,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
           description: User symptom not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-    delete:
-      tags: [AI Reports]
-      summary: Delete a saved report
-      operationId: deleteAIReport
-      security:
-        - cookieAuth: []
-      responses:
-        "200":
-          description: Report deleted
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      message:
-                        type: string
-                        example: Report deleted
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "404":
-          description: Report not found
           content:
             application/json:
               schema:
