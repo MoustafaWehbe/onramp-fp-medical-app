@@ -444,14 +444,17 @@ components:
           example: 70000000-0000-0000-0000-000000000001
         notes:
           type: string
+          maxLength: 5000
           nullable: true
           example: Parking on 4th St
 
     UpdateUserClinicBody:
       type: object
+      minProperties: 1 
       properties:
         notes:
           type: string
+          minLength: 5000
           nullable: true
           example: New entrance on 5th St
 
