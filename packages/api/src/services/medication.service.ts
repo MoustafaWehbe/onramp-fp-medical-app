@@ -95,6 +95,16 @@ export class MedicationService {
       throw createError("Failed to lookup medication category", 502);
     }
   }
+
+  async getById(id: string) {
+    const medication = await Medication.findByPk(id);
+
+    if (!medication) {
+      throw createError("Medication not found", 404);
+    }
+
+    return medication;
+  }
 }
 
 export const medicationService = new MedicationService();
