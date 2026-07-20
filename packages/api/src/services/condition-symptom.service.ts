@@ -120,7 +120,7 @@ export class ConditionSymptomService {
 
     const { count, rows } = await ConditionSymptom.findAndCountAll({
       where: { userConditionId: input.userConditionId },
-      include: [linkedSymptomInclude()],
+      include: [linkedConditionInclude(), linkedSymptomInclude()],
       order: [
         ["createdAt", "DESC"],
         ["id", "ASC"],
@@ -156,7 +156,7 @@ export class ConditionSymptomService {
       });
 
       return ConditionSymptom.findByPk(created.id, {
-        include: [linkedSymptomInclude()],
+        include: [linkedConditionInclude(), linkedSymptomInclude()],
       });
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
