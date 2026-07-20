@@ -30,6 +30,20 @@ module.exports = {
         created_at: now(),
         updated_at: now(),
       },
+      {
+        id: "10000000-0000-0000-0000-000000000004",
+        name: "Sneezing",
+        category: "Respiratory",
+        created_at: now(),
+        updated_at: now(),
+      },
+      {
+        id: "10000000-0000-0000-0000-000000000005",
+        name: "Itchy Eyes",
+        category: "Allergy",
+        created_at: now(),
+        updated_at: now(),
+      },
     ]);
 
     await queryInterface.bulkInsert("condition_catalog", [
@@ -162,6 +176,30 @@ module.exports = {
         created_at: now(),
         updated_at: now(),
       },
+      {
+        id: "70000000-0000-0000-0000-000000000003",
+        user_id: ADMIN_USER_ID,
+        catalog_id: "10000000-0000-0000-0000-000000000003",
+        active: true,
+        created_at: now(),
+        updated_at: now(),
+      },
+      {
+        id: "70000000-0000-0000-0000-000000000004",
+        user_id: ADMIN_USER_ID,
+        catalog_id: "10000000-0000-0000-0000-000000000004",
+        active: true,
+        created_at: now(),
+        updated_at: now(),
+      },
+      {
+        id: "70000000-0000-0000-0000-000000000005",
+        user_id: ADMIN_USER_ID,
+        catalog_id: "10000000-0000-0000-0000-000000000005",
+        active: true,
+        created_at: now(),
+        updated_at: now(),
+      },
     ]);
 
     await queryInterface.bulkInsert("user_medications", [
@@ -201,11 +239,48 @@ module.exports = {
       },
     ]);
 
+    // Migraine → Headache, Nausea, Fatigue
+    // Seasonal Allergies → Sneezing, Itchy Eyes, Fatigue
     await queryInterface.bulkInsert("condition_symptoms", [
       {
         id: "83000000-0000-0000-0000-000000000001",
         user_condition_id: "60000000-0000-0000-0000-000000000001",
         user_symptom_id: "70000000-0000-0000-0000-000000000001",
+        created_at: now(),
+        updated_at: now(),
+      },
+      {
+        id: "83000000-0000-0000-0000-000000000002",
+        user_condition_id: "60000000-0000-0000-0000-000000000001",
+        user_symptom_id: "70000000-0000-0000-0000-000000000003",
+        created_at: now(),
+        updated_at: now(),
+      },
+      {
+        id: "83000000-0000-0000-0000-000000000003",
+        user_condition_id: "60000000-0000-0000-0000-000000000001",
+        user_symptom_id: "70000000-0000-0000-0000-000000000002",
+        created_at: now(),
+        updated_at: now(),
+      },
+      {
+        id: "83000000-0000-0000-0000-000000000004",
+        user_condition_id: "60000000-0000-0000-0000-000000000002",
+        user_symptom_id: "70000000-0000-0000-0000-000000000004",
+        created_at: now(),
+        updated_at: now(),
+      },
+      {
+        id: "83000000-0000-0000-0000-000000000005",
+        user_condition_id: "60000000-0000-0000-0000-000000000002",
+        user_symptom_id: "70000000-0000-0000-0000-000000000005",
+        created_at: now(),
+        updated_at: now(),
+      },
+      {
+        id: "83000000-0000-0000-0000-000000000006",
+        user_condition_id: "60000000-0000-0000-0000-000000000002",
+        user_symptom_id: "70000000-0000-0000-0000-000000000002",
         created_at: now(),
         updated_at: now(),
       },
@@ -282,7 +357,16 @@ module.exports = {
       id: "90000000-0000-0000-0000-000000000001",
     });
     await queryInterface.bulkDelete("condition_symptoms", {
-      id: "83000000-0000-0000-0000-000000000001",
+      id: {
+        [Op.in]: [
+          "83000000-0000-0000-0000-000000000001",
+          "83000000-0000-0000-0000-000000000002",
+          "83000000-0000-0000-0000-000000000003",
+          "83000000-0000-0000-0000-000000000004",
+          "83000000-0000-0000-0000-000000000005",
+          "83000000-0000-0000-0000-000000000006",
+        ],
+      },
     });
     await queryInterface.bulkDelete("user_doctors", {
       id: "82000000-0000-0000-0000-000000000001",
@@ -298,6 +382,9 @@ module.exports = {
         [Op.in]: [
           "70000000-0000-0000-0000-000000000001",
           "70000000-0000-0000-0000-000000000002",
+          "70000000-0000-0000-0000-000000000003",
+          "70000000-0000-0000-0000-000000000004",
+          "70000000-0000-0000-0000-000000000005",
         ],
       },
     });
@@ -350,6 +437,8 @@ module.exports = {
           "10000000-0000-0000-0000-000000000001",
           "10000000-0000-0000-0000-000000000002",
           "10000000-0000-0000-0000-000000000003",
+          "10000000-0000-0000-0000-000000000004",
+          "10000000-0000-0000-0000-000000000005",
         ],
       },
     });
