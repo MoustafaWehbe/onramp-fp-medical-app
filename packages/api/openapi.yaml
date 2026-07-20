@@ -604,6 +604,65 @@ components:
           format: uuid
           example: 40000000-0000-0000-0000-000000000001
 
+    ConditionSymptom:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 83000000-0000-0000-0000-000000000001
+        userConditionId:
+          type: string
+          format: uuid
+          example: 60000000-0000-0000-0000-000000000001
+        userSymptomId:
+          type: string
+          format: uuid
+          example: 70000000-0000-0000-0000-000000000001
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-06-21T10:07:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-06-21T10:07:00Z"
+        userCondition:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            userId:
+              type: string
+              format: uuid
+            conditionId:
+              type: string
+              format: uuid
+            status:
+              type: string
+            active:
+              type: boolean
+            condition:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                name:
+                  type: string
+        userSymptom:
+          $ref: "#/components/schemas/UserSymptom"
+
+    LinkConditionSymptomBody:
+      type: object
+      required: [userSymptomId]
+      properties:
+        userSymptomId:
+          type: string
+          format: uuid
+          example: 70000000-0000-0000-0000-000000000001
+
     # ── Daily Health Logger ──────────────────────────────────────────────────────
     DailyEntry:
       type: object
@@ -1480,103 +1539,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
           description: Condition not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /conditions/{conditionId}/symptoms:
-    parameters:
-      - name: conditionId
-        in: path
-        required: true
-        schema:
-          type: string
-          example: ucond-001
-    post:
-      tags: [Conditions]
-      summary: Link a symptom to a condition
-      operationId: linkSymptomToCondition
-      security:
-        - cookieAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [userSymptomId]
-              properties:
-                userSymptomId:
-                  type: string
-                  example: usym-001
-      responses:
-        "201":
-          description: Symptom linked
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        example: condsym-001
-                      userConditionId:
-                        type: string
-                        example: ucond-001
-                      userSymptomId:
-                        type: string
-                        example: usym-001
-                      createdAt:
-                        type: string
-                        format: date-time
-                        example: "2026-06-21T10:07:00Z"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-  /conditions/{conditionId}/symptoms/{symptomId}:
-    parameters:
-      - name: conditionId
-        in: path
-        required: true
-        schema:
-          type: string
-          example: ucond-001
-      - name: symptomId
-        in: path
-        required: true
-        schema:
-          type: string
-          example: usym-001
-    delete:
-      tags: [Conditions]
-      summary: Unlink a symptom from a condition
-      operationId: unlinkSymptomFromCondition
-      security:
-        - cookieAuth: []
-      responses:
-        "200":
-          description: Symptom unlinked
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      message:
-                        type: string
-                        example: Unlinked
-        "401":
-          description: Unauthorized
           content:
             application/json:
               schema:
@@ -3541,6 +3503,245 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Profile condition symptoms ────────────────────────────────────────────────
+  /profile/conditions/symptoms:
+    get:
+      tags: [Conditions]
+      summary: List all condition-symptom links for the current user
+      operationId: listAllProfileConditionSymptoms
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: currentPage
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+      responses:
+        "200":
+          description: Paginated condition-symptom links across all profile conditions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ConditionSymptom"
+                  pagination:
+                    type: object
+                    required:
+                      [currentPage, pageSize, totalCount, totalPages]
+                    properties:
+                      currentPage:
+                        type: integer
+                        minimum: 1
+                      pageSize:
+                        type: integer
+                        minimum: 1
+                      totalCount:
+                        type: integer
+                        minimum: 0
+                      totalPages:
+                        type: integer
+                        minimum: 0
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  /profile/conditions/{id}/symptoms:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags: [Conditions]
+      summary: List symptoms linked to a profile condition
+      operationId: listProfileConditionSymptoms
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: currentPage
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+      responses:
+        "200":
+          description: Paginated condition-symptom links
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ConditionSymptom"
+                  pagination:
+                    type: object
+                    required:
+                      [currentPage, pageSize, totalCount, totalPages]
+                    properties:
+                      currentPage:
+                        type: integer
+                        minimum: 1
+                      pageSize:
+                        type: integer
+                        minimum: 1
+                      totalCount:
+                        type: integer
+                        minimum: 0
+                      totalPages:
+                        type: integer
+                        minimum: 0
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: User condition not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+    post:
+      tags: [Conditions]
+      summary: Link a profile symptom to a profile condition
+      operationId: linkSymptomToProfileCondition
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LinkConditionSymptomBody"
+      responses:
+        "201":
+          description: Symptom linked to condition
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ConditionSymptom"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: User condition or user symptom not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Symptom already linked to condition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+
+  /profile/conditions/{id}/symptoms/{userSymptomId}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: userSymptomId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      tags: [Conditions]
+      summary: Unlink a profile symptom from a profile condition
+      operationId: unlinkSymptomFromProfileCondition
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Symptom unlinked from condition
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Unlinked
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: User condition or link not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
 
   # ─── Profile symptoms ──────────────────────────────────────────────────────────
   /profile/symptoms:

@@ -93,3 +93,14 @@ export const listUserConditionsQuerySchema =
       .optional(),
 
   });
+
+export const linkConditionSymptomSchema = z.object({
+  userSymptomId: z.string().uuid("Invalid user symptom id"),
+});
+
+export const conditionSymptomParamsSchema = z.object({
+  id: z.string().uuid("Invalid user condition id"),
+  userSymptomId: z.string().uuid("Invalid user symptom id"),
+});
+
+export const listConditionSymptomsQuerySchema = paginationQuerySchema;
