@@ -749,6 +749,10 @@ components:
                     type: string
                     format: date-time
                     example: "2026-06-20T08:00:00Z"
+                  notes:
+                    type: string
+                    nullable: true
+                    example: null
             conditions:
               type: array
               items:
@@ -818,6 +822,7 @@ components:
           type: array
           items:
             type: object
+            required: [userSymptomId]
             properties:
               userSymptomId:
                 type: string
@@ -833,6 +838,7 @@ components:
           type: array
           items:
             type: object
+            required: [userMedicationId, unit]
             properties:
               userMedicationId:
                 type: string
@@ -850,10 +856,118 @@ components:
                 type: string
                 format: date-time
                 example: "2026-06-21T08:00:00Z"
+              notes:
+                type: string
+                nullable: true
+                example: null
         conditions:
           type: array
           items:
             type: object
+            required: [userConditionId]
+            properties:
+              userConditionId:
+                type: string
+                example: ucond-001
+              status:
+                type: string
+                enum: [active, inactive, resolved]
+                example: active
+              notes:
+                type: string
+                nullable: true
+                example: null
+        doctorVisits:
+          type: array
+          items:
+            type: object
+            required: [userDoctorId]
+            properties:
+              userDoctorId:
+                type: string
+                example: udoc-001
+              userClinicId:
+                type: string
+                nullable: true
+                example: uclinic-001
+              summary:
+                type: string
+                nullable: true
+                example: Neurology follow-up
+              notes:
+                type: string
+                nullable: true
+                example: null
+
+    EntryPatchBody:
+      type: object
+      properties:
+        entryDate:
+          type: string
+          format: date
+          example: "2026-06-21"
+        moodRating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 4
+        sleepHours:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 24
+          example: 7
+        journalNotes:
+          type: string
+          nullable: true
+          example: Better day overall
+        symptoms:
+          type: array
+          items:
+            type: object
+            required: [userSymptomId]
+            properties:
+              userSymptomId:
+                type: string
+                example: usym-001
+              severity:
+                type: integer
+                example: 3
+              notes:
+                type: string
+                nullable: true
+                example: null
+        medications:
+          type: array
+          items:
+            type: object
+            required: [userMedicationId, unit]
+            properties:
+              userMedicationId:
+                type: string
+                example: umed-001
+              quantity:
+                type: integer
+                example: 1
+              unit:
+                type: string
+                example: tablet
+              taken:
+                type: boolean
+                example: true
+              takenAt:
+                type: string
+                format: date-time
+                example: "2026-06-21T08:00:00Z"
+              notes:
+                type: string
+                nullable: true
+                example: null
+        conditions:
+          type: array
+          items:
+            type: object
+            required: [userConditionId]
             properties:
               userConditionId:
                 type: string
@@ -2528,7 +2642,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/EntryBody"
+              $ref: "#/components/schemas/EntryPatchBody"
       responses:
         "200":
           description: Entry updated

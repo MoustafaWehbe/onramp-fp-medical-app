@@ -123,19 +123,16 @@ export class DailyEntryService {
       await assertOwnedReferences(input, input.userId, transaction);
 
       if (input.entryDate !== undefined) {
-        entry.setDataValue("entryDate", input.entryDate);
+        entry.set("entryDate", input.entryDate);
       }
       if (input.moodRating !== undefined) {
-        entry.setDataValue("moodRating", input.moodRating as number | undefined);
+        entry.set("moodRating", input.moodRating as number | undefined);
       }
       if (input.sleepHours !== undefined) {
-        entry.setDataValue("sleepHours", input.sleepHours as number | undefined);
+        entry.set("sleepHours", input.sleepHours as number | undefined);
       }
       if (input.journalNotes !== undefined) {
-        entry.setDataValue(
-          "journalNotes",
-          input.journalNotes as string | undefined,
-        );
+        entry.set("journalNotes", input.journalNotes as string | undefined);
       }
 
       try {

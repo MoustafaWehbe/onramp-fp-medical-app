@@ -9,6 +9,11 @@ const notesField = z
   .nullable()
   .optional();
 
+// Compare calendar dates in server-local time so a user's current-day entry is not
+// rejected by a UTC-instant comparison (en-CA yields a YYYY-MM-DD string).
+const isNotFutureDate = (date: string) =>
+  date <= new Date().toLocaleDateString("en-CA");
+
 const entrySymptomItemSchema = z.object({
   userSymptomId: z.string().uuid("Invalid user symptom id"),
   severity: z
@@ -93,7 +98,7 @@ export const createDailyEntrySchema = z.object({
   entryDate: z
     .string()
     .date("Invalid entry date")
-    .refine((date) => new Date(date) <= new Date(), {
+    .refine(isNotFutureDate, {
       message: "Entry date cannot be in the future",
     }),
   ...entryScalarFields,
@@ -105,7 +110,7 @@ export const updateDailyEntrySchema = z
     entryDate: z
       .string()
       .date("Invalid entry date")
-      .refine((date) => new Date(date) <= new Date(), {
+      .refine(isNotFutureDate, {
         message: "Entry date cannot be in the future",
       })
       .optional(),
