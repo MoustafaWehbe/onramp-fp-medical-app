@@ -354,7 +354,6 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
             : "Failed to add medication",
         ),
       );
-      throw error;
     }
   }
 

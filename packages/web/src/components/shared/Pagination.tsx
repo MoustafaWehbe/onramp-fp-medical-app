@@ -53,8 +53,6 @@ function buildPageTokens(
 
   if (left > firstPage + 1) {
     tokens.push("ellipsis-start");
-  } else if (left === firstPage + 1) {
-    tokens.push(firstPage + 1);
   }
 
   for (let page = left; page <= right; page += 1) {
@@ -65,8 +63,6 @@ function buildPageTokens(
 
   if (right < lastPage - 1) {
     tokens.push("ellipsis-end");
-  } else if (right === lastPage - 1) {
-    tokens.push(lastPage - 1);
   }
 
   tokens.push(lastPage);

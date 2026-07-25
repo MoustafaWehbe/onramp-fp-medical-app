@@ -90,7 +90,7 @@ export function MedicationAutocomplete({
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
       setHighlightIndex((i) => Math.max(i - 1, 0));
-    } else if (event.key === "Enter" && highlightIndex >= 0) {
+    } else if (event.key === "Enter") {
       event.preventDefault();
       const option = flatOptions[highlightIndex];
       if (option) selectOption(option);
