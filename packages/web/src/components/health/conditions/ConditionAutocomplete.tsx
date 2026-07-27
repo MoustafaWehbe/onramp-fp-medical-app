@@ -72,6 +72,12 @@ export function ConditionAutocomplete({
     return () => document.removeEventListener("mousedown", handlePointerDown);
   }, []);
 
+  useEffect(() => {
+    if (highlightIndex < 0) return;
+    const el = document.getElementById(`${listId}-option-${highlightIndex}`);
+    el?.scrollIntoView({ block: "nearest" });
+  }, [highlightIndex, listId]);
+
   function selectOption(option: FlatOption) {
     if (option.kind === "catalog") {
       selectCondition({ source: "catalog", condition: option.condition });
@@ -107,6 +113,11 @@ export function ConditionAutocomplete({
         aria-expanded={showDropdown}
         aria-controls={listId}
         aria-autocomplete="list"
+        aria-activedescendant={
+          showDropdown && highlightIndex >= 0
+            ? `${listId}-option-${highlightIndex}`
+            : undefined
+        }
         autoComplete="off"
         disabled={isFormBusy}
         placeholder={placeholder}
@@ -139,25 +150,25 @@ export function ConditionAutocomplete({
               <p className="sticky top-0 bg-muted/80 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur">
                 In catalog
               </p>
-              <ul>
-                {catalogResults.map((condition, index) => (
-                  <li key={condition.id} role="option">
-                    <button
-                      type="button"
-                      className={cn(
-                        "flex w-full items-center px-3 py-2 text-left text-sm hover:bg-accent",
-                        highlightIndex === index && "bg-accent",
-                      )}
-                      onMouseEnter={() => setHighlightIndex(index)}
-                      onClick={() =>
-                        selectOption({ kind: "catalog", condition })
-                      }
-                    >
-                      {condition.name}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              {catalogResults.map((condition, index) => (
+                <button
+                  key={condition.id}
+                  id={`${listId}-option-${index}`}
+                  role="option"
+                  type="button"
+                  aria-selected={highlightIndex === index}
+                  className={cn(
+                    "flex w-full items-center px-3 py-2 text-left text-sm hover:bg-accent",
+                    highlightIndex === index && "bg-accent",
+                  )}
+                  onMouseEnter={() => setHighlightIndex(index)}
+                  onClick={() =>
+                    selectOption({ kind: "catalog", condition })
+                  }
+                >
+                  {condition.name}
+                </button>
+              ))}
             </div>
           )}
           {onlineResults.length > 0 && (
@@ -165,26 +176,26 @@ export function ConditionAutocomplete({
               <p className="sticky top-0 bg-muted/80 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur">
                 NLM Clinical Tables
               </p>
-              <ul>
-                {onlineResults.map((name, index) => {
-                  const flatIndex = catalogResults.length + index;
-                  return (
-                    <li key={`online-${name}`} role="option">
-                      <button
-                        type="button"
-                        className={cn(
-                          "flex w-full items-center px-3 py-2 text-left text-sm hover:bg-accent",
-                          highlightIndex === flatIndex && "bg-accent",
-                        )}
-                        onMouseEnter={() => setHighlightIndex(flatIndex)}
-                        onClick={() => selectOption({ kind: "online", name })}
-                      >
-                        {name}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
+              {onlineResults.map((name, index) => {
+                const flatIndex = catalogResults.length + index;
+                return (
+                  <button
+                    key={`online-${name}`}
+                    id={`${listId}-option-${flatIndex}`}
+                    role="option"
+                    type="button"
+                    aria-selected={highlightIndex === flatIndex}
+                    className={cn(
+                      "flex w-full items-center px-3 py-2 text-left text-sm hover:bg-accent",
+                      highlightIndex === flatIndex && "bg-accent",
+                    )}
+                    onMouseEnter={() => setHighlightIndex(flatIndex)}
+                    onClick={() => selectOption({ kind: "online", name })}
+                  >
+                    {name}
+                  </button>
+                );
+              })}
             </div>
           )}
           {isAutocompleteLoading && flatOptions.length > 0 && (
