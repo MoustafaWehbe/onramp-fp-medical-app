@@ -300,12 +300,14 @@ export function ConditionsProvider({ children, onActivate, panelCloseRef }: Cond
   }
 
   function onNameQueryChange(value: string) {
+    if (formMode === "edit") return;
     setValue("nameQuery", value, { shouldValidate: true });
     setValue("conditionId", undefined);
     setValue("onlineName", undefined);
   }
 
   function selectCondition(selection: ConditionSelection) {
+    if (formMode === "edit") return;
     if (selection.source === "catalog") {
       setValue("nameQuery", selection.condition.name, {
         shouldValidate: true,
