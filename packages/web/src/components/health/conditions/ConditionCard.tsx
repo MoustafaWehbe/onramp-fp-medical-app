@@ -8,7 +8,7 @@ import {
   formatConditionStatus,
   type UserCondition,
 } from "../../../lib/health/health-export";
-import { cn } from "../../../lib/utils";
+import { cn, formatDate } from "../../../lib/utils";
 import { useConditionsContext } from "../../../providers/ConditionsProvider";
 
 interface ConditionCardProps {
@@ -61,7 +61,9 @@ export function ConditionCard({ condition }: ConditionCardProps) {
             {condition.diagnosedDate && (
               <span className="inline-flex items-center gap-1.5">
                 <CalendarDays className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                {condition.diagnosedDate}
+                <time dateTime={condition.diagnosedDate}>
+                  {formatDate(condition.diagnosedDate)}
+                </time>
               </span>
             )}
           </div>
@@ -102,7 +104,7 @@ export function ConditionDetail() {
       value: formatConditionStatus(condition.status),
     },
     condition.diagnosedDate
-      ? { icon: CalendarDays, label: "Diagnosed", value: condition.diagnosedDate }
+      ? { icon: CalendarDays, label: "Diagnosed", value: formatDate(condition.diagnosedDate) }
       : null,
     condition.description
       ? { icon: FileText, label: "Description", value: condition.description }
