@@ -71,8 +71,11 @@ export function useOnlineMedicationSearch(
 export function useEnsureCatalogMedication() {
   return useMutation({
     mutationFn: async (name: string): Promise<Medication> => {
-      // Category lookup happens here, at submit time — after the user
-      // confirms the medication — since the catalog has no update endpoint.
+      const existing = await findCatalogMedicationByName(name);
+      if (existing) return existing;
+
+      // Only insert when missing. Category lookup at submit time —
+      // the catalog has no update endpoint.
       const category = await lookupMedicationCategoryOnline(name).catch(
         () => null,
       );
@@ -83,8 +86,8 @@ export function useEnsureCatalogMedication() {
         });
       } catch (error) {
         if (isAxiosError(error) && error.response?.status === 409) {
-          const existing = await findCatalogMedicationByName(name);
-          if (existing) return existing;
+          const raced = await findCatalogMedicationByName(name);
+          if (raced) return raced;
         }
         throw error;
       }

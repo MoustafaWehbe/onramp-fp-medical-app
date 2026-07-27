@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { authenticate } from "../../middleware/authenticate";
+import { authorize } from "../../middleware/authorize";
 import { userDoctorRouter } from "./user-doctor.routes";
 import { userConditionRouter } from "./user-condition.routes";
 import { userMedicationRouter } from "./user-medication.routes";
@@ -9,7 +10,7 @@ import { dailyEntryRouter } from "./daily-entry.routes";
 
 const router = Router();
 
-router.use(authenticate);
+router.use(authenticate, authorize("user"));
 
 router.use("/doctors", userDoctorRouter);
 

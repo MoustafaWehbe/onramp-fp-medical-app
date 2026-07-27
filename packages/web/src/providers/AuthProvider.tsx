@@ -6,18 +6,19 @@ import {
   type ReactNode,
 } from "react";
 import { apiClient } from "../lib/api-client";
+import type { AppRole } from "../lib/auth/roles";
 
-interface AuthUser {
+export interface AuthUser {
   id: string;
   email: string;
   name: string;
-  role: string;
+  role: AppRole | string;
 }
 
 interface AuthContextValue {
   user: AuthUser | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<AuthUser>;
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -37,11 +38,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => setIsLoading(false));
   }, []);
 
-  async function login(email: string, password: string): Promise<void> {
+  async function login(email: string, password: string): Promise<AuthUser> {
     const { data } = await apiClient.post<{
       data: { user: AuthUser };
     }>("/auth/login", { email, password });
     setUser(data.data.user);
+    return data.data.user;
   }
 
   async function register(

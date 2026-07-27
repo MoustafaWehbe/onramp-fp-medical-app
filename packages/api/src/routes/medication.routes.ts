@@ -2,6 +2,7 @@ import { Router } from "express";
 import { medicationController } from "../controllers/medication.controller";
 import { validate } from "../middleware/validate";
 import { authenticate } from "../middleware/authenticate";
+import { authorize } from "../middleware/authorize";
 import {
   createMedicationSchema,
   listMedicationsQuerySchema,
@@ -12,7 +13,7 @@ import {
 
 const router = Router();
 
-router.use(authenticate);
+router.use(authenticate, authorize("admin", "user"));
 
 router.get(
   "/search-online",
