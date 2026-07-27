@@ -3,7 +3,9 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
+  type MutableRefObject,
   type ReactNode,
 } from "react";
 import { isAxiosError } from "axios";
@@ -119,7 +121,13 @@ function useDebouncedValue(value: string, delay: number): string {
   return debounced;
 }
 
-export function SymptomsProvider({ children }: { children: ReactNode }) {
+interface SymptomsProviderProps {
+  children: ReactNode;
+  onActivate?: () => void;
+  panelCloseRef?: MutableRefObject<(() => void) | null>;
+}
+
+export function SymptomsProvider({ children, onActivate, panelCloseRef }: SymptomsProviderProps) {
   const [panel, setPanel] = useState<SymptomPanelState>({ kind: "closed" });
   const [formError, setFormError] = useState<string | null>(null);
   const [listError, setListError] = useState<string | null>(null);
@@ -214,12 +222,16 @@ export function SymptomsProvider({ children }: { children: ReactNode }) {
         ? panel.symptom.catalog.name
         : undefined;
 
+  const closePanelRef = useRef<(() => void) | null>(null);
+
   function openCreate() {
+    onActivate?.();
     setFormError(null);
     setPanel({ kind: "create" });
   }
 
   function openDetail(symptom: UserSymptom) {
+    onActivate?.();
     setFormError(null);
     setPanel({ kind: "detail", symptom });
   }
@@ -228,6 +240,16 @@ export function SymptomsProvider({ children }: { children: ReactNode }) {
     setPanel({ kind: "closed" });
     setFormError(null);
   }
+
+  useEffect(() => {
+    closePanelRef.current = closePanel;
+  });
+
+  useEffect(() => {
+    if (panelCloseRef) {
+      panelCloseRef.current = () => closePanelRef.current?.();
+    }
+  });
 
   function cancelForm() {
     closePanel();

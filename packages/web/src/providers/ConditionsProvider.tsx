@@ -3,7 +3,9 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
+  type MutableRefObject,
   type ReactNode,
 } from "react";
 import { isAxiosError } from "axios";
@@ -123,7 +125,13 @@ function useDebouncedValue(value: string, delay: number): string {
   return debounced;
 }
 
-export function ConditionsProvider({ children }: { children: ReactNode }) {
+interface ConditionsProviderProps {
+  children: ReactNode;
+  onActivate?: () => void;
+  panelCloseRef?: MutableRefObject<(() => void) | null>;
+}
+
+export function ConditionsProvider({ children, onActivate, panelCloseRef }: ConditionsProviderProps) {
   const [panel, setPanel] = useState<ConditionPanelState>({ kind: "closed" });
   const [formError, setFormError] = useState<string | null>(null);
   const [listError, setListError] = useState<string | null>(null);
@@ -229,17 +237,22 @@ export function ConditionsProvider({ children }: { children: ReactNode }) {
           ? panel.condition.condition.name
           : undefined;
 
+  const closePanelRef = useRef<(() => void) | null>(null);
+
   function openCreate() {
+    onActivate?.();
     setFormError(null);
     setPanel({ kind: "create" });
   }
 
   function openDetail(condition: UserCondition) {
+    onActivate?.();
     setFormError(null);
     setPanel({ kind: "detail", condition });
   }
 
   function openEdit(condition: UserCondition) {
+    onActivate?.();
     setFormError(null);
     setPanel({ kind: "edit", condition });
   }
@@ -248,6 +261,16 @@ export function ConditionsProvider({ children }: { children: ReactNode }) {
     setPanel({ kind: "closed" });
     setFormError(null);
   }
+
+  useEffect(() => {
+    closePanelRef.current = closePanel;
+  });
+
+  useEffect(() => {
+    if (panelCloseRef) {
+      panelCloseRef.current = () => closePanelRef.current?.();
+    }
+  });
 
   function cancelForm() {
     if (panel.kind === "edit") {

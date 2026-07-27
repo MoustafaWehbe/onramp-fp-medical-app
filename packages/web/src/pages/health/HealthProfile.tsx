@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Activity, ClipboardList, Plus } from "lucide-react";
 import {
   ConditionCard,
@@ -283,30 +284,37 @@ function SymptomsSection() {
   );
 }
 
-function HealthProfileView() {
-  return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Health Profile</h1>
-        <p className="text-muted-foreground">
-          Manage your conditions and symptoms in one place.
-        </p>
-      </div>
+function HealthProfileContent() {
+  const symptomsCloseRef = useRef<(() => void) | null>(null);
+  const conditionsCloseRef = useRef<(() => void) | null>(null);
 
-      <div className="grid gap-8 xl:grid-cols-2">
-        <ConditionsSection />
-        <SymptomsSection />
-      </div>
-    </div>
+  return (
+    <ConditionsProvider
+      onActivate={() => symptomsCloseRef.current?.()}
+      panelCloseRef={conditionsCloseRef}
+    >
+      <SymptomsProvider
+        onActivate={() => conditionsCloseRef.current?.()}
+        panelCloseRef={symptomsCloseRef}
+      >
+        <div className="space-y-8">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Health Profile</h1>
+            <p className="text-muted-foreground">
+              Manage your conditions and symptoms in one place.
+            </p>
+          </div>
+
+          <div className="grid gap-8 xl:grid-cols-2">
+            <ConditionsSection />
+            <SymptomsSection />
+          </div>
+        </div>
+      </SymptomsProvider>
+    </ConditionsProvider>
   );
 }
 
 export function HealthProfile() {
-  return (
-    <ConditionsProvider>
-      <SymptomsProvider>
-        <HealthProfileView />
-      </SymptomsProvider>
-    </ConditionsProvider>
-  );
+  return <HealthProfileContent />;
 }
