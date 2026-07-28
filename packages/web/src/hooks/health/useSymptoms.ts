@@ -1,0 +1,109 @@
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { isAxiosError } from "axios";
+import type { PaginationQuery } from "../../lib/api/types";
+import {
+  createProfileSymptom,
+  createSymptomCatalog,
+  findSymptomCatalogByName,
+  listProfileSymptoms,
+  listSymptomsCatalog,
+  removeProfileSymptom,
+  searchSymptomsOnline,
+  type CreateUserSymptomRequest,
+  type SymptomCatalog,
+} from "../../lib/health/health-export";
+
+export const symptomKeys = {
+  all: ["symptoms"] as const,
+  profile: (filters: PaginationQuery) =>
+    [...symptomKeys.all, "profile", filters] as const,
+  catalog: (search: string) =>
+    [...symptomKeys.all, "catalog", search] as const,
+  online: (search: string) =>
+    [...symptomKeys.all, "online", search] as const,
+};
+
+export function useProfileSymptoms(filters: PaginationQuery = {}) {
+  return useQuery({
+    queryKey: symptomKeys.profile(filters),
+    queryFn: () =>
+      listProfileSymptoms({
+        currentPage: filters.currentPage ?? 1,
+        pageSize: filters.pageSize ?? 15,
+        search: filters.search,
+      }),
+  });
+}
+
+export function useSymptomCatalogSearch(search: string) {
+  const trimmed = search.trim();
+  return useQuery({
+    queryKey: symptomKeys.catalog(trimmed),
+    queryFn: () =>
+      listSymptomsCatalog({
+        search: trimmed,
+        currentPage: 1,
+        pageSize: 10,
+      }),
+    enabled: trimmed.length >= 2,
+  });
+}
+
+export function useOnlineSymptomSearch(
+  search: string,
+  enabled: boolean,
+) {
+  const trimmed = search.trim();
+  return useQuery({
+    queryKey: symptomKeys.online(trimmed),
+    queryFn: () => searchSymptomsOnline(trimmed),
+    enabled: enabled && trimmed.length >= 2,
+  });
+}
+
+export function useEnsureSymptomCatalog() {
+  return useMutation({
+    mutationFn: async (name: string): Promise<SymptomCatalog> => {
+      try {
+        return await createSymptomCatalog({ name });
+      } catch (error) {
+        if (isAxiosError(error) && error.response?.status === 409) {
+          const existing = await findSymptomCatalogByName(name);
+          if (existing) return existing;
+        }
+        throw error;
+      }
+    },
+  });
+}
+
+export function useCreateProfileSymptom() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (body: CreateUserSymptomRequest) =>
+      createProfileSymptom(body),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: symptomKeys.all,
+      });
+    },
+  });
+}
+
+export function useRemoveProfileSymptom() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => removeProfileSymptom(id),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: symptomKeys.all,
+      });
+    },
+  });
+}
