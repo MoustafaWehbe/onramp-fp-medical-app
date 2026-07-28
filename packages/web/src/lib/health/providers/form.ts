@@ -3,7 +3,7 @@ import type { UserClinic, UserDoctor } from "./types";
 
 export const clinicFormSchema = z
   .object({
-    nameQuery: z.string().min(1, "Enter a clinic name"),
+    nameQuery: z.string().trim().min(1, "Enter a clinic name"),
     clinicId: z
       .string()
       .uuid("Select a clinic from the list")
@@ -77,7 +77,7 @@ export function toClinicSubmitPayload(
 
 export const doctorFormSchema = z
   .object({
-    nameQuery: z.string().min(1, "Enter a doctor name"),
+    nameQuery: z.string().trim().min(1, "Enter a doctor name"),
     doctorId: z
       .string()
       .uuid("Select a doctor from the list")

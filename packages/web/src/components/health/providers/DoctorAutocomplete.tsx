@@ -118,7 +118,7 @@ export function DoctorAutocomplete({
         >
           {isAutocompleteLoading && catalogResults.length === 0 && (
             <p className="px-3 py-2 text-sm text-muted-foreground">
-              Searching\u2026
+              Searching…
             </p>
           )}
           {catalogResults.length > 0 && (
@@ -128,7 +128,7 @@ export function DoctorAutocomplete({
               </p>
               <ul>
                 {catalogResults.map((doctor, index) => (
-                  <li key={doctor.id} role="option">
+                  <li key={doctor.id} id={`${listId}-option-${index}`} role="option" aria-selected={highlightIndex === index}>
                     <button
                       type="button"
                       className={cn(

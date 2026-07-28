@@ -55,10 +55,10 @@ export function DoctorCard({ doctor }: DoctorCardProps) {
                 {phone}
               </span>
             )}
-            {doctor.userClinic && (
+            {linkedClinic && (
               <span className="inline-flex items-center gap-1.5">
                 <Building2 className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                {linkedClinic?.clinic.name ?? "Linked to clinic"}
+                {linkedClinic.clinic.name}
               </span>
             )}
           </div>

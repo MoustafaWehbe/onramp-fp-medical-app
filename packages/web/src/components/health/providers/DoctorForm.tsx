@@ -17,10 +17,17 @@ export function DoctorForm() {
     submitForm,
     cancelForm,
     savedClinics,
+    panel,
   } = useDoctorsContext();
 
   const doctorId = watch("doctorId");
   const isNewDoctor = !doctorId;
+
+  const editingClinicId =
+    panel.kind === "edit" ? panel.doctor.userClinicId : null;
+  const editingClinicMissing =
+    editingClinicId != null &&
+    !savedClinics.some((c) => c.id === editingClinicId);
 
   if (!formMode) return null;
 
@@ -102,6 +109,9 @@ export function DoctorForm() {
               {c.clinic.name}
             </option>
           ))}
+          {editingClinicMissing && (
+            <option value={editingClinicId!}>Linked clinic</option>
+          )}
         </select>
         {formErrors.userClinicId && (
           <p className="text-xs text-destructive">
