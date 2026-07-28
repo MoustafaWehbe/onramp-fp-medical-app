@@ -70,12 +70,15 @@ export function useOnlineConditionSearch(
 export function useEnsureConditionCatalog() {
   return useMutation({
     mutationFn: async (name: string): Promise<ConditionCatalog> => {
+      const existing = await findConditionCatalogByName(name);
+      if (existing) return existing;
+
       try {
         return await createConditionCatalog({ name });
       } catch (error) {
         if (isAxiosError(error) && error.response?.status === 409) {
-          const existing = await findConditionCatalogByName(name);
-          if (existing) return existing;
+          const raced = await findConditionCatalogByName(name);
+          if (raced) return raced;
         }
         throw error;
       }

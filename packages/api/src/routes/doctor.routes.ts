@@ -2,6 +2,7 @@ import { Router } from "express";
 import { doctorController } from "../controllers/doctor.controller";
 import { validate } from "../middleware/validate";
 import { authenticate } from "../middleware/authenticate";
+import { authorize } from "../middleware/authorize";
 import {
   createDoctorSchema,
   listDoctorsQuerySchema,
@@ -9,7 +10,7 @@ import {
 
 const router = Router();
 
-router.use(authenticate);
+router.use(authenticate, authorize("admin", "user"));
 
 router.get(
   "/",

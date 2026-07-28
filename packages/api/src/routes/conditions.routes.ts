@@ -4,10 +4,11 @@ import { ConditionsController } from "../controllers/conditions.controller";
 import { validate } from "../middleware/validate";
 import {conditionIdParamSchema, createConditionSchema, listConditionsQuerySchema, searchConditionsOnlineQuerySchema} from "../schemas/conditions.schema";
 import { authenticate } from "../middleware/authenticate";
+import { authorize } from "../middleware/authorize";
 
 const router = Router();
 
-router.use(authenticate);
+router.use(authenticate, authorize("admin", "user"));
 // get all conditions
 router.get("/",
     validate(listConditionsQuerySchema, "query"),

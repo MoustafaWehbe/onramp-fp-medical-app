@@ -3,7 +3,9 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
+  type MutableRefObject,
   type ReactNode,
 } from "react";
 import { isAxiosError } from "axios";
@@ -17,46 +19,40 @@ import {
   type UseFormWatch,
 } from "react-hook-form";
 import {
-  useCatalogMedicationSearch,
-  useCreateProfileMedication,
-  useEnsureCatalogMedication,
-  useOnlineMedicationSearch,
-  useProfileMedications,
-  useRemoveProfileMedication,
-  useUpdateProfileMedication,
-} from "../hooks/health/useMedications";
-import type { Medication, UserMedication } from "../lib/health/health-export";
+  useCatalogClinicSearch,
+  useCreateProfileClinic,
+  useEnsureClinicCatalog,
+  useProfileClinics,
+  useRemoveProfileClinic,
+  useUpdateProfileClinic,
+} from "../hooks/health/useClinics";
+import type { Clinic } from "../lib/health/health-export";
+import type { UserClinic } from "../lib/health/health-export";
 import type { Pagination } from "../lib/api/types";
 import {
-  emptyMedicationFormValues,
-  medicationFormSchema,
-  toMedicationFormValues,
-  toMedicationSubmitPayload,
-  type MedicationFormSubmitPayload,
-  type MedicationFormValues,
+  emptyClinicFormValues,
+  clinicFormSchema,
+  toClinicFormValues,
+  toClinicSubmitPayload,
+  type ClinicFormSubmitPayload,
+  type ClinicFormValues,
 } from "../lib/health/health-export";
 
-/** 3 columns × 5 rows */
-export const MEDICATIONS_PAGE_SIZE = 15;
-export const MEDICATIONS_GRID_COLUMNS = 3;
-export const MEDICATIONS_GRID_ROWS = 5;
+export const CLINICS_PAGE_SIZE = 15;
 
 const AUTOCOMPLETE_DEBOUNCE_MS = 300;
 const AUTOCOMPLETE_MIN_CHARS = 2;
-const ONLINE_WHEN_CATALOG_BELOW = 5;
 
-export type MedicationPanelState =
+export type ClinicPanelState =
   | { kind: "closed" }
   | { kind: "create" }
-  | { kind: "detail"; medication: UserMedication }
-  | { kind: "edit"; medication: UserMedication };
+  | { kind: "detail"; clinic: UserClinic }
+  | { kind: "edit"; clinic: UserClinic };
 
-export type MedicationSelection =
-  | { source: "catalog"; medication: Medication }
-  | { source: "online"; name: string };
+export type ClinicSelection = { source: "catalog"; clinic: Clinic };
 
-interface MedicationsContextValue {
-  medications: UserMedication[];
+interface ClinicsContextValue {
+  clinics: UserClinic[];
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
@@ -69,7 +65,7 @@ interface MedicationsContextValue {
   goToNextPage: () => void;
   goToPrevPage: () => void;
 
-  panel: MedicationPanelState;
+  panel: ClinicPanelState;
   panelOpen: boolean;
   panelTitle: string | undefined;
   selectedId: string | null;
@@ -79,31 +75,29 @@ interface MedicationsContextValue {
   isFormBusy: boolean;
   isRemoving: boolean;
 
-  register: UseFormRegister<MedicationFormValues>;
-  watch: UseFormWatch<MedicationFormValues>;
-  setValue: UseFormSetValue<MedicationFormValues>;
-  formErrors: FieldErrors<MedicationFormValues>;
-  handleFormSubmit: UseFormHandleSubmit<MedicationFormValues>;
+  register: UseFormRegister<ClinicFormValues>;
+  watch: UseFormWatch<ClinicFormValues>;
+  setValue: UseFormSetValue<ClinicFormValues>;
+  formErrors: FieldErrors<ClinicFormValues>;
+  handleFormSubmit: UseFormHandleSubmit<ClinicFormValues>;
   nameQuery: string;
 
-  catalogResults: Medication[];
-  onlineResults: string[];
+  catalogResults: Clinic[];
   isAutocompleteLoading: boolean;
-  isAutocompleteFetched: boolean;
 
   openCreate: () => void;
-  openDetail: (medication: UserMedication) => void;
-  openEdit: (medication: UserMedication) => void;
+  openDetail: (clinic: UserClinic) => void;
+  openEdit: (clinic: UserClinic) => void;
   closePanel: () => void;
   cancelForm: () => void;
 
   onNameQueryChange: (value: string) => void;
-  selectMedication: (selection: MedicationSelection) => void;
-  submitForm: (values: MedicationFormValues) => Promise<void>;
+  selectClinic: (selection: ClinicSelection) => void;
+  submitForm: (values: ClinicFormValues) => Promise<void>;
   remove: (id: string) => Promise<void>;
 }
 
-const MedicationsContext = createContext<MedicationsContextValue | null>(null);
+const ClinicsContext = createContext<ClinicsContextValue | null>(null);
 
 function getErrorMessage(error: unknown, fallback: string): string {
   if (isAxiosError(error)) {
@@ -125,20 +119,30 @@ function useDebouncedValue(value: string, delay: number): string {
   return debounced;
 }
 
-export function MedicationsProvider({ children }: { children: ReactNode }) {
-  const [panel, setPanel] = useState<MedicationPanelState>({ kind: "closed" });
+interface ClinicsProviderProps {
+  children: ReactNode;
+  onActivate?: () => void;
+  panelCloseRef?: MutableRefObject<(() => void) | null>;
+}
+
+export function ClinicsProvider({
+  children,
+  onActivate,
+  panelCloseRef,
+}: ClinicsProviderProps) {
+  const [panel, setPanel] = useState<ClinicPanelState>({ kind: "closed" });
   const [formError, setFormError] = useState<string | null>(null);
   const [listError, setListError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const listQuery = useProfileMedications({
+  const listQuery = useProfileClinics({
     currentPage,
-    pageSize: MEDICATIONS_PAGE_SIZE,
+    pageSize: CLINICS_PAGE_SIZE,
   });
-  const ensureCatalog = useEnsureCatalogMedication();
-  const createProfile = useCreateProfileMedication();
-  const updateProfile = useUpdateProfileMedication();
-  const removeProfile = useRemoveProfileMedication();
+  const ensureCatalog = useEnsureClinicCatalog();
+  const createProfile = useCreateProfileClinic();
+  const updateProfile = useUpdateProfileClinic();
+  const removeProfile = useRemoveProfileClinic();
 
   const {
     register,
@@ -147,9 +151,9 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
     watch,
     reset,
     formState: { errors: formErrors },
-  } = useForm<MedicationFormValues>({
-    resolver: zodResolver(medicationFormSchema),
-    defaultValues: emptyMedicationFormValues(),
+  } = useForm<ClinicFormValues>({
+    resolver: zodResolver(clinicFormSchema),
+    defaultValues: emptyClinicFormValues(),
   });
 
   const nameQuery = watch("nameQuery") ?? "";
@@ -161,44 +165,26 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
     AUTOCOMPLETE_DEBOUNCE_MS,
   );
 
-  const catalogQuery = useCatalogMedicationSearch(debouncedSearch);
+  const catalogQuery = useCatalogClinicSearch(debouncedSearch);
   const catalogResults = autocompleteActive
     ? (catalogQuery.data?.data ?? [])
     : [];
-  const shouldSearchOnline =
-    autocompleteActive &&
-    debouncedSearch.trim().length >= AUTOCOMPLETE_MIN_CHARS &&
-    !catalogQuery.isFetching &&
-    catalogResults.length < ONLINE_WHEN_CATALOG_BELOW;
-
-  const onlineQuery = useOnlineMedicationSearch(
-    debouncedSearch,
-    shouldSearchOnline,
-  );
-
-  const catalogNames = new Set(
-    catalogResults.map((m) => m.name.toLocaleLowerCase()),
-  );
-  const onlineResults = (onlineQuery.data ?? []).filter(
-    (name) => !catalogNames.has(name.toLocaleLowerCase()),
-  );
 
   const isAutocompleteLoading =
-    (debouncedSearch.trim().length >= AUTOCOMPLETE_MIN_CHARS &&
-      catalogQuery.isFetching) ||
-    (shouldSearchOnline && onlineQuery.isFetching);
+    debouncedSearch.trim().length >= AUTOCOMPLETE_MIN_CHARS &&
+    catalogQuery.isFetching;
 
   useEffect(() => {
     if (panel.kind === "create") {
-      reset(emptyMedicationFormValues());
+      reset(emptyClinicFormValues());
       setFormError(null);
     } else if (panel.kind === "edit") {
-      reset(toMedicationFormValues(panel.medication));
+      reset(toClinicFormValues(panel.clinic));
       setFormError(null);
     }
   }, [panel, reset]);
 
-  const medications = listQuery.data?.data ?? [];
+  const clinics = listQuery.data?.data ?? [];
   const pagination = listQuery.data?.pagination ?? null;
 
   useEffect(() => {
@@ -220,30 +206,35 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
   const panelOpen = panel.kind !== "closed";
   const selectedId =
     panel.kind === "detail" || panel.kind === "edit"
-      ? panel.medication.id
+      ? panel.clinic.id
       : null;
   const panelTitle =
     panel.kind === "create"
-      ? "Add medication"
+      ? "Add clinic"
       : panel.kind === "edit"
-        ? "Edit medication"
+        ? "Edit clinic"
         : panel.kind === "detail"
-          ? panel.medication.medication.name
+          ? panel.clinic.clinic.name
           : undefined;
 
+  const closePanelRef = useRef<(() => void) | null>(null);
+
   function openCreate() {
+    onActivate?.();
     setFormError(null);
     setPanel({ kind: "create" });
   }
 
-  function openDetail(medication: UserMedication) {
+  function openDetail(clinic: UserClinic) {
+    onActivate?.();
     setFormError(null);
-    setPanel({ kind: "detail", medication });
+    setPanel({ kind: "detail", clinic });
   }
 
-  function openEdit(medication: UserMedication) {
+  function openEdit(clinic: UserClinic) {
+    onActivate?.();
     setFormError(null);
-    setPanel({ kind: "edit", medication });
+    setPanel({ kind: "edit", clinic });
   }
 
   function closePanel() {
@@ -251,9 +242,19 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
     setFormError(null);
   }
 
+  useEffect(() => {
+    closePanelRef.current = closePanel;
+  });
+
+  useEffect(() => {
+    if (panelCloseRef) {
+      panelCloseRef.current = () => closePanelRef.current?.();
+    }
+  });
+
   function cancelForm() {
     if (panel.kind === "edit") {
-      openDetail(panel.medication);
+      openDetail(panel.clinic);
       return;
     }
     closePanel();
@@ -279,53 +280,50 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
   }
 
   function onNameQueryChange(value: string) {
+    if (formMode === "edit") return;
     setValue("nameQuery", value, { shouldValidate: true });
-    setValue("medicationId", undefined);
-    setValue("onlineName", undefined);
+    setValue("clinicId", undefined);
   }
 
-  function selectMedication(selection: MedicationSelection) {
-    if (selection.source === "catalog") {
-      setValue("nameQuery", selection.medication.name, {
-        shouldValidate: true,
-      });
-      setValue("medicationId", selection.medication.id, {
-        shouldValidate: true,
-      });
-      setValue("onlineName", undefined);
-      return;
-    }
-
-    setValue("nameQuery", selection.name, { shouldValidate: true });
-    setValue("medicationId", undefined);
-    setValue("onlineName", selection.name, { shouldValidate: true });
+  function selectClinic(selection: ClinicSelection) {
+    if (formMode === "edit") return;
+    setValue("nameQuery", selection.clinic.name, {
+      shouldValidate: true,
+    });
+    setValue("clinicId", selection.clinic.id, {
+      shouldValidate: true,
+    });
+    setValue("address", "", { shouldValidate: true });
+    setValue("phone", "", { shouldValidate: true });
   }
 
-  async function resolveMedicationId(
-    payload: MedicationFormSubmitPayload,
+  async function resolveClinicId(
+    payload: ClinicFormSubmitPayload,
   ): Promise<string> {
-    if (payload.medicationId) return payload.medicationId;
-    if (!payload.onlineName) {
-      throw new Error("Select a medication from the suggestions");
+    if (payload.clinicId) return payload.clinicId;
+    if (!payload.address?.trim() || !payload.phone?.trim()) {
+      throw new Error(
+        "Address and phone are required for new clinics",
+      );
     }
-    // Insert into catalog only if missing; otherwise reuse existing row
-    const catalog = await ensureCatalog.mutateAsync(payload.onlineName);
+    const catalog = await ensureCatalog.mutateAsync({
+      name: nameQuery.trim(),
+      address: payload.address.trim(),
+      phone: payload.phone.trim(),
+    });
     return catalog.id;
   }
 
-  async function submitForm(values: MedicationFormValues) {
-    const payload = toMedicationSubmitPayload(values);
+  async function submitForm(values: ClinicFormValues) {
+    const payload = toClinicSubmitPayload(values);
 
     try {
       setFormError(null);
 
       if (panel.kind === "create") {
-        const medicationId = await resolveMedicationId(payload);
+        const clinicId = await resolveClinicId(payload);
         await createProfile.mutateAsync({
-          medicationId,
-          dosage: payload.dosage,
-          dosageMeasurement: payload.dosageMeasurement,
-          frequency: payload.frequency,
+          clinicId,
           notes: payload.notes,
         });
         setCurrentPage(1);
@@ -335,13 +333,8 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
 
       if (panel.kind === "edit") {
         await updateProfile.mutateAsync({
-          id: panel.medication.id,
-          body: {
-            dosage: payload.dosage,
-            dosageMeasurement: payload.dosageMeasurement,
-            frequency: payload.frequency,
-            notes: payload.notes,
-          },
+          id: panel.clinic.id,
+          body: { notes: payload.notes ?? null },
         });
         closePanel();
       }
@@ -350,8 +343,8 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
         getErrorMessage(
           error,
           panel.kind === "edit"
-            ? "Failed to update medication"
-            : "Failed to add medication",
+            ? "Failed to update clinic"
+            : "Failed to add clinic",
         ),
       );
     }
@@ -363,25 +356,25 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
       await removeProfile.mutateAsync(id);
       closePanel();
     } catch (error) {
-      setListError(getErrorMessage(error, "Failed to remove medication"));
+      setListError(getErrorMessage(error, "Failed to remove clinic"));
     }
   }
 
-  const value = useMemo<MedicationsContextValue>(
+  const value = useMemo<ClinicsContextValue>(
     () => ({
-      medications,
+      clinics,
       isLoading: listQuery.isLoading,
       isError: listQuery.isError,
       isSuccess: listQuery.isSuccess,
       listErrorMessage:
         listError ??
         (listQuery.isError
-          ? getErrorMessage(listQuery.error, "Failed to load medications")
+          ? getErrorMessage(listQuery.error, "Failed to load clinics")
           : null),
 
       pagination,
       currentPage,
-      pageSize: MEDICATIONS_PAGE_SIZE,
+      pageSize: CLINICS_PAGE_SIZE,
       goToPage,
       goToNextPage,
       goToPrevPage,
@@ -404,9 +397,7 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
       nameQuery,
 
       catalogResults,
-      onlineResults,
       isAutocompleteLoading,
-      isAutocompleteFetched: catalogQuery.isFetched,
 
       openCreate,
       openDetail,
@@ -415,13 +406,13 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
       cancelForm,
 
       onNameQueryChange,
-      selectMedication,
+      selectClinic,
       submitForm,
       remove,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
-      medications,
+      clinics,
       listQuery.isLoading,
       listQuery.isError,
       listQuery.isSuccess,
@@ -444,24 +435,22 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
       handleSubmit,
       nameQuery,
       catalogResults,
-      onlineResults,
       isAutocompleteLoading,
-      catalogQuery.isFetched,
     ],
   );
 
   return (
-    <MedicationsContext.Provider value={value}>
+    <ClinicsContext.Provider value={value}>
       {children}
-    </MedicationsContext.Provider>
+    </ClinicsContext.Provider>
   );
 }
 
-export function useMedicationsContext(): MedicationsContextValue {
-  const ctx = useContext(MedicationsContext);
+export function useClinicsContext(): ClinicsContextValue {
+  const ctx = useContext(ClinicsContext);
   if (!ctx)
     throw new Error(
-      "useMedicationsContext must be used within <MedicationsProvider>",
+      "useClinicsContext must be used within <ClinicsProvider>",
     );
   return ctx;
 }
