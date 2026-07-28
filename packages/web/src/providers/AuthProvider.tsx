@@ -6,13 +6,13 @@ import {
   type ReactNode,
 } from "react";
 import { apiClient } from "../lib/api-client";
-import type { AppRole } from "../lib/auth/roles";
+import { isAppRole, type AppRole } from "../lib/auth/roles";
 
 export interface AuthUser {
   id: string;
   email: string;
   name: string;
-  role: AppRole | string;
+  role: AppRole;
 }
 
 interface AuthContextValue {
@@ -25,6 +25,30 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+function toAuthUser(input: unknown): AuthUser {
+  if (!input || typeof input !== "object") {
+    throw new Error("Invalid auth user payload");
+  }
+
+  const candidate = input as Record<string, unknown>;
+  const { id, email, name, role } = candidate;
+
+  if (
+    typeof id !== "string" ||
+    typeof email !== "string" ||
+    typeof name !== "string" ||
+    typeof role !== "string"
+  ) {
+    throw new Error("Invalid auth user payload");
+  }
+
+  if (!isAppRole(role)) {
+    throw new Error(`Unsupported role: ${role}`);
+  }
+
+  return { id, email, name, role };
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,18 +56,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Restore session on mount — access token cookie is sent automatically
   useEffect(() => {
     apiClient
-      .get<{ data: AuthUser }>("/auth/me")
-      .then(({ data }) => setUser(data.data))
+      .get<{ data: unknown }>("/auth/me")
+      .then(({ data }) => setUser(toAuthUser(data.data)))
       .catch(() => setUser(null))
       .finally(() => setIsLoading(false));
   }, []);
 
   async function login(email: string, password: string): Promise<AuthUser> {
     const { data } = await apiClient.post<{
-      data: { user: AuthUser };
+      data: { user: unknown };
     }>("/auth/login", { email, password });
-    setUser(data.data.user);
-    return data.data.user;
+    const user = toAuthUser(data.data.user);
+    setUser(user);
+    return user;
   }
 
   async function register(
