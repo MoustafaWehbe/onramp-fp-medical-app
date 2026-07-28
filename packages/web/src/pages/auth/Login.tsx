@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "../../hooks/useAuth";
+import { homePathForRole } from "../../lib/auth/roles";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
@@ -29,7 +30,7 @@ export function Login() {
   const [error, setError] = useState<string | null>(null);
 
   if (isLoading) return null;
-  if (user) return <Navigate to="/dashboard" replace />;
+  if (user) return <Navigate to={homePathForRole(user.role)} replace />;
 
   const {
     register,
@@ -42,8 +43,8 @@ export function Login() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       setError(null);
-      await login(data.email, data.password);
-      navigate("/dashboard");
+      const loggedIn = await login(data.email, data.password);
+      navigate(homePathForRole(loggedIn.role));
     } catch {
       setError("Invalid email or password");
     }

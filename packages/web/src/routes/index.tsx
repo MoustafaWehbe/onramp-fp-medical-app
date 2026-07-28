@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
+import { RoleRoute } from "./RoleRoute";
 import { AppLayout } from "../layouts/AppLayout";
+import { AdminLayout } from "../layouts/AdminLayout";
 import { AuthLayout } from "../layouts/AuthLayout";
 import { Login } from "../pages/auth/Login";
 import { Register } from "../pages/auth/Register";
@@ -17,44 +19,75 @@ import { Analytics } from "../pages/analytics/Analytics";
 import { AIReportsList } from "../pages/ai-reports/AIReportsList";
 import { AIReportGenerate } from "../pages/ai-reports/AIReportGenerate";
 import { AIReportView } from "../pages/ai-reports/AIReportView";
+import { AdminDashboard } from "../pages/admin/AdminDashboard";
+import { AdminMedications } from "../pages/admin/AdminMedications";
+import { AdminConditions } from "../pages/admin/AdminConditions";
+import { AdminSymptoms } from "../pages/admin/AdminSymptoms";
+import { AdminClinics } from "../pages/admin/AdminClinics";
+import { AdminDoctors } from "../pages/admin/AdminDoctors";
 import { NotFound } from "../pages/NotFound";
+import { useAuth } from "../hooks/useAuth";
+import { homePathForRole } from "../lib/auth/roles";
+import { LoadingSpinner } from "../components/shared/LoadingSpinner";
+
+function HomeRedirect() {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (!user) return <Navigate to="/login" replace />;
+  return <Navigate to={homePathForRole(user.role)} replace />;
+}
 
 export function AppRoutes() {
   return (
     <Routes>
-      {/* Public auth routes */}
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
 
-      {/* Protected app routes */}
+      <Route path="/" element={<HomeRedirect />} />
+
       <Route element={<ProtectedRoute />}>
-        <Route element={<AppLayout />}>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/settings" element={<Settings />} />
+        <Route element={<RoleRoute roles={["user"]} />}>
+          <Route element={<AppLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/settings" element={<Settings />} />
 
-          {/* Daily Health Logger — specific paths before /log/:date */}
-          <Route path="/log/new" element={<LogNew />} />
-          <Route path="/log/entry/:id" element={<LogEntry />} />
-          <Route path="/log/:date" element={<LogView />} />
+            <Route path="/log/new" element={<LogNew />} />
+            <Route path="/log/entry/:id" element={<LogEntry />} />
+            <Route path="/log/:date" element={<LogView />} />
 
-          {/* Health Profile & Management */}
-          <Route path="/health-profile" element={<HealthProfile />} />
-          <Route path="/medications" element={<Medications />} />
-          <Route path="/providers" element={<Providers />} />
+            <Route path="/health-profile" element={<HealthProfile />} />
+            <Route path="/medications" element={<Medications />} />
+            <Route path="/providers" element={<Providers />} />
 
-          {/* History */}
-          <Route path="/visits" element={<Visits />} />
+            <Route path="/visits" element={<Visits />} />
 
-          {/* Analytics */}
-          <Route path="/analytics" element={<Analytics />} />
+            <Route path="/analytics" element={<Analytics />} />
 
-          {/* AI Reports */}
-          <Route path="/ai-reports" element={<AIReportsList />} />
-          <Route path="/ai-reports/generate" element={<AIReportGenerate />} />
-          <Route path="/ai-reports/:id" element={<AIReportView />} />
+            <Route path="/ai-reports" element={<AIReportsList />} />
+            <Route path="/ai-reports/generate" element={<AIReportGenerate />} />
+            <Route path="/ai-reports/:id" element={<AIReportView />} />
+          </Route>
+        </Route>
+
+        <Route element={<RoleRoute roles={["admin"]} />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="medications" element={<AdminMedications />} />
+            <Route path="conditions" element={<AdminConditions />} />
+            <Route path="symptoms" element={<AdminSymptoms />} />
+            <Route path="clinics" element={<AdminClinics />} />
+            <Route path="doctors" element={<AdminDoctors />} />
+          </Route>
         </Route>
       </Route>
 

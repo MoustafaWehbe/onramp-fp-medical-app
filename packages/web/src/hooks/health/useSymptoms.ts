@@ -68,12 +68,15 @@ export function useOnlineSymptomSearch(
 export function useEnsureSymptomCatalog() {
   return useMutation({
     mutationFn: async (name: string): Promise<SymptomCatalog> => {
+      const existing = await findSymptomCatalogByName(name);
+      if (existing) return existing;
+
       try {
         return await createSymptomCatalog({ name });
       } catch (error) {
         if (isAxiosError(error) && error.response?.status === 409) {
-          const existing = await findSymptomCatalogByName(name);
-          if (existing) return existing;
+          const raced = await findSymptomCatalogByName(name);
+          if (raced) return raced;
         }
         throw error;
       }

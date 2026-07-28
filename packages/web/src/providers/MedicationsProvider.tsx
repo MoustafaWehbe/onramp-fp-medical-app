@@ -308,7 +308,7 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
     if (!payload.onlineName) {
       throw new Error("Select a medication from the suggestions");
     }
-    // Creates the catalog entry with its OpenFDA category resolved server-side
+    // Insert into catalog only if missing; otherwise reuse existing row
     const catalog = await ensureCatalog.mutateAsync(payload.onlineName);
     return catalog.id;
   }
