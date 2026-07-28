@@ -7,11 +7,12 @@ import {
 } from "../schemas/symptoms.schemas";
 import { validate } from "../middleware/validate";
 import { authenticate } from "../middleware/authenticate";
+import { authorize } from "../middleware/authorize";
 import { rateLimiter } from "../middleware/rate-limiter";
 
 const router = Router();
 
-router.use(authenticate);
+router.use(authenticate, authorize("admin", "user"));
 
 router.get(
   "/symptoms/search-online",
