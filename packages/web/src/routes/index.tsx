@@ -8,9 +8,7 @@ import { Login } from "../pages/auth/Login";
 import { Register } from "../pages/auth/Register";
 import { Dashboard } from "../pages/dashboard/Dashboard";
 import { Settings } from "../pages/dashboard/Settings";
-import { LogNew } from "../pages/log/LogNew";
 import { LogView } from "../pages/log/LogView";
-import { LogEntry } from "../pages/log/LogEntry";
 import { HealthProfile } from "../pages/health/HealthProfile";
 import { Medications } from "../pages/health/Medications";
 import { Providers } from "../pages/health/Providers";
@@ -29,6 +27,7 @@ import { NotFound } from "../pages/NotFound";
 import { useAuth } from "../hooks/useAuth";
 import { homePathForRole } from "../lib/auth/roles";
 import { LoadingSpinner } from "../components/shared/LoadingSpinner";
+import { DailyEntriesProvider } from "@/providers/DailyEntriesProvider";
 
 function HomeRedirect() {
   const { user, isLoading } = useAuth();
@@ -61,9 +60,9 @@ export function AppRoutes() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/settings" element={<Settings />} />
 
-            <Route path="/log/new" element={<LogNew />} />
-            <Route path="/log/entry/:id" element={<LogEntry />} />
-            <Route path="/log/:date" element={<LogView />} />
+            <Route path="/log/view" element={<DailyEntriesProvider><LogView /></DailyEntriesProvider>} />
+            
+            
 
             <Route path="/health-profile" element={<HealthProfile />} />
             <Route path="/medications" element={<Medications />} />

@@ -13,85 +13,82 @@ import {
   type FieldErrors,
   type UseFormHandleSubmit,
   type UseFormRegister,
-  type UseFormReset,
   type UseFormSetValue,
   type UseFormWatch,
+  type Control,
 } from "react-hook-form";
 
 import {
   useDailyEntries,
   useDailyEntry,
   useCreateDailyEntry,
-  useUpdateDailyEntry,
   useRemoveDailyEntry,
-} from "../hooks/daily-entries/useDailyEntries";
-
-import {
-  useProfileMedications,
-} from "../hooks/health/useMedications";
+  useUpdateDailyEntry,
+} from "../hooks/useDailyEntries";
 
 import {
   useProfileSymptoms,
 } from "../hooks/health/useSymptoms";
 
 import {
+  useProfileMedications,
+} from "../hooks/health/useMedications";
+
+import {
   useProfileConditions,
 } from "../hooks/health/useConditions";
 
 import {
-  useProfileDoctorVisits,
-} from "../hooks/health/useDoctorVisits";
+  useProfileDoctors,
+} from "../hooks/health/useDoctors";
+
+import {
+  useProfileClinics,
+} from "../hooks/health/useClinics";
 
 import type {
-  DailyEntry,
-  CreateDailyEntryRequest,
-  UpdateDailyEntryRequest,
-} from "../lib/daily-entries/daily-entries-exports";
-
-import type {
-  Medication,
+  UserSymptom,
   UserMedication,
+  UserCondition,
+  UserDoctor,
+  UserClinic,
 } from "../lib/health/health-export";
 
 import type {
-  Pagination,
-} from "../lib/api/types";
+  DailyEntry,
+} from "../lib/daily-entries/daily-entries-exports";
+import type { Pagination } from "../lib/api/types";
 
-// Adjust these imports to your actual daily-entry form exports.
 import {
-  dailyEntryFormSchema,
   emptyDailyEntryFormValues,
+  dailyEntryFormSchema,
   toDailyEntryFormValues,
+  toCreateDailyEntryRequest,
+  toUpdateDailyEntryRequest,
   toDailyEntrySubmitPayload,
   type DailyEntryFormValues,
-  type DailyEntryFormSubmitPayload,
-} from "../lib/daily-entries/daily-entry-form";
+} from "../lib/daily-entries/daily-entries-exports";
 
-// -----------------------------------------------------
-// Constants
-// -----------------------------------------------------
+import { useAuth } from "../hooks/useAuth";
 
+/**
+ * Number of entries displayed per page.
+ */
 export const DAILY_ENTRIES_PAGE_SIZE = 15;
 
-// -----------------------------------------------------
-// Panel state
-// -----------------------------------------------------
-
+/**
+ * Defines the state of the daily-entry side panel.
+ */
 export type DailyEntryPanelState =
   | { kind: "closed" }
   | { kind: "create" }
   | { kind: "detail"; entry: DailyEntry }
   | { kind: "edit"; entry: DailyEntry };
 
-// -----------------------------------------------------
-// Context type
-// -----------------------------------------------------
-
 interface DailyEntriesContextValue {
-  // -----------------------------
-  // Daily entries list
-  // -----------------------------
-
+  /**
+   * Daily entry list.
+   */
   entries: DailyEntry[];
 
   isLoading: boolean;
@@ -100,6 +97,9 @@ interface DailyEntriesContextValue {
 
   listErrorMessage: string | null;
 
+  /**
+   * Pagination.
+   */
   pagination: Pagination | null;
   currentPage: number;
   pageSize: number;
@@ -108,99 +108,103 @@ interface DailyEntriesContextValue {
   goToNextPage: () => void;
   goToPrevPage: () => void;
 
-  // -----------------------------
-  // Selected daily entry
-  // -----------------------------
+  /**
+   * Date filters.
+   */
+  fromDate: string | undefined;
+  toDate: string | undefined;
+  isInvalidDateRange: boolean;
 
+  setFromDate: (date: string | undefined) => void;
+  setToDate: (date: string | undefined) => void;
+  clearDateFilters: () => void;
+
+  /**
+   * Currently selected daily-entry detail.
+   */
   selectedEntry: DailyEntry | null;
-
-  detailEntry: DailyEntry | undefined;
   isDetailLoading: boolean;
+  detailErrorMessage: string | null;
 
-  // -----------------------------
-  // Panel
-  // -----------------------------
-
+  /**
+   * Panel state.
+   */
   panel: DailyEntryPanelState;
-
   panelOpen: boolean;
-
   panelTitle: string | undefined;
-
   selectedId: string | null;
-
   formMode: "create" | "edit" | null;
 
-  // -----------------------------
-  // Form
-  // -----------------------------
-
+  /**
+   * Form.
+   */
+  control: Control<DailyEntryFormValues>;
   register: UseFormRegister<DailyEntryFormValues>;
-
   watch: UseFormWatch<DailyEntryFormValues>;
-
   setValue: UseFormSetValue<DailyEntryFormValues>;
-
-  reset: UseFormReset<DailyEntryFormValues>;
-
   formErrors: FieldErrors<DailyEntryFormValues>;
-
   handleFormSubmit: UseFormHandleSubmit<DailyEntryFormValues>;
 
-  // -----------------------------
-  // Profile data
-  // -----------------------------
-
-  medications: UserMedication[];
-
-  symptoms: UserSymptom[];
-
-  conditions: UserCondition[];
-
-  doctorVisits: UserDoctorVisit[];
-
-  // -----------------------------
-  // Form state
-  // -----------------------------
-
+  /**
+   * Form state.
+   */
   formError: string | null;
-
   isFormBusy: boolean;
-
   isRemoving: boolean;
 
-  // -----------------------------
-  // Actions
-  // -----------------------------
+  /**
+   * User profile resources used by
+   * daily-entry dropdowns.
+   *
+   * All resources are already sorted
+   * alphabetically by display name.
+   */
+  symptoms: UserSymptom[];
+  medications: UserMedication[];
+  conditions: UserCondition[];
+  doctors: UserDoctor[];
+  clinics: UserClinic[];
 
+  /**
+   * Dropdown loading states.
+   */
+  isLoadingSymptoms: boolean;
+  isLoadingMedications: boolean;
+  isLoadingConditions: boolean;
+  isLoadingDoctors: boolean;
+  isLoadingClinics: boolean;
+
+  /**
+   * Dropdown errors.
+   */
+  symptomsErrorMessage: string | null;
+  medicationsErrorMessage: string | null;
+  conditionsErrorMessage: string | null;
+  doctorsErrorMessage: string | null;
+  clinicsErrorMessage: string | null;
+
+  /**
+   * Panel actions.
+   */
   openCreate: () => void;
-
   openDetail: (entry: DailyEntry) => void;
-
   openEdit: (entry: DailyEntry) => void;
-
   closePanel: () => void;
-
   cancelForm: () => void;
 
-  submitForm: (
-    values: DailyEntryFormValues,
-  ) => Promise<void>;
-
+  /**
+   * Daily-entry actions.
+   */
+  submitForm: (values: DailyEntryFormValues) => Promise<void>;
   remove: (id: string) => Promise<void>;
 }
-
-// -----------------------------------------------------
-// Context
-// -----------------------------------------------------
 
 const DailyEntriesContext =
   createContext<DailyEntriesContextValue | null>(null);
 
-// -----------------------------------------------------
-// Helpers
-// -----------------------------------------------------
-
+/**
+ * Extracts a useful error message from Axios/API errors.
+ */
 function getErrorMessage(
   error: unknown,
   fallback: string,
@@ -222,19 +226,26 @@ function getErrorMessage(
   return fallback;
 }
 
-// -----------------------------------------------------
-// Provider
-// -----------------------------------------------------
+/**
+ * Sorts an array alphabetically.
+ */
+function sortAlphabetically<T>(
+  items: T[],
+  getName: (item: T) => string,
+): T[] {
+  return [...items].sort((a, b) =>
+    getName(a).localeCompare(getName(b), undefined, {
+      sensitivity: "base",
+    }),
+  );
+}
 
 export function DailyEntriesProvider({
   children,
 }: {
   children: ReactNode;
 }) {
-  // -----------------------------------------------
-  // Panel state
-  // -----------------------------------------------
-
+  const { user } = useAuth();
   const [panel, setPanel] =
     useState<DailyEntryPanelState>({
       kind: "closed",
@@ -249,44 +260,79 @@ export function DailyEntriesProvider({
   const [currentPage, setCurrentPage] =
     useState(1);
 
-  // -----------------------------------------------
-  // Daily entry hooks
-  // -----------------------------------------------
+  const [fromDate, setFromDate] =
+    useState<string | undefined>(undefined);
 
-  const listQuery = useDailyEntries({
+  const [toDate, setToDate] =
+    useState<string | undefined>(undefined);
+
+    const isInvalidDateRange =
+  Boolean(
+    fromDate &&
+    toDate &&
+    fromDate > toDate,
+  );
+  /**
+   * ----------------------------------------------------
+   * Daily-entry queries
+   * ----------------------------------------------------
+   */
+
+  const listQuery = useDailyEntries(
+    user?.id,{
     currentPage,
     pageSize: DAILY_ENTRIES_PAGE_SIZE,
-  });
+    fromDate,
+    toDate,
+  },
+    !isInvalidDateRange,);
 
-  const detailQuery = useDailyEntry(
+  /**
+   * The detail query is enabled only when
+   * a detail/edit panel has an entry selected.
+   */
+  const detailEntryId =
     panel.kind === "detail" || panel.kind === "edit"
       ? panel.entry.id
-      : undefined,
-  );
+      : undefined;
 
-  const createDailyEntry =
+  const detailQuery =
+    useDailyEntry(detailEntryId);
+
+  /**
+   * ----------------------------------------------------
+   * Daily-entry mutations
+   * ----------------------------------------------------
+   */
+
+  const createEntry =
     useCreateDailyEntry();
 
-  const updateDailyEntry =
+  const updateEntry =
     useUpdateDailyEntry();
 
-  const removeDailyEntry =
+  const removeEntry =
     useRemoveDailyEntry();
 
-  // -----------------------------------------------
-  // Profile hooks
-  //
-  // These are assumed to already exist.
-  // -----------------------------------------------
+  /**
+   * ----------------------------------------------------
+   * Profile resources for dropdowns
+   * ----------------------------------------------------
+   *
+   * We intentionally request 100 records here.
+   *
+   * The dropdown is expected to contain the user's
+   * saved profile resources, not just the first 15.
+   */
 
-  const medicationsQuery =
-    useProfileMedications({
+  const symptomsQuery =
+    useProfileSymptoms({
       currentPage: 1,
       pageSize: 100,
     });
 
-  const symptomsQuery =
-    useProfileSymptoms({
+  const medicationsQuery =
+    useProfileMedications({
       currentPage: 1,
       pageSize: 100,
     });
@@ -297,15 +343,23 @@ export function DailyEntriesProvider({
       pageSize: 100,
     });
 
-  const doctorVisitsQuery =
-    useProfileDoctorVisits({
+  const doctorsQuery =
+    useProfileDoctors({
       currentPage: 1,
       pageSize: 100,
     });
 
-  // -----------------------------------------------
-  // React Hook Form
-  // -----------------------------------------------
+  const clinicsQuery =
+    useProfileClinics({
+      currentPage: 1,
+      pageSize: 100,
+    });
+
+  /**
+   * ----------------------------------------------------
+   * React Hook Form
+   * ----------------------------------------------------
+   */
 
   const {
     register,
@@ -313,21 +367,26 @@ export function DailyEntriesProvider({
     setValue,
     watch,
     reset,
+    control,
     formState: {
       errors: formErrors,
+      
     },
   } = useForm<DailyEntryFormValues>({
+    
     resolver: zodResolver(
       dailyEntryFormSchema,
     ),
-
     defaultValues:
       emptyDailyEntryFormValues(),
+    
   });
 
-  // -----------------------------------------------
-  // Derived data
-  // -----------------------------------------------
+  /**
+   * ----------------------------------------------------
+   * List data
+   * ----------------------------------------------------
+   */
 
   const entries =
     listQuery.data?.data ?? [];
@@ -335,14 +394,85 @@ export function DailyEntriesProvider({
   const pagination =
     listQuery.data?.pagination ?? null;
 
-  const selectedEntry =
-    panel.kind === "detail" ||
-    panel.kind === "edit"
-      ? panel.entry
-      : null;
+  /**
+   * ----------------------------------------------------
+   * Detail data
+   * ----------------------------------------------------
+   *
+   * Prefer the detail endpoint result when
+   * available because it is the source of truth
+   * for the complete entry.
+   */
 
-  const detailEntry =
-    detailQuery.data;
+  const selectedEntry =
+    detailQuery.data ??
+    (
+      panel.kind === "detail" ||
+      panel.kind === "edit"
+        ? panel.entry
+        : null
+    );
+
+  /**
+   * ----------------------------------------------------
+   * Alphabetically sorted dropdown resources
+   * ----------------------------------------------------
+   */
+
+  const symptoms = useMemo(
+    () =>
+      sortAlphabetically<UserSymptom>(
+        (symptomsQuery.data?.data as UserSymptom[]) ?? [],
+        (symptom) =>
+          symptom.catalog.name,
+      ),
+    [symptomsQuery.data?.data],
+  );
+
+  const medications = useMemo(
+    () =>
+      sortAlphabetically<UserMedication>(
+        (medicationsQuery.data?.data as UserMedication[]) ?? [],
+        (medication) =>
+          medication.medication.name,
+      ),
+    [medicationsQuery.data?.data],
+  );
+
+  const conditions = useMemo(
+    () =>
+      sortAlphabetically<UserCondition>(
+        (conditionsQuery.data?.data as UserCondition[]) ?? [],
+        (condition) => condition.condition.name,
+      ),
+    [conditionsQuery.data?.data],
+  );
+
+  const doctors = useMemo(
+    () =>
+      sortAlphabetically<UserDoctor>(
+        doctorsQuery.data?.data ?? [],
+        (doctor) =>
+          doctor.doctor.name,
+      ),
+    [doctorsQuery.data?.data],
+  );
+
+  const clinics = useMemo(
+    () =>
+      sortAlphabetically<UserClinic>(
+        clinicsQuery.data?.data ?? [],
+        (clinic) =>
+          clinic.clinic.name,
+      ),
+    [clinicsQuery.data?.data],
+  );
+
+  /**
+   * ----------------------------------------------------
+   * Form mode
+   * ----------------------------------------------------
+   */
 
   const formMode =
     panel.kind === "create" ||
@@ -350,43 +480,11 @@ export function DailyEntriesProvider({
       ? panel.kind
       : null;
 
-  const panelOpen =
-    panel.kind !== "closed";
-
-  const selectedId =
-    panel.kind === "detail" ||
-    panel.kind === "edit"
-      ? panel.entry.id
-      : null;
-
-  const panelTitle =
-    panel.kind === "create"
-      ? "Add daily entry"
-      : panel.kind === "edit"
-        ? "Edit daily entry"
-        : panel.kind === "detail"
-          ? "Daily entry details"
-          : undefined;
-
-  // -----------------------------------------------
-  // Profile data
-  // -----------------------------------------------
-
-  const medications =
-    medicationsQuery.data?.data ?? [];
-
-  const symptoms =
-    symptomsQuery.data?.data ?? [];
-
-  const conditions =
-    conditionsQuery.data?.data ?? [];
-
-  const doctorVisits =
-    doctorVisitsQuery.data?.data ?? [];
-
-  // -----------------------------------------------
-  // Reset form when panel changes
-  // -----------------------------------------------
+  /**
+   * ----------------------------------------------------
+   * Reset form when panel changes
+   * ----------------------------------------------------
+   */
 
   useEffect(() => {
     if (panel.kind === "create") {
@@ -400,19 +498,41 @@ export function DailyEntriesProvider({
     }
 
     if (panel.kind === "edit") {
-      reset(
-        toDailyEntryFormValues(
-          panel.entry,
-        ),
-      );
+      /**
+       * If detail data is already loaded,
+       * use it to populate the form.
+       */
+      if (detailQuery.data) {
+        reset(
+          toDailyEntryFormValues(
+            detailQuery.data,
+          ),
+        );
+      } else {
+        /**
+         * Fallback to the entry from the list
+         * while detail data is loading.
+         */
+        reset(
+          toDailyEntryFormValues(
+            panel.entry,
+          ),
+        );
+      }
 
       setFormError(null);
     }
-  }, [panel, reset]);
+  }, [
+    panel,
+    detailQuery.data,
+    reset,
+  ]);
 
-  // -----------------------------------------------
-  // Keep current page valid
-  // -----------------------------------------------
+  /**
+   * ----------------------------------------------------
+   * Keep current page valid
+   * ----------------------------------------------------
+   */
 
   useEffect(() => {
     if (!pagination) {
@@ -440,17 +560,117 @@ export function DailyEntriesProvider({
     currentPage,
   ]);
 
-  // -----------------------------------------------
-  // Busy states
-  // -----------------------------------------------
+  /**
+   * ----------------------------------------------------
+   * Busy states
+   * ----------------------------------------------------
+   */
 
   const isFormBusy =
-    createDailyEntry.isPending ||
-    updateDailyEntry.isPending;
+    createEntry.isPending ||
+    updateEntry.isPending;
 
-  // -----------------------------------------------
-  // Panel actions
-  // -----------------------------------------------
+  /**
+   * ----------------------------------------------------
+   * Panel information
+   * ----------------------------------------------------
+   */
+
+  const panelOpen =
+    panel.kind !== "closed";
+
+  const selectedId =
+    panel.kind === "detail" ||
+    panel.kind === "edit"
+      ? panel.entry.id
+      : null;
+
+  const panelTitle =
+    panel.kind === "create"
+      ? "Add daily entry"
+      : panel.kind === "edit"
+        ? "Edit daily entry"
+        : panel.kind === "detail"
+          ? `Entry - ${panel.entry.entryDate}`
+          : undefined;
+
+  /**
+   * ----------------------------------------------------
+   * Pagination actions
+   * ----------------------------------------------------
+   */
+
+  function goToPage(
+    page: number,
+  ) {
+    const totalPages =
+      pagination?.totalPages ?? 1;
+
+    const nextPage = Math.min(
+      Math.max(1, page),
+      Math.max(1, totalPages),
+    );
+
+    setCurrentPage(nextPage);
+  }
+
+  function goToNextPage() {
+    if (!pagination) {
+      return;
+    }
+
+    if (
+      currentPage <
+      pagination.totalPages
+    ) {
+      setCurrentPage(
+        currentPage + 1,
+      );
+    }
+  }
+
+  function goToPrevPage() {
+    if (currentPage > 1) {
+      setCurrentPage(
+        currentPage - 1,
+      );
+    }
+  }
+
+  /**
+   * ----------------------------------------------------
+   * Date filter actions
+   * ----------------------------------------------------
+   */
+
+  function handleSetFromDate(
+    date: string | undefined,
+  ) {
+    setFromDate(date);
+    setCurrentPage(1);
+    setListError(null);
+  }
+
+  function handleSetToDate(
+    date: string | undefined,
+  ) {
+    setToDate(date);
+    setCurrentPage(1);
+    setListError(null);
+  }
+
+  function clearDateFilters() {
+    setFromDate(undefined);
+    setToDate(undefined);
+    setCurrentPage(1);
+    setListError(null);
+  }
+
+  /**
+   * ----------------------------------------------------
+   * Panel actions
+   * ----------------------------------------------------
+   */
 
   function openCreate() {
     setFormError(null);
@@ -502,103 +722,83 @@ export function DailyEntriesProvider({
     closePanel();
   }
 
-  // -----------------------------------------------
-  // Pagination
-  // -----------------------------------------------
 
-  function goToPage(
-    page: number,
-  ) {
-    const totalPages =
-      pagination?.totalPages ?? 1;
+  /**
+   * create and update
+  **/
 
-    const nextPage = Math.min(
-      Math.max(1, page),
-      Math.max(1, totalPages),
-    );
+ function getTodayDate(): string {
+  const today = new Date();
 
-    setCurrentPage(
-      nextPage,
-    );
-  }
+  const year = today.getFullYear();
+  const month = String(
+    today.getMonth() + 1,
+  ).padStart(2, "0");
+  const day = String(
+    today.getDate(),
+  ).padStart(2, "0");
 
-  function goToNextPage() {
-    if (!pagination) {
+  return `${year}-${month}-${day}`;
+}
+
+async function submitForm(
+  values: DailyEntryFormValues,
+) {
+  try {
+    setFormError(null);
+
+    const payload =
+      toDailyEntrySubmitPayload({
+        ...values,
+
+        // Always use today's date.
+        // The user cannot submit an entry for another date.
+        entryDate: getTodayDate(),
+      });
+
+    if (panel.kind === "create") {
+      const request =
+        toCreateDailyEntryRequest(payload);
+
+      await createEntry.mutateAsync(
+        request,
+      );
+
+      setCurrentPage(1);
+
+      closePanel();
+
       return;
     }
 
-    if (
-      currentPage <
-      pagination.totalPages
-    ) {
-      setCurrentPage(
-        currentPage + 1,
-      );
+    if (panel.kind === "edit") {
+      const request =
+        toUpdateDailyEntryRequest(payload);
+
+      await updateEntry.mutateAsync({
+        id: panel.entry.id,
+        body: request,
+      });
+
+      closePanel();
     }
+  } catch (error) {
+    setFormError(
+      getErrorMessage(
+        error,
+        panel.kind === "edit"
+          ? "Failed to update daily entry"
+          : "Failed to create daily entry",
+      ),
+    );
   }
+}
 
-  function goToPrevPage() {
-    if (currentPage > 1) {
-      setCurrentPage(
-        currentPage - 1,
-      );
-    }
-  }
-
-  // -----------------------------------------------
-  // Submit form
-  // -----------------------------------------------
-
-  async function submitForm(
-    values: DailyEntryFormValues,
-  ) {
-    try {
-      setFormError(null);
-
-      const payload =
-        toDailyEntrySubmitPayload(
-          values,
-        );
-
-      if (panel.kind === "create") {
-        await createDailyEntry.mutateAsync(
-          payload as CreateDailyEntryRequest,
-        );
-
-        setCurrentPage(1);
-
-        closePanel();
-
-        return;
-      }
-
-      if (panel.kind === "edit") {
-        await updateDailyEntry.mutateAsync(
-          {
-            id: panel.entry.id,
-
-            body:
-              payload as UpdateDailyEntryRequest,
-          },
-        );
-
-        closePanel();
-      }
-    } catch (error) {
-      setFormError(
-        getErrorMessage(
-          error,
-          panel.kind === "edit"
-            ? "Failed to update daily entry"
-            : "Failed to add daily entry",
-        ),
-      );
-    }
-  }
-
-  // -----------------------------------------------
-  // Remove
-  // -----------------------------------------------
+  /**
+   * ----------------------------------------------------
+   * Delete
+   * ----------------------------------------------------
+   */
 
   async function remove(
     id: string,
@@ -606,7 +806,7 @@ export function DailyEntriesProvider({
     try {
       setListError(null);
 
-      await removeDailyEntry.mutateAsync(
+      await removeEntry.mutateAsync(
         id,
       );
 
@@ -615,20 +815,24 @@ export function DailyEntriesProvider({
       setListError(
         getErrorMessage(
           error,
-          "Failed to remove daily entry",
+          "Failed to delete daily entry",
         ),
       );
     }
   }
 
-  // -----------------------------------------------
-  // Context value
-  // -----------------------------------------------
+  /**
+   * ----------------------------------------------------
+   * Context value
+   * ----------------------------------------------------
+   */
 
   const value =
     useMemo<DailyEntriesContextValue>(
       () => ({
-        // Daily entries
+        /**
+         * List
+         */
         entries,
 
         isLoading:
@@ -642,13 +846,18 @@ export function DailyEntriesProvider({
 
         listErrorMessage:
           listError ??
-          (listQuery.isError
-            ? getErrorMessage(
-                listQuery.error,
-                "Failed to load daily entries",
-              )
-            : null),
+          (
+            listQuery.isError
+              ? getErrorMessage(
+                  listQuery.error,
+                  "Failed to load daily entries",
+                )
+              : null
+          ),
 
+        /**
+         * Pagination
+         */
         pagination,
 
         currentPage,
@@ -662,15 +871,41 @@ export function DailyEntriesProvider({
 
         goToPrevPage,
 
-        // Selected entry
-        selectedEntry,
+        /**
+         * Date filters
+         */
+        fromDate,
 
-        detailEntry,
+        toDate,
+        isInvalidDateRange,
+
+        setFromDate:
+          handleSetFromDate,
+
+        setToDate:
+          handleSetToDate,
+
+        clearDateFilters,
+
+        /**
+         * Detail
+         */
+        selectedEntry,
 
         isDetailLoading:
           detailQuery.isLoading,
 
-        // Panel
+        detailErrorMessage:
+          detailQuery.isError
+            ? getErrorMessage(
+                detailQuery.error,
+                "Failed to load daily entry",
+              )
+            : null,
+
+        /**
+         * Panel
+         */
         panel,
 
         panelOpen,
@@ -681,38 +916,108 @@ export function DailyEntriesProvider({
 
         formMode,
 
-        // Form
+        /**
+         * Form
+         */
+        control,
         register,
 
         watch,
 
         setValue,
 
-        reset,
-
         formErrors,
 
         handleFormSubmit:
           handleSubmit,
 
-        // Profile data
-        medications,
-
-        symptoms,
-
-        conditions,
-
-        doctorVisits,
-
-        // Form state
+        /**
+         * Form state
+         */
         formError,
 
         isFormBusy,
 
         isRemoving:
-          removeDailyEntry.isPending,
+          removeEntry.isPending,
 
-        // Actions
+        /**
+         * Dropdown data
+         */
+        symptoms,
+
+        medications,
+
+        conditions,
+
+        doctors,
+
+        clinics,
+
+        /**
+         * Dropdown loading
+         */
+        isLoadingSymptoms:
+          symptomsQuery.isLoading,
+
+        isLoadingMedications:
+          medicationsQuery.isLoading,
+
+        isLoadingConditions:
+          conditionsQuery.isLoading,
+
+        isLoadingDoctors:
+          doctorsQuery.isLoading,
+
+        isLoadingClinics:
+          clinicsQuery.isLoading,
+
+        /**
+         * Dropdown errors
+         */
+        symptomsErrorMessage:
+          symptomsQuery.isError
+            ? getErrorMessage(
+                symptomsQuery.error,
+                "Failed to load symptoms",
+              )
+            : null,
+
+        medicationsErrorMessage:
+          medicationsQuery.isError
+            ? getErrorMessage(
+                medicationsQuery.error,
+                "Failed to load medications",
+              )
+            : null,
+
+        conditionsErrorMessage:
+          conditionsQuery.isError
+            ? getErrorMessage(
+                conditionsQuery.error,
+                "Failed to load conditions",
+              )
+            : null,
+
+        doctorsErrorMessage:
+          doctorsQuery.isError
+            ? getErrorMessage(
+                doctorsQuery.error,
+                "Failed to load doctors",
+              )
+            : null,
+
+        clinicsErrorMessage:
+          clinicsQuery.isError
+            ? getErrorMessage(
+                clinicsQuery.error,
+                "Failed to load clinics",
+              )
+            : null,
+
+        /**
+         * Panel actions
+         */
         openCreate,
 
         openDetail,
@@ -723,11 +1028,17 @@ export function DailyEntriesProvider({
 
         cancelForm,
 
+        /**
+         * Form actions
+         */
         submitForm,
 
+        /**
+         * Delete
+         */
         remove,
       }),
-
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [
         entries,
 
@@ -742,6 +1053,15 @@ export function DailyEntriesProvider({
 
         currentPage,
 
+        fromDate,
+        toDate,
+
+        selectedEntry,
+
+        detailQuery.isLoading,
+        detailQuery.isError,
+        detailQuery.error,
+
         panel,
 
         panelOpen,
@@ -752,29 +1072,41 @@ export function DailyEntriesProvider({
 
         formMode,
 
-        selectedEntry,
-
-        detailEntry,
-
-        detailQuery.isLoading,
-
         register,
         watch,
         setValue,
-        reset,
         formErrors,
         handleSubmit,
-
-        medications,
-        symptoms,
-        conditions,
-        doctorVisits,
 
         formError,
 
         isFormBusy,
 
-        removeDailyEntry.isPending,
+        removeEntry.isPending,
+
+        symptoms,
+        medications,
+        conditions,
+        doctors,
+        clinics,
+
+        symptomsQuery.isLoading,
+        medicationsQuery.isLoading,
+        conditionsQuery.isLoading,
+        doctorsQuery.isLoading,
+        clinicsQuery.isLoading,
+
+        symptomsQuery.isError,
+        medicationsQuery.isError,
+        conditionsQuery.isError,
+        doctorsQuery.isError,
+        clinicsQuery.isError,
+
+        symptomsQuery.error,
+        medicationsQuery.error,
+        conditionsQuery.error,
+        doctorsQuery.error,
+        clinicsQuery.error,
       ],
     );
 
@@ -787,21 +1119,20 @@ export function DailyEntriesProvider({
   );
 }
 
-// -----------------------------------------------------
-// Context hook
-// -----------------------------------------------------
-
+/**
+ * Access the DailyEntriesProvider context.
+ */
 export function useDailyEntriesContext(): DailyEntriesContextValue {
-  const ctx =
+  const context =
     useContext(
       DailyEntriesContext,
     );
 
-  if (!ctx) {
+  if (!context) {
     throw new Error(
       "useDailyEntriesContext must be used within <DailyEntriesProvider>",
     );
   }
 
-  return ctx;
+  return context;
 }

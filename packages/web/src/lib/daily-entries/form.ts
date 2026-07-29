@@ -1,25 +1,166 @@
 import { z } from "zod";
+
+import type { ConditionStatus } from "../health/condition-status";
+
 import type {
   CreateDailyEntryRequest,
   DailyEntry,
+  DailyEntryConditionRequest,
+  DailyEntryDoctorVisitRequest,
+  DailyEntryMedicationRequest,
+  DailyEntrySymptomRequest,
   UpdateDailyEntryRequest,
 } from "./types";
 
 /**
- * Schema for the daily entry form.
- *
- * Form values use strings for numeric inputs because
- * HTML input elements return string values.
+ * ----------------------------------------------------
+ * Nested Form Schemas
+ * ----------------------------------------------------
  */
+
+const dailyEntrySymptomFormSchema = z.object({
+  userSymptomId: z
+    .string()
+    .min(1, "Symptom is required"),
+
+  severity: z
+    .string()
+    .min(1, "Severity is required")
+    .refine(
+      (value) => {
+        const number = Number(value);
+
+        return (
+          Number.isInteger(number) &&
+          number >= 1 &&
+          number <= 10
+        );
+      },
+      {
+        message:
+          "Severity must be a whole number between 1 and 10",
+      },
+    ),
+
+  notes: z
+    .string()
+    .max(
+      2000,
+      "Symptom notes must be 2000 characters or less",
+    )
+    .optional(),
+});
+
+const dailyEntryMedicationFormSchema = z.object({
+  userMedicationId: z
+    .string()
+    .min(1, "Medication is required"),
+
+  quantity: z
+    .string()
+    .min(1, "Quantity is required")
+    .refine(
+      (value) => {
+        const number = Number(value);
+
+        return (
+          Number.isFinite(number) &&
+          number > 0
+        );
+      },
+      {
+        message:
+          "Quantity must be greater than 0",
+      },
+    ),
+
+  unit: z
+    .string()
+    .min(1, "Unit is required"),
+
+  taken: z.boolean(),
+
+  takenAt: z
+    .string()
+    .optional(),
+
+  notes: z
+    .string()
+    .max(
+      2000,
+      "Medication notes must be 2000 characters or less",
+    )
+    .optional(),
+});
+
+const dailyEntryConditionFormSchema = z.object({
+  userConditionId: z
+    .string()
+    .min(1, "Condition is required"),
+
+  status: z.enum(
+    ["active", "inactive", "resolved"] as const,
+  ),
+
+  notes: z
+    .string()
+    .max(
+      2000,
+      "Condition notes must be 2000 characters or less",
+    )
+    .optional(),
+});
+
+const dailyEntryDoctorVisitFormSchema = z.object({
+  userDoctorId: z
+    .string()
+    .min(1, "Doctor is required"),
+
+  userClinicId: z
+    .string()
+    .min(1, "Clinic is required"),
+
+  summary: z
+    .string()
+    .min(1, "Summary is required")
+    .max(
+      2000,
+      "Summary must be 2000 characters or less",
+    ),
+
+  notes: z
+    .string()
+    .max(
+      2000,
+      "Visit notes must be 2000 characters or less",
+    )
+    .optional(),
+});
+
+/**
+ * ----------------------------------------------------
+ * Main Daily Entry Form Schema
+ * ----------------------------------------------------
+ *
+ * entryDate is automatically set to today's date.
+ *
+ * The UI should display it as read-only.
+ * The user must not be able to change it.
+ */
+
 export const dailyEntryFormSchema = z.object({
-  entryDate: z.string().min(1, "Date is required"),
+  entryDate: z
+    .string()
+    .min(1, "Date is required"),
 
   moodRating: z
     .string()
     .optional()
     .refine(
       (value) => {
-        if (!value || !value.trim()) return true;
+        if (!value || !value.trim()) {
+          return true;
+        }
 
         const number = Number(value);
 
@@ -30,7 +171,8 @@ export const dailyEntryFormSchema = z.object({
         );
       },
       {
-        message: "Mood rating must be a whole number between 1 and 10",
+        message:
+          "Mood rating must be a whole number between 1 and 10",
       },
     ),
 
@@ -39,56 +181,136 @@ export const dailyEntryFormSchema = z.object({
     .optional()
     .refine(
       (value) => {
-        if (!value || !value.trim()) return true;
+        if (!value || !value.trim()) {
+          return true;
+        }
 
         const number = Number(value);
 
-        return Number.isFinite(number) && number >= 0;
+        return (
+          Number.isFinite(number) &&
+          number >= 0
+        );
       },
       {
-        message: "Sleep hours must be 0 or greater",
+        message:
+          "Sleep hours must be 0 or greater",
       },
     ),
 
   journalNotes: z
     .string()
-    .max(5000, "Journal notes must be 5000 characters or less")
+    .max(
+      5000,
+      "Journal notes must be 5000 characters or less",
+    )
     .optional(),
+
+  symptoms: z.array(
+    dailyEntrySymptomFormSchema,
+  ),
+
+  medications: z.array(
+    dailyEntryMedicationFormSchema,
+  ),
+
+  conditions: z.array(
+    dailyEntryConditionFormSchema,
+  ),
+
+  doctorVisits: z.array(
+    dailyEntryDoctorVisitFormSchema,
+  ),
 });
 
-export type DailyEntryFormValues = z.infer<
-  typeof dailyEntryFormSchema
->;
+export type DailyEntryFormValues =
+  z.infer<typeof dailyEntryFormSchema>;
 
 /**
- * Internal payload used when submitting
- * the daily entry form.
+ * ----------------------------------------------------
+ * Form Submit Payload
+ * ----------------------------------------------------
  */
+
 export interface DailyEntryFormSubmitPayload {
   entryDate: string;
+
   moodRating?: number | null;
+
   sleepHours?: number | null;
+
   journalNotes?: string | null;
+
+  symptoms: DailyEntrySymptomRequest[];
+
+  medications: DailyEntryMedicationRequest[];
+
+  conditions: DailyEntryConditionRequest[];
+
+  doctorVisits: DailyEntryDoctorVisitRequest[];
 }
 
 /**
- * Returns empty/default values for creating
- * a new daily entry.
+ * ----------------------------------------------------
+ * Today's Date
+ * ----------------------------------------------------
+ *
+ * Returns today's date in YYYY-MM-DD format.
+ *
+ * Example:
+ * 2026-07-28
  */
+
+export function getTodayDate(): string {
+  return new Date()
+    .toISOString()
+    .split("T")[0];
+}
+
+/**
+ * ----------------------------------------------------
+ * Empty Form Values
+ * ----------------------------------------------------
+ *
+ * Used when opening "Submit Current Entry".
+ *
+ * The entry date is automatically today's date.
+ */
+
 export function emptyDailyEntryFormValues(): DailyEntryFormValues {
   return {
-    entryDate: new Date().toISOString().split("T")[0],
+    entryDate: getTodayDate(),
+
     moodRating: "",
+
     sleepHours: "",
+
     journalNotes: "",
+
+    symptoms: [],
+
+    medications: [],
+
+    conditions: [],
+
+    doctorVisits: [],
   };
 }
 
 /**
- * Converts an existing DailyEntry into form values.
+ * ----------------------------------------------------
+ * Existing Entry -> Form Values
+ * ----------------------------------------------------
  *
- * Used when editing an existing daily entry.
+ * Used when editing an existing entry.
+ *
+ * NOTE:
+ * For the current UI flow, the user should only use
+ * emptyDailyEntryFormValues() when creating today's entry.
+ *
+ * This function is kept for future edit functionality.
  */
+
 export function toDailyEntryFormValues(
   initial?: DailyEntry | null,
 ): DailyEntryFormValues {
@@ -98,70 +320,325 @@ export function toDailyEntryFormValues(
 
   return {
     entryDate: initial.entryDate,
+
     moodRating:
-      initial.moodRating != null
+      initial.moodRating !== null
         ? String(initial.moodRating)
         : "",
+
     sleepHours:
-      initial.sleepHours != null
+      initial.sleepHours !== null
         ? String(initial.sleepHours)
         : "",
-    journalNotes: initial.journalNotes ?? "",
+
+    journalNotes:
+      initial.journalNotes ?? "",
+
+    symptoms:
+      initial.symptoms.map((symptom) => ({
+        userSymptomId:
+          symptom.userSymptomId,
+
+        severity:
+          String(symptom.severity),
+
+        notes:
+          symptom.notes ?? "",
+      })),
+
+    medications:
+      initial.medications.map((medication) => ({
+        userMedicationId:
+          medication.userMedicationId,
+
+        quantity:
+          String(medication.quantity),
+
+        unit:
+          medication.unit,
+
+        taken:
+          medication.taken,
+
+        takenAt:
+          medication.takenAt
+            ? toDateTimeLocal(
+                medication.takenAt,
+              )
+            : "",
+
+        notes:
+          medication.notes ?? "",
+      })),
+
+    conditions:
+      initial.conditions.map((condition) => ({
+        userConditionId:
+          condition.userConditionId,
+
+        status:
+          condition.status,
+
+        notes:
+          condition.notes ?? "",
+      })),
+
+    doctorVisits:
+      initial.doctorVisits.map((visit) => ({
+        userDoctorId:
+          visit.userDoctorId,
+
+        userClinicId:
+          visit.userClinicId,
+
+        summary:
+          visit.summary,
+
+        notes:
+          visit.notes ?? "",
+      })),
   };
 }
 
 /**
- * Converts form values into a clean submit payload.
+ * ----------------------------------------------------
+ * ISO Date -> datetime-local
+ * ----------------------------------------------------
  */
+
+function toDateTimeLocal(
+  value: string,
+): string {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  const year =
+    date.getFullYear();
+
+  const month =
+    String(
+      date.getMonth() + 1,
+    ).padStart(2, "0");
+
+  const day =
+    String(
+      date.getDate(),
+    ).padStart(2, "0");
+
+  const hours =
+    String(
+      date.getHours(),
+    ).padStart(2, "0");
+
+  const minutes =
+    String(
+      date.getMinutes(),
+    ).padStart(2, "0");
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+/**
+ * ----------------------------------------------------
+ * Form Values -> Submit Payload
+ * ----------------------------------------------------
+ *
+ * IMPORTANT:
+ * For a new daily entry, the entry date is ALWAYS
+ * today's date.
+ *
+ * The value from the form is not used to determine
+ * the date sent to the backend.
+ */
+
 export function toDailyEntrySubmitPayload(
   values: DailyEntryFormValues,
 ): DailyEntryFormSubmitPayload {
-  const hasMoodRating = Boolean(values.moodRating?.trim());
-  const hasSleepHours = Boolean(values.sleepHours?.trim());
+  const hasMoodRating =
+    Boolean(
+      values.moodRating?.trim(),
+    );
+
+  const hasSleepHours =
+    Boolean(
+      values.sleepHours?.trim(),
+    );
 
   return {
-    entryDate: values.entryDate,
+    /**
+     * Always submit today's date.
+     */
+    entryDate: getTodayDate(),
 
-    moodRating: hasMoodRating
-      ? Number(values.moodRating)
-      : null,
+    moodRating:
+      hasMoodRating
+        ? Number(values.moodRating)
+        : null,
 
-    sleepHours: hasSleepHours
-      ? Number(values.sleepHours)
-      : null,
+    sleepHours:
+      hasSleepHours
+        ? Number(values.sleepHours)
+        : null,
 
-    journalNotes: values.journalNotes?.trim()
-      ? values.journalNotes.trim()
-      : null,
+    journalNotes:
+      values.journalNotes?.trim()
+        ? values.journalNotes.trim()
+        : null,
+
+    symptoms:
+      values.symptoms.map(
+        (symptom) => ({
+          userSymptomId:
+            symptom.userSymptomId,
+
+          severity:
+            Number(symptom.severity),
+
+          notes:
+            symptom.notes?.trim()
+              ? symptom.notes.trim()
+              : null,
+        }),
+      ),
+
+    medications:
+      values.medications.map(
+        (medication) => ({
+          userMedicationId:
+            medication.userMedicationId,
+
+          quantity:
+            Number(medication.quantity),
+
+          unit:
+            medication.unit.trim(),
+
+          taken:
+            medication.taken,
+
+          takenAt:
+            medication.takenAt?.trim()
+              ? new Date(
+                  medication.takenAt,
+                ).toISOString()
+              : null,
+
+          notes:
+            medication.notes?.trim()
+              ? medication.notes.trim()
+              : null,
+        }),
+      ),
+
+    conditions:
+      values.conditions.map(
+        (condition) => ({
+          userConditionId:
+            condition.userConditionId,
+
+          status:
+            condition.status as ConditionStatus,
+
+          notes:
+            condition.notes?.trim()
+              ? condition.notes.trim()
+              : null,
+        }),
+      ),
+
+    doctorVisits:
+      values.doctorVisits.map(
+        (visit) => ({
+          userDoctorId:
+            visit.userDoctorId,
+
+          userClinicId:
+            visit.userClinicId,
+
+          summary:
+            visit.summary.trim(),
+
+          notes:
+            visit.notes?.trim()
+              ? visit.notes.trim()
+              : null,
+        }),
+      ),
   };
 }
 
 /**
- * Converts the form payload into the request
- * used to create a daily entry.
+ * ----------------------------------------------------
+ * Submit Payload -> Create Request
+ * ----------------------------------------------------
  */
+
 export function toCreateDailyEntryRequest(
   payload: DailyEntryFormSubmitPayload,
 ): CreateDailyEntryRequest {
   return {
-    entryDate: payload.entryDate,
-    moodRating: payload.moodRating,
-    sleepHours: payload.sleepHours,
-    journalNotes: payload.journalNotes,
+    entryDate:
+      payload.entryDate,
+
+    moodRating:
+      payload.moodRating,
+
+    sleepHours:
+      payload.sleepHours,
+
+    journalNotes:
+      payload.journalNotes,
+
+    symptoms:
+      payload.symptoms,
+
+    medications:
+      payload.medications,
+
+    conditions:
+      payload.conditions,
+
+    doctorVisits:
+      payload.doctorVisits,
   };
 }
 
 /**
- * Converts the form payload into the request
- * used to update a daily entry.
+ * ----------------------------------------------------
+ * Submit Payload -> Update Request
+ * ----------------------------------------------------
+ *
  */
+
 export function toUpdateDailyEntryRequest(
   payload: DailyEntryFormSubmitPayload,
 ): UpdateDailyEntryRequest {
   return {
-    entryDate: payload.entryDate,
-    moodRating: payload.moodRating,
-    sleepHours: payload.sleepHours,
-    journalNotes: payload.journalNotes,
+    entryDate:
+      payload.entryDate,
+
+    moodRating:
+      payload.moodRating,
+
+    sleepHours:
+      payload.sleepHours,
+
+    journalNotes:
+      payload.journalNotes,
+
+    symptoms:
+      payload.symptoms,
+
+    medications:
+      payload.medications,
+
+    conditions:
+      payload.conditions,
+
+    doctorVisits:
+      payload.doctorVisits,
   };
 }

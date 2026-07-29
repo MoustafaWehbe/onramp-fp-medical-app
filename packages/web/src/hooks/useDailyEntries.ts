@@ -4,6 +4,8 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
+import { useAuth } from "./useAuth";
+
 import {
   createDailyEntry,
   getDailyEntry,
@@ -15,102 +17,253 @@ import {
   type DailyEntry,
   type UpdateDailyEntryRequest,
 } from "../lib/daily-entries/daily-entries-exports";
+import { PaginatedResponse } from "@/lib/api/types";
 
 /**
- * React Query keys for daily entries.
+ * ----------------------------------------------------
+ * React Query Keys
+ * ----------------------------------------------------
  *
- * Keeping all keys in one place makes it easier
- * to invalidate and refetch related queries.
+ * Centralized query keys for all daily-entry queries.
+ *
+ * Structure:
+ *
+ * ["daily-entries"]
+ * ["daily-entries", "list"]
+ * ["daily-entries", "list", filters]
+ * ["daily-entries", "detail"]
+ * ["daily-entries", "detail", id]
  */
+
 export const dailyEntryKeys = {
+  /**
+   * Base key for all daily-entry queries.
+   */
   all: ["daily-entries"] as const,
 
-  lists: () =>
-    [...dailyEntryKeys.all, "list"] as const,
+  /**
+   * Base key for all list queries.
+   */
+  lists: (userId: string) =>
+    [
+      ...dailyEntryKeys.all,
+      userId,
+      "list",
+    ] as const,
 
-  list: (filters: DailyEntriesQuery) =>
-    [...dailyEntryKeys.lists(), filters] as const,
+  /**
+   * Key for a specific filtered/paginated list.
+   */
+   list: (
+    userId: string,
+    filters: DailyEntriesQuery,
+  ) =>
+    [
+      ...dailyEntryKeys.lists(userId),
+      filters,
+    ] as const,
 
-  details: () =>
-    [...dailyEntryKeys.all, "detail"] as const,
+  /**
+   * Base key for all detail queries.
+   */
+  details: (userId: string) =>
+    [
+      ...dailyEntryKeys.all,
+      userId,
+      "detail",
+    ] as const,
 
-  detail: (id: string) =>
-    [...dailyEntryKeys.details(), id] as const,
+  /**
+   * Key for a specific daily entry.
+   */
+ detail: (
+    userId: string,
+    id: string,
+  ) =>
+    [
+      ...dailyEntryKeys.details(userId),
+      id,
+    ] as const,
 };
 
 /**
- * Get a paginated list of the current user's
- * daily entries.
+ * ----------------------------------------------------
+ * List Daily Entries
+ * ----------------------------------------------------
  *
- * Supports:
- * - currentPage
- * - pageSize
- * - fromDate
- * - toDate
+ * Used by:
+ *
+ * "Check All Entries"
+ *
+ * The user can:
+ * - View previous entries
+ * - Navigate between pages
+ * - Optionally filter by date range
+ *
+ * GET /profile/daily-entries
  */
-export function useDailyEntries(
-  filters: DailyEntriesQuery = {},
-) {
-  return useQuery({
-    queryKey: dailyEntryKeys.list(filters),
 
-    queryFn: () =>
-      listDailyEntries({
-        currentPage: filters.currentPage ?? 1,
-        pageSize: filters.pageSize ?? 15,
-        fromDate: filters.fromDate,
-        toDate: filters.toDate,
-      }),
+export function useDailyEntries(
+  userId: string | undefined,
+  filters: DailyEntriesQuery = {},
+  enabled = true,
+) {
+  return useQuery<PaginatedResponse<DailyEntry>>({
+    queryKey: userId
+      ? dailyEntryKeys.list(userId, filters)
+      : dailyEntryKeys.lists("user-disabled"),
+
+    queryFn: () => {
+      if (!userId) {
+        throw new Error("User ID is required");
+      }
+
+      return listDailyEntries({
+        currentPage:
+          filters.currentPage ?? 1,
+
+        pageSize:
+          filters.pageSize ?? 10,
+
+        fromDate:
+          filters.fromDate,
+
+        toDate:
+          filters.toDate,
+      });
+    },
+
+    enabled: Boolean(userId) && enabled,
   });
 }
 
 /**
- * Get one daily entry by ID.
+ * ----------------------------------------------------
+ * Get Daily Entry Details
+ * ----------------------------------------------------
  *
- * The returned entry includes:
- * - symptoms
- * - medications
- * - conditions
- * - doctor visits
+ * Used when the user clicks on one entry
+ * from the entries list.
+ *
+ * The API returns:
+ * - Basic entry information
+ * - Symptoms
+ * - Medications
+ * - Conditions
+ * - Doctor visits
+ *
+ * GET /profile/daily-entries/:id
  */
+
 export function useDailyEntry(
   id: string | undefined,
 ) {
-  return useQuery({
-    queryKey: dailyEntryKeys.detail(id ?? ""),
+  const { user } = useAuth();
+  return useQuery<DailyEntry>({
+    queryKey:user?.id && id
+      ? dailyEntryKeys.detail(
+            user.id,
+            id,
+          )
+        : [
+            "daily-entries",
+            "detail",
+            "disabled",
+          ],
 
-    queryFn: () => getDailyEntry(id!),
+    queryFn: () =>
+      getDailyEntry(id!),
 
-    enabled: Boolean(id),
+    enabled:
+      Boolean(user?.id) &&
+      Boolean(id),
   });
 }
 
 /**
- * Create a new daily entry.
+ * ----------------------------------------------------
+ * Create Daily Entry
+ * ----------------------------------------------------
+ *
+ * Used by:
+ *
+ * "Submit Current Entry"
+ *
+ * The form should submit today's date.
+ *
+ * POST /profile/daily-entries
+ *
+ * The backend enforces the rule:
+ *
+ * One entry per user per day.
+ *
+ * If the user already submitted today's entry,
+ * the backend returns 409.
  */
-export function useCreateDailyEntry() {
-  const queryClient = useQueryClient();
 
-  return useMutation({
+export function useCreateDailyEntry() {
+  const queryClient =
+    useQueryClient();
+
+    const { user } = useAuth();
+  return useMutation<DailyEntry, Error, CreateDailyEntryRequest, unknown>({
     mutationFn: (
       body: CreateDailyEntryRequest,
     ): Promise<DailyEntry> =>
       createDailyEntry(body),
 
-    onSuccess: () => {
+    onSuccess: (
+      createdEntry: DailyEntry,
+    ) => {
+      
+      if (!user?.id) {
+        return;
+      }
       void queryClient.invalidateQueries({
-        queryKey: dailyEntryKeys.all,
+        queryKey:
+          dailyEntryKeys.lists(
+            user.id,
+          ),
       });
+
+      /**
+       * The created entry can also be cached
+       * as a detail query immediately.
+       *
+       * This is useful if, after submission,
+       * the UI navigates to the entry details.
+       */
+      queryClient.setQueryData(
+        dailyEntryKeys.detail(
+          user.id,
+          createdEntry.id,
+        ),
+        createdEntry,
+      );
     },
   });
 }
 
 /**
- * Update an existing daily entry.
+ * ----------------------------------------------------
+ * Update Daily Entry
+ * ----------------------------------------------------
+ *
+ * NOTE:
+ * Your current UI does not allow the user
+ * to edit the entry date.
+ *
+ * This hook is kept for future editing
+ * functionality.
+ *
+ * PATCH /profile/daily-entries/:id
  */
-export function useUpdateDailyEntry() {
-  const queryClient = useQueryClient();
 
+export function useUpdateDailyEntry() {
+  const queryClient =
+    useQueryClient();
+
+    const { user } = useAuth();
   return useMutation({
     mutationFn: ({
       id,
@@ -119,58 +272,84 @@ export function useUpdateDailyEntry() {
       id: string;
       body: UpdateDailyEntryRequest;
     }): Promise<DailyEntry> =>
-      updateDailyEntry(id, body),
+      updateDailyEntry(
+        id,
+        body,
+      ),
 
     onSuccess: (
       updatedEntry: DailyEntry,
     ) => {
-      /**
-       * Update the specific cached detail immediately.
-       */
+      
+      if (!user?.id) {
+        return;
+      }
+
       queryClient.setQueryData(
-        dailyEntryKeys.detail(updatedEntry.id),
+        dailyEntryKeys.detail(
+          user.id,
+          updatedEntry.id,
+        ),
         updatedEntry,
       );
 
       /**
-       * Invalidate list queries so the list
-       * reflects the updated entry.
+       * Invalidate all list queries.
+       *
+       * This ensures that any list containing
+       * the updated entry is refreshed.
        */
       void queryClient.invalidateQueries({
-        queryKey: dailyEntryKeys.lists(),
+        queryKey:
+          dailyEntryKeys.lists(
+            user.id,
+          ),
       });
     },
   });
 }
 
 /**
- * Remove a daily entry.
+ * ----------------------------------------------------
+ * Remove Daily Entry
+ * ----------------------------------------------------
+ *
+ * Used if the UI later allows the user
+ * to delete an entry.
+ *
+ * DELETE /profile/daily-entries/:id
  */
-export function useRemoveDailyEntry() {
-  const queryClient = useQueryClient();
 
-  return useMutation({
+export function useRemoveDailyEntry() {
+  const queryClient =
+    useQueryClient();
+
+    const { user } = useAuth();
+
+  return useMutation<{ id: string; message: string }, Error, string>({
     mutationFn: (
       id: string,
-    ) => removeDailyEntry(id),
+    ) =>
+      removeDailyEntry(id),
 
     onSuccess: (
       _response,
-      id,
+      id:string,
     ) => {
-      /**
-       * Remove the deleted entry from the
-       * specific detail cache.
-       */
+       if (!user?.id) {
+        return;
+      }
       queryClient.removeQueries({
-        queryKey: dailyEntryKeys.detail(id),
+        queryKey:
+          dailyEntryKeys.detail(user.id, id),
       });
 
       /**
-       * Refresh all daily-entry lists.
+       * Refresh all list queries.
        */
       void queryClient.invalidateQueries({
-        queryKey: dailyEntryKeys.lists(),
+        queryKey:
+          dailyEntryKeys.lists(user.id),
       });
     },
   });

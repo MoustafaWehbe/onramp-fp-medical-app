@@ -1,5 +1,11 @@
 import type { ConditionStatus } from "../health/condition-status";
 
+/**
+ * ----------------------------------------------------
+ * Daily Entry Response Types
+ * ----------------------------------------------------
+ */
+
 export interface DailyEntrySymptom {
   id: string;
   userSymptomId: string;
@@ -49,20 +55,17 @@ export interface DailyEntry {
 }
 
 /**
- * Request payload for a symptom attached to a daily entry.
- *
- * The backend creates the child `id`, so the frontend
- * only sends the user's profile symptom ID and entry data.
+ * ----------------------------------------------------
+ * Nested Create / Update Request Types
+ * ----------------------------------------------------
  */
+
 export interface DailyEntrySymptomRequest {
   userSymptomId: string;
   severity: number;
   notes?: string | null;
 }
 
-/**
- * Request payload for a medication attached to a daily entry.
- */
 export interface DailyEntryMedicationRequest {
   userMedicationId: string;
   quantity: number;
@@ -72,18 +75,12 @@ export interface DailyEntryMedicationRequest {
   notes?: string | null;
 }
 
-/**
- * Request payload for a condition attached to a daily entry.
- */
 export interface DailyEntryConditionRequest {
   userConditionId: string;
   status: ConditionStatus;
   notes?: string | null;
 }
 
-/**
- * Request payload for a doctor visit attached to a daily entry.
- */
 export interface DailyEntryDoctorVisitRequest {
   userDoctorId: string;
   userClinicId: string;
@@ -92,8 +89,11 @@ export interface DailyEntryDoctorVisitRequest {
 }
 
 /**
- * Request payload used when creating a daily entry.
+ * ----------------------------------------------------
+ * Daily Entry Create Request
+ * ----------------------------------------------------
  */
+
 export interface CreateDailyEntryRequest {
   entryDate: string;
   moodRating?: number | null;
@@ -107,15 +107,11 @@ export interface CreateDailyEntryRequest {
 }
 
 /**
- * Request payload used when updating a daily entry.
- *
- * Important:
- * If a child array is provided, the backend completely
- * replaces that collection.
- *
- * If a child array is omitted, the backend leaves the
- * existing collection unchanged.
+ * ----------------------------------------------------
+ * Daily Entry Update Request
+ * ----------------------------------------------------
  */
+
 export interface UpdateDailyEntryRequest {
   entryDate?: string;
   moodRating?: number | null;
@@ -129,8 +125,11 @@ export interface UpdateDailyEntryRequest {
 }
 
 /**
- * Query parameters for listing the current user's daily entries.
+ * ----------------------------------------------------
+ * Daily Entry List Query
+ * ----------------------------------------------------
  */
+
 export interface DailyEntriesQuery {
   currentPage?: number;
   pageSize?: number;
