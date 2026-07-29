@@ -12,7 +12,7 @@ import { LogView } from "../pages/log/LogView";
 import { HealthProfile } from "../pages/health/HealthProfile";
 import { Medications } from "../pages/health/Medications";
 import { Providers } from "../pages/health/Providers";
-import { Visits } from "../pages/health/Visits";
+import { DoctorVisitsPage  } from "../pages/health/Visits";
 import { Analytics } from "../pages/analytics/Analytics";
 import { AIReportsList } from "../pages/ai-reports/AIReportsList";
 import { AIReportGenerate } from "../pages/ai-reports/AIReportGenerate";
@@ -28,6 +28,7 @@ import { useAuth } from "../hooks/useAuth";
 import { homePathForRole } from "../lib/auth/roles";
 import { LoadingSpinner } from "../components/shared/LoadingSpinner";
 import { DailyEntriesProvider } from "@/providers/DailyEntriesProvider";
+import { DoctorVisitsProvider } from "@/providers/DoctorVisitsProvider";
 
 function HomeRedirect() {
   const { user, isLoading } = useAuth();
@@ -68,7 +69,7 @@ export function AppRoutes() {
             <Route path="/medications" element={<Medications />} />
             <Route path="/providers" element={<Providers />} />
 
-            <Route path="/visits" element={<Visits />} />
+            <Route path="/visits" element={<DoctorVisitsProvider><DoctorVisitsPage /></DoctorVisitsProvider>} />
 
             <Route path="/analytics" element={<Analytics />} />
 
