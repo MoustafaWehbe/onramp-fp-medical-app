@@ -64,13 +64,8 @@ const value = useMemo<DoctorVisitsContextValue>(
 doctorVisits: doctorVisitsQuery.data?.data ?? [],
 
 
-  currentPage:
-    doctorVisitsQuery.data?.pagination.currentPage ??
-    currentPage,
-
-  pageSize:
-    doctorVisitsQuery.data?.pagination.pageSize ??
-    pageSize,
+  currentPage,
+  pageSize,
 
   totalCount:
     doctorVisitsQuery.data?.pagination.totalCount ?? 0,
