@@ -278,7 +278,9 @@ function toTimeOnly(
     return "";
   }
 
-  return date.toISOString().slice(11, 16);
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${hours}:${minutes}`;
 }
 
 function buildTodayDateTime(
