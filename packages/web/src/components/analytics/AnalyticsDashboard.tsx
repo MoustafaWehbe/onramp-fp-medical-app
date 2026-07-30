@@ -63,9 +63,9 @@ export function AnalyticsDashboard() {
           </div>
 
           <div>
-            <h1 className="text-xl font-semibold tracking-tight">
+            <h2 className="text-2xl font-bold tracking-tight">
               Health Analytics
-            </h1>
+            </h2>
 
             <p className="text-sm text-muted-foreground">
               Overview for the last {days} days

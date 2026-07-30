@@ -20,7 +20,7 @@ export function MoodChart({ data }: MoodChartProps) {
   }));
 
   return (
-    <div className="rounded-xl border bg-card p-4 shadow-sm">
+    <div className="rounded-xl border bg-card p-4 shadow-sm transition-all  hover:border-primary/40 hover:shadow-md">
       <div className="mb-4">
         <h3 className="font-semibold">
           Mood Trend
