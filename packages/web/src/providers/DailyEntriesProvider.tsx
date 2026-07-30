@@ -805,6 +805,7 @@ async function submitForm(
   ) {
     try {
       setListError(null);
+      setFormError(null);
 
       await removeEntry.mutateAsync(
         id,
@@ -812,7 +813,7 @@ async function submitForm(
 
       closePanel();
     } catch (error) {
-      setListError(
+      setFormError(
         getErrorMessage(
           error,
           "Failed to delete daily entry",
