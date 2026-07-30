@@ -189,6 +189,12 @@ export class AuthService {
 
     const passwordHash = await hashPassword(newPassword);
     await user.update({ passwordHash });
+
+    await RefreshToken.update(
+      { revokedAt: new Date() },
+      { where: { userId } },
+    );
+    await Session.destroy({ where: { userId } });
   }
 
   async deleteAccount(userId: string, currentPassword: string) {

@@ -35,6 +35,7 @@ export const usersController = {
         currentPassword,
         newPassword,
       );
+      clearAuthCookies(res);
       res.json({
         data: { message: "Password updated successfully." },
       });
