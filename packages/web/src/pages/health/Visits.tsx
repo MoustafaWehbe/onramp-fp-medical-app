@@ -18,7 +18,7 @@ refetch,
 } = useDoctorVisitsContext();
 
 if (isLoading) {
-return ( <div className="container mx-auto px-4 py-6"> <h1 className="text-2xl font-semibold">
+return ( <div className="container mx-auto px-4 py-6"> <h1 className="text-2xl font-bold tracking-tight">
 Doctor Visits </h1>
 
 
@@ -34,8 +34,8 @@ Doctor Visits </h1>
 }
 
 if (isError) {
-return ( <div className="container mx-auto px-4 py-6"> <h1 className="text-2xl font-semibold">
-Doctor Visits </h1>
+return ( <div>
+   <h1 className="text-2xl font-bold tracking-tight">Doctor Visits </h1>
 
     <div className="mt-6 rounded-lg border p-6 text-center">
       <p className="text-destructive">
@@ -57,8 +57,7 @@ Doctor Visits </h1>
 }
 
 return ( <div className="container mx-auto px-4 py-6">
-{/* Page header */} <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"> <div> <h1 className="text-2xl font-semibold">
-Doctor Visits </h1>
+{/* Page header */} <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"> <div> <h1 className="text-2xl font-bold tracking-tight">Doctor Visits </h1>
 
 
       <p className="text-sm text-muted-foreground">

@@ -1230,7 +1230,7 @@ return ( <form
 
               <input
                 id={`medications.${index}.takenAt`}
-                type="datetime-local"
+                type="time"
                 {...register(
                   `medications.${index}.takenAt`,
                 )}

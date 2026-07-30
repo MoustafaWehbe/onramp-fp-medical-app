@@ -267,6 +267,36 @@ export function getTodayDate(): string {
     .split("T")[0];
 }
 
+function toTimeOnly(
+  dateString: string,
+): string {
+  const date = new Date(dateString);
+
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  return date.toISOString().slice(11, 16);
+}
+
+function buildTodayDateTime(
+  time: string,
+): string {
+  const today = new Date();
+
+  const [hours, minutes] =
+    time.split(":");
+
+  today.setHours(
+    Number(hours),
+    Number(minutes),
+    0,
+    0,
+  );
+
+  return today.toISOString();
+}
+
 /**
  * ----------------------------------------------------
  * Empty Form Values
@@ -362,10 +392,10 @@ export function toDailyEntryFormValues(
 
         takenAt:
           medication.takenAt
-            ? toDateTimeLocal(
-                medication.takenAt,
-              )
-            : "",
+          ? toTimeOnly(
+              medication.takenAt,
+            )
+          : "",
 
         notes:
           medication.notes ?? "",
@@ -521,10 +551,10 @@ export function toDailyEntrySubmitPayload(
 
           takenAt:
             medication.takenAt?.trim()
-              ? new Date(
-                  medication.takenAt,
-                ).toISOString()
-              : null,
+            ? buildTodayDateTime(
+                medication.takenAt,
+              )
+            : null,
 
           notes:
             medication.notes?.trim()
