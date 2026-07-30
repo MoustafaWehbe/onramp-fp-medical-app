@@ -28,14 +28,19 @@ export function DoctorVisitCard({
   const clinic =
     visit.userClinic?.clinic;
 
-  const formattedDate =
-    new Date(
-      `${visit.entry.entryDate}T00:00:00`,
-    ).toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+  const parsedDate = new Date(
+    `${visit.entry.entryDate}T00:00:00`,
+  );
+
+  const formattedDate = Number.isNaN(
+    parsedDate.getTime(),
+  )
+    ? visit.entry.entryDate
+    : parsedDate.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
 
   return (
     <button
