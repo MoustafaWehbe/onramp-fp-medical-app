@@ -11,6 +11,8 @@ import type {
 DailyEntryFormValues,
 } from "../../lib/daily-entries/daily-entries-exports";
 
+import { MEDICATION_UNITS } from "../../lib/health/health-export";
+
 /**
 
 * ---
@@ -36,6 +38,8 @@ DailyEntryFormValues,
 * The dynamic nested arrays are managed here with
 * React Hook Form's useFieldArray.
   */
+
+
 
 export function DailyEntryForm() {
 const {
@@ -884,7 +888,7 @@ return ( <form
           appendMedication({
             userMedicationId: "",
             quantity: "",
-            unit: "",
+            unit: "mg",
             taken: false,
             takenAt: "",
             notes: "",
@@ -1141,10 +1145,10 @@ return ( <form
                   Unit
                 </label>
 
-                <input
+                <select
                   id={`medications.${index}.unit`}
-                  type="text"
-                  placeholder="e.g. tablet"
+                  
+                  
                   {...register(
                     `medications.${index}.unit`,
                   )}
@@ -1164,7 +1168,15 @@ return ( <form
                     focus:ring-1
                     focus:ring-gray-500
                   "
-                />
+                >
+                  <option value="">Select a unit</option>
+                   {MEDICATION_UNITS.map((unit) => (
+                    <option key={unit} value={unit}>
+                      {unit}
+                    </option>
+                  ))}
+                  
+                </select>
 
                 {formErrors.medications?.[
                   index

@@ -11,6 +11,7 @@ import type {
   DailyEntrySymptomRequest,
   UpdateDailyEntryRequest,
 } from "./types";
+import { MEDICATION_UNITS } from "../health/health-export";
 
 /**
  * ----------------------------------------------------
@@ -74,9 +75,16 @@ const dailyEntryMedicationFormSchema = z.object({
       },
     ),
 
-  unit: z
-    .string()
-    .min(1, "Unit is required"),
+unit: z.union([
+  z.enum(MEDICATION_UNITS),
+  z.literal(""),
+]).refine(
+  (value) => value !== "",
+  {
+    message: "Unit is required",
+  }
+),
+    
 
   taken: z.boolean(),
 
@@ -377,6 +385,7 @@ export function toDailyEntryFormValues(
       })),
 
     medications:
+      // cast to any to satisfy differing unit typing between initial and target types
       initial.medications.map((medication) => ({
         userMedicationId:
           medication.userMedicationId,
@@ -385,7 +394,11 @@ export function toDailyEntryFormValues(
           String(medication.quantity),
 
         unit:
-          medication.unit,
+         MEDICATION_UNITS.includes(
+          medication.unit as any
+        )
+          ? (medication.unit as typeof MEDICATION_UNITS[number])
+          : ("" as const),
 
         taken:
           medication.taken,
@@ -399,7 +412,7 @@ export function toDailyEntryFormValues(
 
         notes:
           medication.notes ?? "",
-      })),
+      })) as any,
 
     conditions:
       initial.conditions.map((condition) => ({

@@ -24,6 +24,14 @@ import {
   getConditionName,
   getDoctorName, getClinicName, } from "../../lib/daily-entries/daily-entries-exports";
 
+function handlePanelKeyDown(
+  event: React.KeyboardEvent<HTMLDivElement>,
+  onClose: () => void,
+) {
+  if (event.key === "Escape") {
+    onClose();
+  }
+}
 
 export function LogEntry() {
   const {
@@ -79,7 +87,14 @@ export function LogEntry() {
           bg-black/40
         "
       >
-        <div
+       <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="daily-entry-detail-title"
+          tabIndex={-1}
+          onKeyDown={(event) =>
+            handlePanelKeyDown(event, closePanel)
+          }
           className="
             flex
             h-full
@@ -106,6 +121,7 @@ export function LogEntry() {
           >
             <div>
               <h2
+                id="daily-entry-panel-title"
                 className="
                   text-lg
                   font-semibold
@@ -172,16 +188,23 @@ export function LogEntry() {
         "
       >
         <div
-          className="
-            flex
-            h-full
-            w-full
-            max-w-2xl
-            flex-col
-            bg-white
-            shadow-xl
-          "
-        >
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="daily-entry-panel-title"
+            tabIndex={-1}
+            onKeyDown={(event) =>
+              handlePanelKeyDown(event, closePanel)
+            }
+            className="
+              flex
+              h-full
+              w-full
+              max-w-2xl
+              flex-col
+              bg-white
+              shadow-xl
+            "
+          >
           {/* -------------------------------- */}
           {/* Header                            */}
           {/* -------------------------------- */}
@@ -198,12 +221,13 @@ export function LogEntry() {
           >
             <div>
               <h2
-                className="
-                  text-lg
-                  font-semibold
-                  text-gray-900
-                "
-              >
+              id="daily-entry-panel-title"
+              className="
+                text-lg
+                font-semibold
+                text-gray-900
+              "
+            >
                 {panelTitle}
               </h2>
 

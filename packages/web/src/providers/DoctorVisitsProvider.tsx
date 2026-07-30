@@ -17,7 +17,7 @@ EntryDoctorVisitsQuery,
 interface DoctorVisitsContextValue {
 doctorVisits: EntryDoctorVisit[];
 currentPage: number;
-pageSize: number;
+
 totalCount: number;
 totalPages: number;
 
@@ -27,11 +27,12 @@ isError: boolean;
 error: Error | null;
 
 setCurrentPage: (page: number) => void;
-setPageSize: (pageSize: number) => void;
+
 
 refetch: () => void;
 }
 
+const DOCTOR_VISITS_PAGE_SIZE = 10;
 const DoctorVisitsContext = createContext<
 DoctorVisitsContextValue | undefined
 
@@ -47,11 +48,11 @@ children,
 const { user } = useAuth();
 
 const [currentPage, setCurrentPage] = useState(1);
-const [pageSize, setPageSize] = useState(10);
+
 
 const query: EntryDoctorVisitsQuery = {
 currentPage,
-pageSize,
+pageSize: DOCTOR_VISITS_PAGE_SIZE,
 };
 
 const doctorVisitsQuery = useDoctorVisits(
@@ -68,9 +69,7 @@ doctorVisits: doctorVisitsQuery.data?.data ?? [],
     doctorVisitsQuery.data?.pagination.currentPage ??
     currentPage,
 
-  pageSize:
-    doctorVisitsQuery.data?.pagination.pageSize ??
-    pageSize,
+  pageSize: DOCTOR_VISITS_PAGE_SIZE,
 
   totalCount:
     doctorVisitsQuery.data?.pagination.totalCount ?? 0,
@@ -88,10 +87,7 @@ doctorVisits: doctorVisitsQuery.data?.data ?? [],
       : null,
 
   setCurrentPage,
-  setPageSize: (newPageSize: number) => {
-    setPageSize(newPageSize);
-    setCurrentPage(1);
-  },
+ 
 
   refetch: () => {
     void doctorVisitsQuery.refetch();
@@ -105,7 +101,7 @@ doctorVisits: doctorVisitsQuery.data?.data ?? [],
   doctorVisitsQuery.error,
   doctorVisitsQuery.refetch,
   currentPage,
-  pageSize,
+  
 ],
 
 

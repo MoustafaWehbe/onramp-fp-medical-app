@@ -5,7 +5,7 @@ export function DoctorVisitsPage() {
 const {
 doctorVisits,
 currentPage,
-pageSize,
+
 totalCount,
 totalPages,
 isLoading,
@@ -13,7 +13,7 @@ isFetching,
 isError,
 error,
 setCurrentPage,
-setPageSize,
+
 refetch,
 } = useDoctorVisitsContext();
 
@@ -139,20 +139,7 @@ return ( <div className="container mx-auto px-4 py-6">
             </button>
           </div>
 
-          {/* Page size */}
-          <select
-            value={pageSize}
-            onChange={(event) =>
-              setPageSize(Number(event.target.value))
-            }
-            className="rounded-md border px-3 py-2 text-sm"
-            aria-label="Visits per page"
-          >
-            <option value={5}>5 per page</option>
-            <option value={10}>10 per page</option>
-            <option value={20}>20 per page</option>
-            <option value={50}>50 per page</option>
-          </select>
+         
         </div>
       )}
     </>
