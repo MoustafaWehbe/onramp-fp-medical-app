@@ -80,6 +80,14 @@ export function LogEntry() {
         "
       >
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="form-panel-title"
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              closePanel();
+            }
+          }}
           className="
             flex
             h-full
@@ -106,6 +114,7 @@ export function LogEntry() {
           >
             <div>
               <h2
+                id="form-panel-title"
                 className="
                   text-lg
                   font-semibold
@@ -172,6 +181,14 @@ export function LogEntry() {
         "
       >
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="detail-panel-title"
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              closePanel();
+            }
+          }}
           className="
             flex
             h-full
@@ -198,6 +215,7 @@ export function LogEntry() {
           >
             <div>
               <h2
+                id="detail-panel-title"
                 className="
                   text-lg
                   font-semibold
