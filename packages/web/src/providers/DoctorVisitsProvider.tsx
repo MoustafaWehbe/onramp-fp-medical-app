@@ -17,6 +17,7 @@ EntryDoctorVisitsQuery,
 interface DoctorVisitsContextValue {
 doctorVisits: EntryDoctorVisit[];
 currentPage: number;
+pageSize: number;
 
 totalCount: number;
 totalPages: number;
@@ -65,10 +66,7 @@ const value = useMemo<DoctorVisitsContextValue>(
 doctorVisits: doctorVisitsQuery.data?.data ?? [],
 
 
-  currentPage:
-    doctorVisitsQuery.data?.pagination.currentPage ??
-    currentPage,
-
+  currentPage,
   pageSize: DOCTOR_VISITS_PAGE_SIZE,
 
   totalCount:

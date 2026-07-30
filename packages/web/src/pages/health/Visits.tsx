@@ -107,37 +107,40 @@ return ( <div className="container mx-auto px-4 py-6">
       )}
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <div className="text-sm text-muted-foreground">
-            Page {currentPage} of {totalPages}
-          </div>
+      <div className="mt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
+        {totalPages > 1 && (
+          <>
+            <div className="text-sm text-muted-foreground">
+              Page {currentPage} of {totalPages}
+            </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              disabled={currentPage <= 1 || isFetching}
-              onClick={() =>
-                setCurrentPage(currentPage - 1)
-              }
-              className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Previous
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                disabled={currentPage <= 1 || isFetching}
+                onClick={() =>
+                  setCurrentPage(currentPage - 1)
+                }
+                className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Previous
+              </button>
 
-            <button
-              type="button"
-              disabled={
-                currentPage >= totalPages || isFetching
-              }
-              onClick={() =>
-                setCurrentPage(currentPage + 1)
-              }
-              className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
+              <button
+                type="button"
+                disabled={
+                  currentPage >= totalPages || isFetching
+                }
+                onClick={() =>
+                  setCurrentPage(currentPage + 1)
+                }
+                className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </>
+        )}
 
          
         </div>

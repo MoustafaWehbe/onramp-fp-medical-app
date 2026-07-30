@@ -90,11 +90,12 @@ export class DailyEntryService {
         );
     }
     const rows = await DailyEntry.findAll({
-    where: {
-      id: {
-        [Op.in]: entryIds,
+      where: {
+        ...where,
+        id: {
+          [Op.in]: entryIds,
+        },
       },
-    },
 
     include: entryIncludes(),
 

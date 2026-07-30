@@ -1263,6 +1263,18 @@ return ( <form
                   focus:ring-gray-500
                 "
               />
+              {formErrors.medications?.[
+                index
+              ]?.takenAt && (
+                <p className="mt-1 text-sm text-red-600">
+                  {
+                    formErrors.medications[
+                      index
+                    ]?.takenAt
+                      ?.message
+                  }
+                </p>
+              )}
             </div>
 
             <div className="mt-4">
