@@ -90,7 +90,7 @@ export function LogEntry() {
        <div
           role="dialog"
           aria-modal="true"
-          aria-labelledby="daily-entry-detail-title"
+          aria-labelledby="daily-entry-panel-title"
           tabIndex={-1}
           onKeyDown={(event) =>
             handlePanelKeyDown(event, closePanel)
