@@ -26,12 +26,20 @@ export interface SymptomFrequencyItem {
   count: number;
 }
 
-function getStartDate(days: number): string {
-  const date = new Date();
+function getDateRange(days: number) {
+  const end = new Date();
+  const start = new Date(end);
 
-  date.setDate(date.getDate() - days);
+  start.setUTCDate(
+    start.getUTCDate() - (days - 1),
+  );
 
-  return date.toISOString().split("T")[0];
+  return {
+    startDate:
+      start.toISOString().split("T")[0],
+    endDate:
+      end.toISOString().split("T")[0],
+  };
 }
 
 export class AnalyticsService {
@@ -60,13 +68,16 @@ export class AnalyticsService {
     userId: string,
     days = 30,
   ): Promise<MoodTrendItem[]> {
-    const startDate = getStartDate(days);
+    const { startDate,endDate} = getDateRange(days);
 
     const entries = await DailyEntry.findAll({
       where: {
         userId,
         entryDate: {
-          [Op.gte]: startDate,
+          [Op.between]: [
+            startDate,
+            endDate,
+          ],
         },
       },
       attributes: [
@@ -88,13 +99,16 @@ export class AnalyticsService {
     userId: string,
     days = 30,
   ): Promise<SleepTrendItem[]> {
-    const startDate = getStartDate(days);
+    const { startDate,endDate} = getDateRange(days);
 
     const entries = await DailyEntry.findAll({
       where: {
         userId,
         entryDate: {
-          [Op.gte]: startDate,
+          [Op.between]: [
+            startDate,
+            endDate,
+          ],
         },
       },
       attributes: [
@@ -116,7 +130,7 @@ export class AnalyticsService {
     userId: string,
     days = 30,
   ): Promise<SymptomFrequencyItem[]> {
-    const startDate = getStartDate(days);
+    const { startDate, endDate } = getDateRange(days);
 
     const symptoms = await EntrySymptom.findAll({
       attributes: [
@@ -137,7 +151,10 @@ export class AnalyticsService {
           where: {
             userId,
             entryDate: {
-              [Op.gte]: startDate,
+               [Op.between]: [
+                startDate,
+                endDate,
+              ],
             },
           },
         },

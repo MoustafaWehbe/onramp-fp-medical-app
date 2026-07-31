@@ -16,7 +16,7 @@ interface SleepChartProps {
 export function SleepChart({ data }: SleepChartProps) {
   const chartData = data.map((item) => ({
     date: item.date,
-    hours: item.hours ?? 0,
+    hours: item.hours,
   }));
 
   return (
