@@ -46,7 +46,7 @@ export function Dashboard() {
             <CardTitle className="text-base">Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Link to="/log/new">
+            <Link to="/log/view">
               <Button variant="default" className="w-full">
                 New Daily Log
               </Button>

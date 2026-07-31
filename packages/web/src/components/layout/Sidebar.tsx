@@ -22,7 +22,7 @@ const navSections = [
   {
     label: "Daily Log",
     items: [
-      { to: "/log/new", label: "New Log", icon: ClipboardPlus },
+      { to: "/log/view", label: "View Log", icon: ClipboardPlus },
     ],
   },
   {
