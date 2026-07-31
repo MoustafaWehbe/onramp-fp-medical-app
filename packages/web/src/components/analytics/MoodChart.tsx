@@ -16,7 +16,7 @@ interface MoodChartProps {
 export function MoodChart({ data }: MoodChartProps) {
   const chartData = data.map((item) => ({
     date: item.date,
-    value: item.value ?? 0,
+    value: item.value,
   }));
 
   return (
