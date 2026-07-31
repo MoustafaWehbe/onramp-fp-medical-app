@@ -214,15 +214,15 @@ export class AuthService {
   }
 
   async deleteAccount(userId: string, currentPassword: string) {
-    const user = await User.findByPk(userId);
-    if (!user) throw createError("User not found", 404);
-
-    const valid = await verifyPassword(currentPassword, user.passwordHash);
-    if (!valid) throw createError("Current password is incorrect", 401);
-
     const sequelize = getDatabase();
     try {
       await sequelize.transaction(async (transaction) => {
+        const user = await User.findByPk(userId, { transaction, lock: true });
+        if (!user) throw createError("User not found", 404);
+
+        const valid = await verifyPassword(currentPassword, user.passwordHash);
+        if (!valid) throw createError("Current password is incorrect", 401);
+
         const entries = await DailyEntry.findAll({
           attributes: ["id"],
           where: { userId },
