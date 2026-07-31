@@ -5,8 +5,24 @@ import {
   generateTokenPair,
   verifyRefreshToken,
 } from "@starter-kit/shared";
-import { User, Session, RefreshToken } from "../models";
+import {
+  User,
+  Session,
+  RefreshToken,
+  DailyEntry,
+  EntryCondition,
+  EntrySymptom,
+  EntryMedication,
+  EntryDoctorVisit,
+  UserCondition,
+  UserSymptom,
+  UserMedication,
+  UserDoctor,
+  UserClinic,
+} from "../models";
 import { createError } from "../middleware/error-handler";
+import { getDatabase } from "../lib/db";
+import { Op } from "sequelize";
 
 interface RegisterInput {
   email: string;
@@ -204,7 +220,54 @@ export class AuthService {
     const valid = await verifyPassword(currentPassword, user.passwordHash);
     if (!valid) throw createError("Current password is incorrect", 401);
 
-    await user.destroy();
+    const sequelize = getDatabase();
+    try {
+      await sequelize.transaction(async (transaction) => {
+        const entries = await DailyEntry.findAll({
+          attributes: ["id"],
+          where: { userId },
+          transaction,
+        });
+        const entryIds = entries.map((e) => e.id);
+
+        if (entryIds.length > 0) {
+          await EntryCondition.destroy({
+            where: { entryId: { [Op.in]: entryIds } },
+            transaction,
+          });
+          await EntrySymptom.destroy({
+            where: { entryId: { [Op.in]: entryIds } },
+            transaction,
+          });
+          await EntryMedication.destroy({
+            where: { entryId: { [Op.in]: entryIds } },
+            transaction,
+          });
+          await EntryDoctorVisit.destroy({
+            where: { entryId: { [Op.in]: entryIds } },
+            transaction,
+          });
+        }
+
+        await DailyEntry.destroy({ where: { userId }, transaction });
+
+        await UserCondition.destroy({ where: { userId }, transaction });
+        await UserSymptom.destroy({ where: { userId }, transaction });
+        await UserMedication.destroy({ where: { userId }, transaction });
+        await UserDoctor.destroy({ where: { userId }, transaction });
+        await UserClinic.destroy({ where: { userId }, transaction });
+
+        await RefreshToken.destroy({ where: { userId }, transaction });
+        await Session.destroy({ where: { userId }, transaction });
+
+        await User.destroy({ where: { id: userId }, transaction });
+      });
+    } catch (error) {
+      if (error instanceof Error && (error as unknown as Record<string, unknown>).isOperational) {
+        throw error;
+      }
+      throw createError("Failed to delete account", 500);
+    }
   }
 }
 

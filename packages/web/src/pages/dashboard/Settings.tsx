@@ -81,6 +81,7 @@ function SettingsView() {
   const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    cancelledRef.current = false;
     return () => {
       cancelledRef.current = true;
       if (redirectTimer.current) clearTimeout(redirectTimer.current);
