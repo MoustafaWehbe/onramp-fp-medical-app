@@ -58,18 +58,52 @@ export class DailyEntryService {
       where.entryDate = { [Op.lte]: input.toDate };
     }
 
-    const { count, rows } = await DailyEntry.findAndCountAll({
+    const count = await DailyEntry.count({
       where,
-      include: entryIncludes(),
+    });
+
+    const paginatedEntries =
+    await DailyEntry.findAll({
+      where,
+
+      attributes: ["id"],
+
       order: [
         ["entryDate", "DESC"],
         ["id", "ASC"],
       ],
+
       limit,
       offset,
-      distinct: true,
     });
 
+    const entryIds =
+      paginatedEntries.map(
+        (entry) => entry.id,
+      );
+    if (entryIds.length === 0) {
+        return buildPaginatedResponse(
+          [],
+          count,
+          currentPage,
+          pageSize,
+        );
+    }
+    const rows = await DailyEntry.findAll({
+      where: {
+        ...where,
+        id: {
+          [Op.in]: entryIds,
+        },
+      },
+
+    include: entryIncludes(),
+
+    order: [
+      ["entryDate", "DESC"],
+      ["id", "ASC"],
+    ],
+  });
     return buildPaginatedResponse(rows, count, currentPage, pageSize);
   }
 
