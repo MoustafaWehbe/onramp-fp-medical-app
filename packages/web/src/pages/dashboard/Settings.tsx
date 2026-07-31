@@ -77,10 +77,12 @@ function SettingsView() {
   const [passwordFormOpen, setPasswordFormOpen] = useState(false);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
+  const cancelledRef = useRef(false);
   const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
+      cancelledRef.current = true;
       if (redirectTimer.current) clearTimeout(redirectTimer.current);
     };
   }, []);
@@ -99,6 +101,7 @@ function SettingsView() {
   async function onUpdatePassword(values: UpdatePasswordFormValues) {
     try {
       await submitUpdatePassword(values);
+      if (cancelledRef.current) return;
       redirectTimer.current = setTimeout(() => {
         void logout()
           .catch(() => undefined)
@@ -176,7 +179,10 @@ function SettingsView() {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => clearEmailStatus()}
+                onClick={() => {
+                  clearEmailStatus();
+                  setEmailFormOpen(true);
+                }}
               >
                 Change Again
               </Button>
