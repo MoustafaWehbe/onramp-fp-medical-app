@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,6 +40,7 @@ function SettingsView() {
     submitUpdateEmail,
     submitUpdatePassword,
     submitDeleteAccount,
+    clearEmailStatus,
   } = useSettingsContext();
 
   const navigate = useNavigate();
@@ -66,6 +67,7 @@ function SettingsView() {
     register: deleteRegister,
     handleSubmit: handleDeleteSubmit,
     formState: { errors: deleteErrors },
+    reset: resetDelete,
   } = useForm<DeleteAccountFormValues>({
     resolver: zodResolver(deleteAccountSchema),
   });
@@ -74,6 +76,17 @@ function SettingsView() {
   const [emailFormOpen, setEmailFormOpen] = useState(false);
   const [passwordFormOpen, setPasswordFormOpen] = useState(false);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+
+  const cancelledRef = useRef(false);
+  const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    cancelledRef.current = false;
+    return () => {
+      cancelledRef.current = true;
+      if (redirectTimer.current) clearTimeout(redirectTimer.current);
+    };
+  }, []);
 
   async function onUpdateEmail(values: UpdateEmailFormValues) {
     try {
@@ -89,9 +102,11 @@ function SettingsView() {
   async function onUpdatePassword(values: UpdatePasswordFormValues) {
     try {
       await submitUpdatePassword(values);
-      setTimeout(() => {
-        logout();
-        navigate("/login", { replace: true });
+      if (cancelledRef.current) return;
+      redirectTimer.current = setTimeout(() => {
+        void logout()
+          .catch(() => undefined)
+          .finally(() => navigate("/login", { replace: true }));
       }, 2000);
     } catch {
       // error set by provider
@@ -101,11 +116,15 @@ function SettingsView() {
   async function onDeleteAccount(values: DeleteAccountFormValues) {
     try {
       await submitDeleteAccount(values);
-      await logout();
-      navigate("/login", { replace: true });
     } catch {
-      // error set by provider
+      return;
     }
+    try {
+      await logout();
+    } catch {
+      // session is already dead; user state is cleared by logout()
+    }
+    navigate("/login", { replace: true });
   }
 
   return (
@@ -156,7 +175,19 @@ function SettingsView() {
         </CardHeader>
         <CardContent>
           {emailSuccess ? (
-            <p className="text-sm text-green-600">{emailSuccess}</p>
+            <div className="space-y-3">
+              <p className="text-sm text-green-600">{emailSuccess}</p>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  clearEmailStatus();
+                  setEmailFormOpen(true);
+                }}
+              >
+                Change Again
+              </Button>
+            </div>
           ) : !emailFormOpen ? (
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground">
@@ -396,7 +427,10 @@ function SettingsView() {
                   variant="outline"
                   type="button"
                   disabled={isDeleteBusy}
-                  onClick={() => setDeleteConfirmOpen(false)}
+                  onClick={() => {
+                    resetDelete({ currentPassword: "" });
+                    setDeleteConfirmOpen(false);
+                  }}
                 >
                   Cancel
                 </Button>
