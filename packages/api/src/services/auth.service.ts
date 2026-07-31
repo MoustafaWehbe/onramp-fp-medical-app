@@ -143,6 +143,69 @@ export class AuthService {
     if (!user) throw createError("User not found", 404);
     return user;
   }
+
+  async updateEmail(
+    userId: string,
+    currentPassword: string,
+    newEmail: string,
+  ) {
+    const user = await User.findByPk(userId);
+    if (!user) throw createError("User not found", 404);
+
+    const valid = await verifyPassword(currentPassword, user.passwordHash);
+    if (!valid) throw createError("Current password is incorrect", 401);
+
+    if (newEmail.toLowerCase() === user.email.toLowerCase()) {
+      throw createError("New email must be different from current email", 422);
+    }
+
+    const existing = await User.findOne({ where: { email: newEmail } });
+    if (existing) throw createError("Email is already in use", 409);
+
+    await user.update({ email: newEmail });
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    };
+  }
+
+  async updatePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string,
+  ) {
+    const user = await User.findByPk(userId);
+    if (!user) throw createError("User not found", 404);
+
+    const valid = await verifyPassword(currentPassword, user.passwordHash);
+    if (!valid) throw createError("Current password is incorrect", 401);
+
+    if (newPassword === currentPassword) {
+      throw createError("New password must be different from current password", 422);
+    }
+
+    const passwordHash = await hashPassword(newPassword);
+    await user.update({ passwordHash });
+
+    await RefreshToken.update(
+      { revokedAt: new Date() },
+      { where: { userId } },
+    );
+    await Session.destroy({ where: { userId } });
+  }
+
+  async deleteAccount(userId: string, currentPassword: string) {
+    const user = await User.findByPk(userId);
+    if (!user) throw createError("User not found", 404);
+
+    const valid = await verifyPassword(currentPassword, user.passwordHash);
+    if (!valid) throw createError("Current password is incorrect", 401);
+
+    await user.destroy();
+  }
 }
 
 export const authService = new AuthService();

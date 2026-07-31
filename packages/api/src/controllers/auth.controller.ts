@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { authService } from "../services/auth.service";
+import { clearAuthCookies } from "../utils/cookies";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -28,11 +29,6 @@ function setAuthCookies(
     path: "/api/auth/refresh",
     maxAge: REFRESH_MAX_AGE,
   });
-}
-
-function clearAuthCookies(res: Response): void {
-  res.clearCookie(ACCESS_COOKIE, { path: "/api" });
-  res.clearCookie(REFRESH_COOKIE, { path: "/api/auth/refresh" });
 }
 
 export const authController = {
