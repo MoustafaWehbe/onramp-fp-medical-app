@@ -19,16 +19,22 @@ import {
   type UseFormWatch,
 } from "react-hook-form";
 import {
+  useAllConditionSymptoms,
   useConditionCatalogSearch,
   useCreateProfileCondition,
   useEnsureConditionCatalog,
+  useLinkConditionSymptom,
   useOnlineConditionSearch,
   useProfileConditions,
   useRemoveProfileCondition,
+  useUnlinkConditionSymptom,
   useUpdateProfileCondition,
 } from "../hooks/health/useConditions";
+import { useProfileSymptoms } from "../hooks/health/useSymptoms";
 import type { ConditionCatalog } from "../lib/health/health-export";
+import type { ConditionSymptom } from "../lib/health/health-export";
 import type { UserCondition } from "../lib/health/health-export";
+import type { UserSymptom } from "../lib/health/health-export";
 import type { Pagination } from "../lib/api/types";
 import {
   emptyConditionFormValues,
@@ -40,6 +46,8 @@ import {
 } from "../lib/health/health-export";
 
 export const CONDITIONS_PAGE_SIZE = 15;
+const CONDITION_SYMPTOMS_PAGE_SIZE = 100;
+const PROFILE_SYMPTOMS_PAGE_SIZE = 100;
 
 const AUTOCOMPLETE_DEBOUNCE_MS = 300;
 const AUTOCOMPLETE_MIN_CHARS = 2;
@@ -101,6 +109,19 @@ interface ConditionsContextValue {
   selectCondition: (selection: ConditionSelection) => void;
   submitForm: (values: ConditionFormValues) => Promise<void>;
   remove: (id: string) => Promise<void>;
+
+  linkedSymptomsByConditionId: Record<string, ConditionSymptom[]>;
+  profileSymptoms: UserSymptom[];
+  isLinkingSymptom: boolean;
+  isUnlinkingSymptom: boolean;
+  linkSymptom: (
+    userConditionId: string,
+    userSymptomId: string,
+  ) => Promise<void>;
+  unlinkSymptom: (
+    userConditionId: string,
+    userSymptomId: string,
+  ) => Promise<void>;
 }
 
 const ConditionsContext = createContext<ConditionsContextValue | null>(null);
@@ -141,10 +162,20 @@ export function ConditionsProvider({ children, onActivate, panelCloseRef }: Cond
     currentPage,
     pageSize: CONDITIONS_PAGE_SIZE,
   });
+  const conditionSymptomsQuery = useAllConditionSymptoms({
+    currentPage: 1,
+    pageSize: CONDITION_SYMPTOMS_PAGE_SIZE,
+  });
+  const profileSymptomsQuery = useProfileSymptoms({
+    currentPage: 1,
+    pageSize: PROFILE_SYMPTOMS_PAGE_SIZE,
+  });
   const ensureCatalog = useEnsureConditionCatalog();
   const createProfile = useCreateProfileCondition();
   const updateProfile = useUpdateProfileCondition();
   const removeProfile = useRemoveProfileCondition();
+  const linkConditionSymptom = useLinkConditionSymptom();
+  const unlinkConditionSymptom = useUnlinkConditionSymptom();
 
   const {
     register,
@@ -206,6 +237,17 @@ export function ConditionsProvider({ children, onActivate, panelCloseRef }: Cond
 
   const conditions = listQuery.data?.data ?? [];
   const pagination = listQuery.data?.pagination ?? null;
+  const profileSymptoms = profileSymptomsQuery.data?.data ?? [];
+  const linkedSymptomsByConditionId = useMemo(() => {
+    const links = conditionSymptomsQuery.data?.data ?? [];
+    const map: Record<string, ConditionSymptom[]> = {};
+    for (const link of links) {
+      const key = link.userConditionId;
+      if (!map[key]) map[key] = [];
+      map[key].push(link);
+    }
+    return map;
+  }, [conditionSymptomsQuery.data?.data]);
 
   useEffect(() => {
     if (!pagination) return;
@@ -389,6 +431,41 @@ export function ConditionsProvider({ children, onActivate, panelCloseRef }: Cond
     }
   }
 
+  async function linkSymptom(
+    userConditionId: string,
+    userSymptomId: string,
+  ) {
+    try {
+      setFormError(null);
+      await linkConditionSymptom.mutateAsync({
+        userConditionId,
+        body: { userSymptomId },
+      });
+    } catch (error) {
+      setFormError(
+        getErrorMessage(error, "Failed to link symptom to condition"),
+      );
+      throw error;
+    }
+  }
+
+  async function unlinkSymptom(
+    userConditionId: string,
+    userSymptomId: string,
+  ) {
+    try {
+      setFormError(null);
+      await unlinkConditionSymptom.mutateAsync({
+        userConditionId,
+        userSymptomId,
+      });
+    } catch (error) {
+      setFormError(
+        getErrorMessage(error, "Failed to unlink symptom from condition"),
+      );
+    }
+  }
+
   const value = useMemo<ConditionsContextValue>(
     () => ({
       conditions,
@@ -440,6 +517,13 @@ export function ConditionsProvider({ children, onActivate, panelCloseRef }: Cond
       selectCondition,
       submitForm,
       remove,
+
+      linkedSymptomsByConditionId,
+      profileSymptoms,
+      isLinkingSymptom: linkConditionSymptom.isPending,
+      isUnlinkingSymptom: unlinkConditionSymptom.isPending,
+      linkSymptom,
+      unlinkSymptom,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -469,6 +553,10 @@ export function ConditionsProvider({ children, onActivate, panelCloseRef }: Cond
       onlineResults,
       isAutocompleteLoading,
       catalogQuery.isFetched,
+      linkedSymptomsByConditionId,
+      profileSymptoms,
+      linkConditionSymptom.isPending,
+      unlinkConditionSymptom.isPending,
     ],
   );
 

@@ -44,3 +44,36 @@ export interface UpdateUserConditionRequest {
   status?: ConditionStatus;
   notes?: string | null;
 }
+
+export interface ConditionSymptom {
+  id: string;
+  userConditionId: string;
+  userSymptomId: string;
+  createdAt: string;
+  updatedAt: string;
+  userCondition: {
+    id: string;
+    userId: string;
+    conditionId: string;
+    status: ConditionStatus;
+    active: boolean;
+    condition: { id: string; name: string };
+  };
+  userSymptom: {
+    id: string;
+    userId: string;
+    catalogId: string;
+    active: boolean;
+    createdAt: string;
+    updatedAt: string;
+    catalog: { id: string; name: string; category: string | null };
+  };
+}
+
+export interface LinkConditionSymptomRequest {
+  userSymptomId: string;
+}
+
+export interface UnlinkConditionSymptomResponse {
+  message: string;
+}

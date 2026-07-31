@@ -7,8 +7,11 @@ import type {
 } from "../../api/types";
 import type {
   ConditionCatalog,
+  ConditionSymptom,
   CreateConditionRequest,
   CreateUserConditionRequest,
+  LinkConditionSymptomRequest,
+  UnlinkConditionSymptomResponse,
   UpdateUserConditionRequest,
   UserCondition,
 } from "./types";
@@ -106,4 +109,46 @@ export async function findConditionCatalogByName(
       (c) => c.name.toLocaleLowerCase() === normalized,
     ) ?? null
   );
+}
+
+export async function listAllConditionSymptoms(
+  query: PaginationQuery = {},
+): Promise<PaginatedResponse<ConditionSymptom>> {
+  const { data } = await apiClient.get<PaginatedResponse<ConditionSymptom>>(
+    "/profile/conditions/symptoms",
+    { params: query },
+  );
+  return data;
+}
+
+export async function listConditionSymptoms(
+  userConditionId: string,
+  query: PaginationQuery = {},
+): Promise<PaginatedResponse<ConditionSymptom>> {
+  const { data } = await apiClient.get<PaginatedResponse<ConditionSymptom>>(
+    `/profile/conditions/${userConditionId}/symptoms`,
+    { params: query },
+  );
+  return data;
+}
+
+export async function linkConditionSymptom(
+  userConditionId: string,
+  body: LinkConditionSymptomRequest,
+): Promise<ConditionSymptom> {
+  const { data } = await apiClient.post<DataResponse<ConditionSymptom>>(
+    `/profile/conditions/${userConditionId}/symptoms`,
+    body,
+  );
+  return data.data;
+}
+
+export async function unlinkConditionSymptom(
+  userConditionId: string,
+  userSymptomId: string,
+): Promise<UnlinkConditionSymptomResponse> {
+  const { data } = await apiClient.delete<
+    DataResponse<UnlinkConditionSymptomResponse>
+  >(`/profile/conditions/${userConditionId}/symptoms/${userSymptomId}`);
+  return data.data;
 }
