@@ -5,17 +5,23 @@ import {
 } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import type { PaginationQuery } from "../../lib/api/types";
+import { fetchAllPages } from "../../lib/api/fetch-all-pages";
 import {
   createConditionCatalog,
   createProfileCondition,
   findConditionCatalogByName,
+  linkConditionSymptom,
+  listAllConditionSymptoms,
+  listConditionSymptoms,
   listConditionsCatalog,
   listProfileConditions,
   removeProfileCondition,
   searchConditionsOnline,
+  unlinkConditionSymptom,
   updateProfileCondition,
   type ConditionCatalog,
   type CreateUserConditionRequest,
+  type LinkConditionSymptomRequest,
   type UpdateUserConditionRequest,
 } from "../../lib/health/health-export";
 
@@ -27,6 +33,10 @@ export const conditionKeys = {
     [...conditionKeys.all, "catalog", search] as const,
   online: (search: string) =>
     [...conditionKeys.all, "online", search] as const,
+  symptoms: (filters: PaginationQuery = {}) =>
+    [...conditionKeys.all, "symptoms", filters] as const,
+  conditionSymptoms: (userConditionId: string, filters: PaginationQuery = {}) =>
+    [...conditionKeys.all, "symptoms", userConditionId, filters] as const,
 };
 
 export function useProfileConditions(filters: PaginationQuery = {}) {
@@ -124,6 +134,79 @@ export function useRemoveProfileCondition() {
 
   return useMutation({
     mutationFn: (id: string) => removeProfileCondition(id),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: conditionKeys.all,
+      });
+    },
+  });
+}
+
+export function useAllConditionSymptoms(filters: PaginationQuery = {}) {
+  const pageSize = filters.pageSize ?? 100;
+  const search = filters.search;
+
+  return useQuery({
+    queryKey: conditionKeys.symptoms({ ...filters, fetchAll: true }),
+    queryFn: () =>
+      fetchAllPages(
+        (currentPage, size) =>
+          listAllConditionSymptoms({
+            currentPage,
+            pageSize: size,
+            search,
+          }),
+        pageSize,
+      ),
+  });
+}
+
+export function useConditionSymptoms(
+  userConditionId: string,
+  filters: PaginationQuery = {},
+) {
+  return useQuery({
+    queryKey: conditionKeys.conditionSymptoms(userConditionId, filters),
+    queryFn: () =>
+      listConditionSymptoms(userConditionId, {
+        currentPage: filters.currentPage ?? 1,
+        pageSize: filters.pageSize ?? 50,
+        search: filters.search,
+      }),
+    enabled: Boolean(userConditionId),
+  });
+}
+
+export function useLinkConditionSymptom() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      userConditionId,
+      body,
+    }: {
+      userConditionId: string;
+      body: LinkConditionSymptomRequest;
+    }) => linkConditionSymptom(userConditionId, body),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: conditionKeys.all,
+      });
+    },
+  });
+}
+
+export function useUnlinkConditionSymptom() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      userConditionId,
+      userSymptomId,
+    }: {
+      userConditionId: string;
+      userSymptomId: string;
+    }) => unlinkConditionSymptom(userConditionId, userSymptomId),
     onSuccess: () => {
       void queryClient.invalidateQueries({
         queryKey: conditionKeys.all,
