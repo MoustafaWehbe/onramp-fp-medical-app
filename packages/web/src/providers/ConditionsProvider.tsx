@@ -163,12 +163,11 @@ export function ConditionsProvider({ children, onActivate, panelCloseRef }: Cond
     pageSize: CONDITIONS_PAGE_SIZE,
   });
   const conditionSymptomsQuery = useAllConditionSymptoms({
-    currentPage: 1,
     pageSize: CONDITION_SYMPTOMS_PAGE_SIZE,
   });
   const profileSymptomsQuery = useProfileSymptoms({
-    currentPage: 1,
     pageSize: PROFILE_SYMPTOMS_PAGE_SIZE,
+    fetchAll: true,
   });
   const ensureCatalog = useEnsureConditionCatalog();
   const createProfile = useCreateProfileCondition();

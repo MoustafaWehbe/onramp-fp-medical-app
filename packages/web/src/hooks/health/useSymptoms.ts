@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import type { PaginationQuery } from "../../lib/api/types";
+import { fetchAllPages } from "../../lib/api/fetch-all-pages";
 import {
   createProfileSymptom,
   createSymptomCatalog,
@@ -28,14 +29,28 @@ export const symptomKeys = {
 };
 
 export function useProfileSymptoms(filters: PaginationQuery = {}) {
+  const pageSize = filters.pageSize ?? (filters.fetchAll ? 100 : 15);
+  const search = filters.search;
+  const currentPage = filters.currentPage ?? 1;
+
   return useQuery({
     queryKey: symptomKeys.profile(filters),
     queryFn: () =>
-      listProfileSymptoms({
-        currentPage: filters.currentPage ?? 1,
-        pageSize: filters.pageSize ?? 15,
-        search: filters.search,
-      }),
+      filters.fetchAll
+        ? fetchAllPages(
+            (page, size) =>
+              listProfileSymptoms({
+                currentPage: page,
+                pageSize: size,
+                search,
+              }),
+            pageSize,
+          )
+        : listProfileSymptoms({
+            currentPage,
+            pageSize,
+            search,
+          }),
   });
 }
 

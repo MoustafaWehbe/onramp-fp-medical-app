@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import type { PaginationQuery } from "../../lib/api/types";
+import { fetchAllPages } from "../../lib/api/fetch-all-pages";
 import {
   createConditionCatalog,
   createProfileCondition,
@@ -142,14 +143,21 @@ export function useRemoveProfileCondition() {
 }
 
 export function useAllConditionSymptoms(filters: PaginationQuery = {}) {
+  const pageSize = filters.pageSize ?? 100;
+  const search = filters.search;
+
   return useQuery({
-    queryKey: conditionKeys.symptoms(filters),
+    queryKey: conditionKeys.symptoms({ ...filters, fetchAll: true }),
     queryFn: () =>
-      listAllConditionSymptoms({
-        currentPage: filters.currentPage ?? 1,
-        pageSize: filters.pageSize ?? 100,
-        search: filters.search,
-      }),
+      fetchAllPages(
+        (currentPage, size) =>
+          listAllConditionSymptoms({
+            currentPage,
+            pageSize: size,
+            search,
+          }),
+        pageSize,
+      ),
   });
 }
 
