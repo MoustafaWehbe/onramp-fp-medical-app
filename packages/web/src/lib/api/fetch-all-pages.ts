@@ -27,7 +27,7 @@ export async function fetchAllPages<T>(
     data,
     pagination: {
       currentPage: 1,
-      pageSize: size,
+      pageSize: data.length,
       totalCount: first.pagination.totalCount,
       totalPages: first.pagination.totalCount === 0 ? 0 : 1,
     },
