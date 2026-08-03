@@ -226,6 +226,10 @@ export function useCreateDailyEntry() {
           ),
       });
 
+      void queryClient.invalidateQueries({
+        queryKey: ["dashboard"],
+      });
+
       /**
        * The created entry can also be cached
        * as a detail query immediately.
@@ -305,6 +309,10 @@ export function useUpdateDailyEntry() {
             user.id,
           ),
       });
+
+      void queryClient.invalidateQueries({
+        queryKey: ["dashboard"],
+      });
     },
   });
 }
@@ -350,6 +358,10 @@ export function useRemoveDailyEntry() {
       void queryClient.invalidateQueries({
         queryKey:
           dailyEntryKeys.lists(user.id),
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: ["dashboard"],
       });
     },
   });
