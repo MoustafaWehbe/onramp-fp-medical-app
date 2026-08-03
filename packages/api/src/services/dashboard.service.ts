@@ -186,7 +186,6 @@ export class DashboardService {
         {
           model: UserDoctor,
           as: "userDoctor",
-          attributes: [],
           required: true,
           where: { userId },
           include: [
@@ -200,7 +199,6 @@ export class DashboardService {
         {
           model: UserClinic,
           as: "userClinic",
-          attributes: [],
           required: false,
           include: [
             {
