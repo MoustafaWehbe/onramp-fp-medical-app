@@ -5,6 +5,7 @@ import {
   type ReactNode,
 } from "react";
 import { isAxiosError } from "axios";
+import { useAuth } from "../hooks/useAuth";
 import { useDashboardQuery } from "../hooks/useDashboard";
 import type { DashboardData } from "../lib/dashboard/types";
 
@@ -35,7 +36,8 @@ interface DashboardProviderProps {
 }
 
 export function DashboardProvider({ children }: DashboardProviderProps) {
-  const query = useDashboardQuery();
+  const { user } = useAuth();
+  const query = useDashboardQuery(user?.id);
 
   const value = useMemo<DashboardContextValue>(
     () => ({

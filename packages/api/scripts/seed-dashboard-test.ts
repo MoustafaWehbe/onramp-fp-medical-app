@@ -30,6 +30,47 @@ function prompt(question: string): Promise<string> {
   });
 }
 
+function promptPassword(question: string): Promise<string> {
+  return new Promise((resolve) => {
+    process.stdout.write(question);
+    const stdin = process.stdin;
+
+    if (!stdin.isTTY) {
+      stdin.resume();
+      stdin.once('data', (data) => {
+        resolve(data.toString().trim());
+      });
+      return;
+    }
+
+    const wasRaw = stdin.isRaw;
+    stdin.setRawMode(true);
+    stdin.resume();
+
+    let password = '';
+    const onData = (char: Buffer) => {
+      const key = char.toString();
+      if (key === '\r' || key === '\n') {
+        process.stdout.write('\n');
+        stdin.setRawMode(wasRaw);
+        stdin.pause();
+        stdin.removeListener('data', onData);
+        resolve(password);
+      } else if (key === '\x7f' || key === '\b') {
+        if (password.length > 0) {
+          password = password.slice(0, -1);
+        }
+      } else if (key === '\x03') {
+        process.stdout.write('\n');
+        process.exit(1);
+      } else {
+        password += key;
+      }
+    };
+    stdin.on('data', onData);
+  });
+}
+
 function formatDate(date: Date): string {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");
@@ -67,7 +108,7 @@ async function main() {
   console.log("Seed 10 daily entries for dashboard testing\n");
 
   const email = await prompt("Email: ");
-  const password = await prompt("Password: ");
+  const password = await promptPassword("Password: ");
 
   if (!email || !password) {
     console.error("Email and password are required.");
@@ -163,6 +204,7 @@ async function main() {
 
   let created = 0;
   let skipped = 0;
+  let failed = 0;
 
   for (const entry of entries) {
     try {
@@ -173,6 +215,7 @@ async function main() {
         console.log(`  SKIP ${entry.entryDate} | already exists`);
         skipped++;
       } else {
+        failed++;
         console.log(
           `  FAIL ${entry.entryDate} | ${err.response?.data?.error ?? err.message}`,
         );
@@ -180,7 +223,8 @@ async function main() {
     }
   }
 
-  console.log(`\nDone: ${created} created, ${skipped} skipped.`);
+  console.log(`\nDone: ${created} created, ${skipped} skipped, ${failed} failed.`);
+  if (failed > 0) process.exitCode = 1;
 }
 
 main().catch((err) => {
