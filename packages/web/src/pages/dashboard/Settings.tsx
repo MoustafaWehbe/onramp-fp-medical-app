@@ -376,6 +376,7 @@ function SettingsView() {
     <div className="flex gap-3">
       <Button
         variant={theme === "light" ? "default" : "outline"}
+        aria-pressed={theme === "light"}
         onClick={() => setTheme("light")}
       >
         Light
@@ -383,6 +384,7 @@ function SettingsView() {
 
       <Button
         variant={theme === "dark" ? "default" : "outline"}
+        aria-pressed={theme === "dark"}
         onClick={() => setTheme("dark")}
       >
         Dark
