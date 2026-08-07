@@ -13,7 +13,7 @@ DailyEntryFormValues,
 
 import { MEDICATION_UNITS } from "../../lib/health/health-export";
 import { Input } from "../../components/ui/input";
-
+import { useNavigate } from "react-router-dom";
 
 /**
 
@@ -44,6 +44,7 @@ import { Input } from "../../components/ui/input";
 
 
 export function DailyEntryForm() {
+  const navigate = useNavigate();
 const {
 control,
 register,
@@ -167,6 +168,76 @@ const onSubmit: SubmitHandler<DailyEntryFormValues> = async (values) => {
 
 const isCreateMode =
 formMode === "create";
+const handleAddSymptom = () => {
+  if (symptoms.length === 0) {
+    <p className="mt-2 text-sm text-muted-foreground">
+    No symptoms found. Add symptoms from your Health Profile before creating a daily entry.
+  </p>
+    navigate("/health-profile");
+    return;
+  }
+
+  appendSymptom({
+    userSymptomId: "",
+    severity: "",
+    notes: "",
+  });
+};
+
+
+const handleAddMedication = () => {
+  if (medications.length === 0) {
+    <p className="mt-2 text-sm text-muted-foreground">
+    No medications found. Add medications from your Health Profile before creating a daily entry.
+  </p>
+    navigate("/medications");
+    return;
+  }
+
+  appendMedication({
+    userMedicationId: "",
+    quantity: "",
+    unit: "mg",
+    taken: false,
+    takenAt: "",
+    notes: "",
+  });
+};
+
+
+const handleAddCondition = () => {
+  if (conditions.length === 0) {
+    <p className="mt-2 text-sm text-muted-foreground">
+    No conditions found. Add conditions from your Health Profile before creating a daily entry.
+  </p>
+    navigate("/health-profile");
+    return;
+  }
+
+  appendCondition({
+    userConditionId: "",
+    status: "active",
+    notes: "",
+  });
+};
+
+
+const handleAddDoctorVisit = () => {
+  if (doctors.length === 0 || clinics.length === 0) {
+    <p className="mt-2 text-sm text-muted-foreground">
+    No doctors or clinics found. Add them from your Health Profile before creating a daily entry.
+  </p>
+    navigate("/providers");
+    return;
+  }
+
+  appendDoctorVisit({
+    userDoctorId: "",
+    userClinicId: "",
+    summary: "",
+    notes: "",
+  });
+};
 
 const isEditMode =
 formMode === "edit";
@@ -462,13 +533,7 @@ return ( <form
 
       <button
         type="button"
-        onClick={() =>
-          appendSymptom({
-            userSymptomId: "",
-            severity: "",
-            notes: "",
-          })
-        }
+        onClick={handleAddSymptom}
         disabled={
           isLoadingSymptoms ||
           Boolean(symptomsErrorMessage)
@@ -815,16 +880,7 @@ return ( <form
 
       <button
         type="button"
-        onClick={() =>
-          appendMedication({
-            userMedicationId: "",
-            quantity: "",
-            unit: "mg",
-            taken: false,
-            takenAt: "",
-            notes: "",
-          })
-        }
+        onClick={handleAddMedication}
         disabled={
           isLoadingMedications ||
           Boolean(
@@ -1274,13 +1330,7 @@ return ( <form
 
       <button
         type="button"
-        onClick={() =>
-          appendCondition({
-            userConditionId: "",
-            status: "active",
-            notes: "",
-          })
-        }
+        onClick={handleAddCondition}
         disabled={
           isLoadingConditions ||
           Boolean(
@@ -1616,14 +1666,7 @@ return ( <form
 
       <button
         type="button"
-        onClick={() =>
-          appendDoctorVisit({
-            userDoctorId: "",
-            userClinicId: "",
-            summary: "",
-            notes: "",
-          })
-        }
+        onClick={handleAddDoctorVisit}
         disabled={
           isLoadingDoctors ||
           isLoadingClinics ||
