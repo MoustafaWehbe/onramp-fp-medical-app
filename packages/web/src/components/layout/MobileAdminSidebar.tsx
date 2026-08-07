@@ -4,24 +4,27 @@ import {
   SheetTitle,
 } from "../ui/sheet";
 
-import { Sidebar } from "./Sidebar";
+import { AdminSidebar } from "./AdminSidebar";
 
-interface MobileSidebarProps {
+
+interface MobileAdminSidebarProps {
   open: boolean;
   onClose: () => void;
 }
 
-export function MobileSidebar({
+
+export function MobileAdminSidebar({
   open,
   onClose,
-}: MobileSidebarProps) {
+}: MobileAdminSidebarProps) {
   return (
     <Sheet open={open} onOpenChange={onClose}>
       <SheetContent side="left" className="p-0">
         <SheetTitle className="sr-only">
-          Navigation
+          Admin navigation
         </SheetTitle>
-        <Sidebar />
+
+        <AdminSidebar />
       </SheetContent>
     </Sheet>
   );

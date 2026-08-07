@@ -10,6 +10,8 @@ interface SheetContentProps
 
 const Sheet = SheetPrimitive.Root;
 
+const SheetTitle = SheetPrimitive.Title;
+
 const SheetTrigger = SheetPrimitive.Trigger;
 
 const SheetClose = SheetPrimitive.Close;
@@ -52,4 +54,5 @@ export {
   SheetTrigger,
   SheetClose,
   SheetContent,
+  SheetTitle,
 };
