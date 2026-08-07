@@ -18,6 +18,8 @@ import { DailyEntryCard } from "../../components/daily-entries/DailyEntryCard";
 import {
   useDailyEntriesContext,
 } from "../../providers/DailyEntriesProvider";
+import {Input} from "../../components/ui/input";
+
 
 export function LogView() {
   const {
@@ -123,13 +125,13 @@ export function LogView() {
                   text-2xl
                   font-bold
                   tracking-tight
-                  text-gray-900
+                 text-foreground
                 "
               >
                 Daily Entries
               </h1>
 
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-muted-foreground">
                 View your daily health history.
               </p>
             </div>
@@ -168,7 +170,7 @@ export function LogView() {
         className="
           rounded-lg
           border
-          bg-white
+          bg-card
           p-4
           shadow-sm
         "
@@ -190,33 +192,21 @@ export function LogView() {
                 block
                 text-sm
                 font-medium
-                text-gray-700
+                text-foreground
               "
             >
               From date
             </label>
 
-            <input
+            <Input
               id="from-date"
               type="date"
               value={fromDate ?? ""}
               onChange={(event) =>
-                setFromDate(
-                  event.target.value || undefined,
-                )
+                setFromDate(event.target.value || undefined)
               }
-              className="
-                w-full
-                rounded-md
-                border
-                px-3
-                py-2
-                text-sm
-                outline-none
-                focus:ring-2
-                focus:ring-primary/30
-              "
             />
+            
           </div>
 
           <div className="flex-1">
@@ -227,13 +217,13 @@ export function LogView() {
                 block
                 text-sm
                 font-medium
-                text-gray-700
+                text-foreground
               "
             >
               To date
             </label>
 
-            <input
+            <Input
               id="to-date"
               type="date"
               value={toDate ?? ""}
@@ -242,17 +232,6 @@ export function LogView() {
                   event.target.value || undefined,
                 )
               }
-              className="
-                w-full
-                rounded-md
-                border
-                px-3
-                py-2
-                text-sm
-                outline-none
-                focus:ring-2
-                focus:ring-primary/30
-              "
             />
           </div>
 
@@ -267,9 +246,9 @@ export function LogView() {
                 py-2
                 text-sm
                 font-medium
-                text-gray-700
+                text-foreground
                 transition
-                hover:bg-gray-50
+                hover:bg-muted
               "
             >
               Clear filters
@@ -312,7 +291,7 @@ export function LogView() {
             rounded-lg
             border
             border-dashed
-            bg-white
+            bg-card
             px-6
             py-12
             text-center
@@ -332,7 +311,7 @@ export function LogView() {
               mt-4
               text-lg
               font-semibold
-              text-gray-900
+              text-foreground
             "
           >
             No daily entries found
@@ -344,7 +323,7 @@ export function LogView() {
               mt-2
               max-w-md
               text-sm
-              text-gray-500
+              text-muted-foreground
             "
           >
             {fromDate || toDate

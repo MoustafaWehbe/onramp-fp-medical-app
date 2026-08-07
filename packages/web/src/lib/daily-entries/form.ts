@@ -65,13 +65,13 @@ const dailyEntryMedicationFormSchema = z.object({
         const number = Number(value);
 
         return (
-          Number.isFinite(number) &&
+          Number.isInteger(number) &&
           number > 0
         );
       },
       {
         message:
-          "Quantity must be greater than 0",
+          "Quantity must be a whole number greater than 0",
       },
     ),
 
@@ -175,12 +175,12 @@ export const dailyEntryFormSchema = z.object({
         return (
           Number.isInteger(number) &&
           number >= 1 &&
-          number <= 10
+          number <= 5
         );
       },
       {
         message:
-          "Mood rating must be a whole number between 1 and 10",
+          "Mood rating must be a whole number between 1 and 5",
       },
     ),
 
@@ -197,12 +197,13 @@ export const dailyEntryFormSchema = z.object({
 
         return (
           Number.isFinite(number) &&
-          number >= 0
+          number >= 0 &&
+          number <= 24
         );
       },
       {
         message:
-          "Sleep hours must be 0 or greater",
+          "Sleep hours must be between 0 and 24",
       },
     ),
 
@@ -518,7 +519,7 @@ export function toDailyEntrySubmitPayload(
     /**
      * Always submit today's date.
      */
-    entryDate: getTodayDate(),
+    entryDate: values.entryDate,
 
     moodRating:
       hasMoodRating

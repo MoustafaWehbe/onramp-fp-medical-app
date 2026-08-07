@@ -56,9 +56,9 @@ const navSections = [
 
 export function Sidebar() {
   return (
-    <aside className="flex w-60 flex-col border-r bg-card">
+    <aside className="flex w-60 shrink-0 flex-col border-r bg-card">
       <div className="flex h-14 items-center border-b px-6">
-        <span className="font-semibold">Starter Kit</span>
+        <span className="font-semibold">HealthTrack</span>
       </div>
       <nav className="flex-1 space-y-4 overflow-y-auto p-3">
         {navSections.map((section) => (

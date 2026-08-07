@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import {
-  X,
   Pencil,
   Trash2,
   CalendarDays,
@@ -12,6 +11,7 @@ import {
   Stethoscope,
   Building2,
 } from "lucide-react";
+import {AsidePanel} from "../../components/shared/AsidePanel";
 
 import {
   useDailyEntriesContext,
@@ -23,15 +23,16 @@ import {
   getMedicationName,
   getConditionName,
   getDoctorName, getClinicName, } from "../../lib/daily-entries/daily-entries-exports";
+  import {getTodayDate} from "../../lib/daily-entries/form";
 
-function handlePanelKeyDown(
-  event: React.KeyboardEvent<HTMLDivElement>,
-  onClose: () => void,
-) {
-  if (event.key === "Escape") {
-    onClose();
-  }
-}
+// function handlePanelKeyDown(
+//   event: React.KeyboardEvent<HTMLDivElement>,
+//   onClose: () => void,
+// ) {
+//   if (event.key === "Escape") {
+//     onClose();
+//   }
+// }
 
 export function LogEntry() {
   const {
@@ -64,6 +65,8 @@ export function LogEntry() {
     return null;
   }
 
+  // can edit only if the submitted entry is today
+  const canEdit= selectedEntry && selectedEntry.entryDate === getTodayDate();
   /**
    * ----------------------------------------------------
    * CREATE / EDIT
@@ -77,93 +80,13 @@ export function LogEntry() {
     formMode === "edit"
   ) {
     return (
-      <div
-        className="
-          fixed
-          inset-0
-          z-50
-          flex
-          justify-end
-          bg-black/40
-        "
-      >
-       <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="daily-entry-panel-title"
-          tabIndex={-1}
-          onKeyDown={(event) =>
-            handlePanelKeyDown(event, closePanel)
-          }
-          className="
-            flex
-            h-full
-            w-full
-            max-w-2xl
-            flex-col
-            bg-white
-            shadow-xl
-          "
-        >
-          {/* -------------------------------- */}
-          {/* Panel header                       */}
-          {/* -------------------------------- */}
-
-          <div
-            className="
-              flex
-              items-center
-              justify-between
-              border-b
-              px-6
-              py-4
-            "
-          >
-            <div>
-              <h2
-                id="daily-entry-panel-title"
-                className="
-                  text-lg
-                  font-semibold
-                  text-gray-900
-                "
-              >
-                {panelTitle}
-              </h2>
-
-              <p className="mt-1 text-sm text-gray-500">
-                {formMode === "create"
-                  ? "Record your health information for today."
-                  : "Update your daily health entry."}
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={closePanel}
-              aria-label="Close panel"
-              className="
-                rounded-md
-                p-2
-                text-gray-500
-                transition
-                hover:bg-gray-100
-                hover:text-gray-700
-              "
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-
-          {/* -------------------------------- */}
-          {/* Form                              */}
-          {/* -------------------------------- */}
-
-          <div className="flex-1 overflow-y-auto p-6">
-            <DailyEntryForm />
-          </div>
-        </div>
-      </div>
+      <AsidePanel
+      open={panelOpen}
+      onClose={closePanel}
+      title={panelTitle}
+    >
+      <DailyEntryForm />
+    </AsidePanel>
     );
   }
 
@@ -177,34 +100,19 @@ export function LogEntry() {
     panel.kind === "detail"
   ) {
     return (
-      <div
-        className="
-          fixed
-          inset-0
-          z-50
-          flex
-          justify-end
-          bg-black/40
-        "
-      >
-        <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="daily-entry-panel-title"
-            tabIndex={-1}
-            onKeyDown={(event) =>
-              handlePanelKeyDown(event, closePanel)
-            }
-            className="
-              flex
-              h-full
-              w-full
-              max-w-2xl
-              flex-col
-              bg-white
-              shadow-xl
-            "
-          >
+      <AsidePanel
+      open={panelOpen}
+      onClose={closePanel}
+      title={panelTitle}
+      onEdit={canEdit ? () =>
+        openEdit(selectedEntry)
+      : undefined}
+      onDelete={() =>
+        selectedEntry && remove(selectedEntry.id)
+      }
+      deleteDisabled={isRemoving}
+    >
+        <div>
           {/* -------------------------------- */}
           {/* Header                            */}
           {/* -------------------------------- */}
@@ -225,39 +133,23 @@ export function LogEntry() {
               className="
                 text-lg
                 font-semibold
-                text-gray-900
+                text-foreground
               "
             >
                 {panelTitle}
               </h2>
 
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Daily health entry details
               </p>
             </div>
-
-            <button
-              type="button"
-              onClick={closePanel}
-              aria-label="Close panel"
-              className="
-                rounded-md
-                p-2
-                text-gray-500
-                transition
-                hover:bg-gray-100
-                hover:text-gray-700
-              "
-            >
-              <X className="h-5 w-5" />
-            </button>
           </div>
 
           {/* -------------------------------- */}
           {/* Detail content                    */}
           {/* -------------------------------- */}
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="overflow-y-auto p-6">
             {isDetailLoading ? (
               <div
                 className="
@@ -267,7 +159,7 @@ export function LogEntry() {
                   justify-center
                 "
               >
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-muted-foreground">
                   Loading entry details...
                 </div>
               </div>
@@ -305,7 +197,7 @@ export function LogEntry() {
                     justify-end
                     gap-2
                   "
-                >
+                >{canEdit && (
                   <button
                     type="button"
                     onClick={() =>
@@ -321,14 +213,14 @@ export function LogEntry() {
                       py-2
                       text-sm
                       font-medium
-                      text-gray-700
+                      text-foreground
                       transition
-                      hover:bg-gray-50
+                      hover:bg-muted
                     "
                   >
                     <Pencil className="h-4 w-4" />
                     Edit
-                  </button>
+                  </button>)}
 
                   <button
                     type="button"
@@ -390,7 +282,7 @@ export function LogEntry() {
                   className="
                     rounded-lg
                     border
-                    bg-gray-50
+                    bg-muted
                     p-4
                   "
                 >
@@ -399,7 +291,7 @@ export function LogEntry() {
                       className="
                         h-5
                         w-5
-                        text-gray-500
+                        text-muted-foreground
                       "
                     />
 
@@ -410,7 +302,7 @@ export function LogEntry() {
                           font-medium
                           uppercase
                           tracking-wide
-                          text-gray-500
+                          text-muted-foreground
                         "
                       >
                         Entry date
@@ -420,7 +312,7 @@ export function LogEntry() {
                         className="
                           mt-1
                           font-semibold
-                          text-gray-900
+                          text-foreground
                         "
                       >
                         {formatEntryDate(
@@ -488,13 +380,13 @@ export function LogEntry() {
                         whitespace-pre-wrap
                         text-sm
                         leading-6
-                        text-gray-700
+                        text-foreground
                       "
                     >
                       {selectedEntry.journalNotes}
                     </p>
                   ) : (
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground ">
                       No journal notes recorded.
                     </p>
                   )}
@@ -594,11 +486,11 @@ export function LogEntry() {
                             className="
                               rounded-md
                               border
-                              bg-gray-50
+                              bg-muted
                               p-3
                             "
                           >
-                            <p className="font-medium text-gray-900">
+                            <p className="font-medium text-foreground">
                                {getDoctorName(
                                   visit,
                                   doctors,
@@ -613,7 +505,7 @@ export function LogEntry() {
                                   items-center
                                   gap-2
                                   text-sm
-                                  text-gray-500
+                                  text-muted-foreground
                                 "
                               >
                                 <Building2
@@ -637,14 +529,14 @@ export function LogEntry() {
               </div>
             ) : (
               <div className="p-6">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   No entry selected.
                 </p>
               </div>
             )}
           </div>
         </div>
-      </div>
+      </AsidePanel>
     );
   }
 
@@ -671,7 +563,7 @@ function DetailItem({
       className="
         rounded-lg
         border
-        bg-white
+       bg-card
         p-4
       "
     >
@@ -682,7 +574,7 @@ function DetailItem({
           gap-3
         "
       >
-        <div className="text-gray-500">
+        <div className="text-muted-foreground">
           {icon}
         </div>
 
@@ -693,7 +585,7 @@ function DetailItem({
               font-medium
               uppercase
               tracking-wide
-              text-gray-500
+              text-muted-foreground
             "
           >
             {label}
@@ -703,7 +595,7 @@ function DetailItem({
             className="
               mt-1
               font-semibold
-              text-gray-900
+              text-foreground
             "
           >
             {value}
@@ -728,7 +620,7 @@ function DetailSection({
       className="
         rounded-lg
         border
-        bg-white
+        bg-card
         p-4
       "
     >
@@ -740,14 +632,14 @@ function DetailSection({
           gap-2
         "
       >
-        <div className="text-gray-500">
+        <div className="text-muted-foreground">
           {icon}
         </div>
 
         <h3
           className="
             font-semibold
-            text-gray-900
+            text-foreground
           "
         >
           {title}
@@ -771,11 +663,11 @@ function TagList({
           key={`${item}-${index}`}
           className="
             rounded-full
-            bg-gray-100
+            bg-muted
             px-3
             py-1
             text-sm
-            text-gray-700
+            text-foreground
           "
         >
           {item}
@@ -787,7 +679,7 @@ function TagList({
 
 function EmptyRelatedData() {
   return (
-    <p className="text-sm text-gray-500">
+    <p className="text-sm text-muted-foreground">
       None recorded.
     </p>
   );

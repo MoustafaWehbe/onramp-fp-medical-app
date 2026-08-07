@@ -17,7 +17,6 @@ router.get("/",
 
 // get conditions from external API
 router.get("/search-online",
-    rateLimiter,
     validate(searchConditionsOnlineQuerySchema, "query"),
     (req, res,next) => ConditionsController.getConditions(req, res,next)
 );
