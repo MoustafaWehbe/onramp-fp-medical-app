@@ -29,6 +29,7 @@ import { homePathForRole } from "../lib/auth/roles";
 import { LoadingSpinner } from "../components/shared/LoadingSpinner";
 import { DailyEntriesProvider } from "@/providers/DailyEntriesProvider";
 import { DoctorVisitsProvider } from "@/providers/DoctorVisitsProvider";
+import { DashboardProvider } from "@/providers/DashboardProvider";
 
 function HomeRedirect() {
   const { user, isLoading } = useAuth();
@@ -58,7 +59,7 @@ export function AppRoutes() {
       <Route element={<ProtectedRoute />}>
         <Route element={<RoleRoute roles={["user"]} />}>
           <Route element={<AppLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<DashboardProvider><Dashboard /></DashboardProvider>} />
             <Route path="/settings" element={<Settings />} />
 
             <Route path="/log/view" element={<DailyEntriesProvider><LogView /></DailyEntriesProvider>} />

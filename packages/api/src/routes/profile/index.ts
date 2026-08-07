@@ -8,6 +8,7 @@ import { userSymptomRouter } from "./user-symptom.routes";
 import { userClinicRouter } from "./user-clinic.routes";
 import { dailyEntryRouter } from "./daily-entry.routes";
 import { entryDoctorVisitRouter } from "./entry-doctor-visit.routes";
+import { dashboardRouter } from "../dashboard.routes";
 
 const router = Router();
 
@@ -21,5 +22,6 @@ router.use("/symptoms", userSymptomRouter);
 router.use("/clinics", userClinicRouter);
 router.use("/daily-entries", dailyEntryRouter);
 router.use("/doctor-visits", entryDoctorVisitRouter);
+router.use("/dashboard", dashboardRouter);
 
 export { router as profileRouter };

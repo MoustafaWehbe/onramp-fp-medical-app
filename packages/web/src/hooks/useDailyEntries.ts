@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-query";
 
 import { useAuth } from "./useAuth";
+import { dashboardKeys } from "./useDashboard";
 
 import {
   createDailyEntry,
@@ -226,6 +227,10 @@ export function useCreateDailyEntry() {
           ),
       });
 
+      void queryClient.invalidateQueries({
+        queryKey: dashboardKeys.all(user.id),
+      });
+
       /**
        * The created entry can also be cached
        * as a detail query immediately.
@@ -305,6 +310,10 @@ export function useUpdateDailyEntry() {
             user.id,
           ),
       });
+
+      void queryClient.invalidateQueries({
+        queryKey: dashboardKeys.all(user.id),
+      });
     },
   });
 }
@@ -350,6 +359,10 @@ export function useRemoveDailyEntry() {
       void queryClient.invalidateQueries({
         queryKey:
           dailyEntryKeys.lists(user.id),
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: dashboardKeys.all(user.id),
       });
     },
   });
