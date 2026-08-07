@@ -108,6 +108,75 @@ components:
           format: date-time
           example: "2024-01-01T00:00:00.000Z"
 
+    DashboardStats:
+      type: object
+      properties:
+        entryCount:
+          type: integer
+          example: 12
+        activeMedicationCount:
+          type: integer
+          example: 3
+        activeConditionCount:
+          type: integer
+          example: 2
+        avgMood:
+          type: number
+          nullable: true
+          example: 3.8
+
+    RecentEntryItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        entryDate:
+          type: string
+          example: "2025-08-03"
+        moodRating:
+          type: integer
+          nullable: true
+          example: 4
+        sleepHours:
+          type: number
+          nullable: true
+          example: 7.5
+        journalSnippet:
+          type: string
+          nullable: true
+          example: "Feeling good today..."
+
+    LastVisitItem:
+      type: object
+      properties:
+        date:
+          type: string
+          example: "2025-07-28"
+        doctorName:
+          type: string
+          example: "Dr. Smith"
+        clinicName:
+          type: string
+          nullable: true
+          example: "City Medical Center"
+        summary:
+          type: string
+          nullable: true
+
+    DashboardData:
+      type: object
+      properties:
+        stats:
+          $ref: "#/components/schemas/DashboardStats"
+        recentEntries:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecentEntryItem"
+        lastVisit:
+          nullable: true
+          $ref: "#/components/schemas/LastVisitItem"
+
     ErrorResponse:
       type: object
       properties:
@@ -2989,6 +3058,30 @@ paths:
                             count:
                               type: integer
                               example: 12
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /profile/dashboard:
+    get:
+      tags: [Profile]
+      summary: Dashboard — summary stats, recent entries, and last visit
+      operationId: getProfileDashboard
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Dashboard data payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/DashboardData"
         "401":
           description: Unauthorized
           content:
