@@ -14,6 +14,7 @@ export function Header({ onMenuClick }: HeaderProps) {
       <button
           onClick={onMenuClick}
           className="md:hidden"
+          aria-label="Open navigation"
         >
           <Menu className="h-5 w-5" />
         </button>
