@@ -52,14 +52,15 @@ entry.journalNotes?.trim(),
 
 return ( <article
    className="
-     rounded-lg
-     border
-     bg-white
-     p-5
-     shadow-sm
-     transition
-     hover:shadow-md
-   "
+ rounded-lg
+ border
+ bg-card
+ text-card-foreground
+ p-5
+ shadow-sm
+ transition
+ hover:shadow-md
+ "
  >
 {/* -------------------------------- */}
 {/* Header                           */}
@@ -78,7 +79,7 @@ return ( <article
         className="
           text-lg
           font-semibold
-          text-gray-900
+         text-foreground
         "
       >
         {formatEntryDate(
@@ -90,7 +91,7 @@ return ( <article
         className="
           mt-1
           text-sm
-          text-gray-500
+         text-muted-foreground
         "
       >
         Daily health entry
@@ -138,7 +139,7 @@ return ( <article
     <div
       className="
         rounded-md
-        bg-gray-50
+       bg-muted
         p-3
       "
     >
@@ -148,7 +149,7 @@ return ( <article
           font-medium
           uppercase
           tracking-wide
-          text-gray-500
+          text-muted-foreground
         "
       >
         Mood
@@ -159,11 +160,11 @@ return ( <article
           mt-1
           text-base
           font-semibold
-          text-gray-900
+          text-foreground
         "
       >
         {hasMood
-          ? `${entry.moodRating} / 10`
+          ? `${entry.moodRating} / 5`
           : "Not recorded"}
       </p>
     </div>
@@ -173,7 +174,7 @@ return ( <article
     <div
       className="
         rounded-md
-        bg-gray-50
+        bg-muted
         p-3
       "
     >
@@ -183,7 +184,7 @@ return ( <article
           font-medium
           uppercase
           tracking-wide
-          text-gray-500
+          text-muted-foreground
         "
       >
         Sleep
@@ -194,7 +195,7 @@ return ( <article
           mt-1
           text-base
           font-semibold
-          text-gray-900
+         text-foreground
         "
       >
         {hasSleep
@@ -222,7 +223,7 @@ return ( <article
           font-medium
           uppercase
           tracking-wide
-          text-gray-500
+         text-muted-foreground
         "
       >
         Journal
@@ -234,7 +235,7 @@ return ( <article
           line-clamp-2
           text-sm
           leading-6
-          text-gray-700
+          text-foreground
         "
       >
         {entry.journalNotes}
@@ -255,33 +256,33 @@ return ( <article
       border-t
       pt-4
       text-sm
-      text-gray-500
+      text-muted-foreground
     "
   >
     <span>
       Symptoms:{" "}
-      <strong className="text-gray-700">
+      <strong className="text-foreground">
         {entry.symptoms.length}
       </strong>
     </span>
 
     <span>
       Medications:{" "}
-      <strong className="text-gray-700">
+      <strong className="text-foreground">
         {entry.medications.length}
       </strong>
     </span>
 
     <span>
       Conditions:{" "}
-      <strong className="text-gray-700">
+      <strong className="text-foreground">
         {entry.conditions.length}
       </strong>
     </span>
 
     <span>
       Doctor visits:{" "}
-      <strong className="text-gray-700">
+      <strong className="text-foreground">
         {entry.doctorVisits.length}
       </strong>
     </span>

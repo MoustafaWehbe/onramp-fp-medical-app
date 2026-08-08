@@ -145,7 +145,7 @@ export function DailyEntryDetails({
             className="
               text-sm
               font-medium
-              text-gray-500
+              text-muted-foreground
             "
           >
             Daily health entry
@@ -156,7 +156,7 @@ export function DailyEntryDetails({
               mt-1
               text-2xl
               font-semibold
-              text-gray-900
+              text-foreground
             "
           >
             {formatEntryDate(
@@ -178,14 +178,14 @@ export function DailyEntryDetails({
             className="
               rounded-md
               border
-              border-gray-300
+              border-border
               px-4
               py-2
               text-sm
               font-medium
-              text-gray-700
+              text-foreground
               transition
-              hover:bg-gray-50
+              hover:bg-muted
               disabled:cursor-not-allowed
               disabled:opacity-50
             "
@@ -229,7 +229,7 @@ export function DailyEntryDetails({
             className="
               text-lg
               font-semibold
-              text-gray-900
+              text-foreground
             "
           >
             Daily information
@@ -239,7 +239,7 @@ export function DailyEntryDetails({
             className="
               mt-1
               text-sm
-              text-gray-500
+              text-muted-foreground
             "
           >
             Your recorded mood, sleep, and journal
@@ -261,7 +261,7 @@ export function DailyEntryDetails({
             className="
               rounded-lg
               border
-              bg-gray-50
+              bg-muted
               p-4
             "
           >
@@ -271,7 +271,7 @@ export function DailyEntryDetails({
                 font-medium
                 uppercase
                 tracking-wide
-                text-gray-500
+                text-muted-foreground
               "
             >
               Mood rating
@@ -282,11 +282,11 @@ export function DailyEntryDetails({
                 mt-2
                 text-xl
                 font-semibold
-                text-gray-900
+                text-foreground
               "
             >
               {entry.moodRating !== null
-                ? `${entry.moodRating} / 10`
+                ? `${entry.moodRating} / 5`
                 : "Not recorded"}
             </p>
           </div>
@@ -297,7 +297,7 @@ export function DailyEntryDetails({
             className="
               rounded-lg
               border
-              bg-gray-50
+              bg-muted
               p-4
             "
           >
@@ -307,7 +307,7 @@ export function DailyEntryDetails({
                 font-medium
                 uppercase
                 tracking-wide
-                text-gray-500
+                text-muted-foreground
               "
             >
               Sleep hours
@@ -318,7 +318,7 @@ export function DailyEntryDetails({
                 mt-2
                 text-xl
                 font-semibold
-                text-gray-900
+                text-foreground
               "
             >
               {entry.sleepHours !== null
@@ -334,7 +334,7 @@ export function DailyEntryDetails({
           className="
             rounded-lg
             border
-            bg-white
+            bg-card
             p-4
           "
         >
@@ -344,7 +344,7 @@ export function DailyEntryDetails({
               font-medium
               uppercase
               tracking-wide
-              text-gray-500
+              text-muted-foreground
             "
           >
             Journal notes
@@ -356,7 +356,7 @@ export function DailyEntryDetails({
               whitespace-pre-wrap
               text-sm
               leading-6
-              text-gray-700
+              text-foreground
             "
           >
             {entry.journalNotes?.trim()
@@ -382,7 +382,7 @@ export function DailyEntryDetails({
             className="
               text-lg
               font-semibold
-              text-gray-900
+              text-foreground
             "
           >
             Symptoms
@@ -392,7 +392,7 @@ export function DailyEntryDetails({
             className="
               mt-1
               text-sm
-              text-gray-500
+              text-muted-foreground
             "
           >
             Symptoms recorded for this daily entry.
@@ -413,7 +413,7 @@ export function DailyEntryDetails({
                   className="
                     rounded-lg
                     border
-                    bg-gray-50
+                   bg-card
                     p-4
                   "
                 >
@@ -432,7 +432,7 @@ export function DailyEntryDetails({
                         className="
                           text-base
                           font-semibold
-                          text-gray-900
+                          text-foreground
                         "
                       >
                         {getSymptomName(symptom.userSymptomId)}
@@ -444,12 +444,12 @@ export function DailyEntryDetails({
                         inline-flex
                         w-fit
                         rounded-full
-                        bg-gray-200
+                       bg-muted
                         px-3
                         py-1
                         text-xs
                         font-medium
-                        text-gray-700
+                        text-muted-foreground
                       "
                     >
                       Severity:{" "}
@@ -466,7 +466,7 @@ export function DailyEntryDetails({
                         font-medium
                         uppercase
                         tracking-wide
-                        text-gray-500
+                        text-muted-foreground
                       "
                     >
                       Notes
@@ -478,7 +478,7 @@ export function DailyEntryDetails({
                         whitespace-pre-wrap
                         text-sm
                         leading-6
-                        text-gray-700
+                        text-foreground
                       "
                     >
                       {symptom.notes?.trim()
@@ -509,7 +509,7 @@ export function DailyEntryDetails({
             className="
               text-lg
               font-semibold
-              text-gray-900
+              text-foreground
             "
           >
             Medications
@@ -519,7 +519,7 @@ export function DailyEntryDetails({
             className="
               mt-1
               text-sm
-              text-gray-500
+              text-muted-foreground
             "
           >
             Medications recorded for this daily entry.
@@ -540,7 +540,7 @@ export function DailyEntryDetails({
                   className="
                     rounded-lg
                     border
-                    bg-gray-50
+                   bg-card
                     p-4
                   "
                 >
@@ -559,7 +559,7 @@ export function DailyEntryDetails({
                         className="
                           text-base
                           font-semibold
-                          text-gray-900
+                          text-foreground
                         "
                       >
                         {getMedicationName(medication.userMedicationId,)}
@@ -569,7 +569,7 @@ export function DailyEntryDetails({
                         className="
                           mt-1
                           text-sm
-                          text-gray-500
+                          text-muted-foreground
                         "
                       >
                         Quantity:{" "}
@@ -593,8 +593,8 @@ export function DailyEntryDetails({
                         font-medium
                         ${
                           medication.taken
-                            ? "bg-green-100 text-green-700"
-                            : "bg-gray-200 text-gray-700"
+                            ? "bg-green-500/10 text-green-500"
+                            : "bg-muted text-muted-foreground"
                         }
                       `}
                     >
@@ -612,7 +612,7 @@ export function DailyEntryDetails({
                           font-medium
                           uppercase
                           tracking-wide
-                          text-gray-500
+                          text-muted-foreground
                         "
                       >
                         Taken at
@@ -622,7 +622,7 @@ export function DailyEntryDetails({
                         className="
                           mt-1
                           text-sm
-                          text-gray-700
+                          text-foreground
                         "
                       >
                         {formatDateTime(
@@ -639,7 +639,7 @@ export function DailyEntryDetails({
                         font-medium
                         uppercase
                         tracking-wide
-                        text-gray-500
+                        text-muted-foreground
                       "
                     >
                       Notes
@@ -651,7 +651,7 @@ export function DailyEntryDetails({
                         whitespace-pre-wrap
                         text-sm
                         leading-6
-                        text-gray-700
+                        text-foreground
                       "
                     >
                       {medication.notes?.trim()
@@ -682,7 +682,7 @@ export function DailyEntryDetails({
             className="
               text-lg
               font-semibold
-              text-gray-900
+              text-foreground
             "
           >
             Conditions
@@ -692,7 +692,7 @@ export function DailyEntryDetails({
             className="
               mt-1
               text-sm
-              text-gray-500
+              text-muted-foreground
             "
           >
             Health conditions and their status for
@@ -714,7 +714,7 @@ export function DailyEntryDetails({
                   className="
                     rounded-lg
                     border
-                    bg-gray-50
+                    bg-card
                     p-4
                   "
                 >
@@ -732,7 +732,7 @@ export function DailyEntryDetails({
                       className="
                         text-base
                         font-semibold
-                        text-gray-900
+                        text-foreground
                       "
                     >
                       {getConditionName(condition.userConditionId)}
@@ -743,13 +743,13 @@ export function DailyEntryDetails({
                         inline-flex
                         w-fit
                         rounded-full
-                        bg-gray-200
+                        bg-muted
                         px-3
                         py-1
                         text-xs
                         font-medium
                         capitalize
-                        text-gray-700
+                        text-muted-foreground
                       "
                     >
                       {displayValue(
@@ -765,7 +765,7 @@ export function DailyEntryDetails({
                         font-medium
                         uppercase
                         tracking-wide
-                        text-gray-500
+                        text-muted-foreground
                       "
                     >
                       Notes
@@ -777,7 +777,7 @@ export function DailyEntryDetails({
                         whitespace-pre-wrap
                         text-sm
                         leading-6
-                        text-gray-700
+                        text-foreground
                       "
                     >
                       {condition.notes?.trim()
@@ -808,7 +808,7 @@ export function DailyEntryDetails({
             className="
               text-lg
               font-semibold
-              text-gray-900
+              text-foreground
             "
           >
             Doctor visits
@@ -818,7 +818,7 @@ export function DailyEntryDetails({
             className="
               mt-1
               text-sm
-              text-gray-500
+              text-muted-foreground
             "
           >
             Doctor visits associated with this entry.
@@ -839,7 +839,7 @@ export function DailyEntryDetails({
                   className="
                     rounded-lg
                     border
-                    bg-gray-50
+                    bg-card
                     p-4
                   "
                 >
@@ -916,14 +916,14 @@ export function DailyEntryDetails({
           className="
             rounded-md
             border
-            border-gray-300
+           border-border
             px-4
             py-2
             text-sm
             font-medium
-            text-gray-700
+            text-foreground
             transition
-            hover:bg-gray-50
+            hover:bg-muted
             disabled:cursor-not-allowed
             disabled:opacity-50
           "
@@ -946,14 +946,14 @@ export function DailyEntryDetails({
             className="
               rounded-md
               border
-              border-red-200
+              border-red-500/30
               px-4
               py-2
               text-sm
               font-medium
-              text-red-600
+              text-red-500
               transition
-              hover:bg-red-50
+              hover:bg-red-500/10
               disabled:cursor-not-allowed
               disabled:opacity-50
             "
@@ -969,14 +969,14 @@ export function DailyEntryDetails({
             disabled={isRemoving}
             className="
               rounded-md
-              bg-gray-900
+              bg-primary
               px-4
               py-2
               text-sm
               font-medium
-              text-white
+              text-primary-foreground
               transition
-              hover:bg-gray-800
+              hover:bg-primary/90
               disabled:cursor-not-allowed
               disabled:opacity-50
             "
@@ -1006,7 +1006,7 @@ function EmptySectionMessage({
         p-5
         text-center
         text-sm
-        text-gray-500
+        text-muted-foreground
       "
     >
       {message}
@@ -1032,7 +1032,7 @@ function DetailField({
           font-medium
           uppercase
           tracking-wide
-          text-gray-500
+          text-muted-foreground
         "
       >
         {label}
@@ -1044,7 +1044,7 @@ function DetailField({
           whitespace-pre-wrap
           text-sm
           leading-6
-          text-gray-700
+          text-foreground
         "
       >
         {value}

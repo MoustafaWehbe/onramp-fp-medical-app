@@ -12,6 +12,8 @@ DailyEntryFormValues,
 } from "../../lib/daily-entries/daily-entries-exports";
 
 import { MEDICATION_UNITS } from "../../lib/health/health-export";
+import { Input } from "../../components/ui/input";
+import { useNavigate } from "react-router-dom";
 
 /**
 
@@ -42,6 +44,7 @@ import { MEDICATION_UNITS } from "../../lib/health/health-export";
 
 
 export function DailyEntryForm() {
+  const navigate = useNavigate();
 const {
 control,
 register,
@@ -165,6 +168,76 @@ const onSubmit: SubmitHandler<DailyEntryFormValues> = async (values) => {
 
 const isCreateMode =
 formMode === "create";
+const handleAddSymptom = () => {
+  if (symptoms.length === 0) {
+    <p className="mt-2 text-sm text-muted-foreground">
+    No symptoms found. Add symptoms from your Health Profile before creating a daily entry.
+  </p>
+    navigate("/health-profile");
+    return;
+  }
+
+  appendSymptom({
+    userSymptomId: "",
+    severity: "",
+    notes: "",
+  });
+};
+
+
+const handleAddMedication = () => {
+  if (medications.length === 0) {
+    <p className="mt-2 text-sm text-muted-foreground">
+    No medications found. Add medications from your Health Profile before creating a daily entry.
+  </p>
+    navigate("/medications");
+    return;
+  }
+
+  appendMedication({
+    userMedicationId: "",
+    quantity: "",
+    unit: "mg",
+    taken: false,
+    takenAt: "",
+    notes: "",
+  });
+};
+
+
+const handleAddCondition = () => {
+  if (conditions.length === 0) {
+    <p className="mt-2 text-sm text-muted-foreground">
+    No conditions found. Add conditions from your Health Profile before creating a daily entry.
+  </p>
+    navigate("/health-profile");
+    return;
+  }
+
+  appendCondition({
+    userConditionId: "",
+    status: "active",
+    notes: "",
+  });
+};
+
+
+const handleAddDoctorVisit = () => {
+  if (doctors.length === 0 || clinics.length === 0) {
+    <p className="mt-2 text-sm text-muted-foreground">
+    No doctors or clinics found. Add them from your Health Profile before creating a daily entry.
+  </p>
+    navigate("/providers");
+    return;
+  }
+
+  appendDoctorVisit({
+    userDoctorId: "",
+    userClinicId: "",
+    summary: "",
+    notes: "",
+  });
+};
 
 const isEditMode =
 formMode === "edit";
@@ -212,7 +285,7 @@ return ( <form
         className="
           text-lg
           font-semibold
-          text-gray-900
+          text-foreground
         "
       >
         Daily information
@@ -222,7 +295,7 @@ return ( <form
         className="
           mt-1
           text-sm
-          text-gray-500
+          text-muted-foreground
         "
       >
         Record how you are feeling today.
@@ -240,31 +313,18 @@ return ( <form
           block
           text-sm
           font-medium
-          text-gray-700
+          text-foreground
         "
       >
         Entry date
       </label>
 
-      <input
+      <Input
         id="entryDate"
         type="date"
         readOnly
         {...register("entryDate")}
-        className="
-          mt-1
-          block
-          w-full
-          rounded-md
-          border
-          border-gray-300
-          bg-gray-100
-          px-3
-          py-2
-          text-sm
-          text-gray-700
-          outline-none
-        "
+        
       />
 
       {formErrors.entryDate && (
@@ -302,35 +362,21 @@ return ( <form
             block
             text-sm
             font-medium
-            text-gray-700
+            text-foreground
           "
         >
           Mood rating
         </label>
 
-        <input
+        <Input
           id="moodRating"
           type="number"
           min="1"
-          max="10"
+          max="5"
           step="1"
-          placeholder="1 - 10"
+          placeholder="1 - 5"
           {...register("moodRating")}
-          className="
-            mt-1
-            block
-            w-full
-            rounded-md
-            border
-            border-gray-300
-            px-3
-            py-2
-            text-sm
-            outline-none
-            focus:border-gray-500
-            focus:ring-1
-            focus:ring-gray-500
-          "
+          
         />
 
         {formErrors.moodRating && (
@@ -349,10 +395,10 @@ return ( <form
           className="
             mt-1
             text-xs
-            text-gray-500
+            text-muted-foreground
           "
         >
-          Rate your mood from 1 to 10.
+          Rate your mood from 1 to 5.
         </p>
       </div>
 
@@ -365,34 +411,20 @@ return ( <form
             block
             text-sm
             font-medium
-            text-gray-700
+            text-foreground
           "
         >
           Sleep hours
         </label>
 
-        <input
+        <Input
           id="sleepHours"
           type="number"
           min="0"
           step="0.5"
           placeholder="e.g. 7.5"
           {...register("sleepHours")}
-          className="
-            mt-1
-            block
-            w-full
-            rounded-md
-            border
-            border-gray-300
-            px-3
-            py-2
-            text-sm
-            outline-none
-            focus:border-gray-500
-            focus:ring-1
-            focus:ring-gray-500
-          "
+          
         />
 
         {formErrors.sleepHours && (
@@ -411,7 +443,7 @@ return ( <form
           className="
             mt-1
             text-xs
-            text-gray-500
+            text-muted-foreground
           "
         >
           Enter the number of hours you slept.
@@ -430,33 +462,18 @@ return ( <form
           block
           text-sm
           font-medium
-          text-gray-700
+          text-foreground
         "
       >
         Journal notes
       </label>
 
-      <textarea
+      <Input
         id="journalNotes"
-        rows={5}
         placeholder="Write anything you would like to remember about today..."
         {...register("journalNotes")}
-        className="
-          mt-1
-          block
-          w-full
-          resize-y
-          rounded-md
-          border
-          border-gray-300
-          px-3
-          py-2
-          text-sm
-          outline-none
-          focus:border-gray-500
-          focus:ring-1
-          focus:ring-gray-500
-        "
+        
+        
       />
 
       {formErrors.journalNotes && (
@@ -497,7 +514,7 @@ return ( <form
           className="
             text-lg
             font-semibold
-            text-gray-900
+            text-foreground
           "
         >
           Symptoms
@@ -507,7 +524,7 @@ return ( <form
           className="
             mt-1
             text-sm
-            text-gray-500
+            text-muted-foreground
           "
         >
           Add any symptoms you experienced today.
@@ -516,13 +533,7 @@ return ( <form
 
       <button
         type="button"
-        onClick={() =>
-          appendSymptom({
-            userSymptomId: "",
-            severity: "",
-            notes: "",
-          })
-        }
+        onClick={handleAddSymptom}
         disabled={
           isLoadingSymptoms ||
           Boolean(symptomsErrorMessage)
@@ -534,9 +545,9 @@ return ( <form
           py-2
           text-sm
           font-medium
-          text-gray-700
+          text-foreground
           transition
-          hover:bg-gray-50
+          hover:bg-muted
           disabled:cursor-not-allowed
           disabled:opacity-50
         "
@@ -549,7 +560,7 @@ return ( <form
       <p
         className="
           text-sm
-          text-gray-500
+          text-muted-foreground
         "
       >
         Loading symptoms...
@@ -579,7 +590,7 @@ return ( <form
             p-5
             text-center
             text-sm
-            text-gray-500
+            text-muted-foreground
           "
         >
           No symptoms added.
@@ -598,7 +609,7 @@ return ( <form
             className="
               rounded-lg
               border
-              bg-gray-50
+              bg-muted
               p-4
             "
           >
@@ -613,7 +624,7 @@ return ( <form
               <h3
                 className="
                   font-medium
-                  text-gray-900
+                  text-foreground
                 "
               >
                 Symptom {index + 1}
@@ -651,7 +662,7 @@ return ( <form
                     block
                     text-sm
                     font-medium
-                    text-gray-700
+                    text-foreground
                   "
                 >
                   Symptom
@@ -669,7 +680,7 @@ return ( <form
                     rounded-md
                     border
                     border-gray-300
-                    bg-white
+                    bg-card
                     px-3
                     py-2
                     text-sm
@@ -722,13 +733,13 @@ return ( <form
                     block
                     text-sm
                     font-medium
-                    text-gray-700
+                    text-foreground
                   "
                 >
                   Severity
                 </label>
 
-                <input
+                <Input
                   id={`symptoms.${index}.severity`}
                   type="number"
                   min="1"
@@ -738,22 +749,7 @@ return ( <form
                   {...register(
                     `symptoms.${index}.severity`,
                   )}
-                  className="
-                    mt-1
-                    block
-                    w-full
-                    rounded-md
-                    border
-                    border-gray-300
-                    bg-white
-                    px-3
-                    py-2
-                    text-sm
-                    outline-none
-                    focus:border-gray-500
-                    focus:ring-1
-                    focus:ring-gray-500
-                  "
+                 
                 />
 
                 {formErrors.symptoms?.[
@@ -784,7 +780,7 @@ return ( <form
                   block
                   text-sm
                   font-medium
-                  text-gray-700
+                  text-foreground
                 "
               >
                 Notes
@@ -805,7 +801,7 @@ return ( <form
                   rounded-md
                   border
                   border-gray-300
-                  bg-white
+                  bg-card
                   px-3
                   py-2
                   text-sm
@@ -865,7 +861,7 @@ return ( <form
           className="
             text-lg
             font-semibold
-            text-gray-900
+            text-foreground
           "
         >
           Medications
@@ -875,7 +871,7 @@ return ( <form
           className="
             mt-1
             text-sm
-            text-gray-500
+            text-muted-foreground
           "
         >
           Record medications taken today.
@@ -884,16 +880,7 @@ return ( <form
 
       <button
         type="button"
-        onClick={() =>
-          appendMedication({
-            userMedicationId: "",
-            quantity: "",
-            unit: "mg",
-            taken: false,
-            takenAt: "",
-            notes: "",
-          })
-        }
+        onClick={handleAddMedication}
         disabled={
           isLoadingMedications ||
           Boolean(
@@ -907,9 +894,9 @@ return ( <form
           py-2
           text-sm
           font-medium
-          text-gray-700
+          text-foreground
           transition
-          hover:bg-gray-50
+          hover:bg-muted
           disabled:cursor-not-allowed
           disabled:opacity-50
         "
@@ -922,7 +909,7 @@ return ( <form
       <p
         className="
           text-sm
-          text-gray-500
+          text-muted-foreground
         "
       >
         Loading medications...
@@ -952,7 +939,7 @@ return ( <form
             p-5
             text-center
             text-sm
-            text-gray-500
+            text-muted-foreground
           "
         >
           No medications added.
@@ -967,7 +954,7 @@ return ( <form
             className="
               rounded-lg
               border
-              bg-gray-50
+              bg-muted
               p-4
             "
           >
@@ -982,7 +969,7 @@ return ( <form
               <h3
                 className="
                   font-medium
-                  text-gray-900
+                  text-foreground
                 "
               >
                 Medication {index + 1}
@@ -1020,7 +1007,7 @@ return ( <form
                     block
                     text-sm
                     font-medium
-                    text-gray-700
+                    text-foreground
                   "
                 >
                   Medication
@@ -1038,7 +1025,7 @@ return ( <form
                     rounded-md
                     border
                     border-gray-300
-                    bg-white
+                    bg-card
                     px-3
                     py-2
                     text-sm
@@ -1085,13 +1072,13 @@ return ( <form
                     block
                     text-sm
                     font-medium
-                    text-gray-700
+                    text-foreground
                   "
                 >
                   Quantity
                 </label>
 
-                <input
+                <Input
                   id={`medications.${index}.quantity`}
                   type="number"
                   min="0"
@@ -1100,22 +1087,7 @@ return ( <form
                   {...register(
                     `medications.${index}.quantity`,
                   )}
-                  className="
-                    mt-1
-                    block
-                    w-full
-                    rounded-md
-                    border
-                    border-gray-300
-                    bg-white
-                    px-3
-                    py-2
-                    text-sm
-                    outline-none
-                    focus:border-gray-500
-                    focus:ring-1
-                    focus:ring-gray-500
-                  "
+                 
                 />
 
                 {formErrors.medications?.[
@@ -1139,7 +1111,7 @@ return ( <form
                     block
                     text-sm
                     font-medium
-                    text-gray-700
+                    text-foreground
                   "
                 >
                   Unit
@@ -1159,7 +1131,7 @@ return ( <form
                     rounded-md
                     border
                     border-gray-300
-                    bg-white
+                    bg-card
                     px-3
                     py-2
                     text-sm
@@ -1200,18 +1172,13 @@ return ( <form
                   pt-6
                 "
               >
-                <input
+                <Input
                   id={`medications.${index}.taken`}
                   type="checkbox"
                   {...register(
                     `medications.${index}.taken`,
                   )}
-                  className="
-                    h-4
-                    w-4
-                    rounded
-                    border-gray-300
-                  "
+                  className="h-4 w-4 rounded"
                 />
 
                 <label
@@ -1219,7 +1186,7 @@ return ( <form
                   className="
                     text-sm
                     font-medium
-                    text-gray-700
+                    text-foreground
                   "
                 >
                   Medication was taken
@@ -1234,34 +1201,19 @@ return ( <form
                   block
                   text-sm
                   font-medium
-                  text-gray-700
+                  text-foreground
                 "
               >
                 Taken at
               </label>
 
-              <input
+              <Input
                 id={`medications.${index}.takenAt`}
                 type="time"
                 {...register(
                   `medications.${index}.takenAt`,
                 )}
-                className="
-                  mt-1
-                  block
-                  w-full
-                  rounded-md
-                  border
-                  border-gray-300
-                  bg-white
-                  px-3
-                  py-2
-                  text-sm
-                  outline-none
-                  focus:border-gray-500
-                  focus:ring-1
-                  focus:ring-gray-500
-                "
+                
               />
               {formErrors.medications?.[
                 index
@@ -1284,7 +1236,7 @@ return ( <form
                   block
                   text-sm
                   font-medium
-                  text-gray-700
+                  text-foreground
                 "
               >
                 Notes
@@ -1305,7 +1257,7 @@ return ( <form
                   rounded-md
                   border
                   border-gray-300
-                  bg-white
+                  bg-card
                   px-3
                   py-2
                   text-sm
@@ -1359,7 +1311,7 @@ return ( <form
           className="
             text-lg
             font-semibold
-            text-gray-900
+            text-foreground
           "
         >
           Conditions
@@ -1369,7 +1321,7 @@ return ( <form
           className="
             mt-1
             text-sm
-            text-gray-500
+            text-muted-foreground
           "
         >
           Record the status of your conditions today.
@@ -1378,13 +1330,7 @@ return ( <form
 
       <button
         type="button"
-        onClick={() =>
-          appendCondition({
-            userConditionId: "",
-            status: "active",
-            notes: "",
-          })
-        }
+        onClick={handleAddCondition}
         disabled={
           isLoadingConditions ||
           Boolean(
@@ -1398,9 +1344,9 @@ return ( <form
           py-2
           text-sm
           font-medium
-          text-gray-700
+          text-foreground
           transition
-          hover:bg-gray-50
+          hover:bg-muted
           disabled:cursor-not-allowed
           disabled:opacity-50
         "
@@ -1410,7 +1356,7 @@ return ( <form
     </div>
 
     {isLoadingConditions && (
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-muted-foreground">
         Loading conditions...
       </p>
     )}
@@ -1435,7 +1381,7 @@ return ( <form
             p-5
             text-center
             text-sm
-            text-gray-500
+            text-muted-foreground
           "
         >
           No conditions added.
@@ -1450,7 +1396,7 @@ return ( <form
             className="
               rounded-lg
               border
-              bg-gray-50
+              bg-muted
               p-4
             "
           >
@@ -1462,7 +1408,7 @@ return ( <form
                 gap-4
               "
             >
-              <h3 className="font-medium text-gray-900">
+              <h3 className="font-medium text-foreground">
                 Condition {index + 1}
               </h3>
 
@@ -1498,7 +1444,7 @@ return ( <form
                     block
                     text-sm
                     font-medium
-                    text-gray-700
+                    text-foreground
                   "
                 >
                   Condition
@@ -1516,7 +1462,7 @@ return ( <form
                     rounded-md
                     border
                     border-gray-300
-                    bg-white
+                    bg-card
                     px-3
                     py-2
                     text-sm
@@ -1563,7 +1509,7 @@ return ( <form
                     block
                     text-sm
                     font-medium
-                    text-gray-700
+                    text-foreground
                   "
                 >
                   Status
@@ -1581,7 +1527,7 @@ return ( <form
                     rounded-md
                     border
                     border-gray-300
-                    bg-white
+                    bg-card
                     px-3
                     py-2
                     text-sm
@@ -1626,7 +1572,7 @@ return ( <form
                   block
                   text-sm
                   font-medium
-                  text-gray-700
+                  text-foreground
                 "
               >
                 Notes
@@ -1647,7 +1593,7 @@ return ( <form
                   rounded-md
                   border
                   border-gray-300
-                  bg-white
+                  bg-card
                   px-3
                   py-2
                   text-sm
@@ -1701,7 +1647,7 @@ return ( <form
           className="
             text-lg
             font-semibold
-            text-gray-900
+            text-foreground
           "
         >
           Doctor visits
@@ -1711,7 +1657,7 @@ return ( <form
           className="
             mt-1
             text-sm
-            text-gray-500
+            text-muted-foreground
           "
         >
           Add any doctor visits related to today.
@@ -1720,14 +1666,7 @@ return ( <form
 
       <button
         type="button"
-        onClick={() =>
-          appendDoctorVisit({
-            userDoctorId: "",
-            userClinicId: "",
-            summary: "",
-            notes: "",
-          })
-        }
+        onClick={handleAddDoctorVisit}
         disabled={
           isLoadingDoctors ||
           isLoadingClinics ||
@@ -1745,9 +1684,9 @@ return ( <form
           py-2
           text-sm
           font-medium
-          text-gray-700
+          text-foreground
           transition
-          hover:bg-gray-50
+          hover:bg-muted
           disabled:cursor-not-allowed
           disabled:opacity-50
         "
@@ -1758,7 +1697,7 @@ return ( <form
 
     {isLoadingDoctors ||
     isLoadingClinics ? (
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-muted-foreground">
         Loading doctors and clinics...
       </p>
     ) : null}
@@ -1794,7 +1733,7 @@ return ( <form
             p-5
             text-center
             text-sm
-            text-gray-500
+            text-muted-foreground
           "
         >
           No doctor visits added.
@@ -1809,7 +1748,7 @@ return ( <form
             className="
               rounded-lg
               border
-              bg-gray-50
+              bg-muted
               p-4
             "
           >
@@ -1821,7 +1760,7 @@ return ( <form
                 gap-4
               "
             >
-              <h3 className="font-medium text-gray-900">
+              <h3 className="font-medium text-foreground">
                 Doctor visit {index + 1}
               </h3>
 
@@ -1857,7 +1796,7 @@ return ( <form
                     block
                     text-sm
                     font-medium
-                    text-gray-700
+                    text-foreground
                   "
                 >
                   Doctor
@@ -1875,7 +1814,7 @@ return ( <form
                     rounded-md
                     border
                     border-gray-300
-                    bg-white
+                    bg-card
                     px-3
                     py-2
                     text-sm
@@ -1922,7 +1861,7 @@ return ( <form
                     block
                     text-sm
                     font-medium
-                    text-gray-700
+                    text-foreground
                   "
                 >
                   Clinic
@@ -1940,7 +1879,7 @@ return ( <form
                     rounded-md
                     border
                     border-gray-300
-                    bg-white
+                    bg-card
                     px-3
                     py-2
                     text-sm
@@ -1988,7 +1927,7 @@ return ( <form
                   block
                   text-sm
                   font-medium
-                  text-gray-700
+                  text-foreground
                 "
               >
                 Summary
@@ -2009,7 +1948,7 @@ return ( <form
                   rounded-md
                   border
                   border-gray-300
-                  bg-white
+                  bg-card
                   px-3
                   py-2
                   text-sm
@@ -2041,7 +1980,7 @@ return ( <form
                   block
                   text-sm
                   font-medium
-                  text-gray-700
+                  text-foreground
                 "
               >
                 Notes
@@ -2062,7 +2001,7 @@ return ( <form
                   rounded-md
                   border
                   border-gray-300
-                  bg-white
+                  bg-card
                   px-3
                   py-2
                   text-sm
@@ -2119,9 +2058,9 @@ return ( <form
         py-2
         text-sm
         font-medium
-        text-gray-700
+        text-foreground
         transition
-        hover:bg-gray-50
+        hover:bg-muted
         disabled:cursor-not-allowed
         disabled:opacity-50
       "

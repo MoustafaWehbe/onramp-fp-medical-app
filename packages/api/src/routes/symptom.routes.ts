@@ -16,7 +16,6 @@ router.use(authenticate, authorize("admin", "user"));
 
 router.get(
   "/symptoms/search-online",
-  rateLimiter,
   validate(searchSymptomsOnlineQuerySchema, "query"),
   symptomCatalogController.searchSymptomsOnline,
 );

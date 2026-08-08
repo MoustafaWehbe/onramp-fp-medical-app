@@ -25,9 +25,11 @@ import {
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
+import {useTheme} from "../../providers/ThemeProvider";
 
 function SettingsView() {
   const { user, logout, updateUser } = useAuth();
+  const { theme, setTheme } = useTheme();
   const {
     isEmailBusy,
     isPasswordBusy,
@@ -362,6 +364,33 @@ function SettingsView() {
             </form>
           )}
         </CardContent>
+      </Card>
+
+      {/* Theme Selection */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Theme Selection</CardTitle>
+          <CardDescription>Switch your theme</CardDescription>
+          </CardHeader>
+           <CardContent>
+    <div className="flex gap-3">
+      <Button
+        variant={theme === "light" ? "default" : "outline"}
+        aria-pressed={theme === "light"}
+        onClick={() => setTheme("light")}
+      >
+        Light
+      </Button>
+
+      <Button
+        variant={theme === "dark" ? "default" : "outline"}
+        aria-pressed={theme === "dark"}
+        onClick={() => setTheme("dark")}
+      >
+        Dark
+      </Button>
+    </div>
+  </CardContent>
       </Card>
 
       <Card>

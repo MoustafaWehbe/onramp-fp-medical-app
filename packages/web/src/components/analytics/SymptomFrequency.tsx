@@ -56,7 +56,19 @@ export function SymptomFrequency({
                 allowDecimals={false}
               />
 
-              <Tooltip />
+              <Tooltip 
+               contentStyle={{
+                backgroundColor: "hsl(var(--background))",
+                border: "1px solid hsl(var(--border))",
+                borderRadius: "8px",
+              }}
+              labelStyle={{
+                color: "hsl(var(--foreground))",
+              }}
+              itemStyle={{
+                color: "hsl(var(--foreground))",
+              }}
+              cursor={{ fill: "transparent" }}/>
 
               <Bar
                 dataKey="count"

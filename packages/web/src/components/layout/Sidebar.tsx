@@ -54,9 +54,13 @@ const navSections = [
   },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  onNavigate?: () => void;
+}
+
+export function Sidebar({ onNavigate }: SidebarProps) {
   return (
-    <aside className="flex w-60 flex-col border-r bg-card">
+    <aside className="flex w-60 shrink-0 flex-col border-r bg-card">
       <div className="flex h-14 items-center border-b px-6">
         <span className="font-semibold">HealthTrack</span>
       </div>
@@ -71,6 +75,7 @@ export function Sidebar() {
                 <NavLink
                   key={to}
                   to={to}
+                  onClick={onNavigate}
                   end
                   className={({ isActive }) =>
                     cn(

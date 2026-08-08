@@ -747,14 +747,7 @@ async function submitForm(
   try {
     setFormError(null);
 
-    const payload =
-      toDailyEntrySubmitPayload({
-        ...values,
-
-        // Always use today's date.
-        // The user cannot submit an entry for another date.
-        entryDate: getTodayDate(),
-      });
+    const payload = toDailyEntrySubmitPayload(values);
 
     if (panel.kind === "create") {
       const request =
