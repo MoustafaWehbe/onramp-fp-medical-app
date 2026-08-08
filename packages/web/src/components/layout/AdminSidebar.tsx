@@ -53,7 +53,11 @@ const navSections = [
   },
 ];
 
-export function AdminSidebar() {
+interface AdminSidebarProps {
+  onNavigate?: () => void;
+}
+
+export function AdminSidebar({ onNavigate }: AdminSidebarProps) {
   return (
     <aside className="flex h-full w-60 shrink-0 flex-col bg-card">
       <div className="flex h-14 items-center border-b px-6">
@@ -70,6 +74,7 @@ export function AdminSidebar() {
                 <NavLink
                   key={to}
                   to={to}
+                  onClick={onNavigate}
                   end={end}
                   className={({ isActive }) =>
                     cn(

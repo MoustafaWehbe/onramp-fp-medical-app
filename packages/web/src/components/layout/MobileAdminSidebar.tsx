@@ -24,7 +24,7 @@ export function MobileAdminSidebar({
           Admin navigation
         </SheetTitle>
 
-        <AdminSidebar />
+        <AdminSidebar onNavigate={onClose} />
       </SheetContent>
     </Sheet>
   );
