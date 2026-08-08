@@ -38,6 +38,8 @@ function SettingsView() {
     submitUpdatePassword,
     submitDeleteAccount,
     clearEmailStatus,
+    clearPasswordStatus,
+    clearDeleteStatus,
   } = useSettingsContext();
 
   const navigate = useNavigate();
@@ -210,8 +212,11 @@ function SettingsView() {
                 onClick={() => {
                   if (emailSuccess) {
                     clearEmailStatus();
+                    resetEmail({ currentPassword: "", newEmail: "" });
                     setEmailFormOpen(true);
                   } else {
+                    clearEmailStatus();
+                    resetEmail({ currentPassword: "", newEmail: "" });
                     setEmailFormOpen((e) => !e);
                   }
                 }}
@@ -272,6 +277,7 @@ function SettingsView() {
                       type="button"
                       disabled={isEmailBusy}
                       onClick={() => {
+                        clearEmailStatus();
                         resetEmail({ currentPassword: "", newEmail: "" });
                         setEmailFormOpen(false);
                       }}
@@ -305,7 +311,15 @@ function SettingsView() {
                   size="sm"
                   variant="outline"
                   className="shrink-0"
-                  onClick={() => setPasswordFormOpen((p) => !p)}
+                  onClick={() => {
+                    clearPasswordStatus();
+                    resetPassword({
+                      currentPassword: "",
+                      newPassword: "",
+                      confirmNewPassword: "",
+                    });
+                    setPasswordFormOpen((p) => !p);
+                  }}
                 >
                   {passwordFormOpen ? "Cancel" : "Change"}
                 </Button>
@@ -384,6 +398,7 @@ function SettingsView() {
                       type="button"
                       disabled={isPasswordBusy}
                       onClick={() => {
+                        clearPasswordStatus();
                         resetPassword({
                           currentPassword: "",
                           newPassword: "",
@@ -463,7 +478,11 @@ function SettingsView() {
                 size="sm"
                 variant="destructive"
                 className="shrink-0"
-                onClick={() => setDeleteConfirmOpen((d) => !d)}
+                onClick={() => {
+                  clearDeleteStatus();
+                  resetDelete({ currentPassword: "" });
+                  setDeleteConfirmOpen((d) => !d);
+                }}
               >
                 {deleteConfirmOpen ? "Cancel" : "Delete"}
               </Button>
@@ -517,6 +536,7 @@ function SettingsView() {
                       type="button"
                       disabled={isDeleteBusy}
                       onClick={() => {
+                        clearDeleteStatus();
                         resetDelete({ currentPassword: "" });
                         setDeleteConfirmOpen(false);
                       }}

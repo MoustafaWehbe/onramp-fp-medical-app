@@ -44,6 +44,7 @@ interface SettingsContextValue {
 
   clearEmailStatus: () => void;
   clearPasswordStatus: () => void;
+  clearDeleteStatus: () => void;
 }
 
 const SettingsContext = createContext<SettingsContextValue | null>(null);
@@ -118,6 +119,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     setPasswordSuccess(null);
   }
 
+  function clearDeleteStatus() {
+    setDeleteError(null);
+  }
+
   const value = useMemo<SettingsContextValue>(
     () => ({
       isEmailBusy: updateEmailMutation.isPending,
@@ -137,6 +142,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
       clearEmailStatus,
       clearPasswordStatus,
+      clearDeleteStatus,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
