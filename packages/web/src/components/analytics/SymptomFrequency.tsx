@@ -67,7 +67,8 @@ export function SymptomFrequency({
               }}
               itemStyle={{
                 color: "hsl(var(--foreground))",
-              }}/>
+              }}
+              cursor={{ fill: "transparent" }}/>
 
               <Bar
                 dataKey="count"

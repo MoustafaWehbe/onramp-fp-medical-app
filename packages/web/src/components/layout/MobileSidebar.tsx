@@ -21,7 +21,7 @@ export function MobileSidebar({
         <SheetTitle className="sr-only">
           Navigation
         </SheetTitle>
-        <Sidebar />
+        <Sidebar onNavigate={onClose} />
       </SheetContent>
     </Sheet>
   );
