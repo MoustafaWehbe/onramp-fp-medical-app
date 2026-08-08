@@ -29,8 +29,6 @@ export function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
-  if (isLoading) return null;
-  if (user) return <Navigate to={homePathForRole(user.role)} replace />;
 
   const {
     register,
@@ -49,6 +47,9 @@ export function Login() {
       setError("Invalid email or password");
     }
   };
+
+  if (isLoading) return null;
+  if (user) return <Navigate to={homePathForRole(user.role)} replace />;
 
   return (
     <Card>
