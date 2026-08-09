@@ -27,6 +27,25 @@ interface GeneratedReportContent {
   [key: string]: unknown;
 }
 
+// Local deadline for the OpenAI call so a hung request cannot hold the
+// HTTP request open indefinitely.
+const AI_GENERATION_TIMEOUT_MS = 60_000;
+
+async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  let timer: NodeJS.Timeout;
+  const deadline = new Promise<never>((_, reject) => {
+    timer = setTimeout(
+      () => reject(new Error("AI generation timed out")),
+      ms,
+    );
+  });
+  try {
+    return await Promise.race([promise, deadline]);
+  } finally {
+    clearTimeout(timer!);
+  }
+}
+
 const SYSTEM_PROMPT = `You are a clinical health assistant generating a physician-ready patient report.
 Given the patient's daily log entries and active profile data for a date range, respond with a JSON object that has exactly these keys:
 - summary: string — concise clinical overview of the period
@@ -49,13 +68,36 @@ async function findOwnedReport(userId: string, id: string) {
   return report;
 }
 
+function isStringArray(value: unknown): value is string[] {
+  return (
+    Array.isArray(value) && value.every((item) => typeof item === "string")
+  );
+}
+
 function parseReportContent(raw: string): GeneratedReportContent {
   try {
-    const parsed = JSON.parse(raw) as GeneratedReportContent;
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
       throw new Error("Report content is not an object");
     }
-    return parsed;
+
+    if (typeof parsed.summary !== "string") {
+      throw new Error("Report summary must be a string");
+    }
+
+    const listKeys = [
+      "conditions",
+      "medications",
+      "symptoms",
+      "recommendations",
+    ] as const;
+    for (const key of listKeys) {
+      if (!isStringArray(parsed[key])) {
+        throw new Error(`Report ${key} must be an array of strings`);
+      }
+    }
+
+    return parsed as GeneratedReportContent;
   } catch {
     throw createError("Failed to generate AI report", 502);
   }
@@ -117,18 +159,21 @@ export class AiReportService {
 
     let raw: string;
     try {
-      raw = await chatCompletion(
-        [
-          { role: "system", content: SYSTEM_PROMPT },
-          {
-            role: "user",
-            content: JSON.stringify({
-              reportType: input.reportType,
-              ...context,
-            }),
-          },
-        ],
-        { response_format: { type: "json_object" } },
+      raw = await withTimeout(
+        chatCompletion(
+          [
+            { role: "system", content: SYSTEM_PROMPT },
+            {
+              role: "user",
+              content: JSON.stringify({
+                reportType: input.reportType,
+                ...context,
+              }),
+            },
+          ],
+          { response_format: { type: "json_object" } },
+        ),
+        AI_GENERATION_TIMEOUT_MS,
       );
     } catch {
       throw createError("Failed to generate AI report", 502);
