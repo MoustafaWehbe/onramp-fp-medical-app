@@ -46,7 +46,12 @@ describe("EntryDoctorVisitService.list", () => {
 
     expect(mockEntryDoctorVisit.findAndCountAll).toHaveBeenCalledWith(
       expect.objectContaining({
-        include: expect.any(Array),
+        include: expect.arrayContaining([
+          expect.objectContaining({
+            as: "entry",
+            where: { userId },
+          }),
+        ]),
         order: expect.any(Array),
         limit: 10,
         offset: 0,
@@ -68,7 +73,12 @@ describe("EntryDoctorVisitService.getById", () => {
     expect(mockEntryDoctorVisit.findOne).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { id: "doctor-visit-1" },
-        include: expect.any(Array),
+        include: expect.arrayContaining([
+          expect.objectContaining({
+            as: "entry",
+            where: { userId },
+          }),
+        ]),
       }),
     );
     expect(result).toEqual(visitRow);

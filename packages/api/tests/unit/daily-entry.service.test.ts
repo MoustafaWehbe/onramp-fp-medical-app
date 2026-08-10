@@ -126,6 +126,12 @@ describe("DailyEntryService.list", () => {
     expect(mockDailyEntry.count).toHaveBeenCalledWith({
       where: { userId, entryDate: { [Op.between]: ["2026-01-01", "2026-01-07"] } },
     });
+    expect(mockDailyEntry.findAll).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        where: { userId, entryDate: { [Op.between]: ["2026-01-01", "2026-01-07"] } },
+      }),
+    );
   });
 
   it("builds a gte clause when only fromDate is provided", async () => {
@@ -137,6 +143,12 @@ describe("DailyEntryService.list", () => {
     expect(mockDailyEntry.count).toHaveBeenCalledWith({
       where: { userId, entryDate: { [Op.gte]: "2026-01-01" } },
     });
+    expect(mockDailyEntry.findAll).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        where: { userId, entryDate: { [Op.gte]: "2026-01-01" } },
+      }),
+    );
   });
 
   it("builds a lte clause when only toDate is provided", async () => {
@@ -148,6 +160,12 @@ describe("DailyEntryService.list", () => {
     expect(mockDailyEntry.count).toHaveBeenCalledWith({
       where: { userId, entryDate: { [Op.lte]: "2026-01-07" } },
     });
+    expect(mockDailyEntry.findAll).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        where: { userId, entryDate: { [Op.lte]: "2026-01-07" } },
+      }),
+    );
   });
 
   it("short-circuits and returns an empty page when no entries match", async () => {

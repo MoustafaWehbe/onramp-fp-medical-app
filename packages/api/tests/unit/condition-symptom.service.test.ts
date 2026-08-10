@@ -62,6 +62,13 @@ describe("ConditionSymptomService.listAll", () => {
 
     expect(mockConditionSymptom.findAndCountAll).toHaveBeenCalledWith(
       expect.objectContaining({
+        include: expect.arrayContaining([
+          expect.objectContaining({
+            as: "userCondition",
+            required: true,
+            where: { userId },
+          }),
+        ]),
         order: [
           ["createdAt", "DESC"],
           ["id", "ASC"],
@@ -105,6 +112,11 @@ describe("ConditionSymptomService.list", () => {
       pageSize: 10,
     });
 
+    expect(mockUserCondition.findOne).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "user-condition-1", userId },
+      }),
+    );
     expect(mockConditionSymptom.findAndCountAll).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { userConditionId: "user-condition-1" },
@@ -173,6 +185,16 @@ describe("ConditionSymptomService.link", () => {
       userSymptomId: "user-symptom-1",
     });
 
+    expect(mockUserCondition.findOne).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "user-condition-1", userId },
+      }),
+    );
+    expect(mockUserSymptom.findOne).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "user-symptom-1", userId },
+      }),
+    );
     expect(mockConditionSymptom.create).toHaveBeenCalledWith({
       userConditionId: "user-condition-1",
       userSymptomId: "user-symptom-1",
@@ -237,6 +259,11 @@ describe("ConditionSymptomService.unlink", () => {
 
     const result = await service.unlink(userId, "user-condition-1", "user-symptom-1");
 
+    expect(mockUserCondition.findOne).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "user-condition-1", userId },
+      }),
+    );
     expect(linkedRecord.destroy).toHaveBeenCalled();
     expect(result).toEqual({ message: "Unlinked" });
   });

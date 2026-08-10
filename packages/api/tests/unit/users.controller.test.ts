@@ -9,6 +9,7 @@ jest.mock("../../src/lib/db", () => ({
 }));
 
 jest.mock("../../src/middleware/authenticate", () => ({
+  ...jest.requireActual("../../src/middleware/authenticate"),
   authenticate: (req: Request, _res: unknown, next: () => void) => {
     req.user = {
       userId: "00000000-0000-0000-0000-000000000001",

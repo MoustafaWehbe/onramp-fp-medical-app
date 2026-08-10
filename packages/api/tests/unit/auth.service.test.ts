@@ -94,7 +94,13 @@ const userRecord = {
   name: "Alice",
   role: "user",
   passwordHash: "hashed-password",
-  update: jest.fn().mockResolvedValue(undefined),
+  update: jest.fn(async function (
+    this: Record<string, unknown>,
+    values: Record<string, unknown>,
+  ) {
+    Object.assign(this, values);
+    return this;
+  }),
 } as unknown as User;
 const storedToken = {
   tokenHash: "a-hash",
@@ -105,6 +111,12 @@ const storedToken = {
 
 beforeEach(() => {
   jest.clearAllMocks();
+  Object.assign(userRecord, {
+    email: "alice@example.com",
+    name: "Alice",
+    role: "user",
+    passwordHash: "hashed-password",
+  });
   mockGetDatabase.mockReturnValue({
     transaction: jest.fn(async (cb: (txn: unknown) => unknown) => cb(fakeTx)),
   } as never);
@@ -481,7 +493,7 @@ describe("AuthService.updateEmail", () => {
     expect(userRecord.update).toHaveBeenCalledWith({ email: "bob@example.com" });
     expect(result).toEqual({
       id: userId,
-      email: "alice@example.com",
+      email: "bob@example.com",
       name: "Alice",
       role: "user",
     });
