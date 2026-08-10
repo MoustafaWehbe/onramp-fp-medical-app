@@ -2,10 +2,7 @@ import { Op, UniqueConstraintError } from "sequelize";
 import { Medication } from "../../src/models";
 import { searchMedicationNames } from "../../src/lib/medication-search";
 import { lookupMedicationCategory } from "../../src/lib/medication-category";
-import {
-  medicationService,
-  MedicationService,
-} from "../../src/services/medication.service";
+import { MedicationService } from "../../src/services/medication.service";
 
 jest.mock("../../src/models", () => ({
   Medication: {
@@ -172,7 +169,7 @@ describe("MedicationService.create", () => {
   });
 });
 
-// ─── searchNames ────────────────────────────────────────────────────────────── 0
+// ─── searchNames ──────────────────────────────────────────────────────────────
 
 describe("MedicationService.searchNames", () => {
   it("returns the names resolved from the search library", async () => {

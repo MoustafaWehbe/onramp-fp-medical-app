@@ -1,9 +1,6 @@
 import { UniqueConstraintError } from "sequelize";
 import { Doctor, UserClinic, UserDoctor } from "../../src/models";
-import {
-  userDoctorService,
-  UserDoctorService,
-} from "../../src/services/user-doctor.service";
+import { UserDoctorService } from "../../src/services/user-doctor.service";
 
 jest.mock("../../src/models", () => ({
   Doctor: {
@@ -222,7 +219,7 @@ describe("UserDoctorService.update", () => {
     expect(result).toEqual(ownedRecord);
   });
 
-  it("skips ownership check and setDataValue when only notes are undefined", async () => {
+  it("skips ownership check and setDataValue when no fields are provided", async () => {
     mockUserDoctor.findOne
       .mockResolvedValueOnce(ownedRecord)
       .mockResolvedValueOnce(ownedRecord);

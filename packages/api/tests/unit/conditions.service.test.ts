@@ -1,7 +1,7 @@
 import { Op, UniqueConstraintError } from "sequelize";
 import { ConditionCatalog } from "src/models/catalogs/ConditionCatalog";
 import { searchConditionsFromApi } from "../../src/lib/catalog-condition-api";
-import { conditionService, ConditionService } from "../../src/services/conditions.service";
+import { ConditionService } from "../../src/services/conditions.service";
 
 jest.mock("../../src/models/catalogs/ConditionCatalog", () => ({
   ConditionCatalog: {

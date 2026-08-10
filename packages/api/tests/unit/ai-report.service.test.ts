@@ -2,10 +2,7 @@ import { Op } from "sequelize";
 import { AiReport } from "../../src/models";
 import { chatCompletion } from "../../src/lib/ai";
 import { collectReportData } from "../../src/services/ai-report/data-collector";
-import {
-  aiReportService,
-  AiReportService,
-} from "../../src/services/ai-report.service";
+import { AiReportService } from "../../src/services/ai-report.service";
 
 jest.mock("../../src/lib/ai", () => ({
   chatCompletion: jest.fn(),

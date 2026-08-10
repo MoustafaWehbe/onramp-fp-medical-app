@@ -1,8 +1,5 @@
-import { DailyEntry, EntryDoctorVisit, UserClinic, UserDoctor } from "../../src/models";
-import {
-  entryDoctorVisitService,
-  EntryDoctorVisitService,
-} from "../../src/services/entry-doctor-visit.service";
+import { EntryDoctorVisit } from "../../src/models";
+import { EntryDoctorVisitService } from "../../src/services/entry-doctor-visit.service";
 
 jest.mock("../../src/models", () => ({
   DailyEntry: {},

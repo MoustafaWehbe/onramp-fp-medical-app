@@ -1,6 +1,6 @@
 import { Op, UniqueConstraintError } from "sequelize";
 import { Clinic } from "../../src/models";
-import { clinicService, ClinicService } from "../../src/services/clinic.service";
+import { ClinicService } from "../../src/services/clinic.service";
 
 jest.mock("../../src/models", () => ({
   Clinic: {

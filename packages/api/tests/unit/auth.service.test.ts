@@ -95,13 +95,13 @@ const userRecord = {
   role: "user",
   passwordHash: "hashed-password",
   update: jest.fn().mockResolvedValue(undefined),
-} as any;
+} as unknown as User;
 const storedToken = {
   tokenHash: "a-hash",
   isValid: true,
   sessionId,
   update: jest.fn().mockResolvedValue(undefined),
-} as any;
+} as unknown as RefreshToken;
 
 beforeEach(() => {
   jest.clearAllMocks();

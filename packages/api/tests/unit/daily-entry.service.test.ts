@@ -14,10 +14,7 @@ import {
   rethrowUnique,
 } from "../../src/services/daily-entry/children";
 import { createError } from "../../src/middleware/error-handler";
-import {
-  dailyEntryService,
-  DailyEntryService,
-} from "../../src/services/daily-entry.service";
+import { DailyEntryService } from "../../src/services/daily-entry.service";
 
 jest.mock("../../src/models", () => ({
   DailyEntry: {

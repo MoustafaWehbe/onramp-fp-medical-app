@@ -1,15 +1,10 @@
 import { UniqueConstraintError } from "sequelize";
 import {
-  ConditionCatalog,
   ConditionSymptom,
-  SymptomCatalog,
   UserCondition,
   UserSymptom,
 } from "../../src/models";
-import {
-  conditionSymptomService,
-  ConditionSymptomService,
-} from "../../src/services/condition-symptom.service";
+import { ConditionSymptomService } from "../../src/services/condition-symptom.service";
 
 jest.mock("../../src/models", () => ({
   ConditionCatalog: {},
