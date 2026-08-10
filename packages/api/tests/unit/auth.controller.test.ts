@@ -102,9 +102,19 @@ describe("POST /api/auth/login", () => {
 
     expect(res.status).toBe(200);
     expect(res.body.data.user.email).toBe("alice@example.com");
-    const setCookie = (res.headers["set-cookie"] as string[]).join(";");
-    expect(setCookie).toContain("accessToken=access.token.here");
-    expect(setCookie).toContain("refreshToken=refresh.token.here");
+    const cookies = res.headers["set-cookie"] as string[];
+    const accessCookie = cookies.find((c) => c.startsWith("accessToken="));
+    const refreshCookie = cookies.find((c) => c.startsWith("refreshToken="));
+    expect(accessCookie).toBeDefined();
+    expect(refreshCookie).toBeDefined();
+    expect(accessCookie).toContain("accessToken=access.token.here");
+    expect(accessCookie).toContain("HttpOnly");
+    expect(accessCookie).toContain("SameSite=Lax");
+    expect(accessCookie).toContain("Path=/api");
+    expect(refreshCookie).toContain("refreshToken=refresh.token.here");
+    expect(refreshCookie).toContain("HttpOnly");
+    expect(refreshCookie).toContain("SameSite=Lax");
+    expect(refreshCookie).toContain("Path=/api/auth/refresh");
   });
 
   it("returns 422 when body is missing", async () => {
@@ -154,6 +164,13 @@ describe("POST /api/auth/logout", () => {
     expect(res.body.data.message).toBe("Logged out successfully");
     expect(mockAuthService.logout).toHaveBeenCalledWith(
       "00000000-0000-0000-0000-000000000002",
+    );
+    const cookies = res.headers["set-cookie"] as string[];
+    expect(cookies.find((c) => c.startsWith("accessToken="))).toMatch(
+      /^accessToken=;/,
+    );
+    expect(cookies.find((c) => c.startsWith("refreshToken="))).toMatch(
+      /^refreshToken=;/,
     );
   });
 });

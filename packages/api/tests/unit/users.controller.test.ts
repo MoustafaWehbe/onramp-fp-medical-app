@@ -55,6 +55,7 @@ describe("PATCH /api/users/me/email", () => {
     expect(res.status).toBe(200);
     expect(res.body.data.email).toBe("new@example.com");
     expect(res.body.data.message).toBe("Email updated successfully.");
+    expect(res.body.data).not.toHaveProperty("passwordHash");
     expect(mockAuthService.updateEmail).toHaveBeenCalledWith(
       USER_ID,
       "CurrentPass1",

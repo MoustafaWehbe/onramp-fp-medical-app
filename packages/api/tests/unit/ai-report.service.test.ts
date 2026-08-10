@@ -200,6 +200,18 @@ describe("AiReportService.generate", () => {
       ]),
       { response_format: { type: "json_object" } },
     );
+    const userMessage = mockChatCompletion.mock.calls[0][0].find(
+      (m) => m.role === "user",
+    ) as { role: "user"; content: string } | undefined;
+    expect(userMessage).toBeDefined();
+    expect(JSON.parse(userMessage!.content)).toEqual({
+      reportType: "weekly",
+      dateRange: { startDate: "2026-01-01", endDate: "2026-01-07" },
+      entries: [],
+      activeConditions: [],
+      activeMedications: [],
+      activeSymptoms: [],
+    });
     expect(mockAiReport.create).toHaveBeenCalledWith({
       userId,
       dateRangeStart: "2026-01-01",

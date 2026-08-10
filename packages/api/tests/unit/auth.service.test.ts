@@ -283,7 +283,7 @@ describe("AuthService.login", () => {
       expect.objectContaining({
         userId,
         sessionId,
-        tokenHash: expect.any(String),
+        tokenHash: expect.stringMatching(/^[0-9a-f]{64}$/),
         expiresAt: expect.any(Date),
       }),
     );
@@ -370,7 +370,7 @@ describe("AuthService.refresh", () => {
       expect.objectContaining({
         userId,
         sessionId,
-        tokenHash: expect.any(String),
+        tokenHash: expect.stringMatching(/^[0-9a-f]{64}$/),
         expiresAt: expect.any(Date),
       }),
     );
@@ -652,6 +652,44 @@ describe("AuthService.deleteAccount", () => {
       where: { id: userId },
       transaction: fakeTx,
     });
+
+    const order = (fn: jest.Mock) => fn.mock.invocationCallOrder[0];
+    expect(order(mockEntryCondition.destroy as jest.Mock)).toBeLessThan(
+      order(mockDailyEntry.destroy as jest.Mock),
+    );
+    expect(order(mockEntrySymptom.destroy as jest.Mock)).toBeLessThan(
+      order(mockDailyEntry.destroy as jest.Mock),
+    );
+    expect(order(mockEntryMedication.destroy as jest.Mock)).toBeLessThan(
+      order(mockDailyEntry.destroy as jest.Mock),
+    );
+    expect(order(mockEntryDoctorVisit.destroy as jest.Mock)).toBeLessThan(
+      order(mockDailyEntry.destroy as jest.Mock),
+    );
+    expect(order(mockDailyEntry.destroy as jest.Mock)).toBeLessThan(
+      order(mockUser.destroy as jest.Mock),
+    );
+    expect(order(mockUserCondition.destroy as jest.Mock)).toBeLessThan(
+      order(mockUser.destroy as jest.Mock),
+    );
+    expect(order(mockUserSymptom.destroy as jest.Mock)).toBeLessThan(
+      order(mockUser.destroy as jest.Mock),
+    );
+    expect(order(mockUserMedication.destroy as jest.Mock)).toBeLessThan(
+      order(mockUser.destroy as jest.Mock),
+    );
+    expect(order(mockUserDoctor.destroy as jest.Mock)).toBeLessThan(
+      order(mockUser.destroy as jest.Mock),
+    );
+    expect(order(mockUserClinic.destroy as jest.Mock)).toBeLessThan(
+      order(mockUser.destroy as jest.Mock),
+    );
+    expect(order(mockRefreshToken.destroy as jest.Mock)).toBeLessThan(
+      order(mockUser.destroy as jest.Mock),
+    );
+    expect(order(mockSession.destroy as jest.Mock)).toBeLessThan(
+      order(mockUser.destroy as jest.Mock),
+    );
   });
 
   it("skips entry cleanups when the user has no entries", async () => {

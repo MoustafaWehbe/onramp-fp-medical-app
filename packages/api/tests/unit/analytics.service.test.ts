@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { DailyEntry, EntrySymptom } from "../../src/models";
 import { AnalyticsService } from "../../src/services/analytics.service";
 
@@ -20,6 +21,10 @@ const userId = "00000000-0000-0000-0000-000000000001";
 
 beforeEach(() => {
   jest.clearAllMocks();
+});
+
+afterEach(() => {
+  jest.useRealTimers();
 });
 
 // ─── getDashboard ────────────────────────────────────────────────────────────
@@ -60,6 +65,8 @@ describe("AnalyticsService.getDashboard", () => {
 
 describe("AnalyticsService.getMoodTrend", () => {
   it("maps entries to date/value pairs with null fallbacks", async () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2026-01-10T12:00:00Z"));
     mockDailyEntry.findAll.mockResolvedValue([
       { entryDate: "2026-01-09", moodRating: 4 },
       { entryDate: "2026-01-10", moodRating: null },
@@ -71,7 +78,7 @@ describe("AnalyticsService.getMoodTrend", () => {
       expect.objectContaining({
         where: {
           userId,
-          entryDate: expect.any(Object),
+          entryDate: { [Op.between]: ["2026-01-04", "2026-01-10"] },
         },
         attributes: ["entryDate", "moodRating"],
         order: [["entryDate", "ASC"]],
@@ -88,6 +95,8 @@ describe("AnalyticsService.getMoodTrend", () => {
 
 describe("AnalyticsService.getSleepTrend", () => {
   it("maps entries to date/hours pairs with null fallbacks", async () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2026-01-10T12:00:00Z"));
     mockDailyEntry.findAll.mockResolvedValue([
       { entryDate: "2026-01-09", sleepHours: 7.5 },
       { entryDate: "2026-01-10", sleepHours: null },
@@ -99,7 +108,7 @@ describe("AnalyticsService.getSleepTrend", () => {
       expect.objectContaining({
         where: {
           userId,
-          entryDate: expect.any(Object),
+          entryDate: { [Op.between]: ["2026-01-04", "2026-01-10"] },
         },
         attributes: ["entryDate", "sleepHours"],
         order: [["entryDate", "ASC"]],
