@@ -1,8 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   updateEmail,
   updatePassword,
   deleteAccount,
+  getReminderSettings,
+  updateReminderSettings,
+  
 } from "../lib/settings/settings-export";
 
 export const settingsKeys = {
@@ -38,6 +41,26 @@ export function useDeleteAccount() {
     mutationFn: deleteAccount,
     onSuccess: () => {
       queryClient.clear();
+    },
+  });
+}
+
+export function useReminderSettings() {
+  return useQuery({
+    queryKey: settingsKeys.all,
+    queryFn: getReminderSettings,
+  });
+}
+
+export function useUpdateReminderSettings() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateReminderSettings,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: settingsKeys.all,
+      });
     },
   });
 }

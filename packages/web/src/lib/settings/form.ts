@@ -1,4 +1,17 @@
 import { z } from "zod";
+const timezoneOptions = [
+  "UTC",
+  "Asia/Beirut",
+  "Europe/London",
+  "Europe/Paris",
+  "Europe/Berlin",
+  "America/New_York",
+  "America/Los_Angeles",
+  "Asia/Dubai",
+  "Asia/Riyadh",
+  "Asia/Tokyo",
+  "Australia/Sydney",
+] as const;
 
 export const updateEmailSchema = z.object({
   currentPassword: z.string().min(1, "Current password is required"),
@@ -29,3 +42,30 @@ export const deleteAccountSchema = z.object({
 });
 
 export type DeleteAccountFormValues = z.infer<typeof deleteAccountSchema>;
+
+export const reminderSettingsSchema = z
+  .object({
+    enabled: z.boolean(),
+
+    reminderTime: z.preprocess(
+      (value) => (value === "" ? null : value),
+      z
+        .string()
+        .regex(
+          /^([01]\d|2[0-3]):[0-5]\d$/,
+          "Reminder time must be in HH:mm format",
+        )
+        .nullable(),
+    ),
+
+    timezone: z.string().min(1, "Timezone is required"),
+  })
+  .superRefine((data, ctx) => {
+    if (data.enabled && !data.reminderTime) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["reminderTime"],
+        message: "Reminder time is required when reminders are enabled",
+      });
+    }
+  });
