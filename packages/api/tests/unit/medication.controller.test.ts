@@ -1,6 +1,7 @@
 import type { Request } from "express";
 import request from "supertest";
 import { app } from "../../app";
+import { createError } from "../../src/middleware/error-handler";
 
 jest.mock("../../src/lib/db", () => ({
   initializeDatabase: jest.fn().mockResolvedValue(undefined),
@@ -25,6 +26,7 @@ jest.mock("../../src/services/medication.service", () => ({
     create: jest.fn(),
     searchNames: jest.fn(),
     lookupCategoryOnline: jest.fn(),
+    getById: jest.fn(),
   },
 }));
 
@@ -206,5 +208,45 @@ describe("GET /api/medications/category-online", () => {
 
     expect(res.status).toBe(422);
     expect(res.body.errors[0].field).toBe("name");
+  });
+});
+
+describe("GET /api/medications/:id", () => {
+  it("returns 200 with the medication", async () => {
+    mockMedicationService.getById.mockResolvedValue({
+      id: "30000000-0000-0000-0000-000000000001",
+      name: "Panadol",
+      strength: "500mg",
+      category: "Painkiller",
+    } as never);
+
+    const res = await request(app).get(
+      "/api/medications/30000000-0000-0000-0000-000000000001",
+    );
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.id).toBe("30000000-0000-0000-0000-000000000001");
+    expect(mockMedicationService.getById).toHaveBeenCalledWith(
+      "30000000-0000-0000-0000-000000000001",
+    );
+  });
+
+  it("returns 422 when id is not a uuid", async () => {
+    const res = await request(app).get("/api/medications/not-a-uuid");
+
+    expect(res.status).toBe(422);
+    expect(res.body.errors[0].field).toBe("id");
+  });
+
+  it("returns 404 when the medication is not found", async () => {
+    mockMedicationService.getById.mockRejectedValue(
+      createError("Medication not found", 404),
+    );
+
+    const res = await request(app).get(
+      "/api/medications/30000000-0000-0000-0000-000000000001",
+    );
+
+    expect(res.status).toBe(404);
   });
 });
