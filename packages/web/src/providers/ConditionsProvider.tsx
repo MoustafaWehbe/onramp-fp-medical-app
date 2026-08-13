@@ -31,19 +31,19 @@ import {
   useUpdateProfileCondition,
 } from "../hooks/health/useConditions";
 import { useProfileSymptoms } from "../hooks/health/useSymptoms";
-import type { ConditionCatalog } from "../lib/health/health-export";
-import type { ConditionSymptom } from "../lib/health/health-export";
-import type { UserCondition } from "../lib/health/health-export";
-import type { UserSymptom } from "../lib/health/health-export";
-import type { Pagination } from "../lib/api/types";
 import {
   emptyConditionFormValues,
   conditionFormSchema,
   toConditionFormValues,
   toConditionSubmitPayload,
+  type ConditionCatalog,
   type ConditionFormSubmitPayload,
   type ConditionFormValues,
+  type ConditionSymptom,
+  type UserCondition,
+  type UserSymptom,
 } from "../lib/health/health-export";
+import type { Pagination } from "../lib/api/types";
 
 export const CONDITIONS_PAGE_SIZE = 15;
 const CONDITION_SYMPTOMS_PAGE_SIZE = 100;

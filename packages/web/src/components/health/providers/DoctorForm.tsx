@@ -1,4 +1,3 @@
-import { NotebookPen } from "lucide-react";
 import { useDoctorsContext } from "../../../providers/DoctorsProvider";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";

@@ -1,9 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { conditionService } from "../services/conditions.service";
 import { userConditionService } from "../services/user-condition.service";
 import { conditionSymptomService } from "../services/condition-symptom.service";
 import axios from "axios";
-import { NextFunction } from "express";
 
 export const ConditionsController = {
 
