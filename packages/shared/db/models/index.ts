@@ -16,6 +16,7 @@ import {
   UserMedication,
   UserClinic,
   UserDoctor,
+  UserReminderSettings,
 } from "./profile";
 import {
   DailyEntry,
@@ -47,6 +48,7 @@ export function initModels(sequelize: Sequelize): void {
   UserMedication.initModel(sequelize);
   UserClinic.initModel(sequelize);
   UserDoctor.initModel(sequelize);
+  UserReminderSettings.initModel(sequelize);
   DailyEntry.initModel(sequelize);
   EntryCondition.initModel(sequelize);
   EntrySymptom.initModel(sequelize);
@@ -142,6 +144,17 @@ export function initModels(sequelize: Sequelize): void {
   UserDoctor.belongsTo(UserClinic, {
     foreignKey: "userClinicId",
     as: "userClinic",
+  });
+
+    // UserReminderSettings associations
+  User.hasOne(UserReminderSettings, {
+    foreignKey: "userId",
+    as: "reminderSettings",
+  });
+
+  UserReminderSettings.belongsTo(User, {
+    foreignKey: "userId",
+    as: "user",
   });
 
   // Daily entry associations

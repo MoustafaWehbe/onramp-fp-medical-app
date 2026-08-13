@@ -9,6 +9,7 @@ import { profileRouter } from "./profile";
 import { analyticsRouter } from "./analytics.routes";
 import { usersRouter } from "./users.routes";
 import { aiReportsRouter } from "./ai-reports.routes";
+import { reminderSettingsRouter } from "./reminder-settings.routes";
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use("/conditions", conditionsRouter);
 router.use("/profile", profileRouter);
 router.use("/analytics", analyticsRouter);
 router.use("/ai-reports", aiReportsRouter);
+router.use("/reminder-settings", reminderSettingsRouter);
 
 export { router };
