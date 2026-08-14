@@ -26,16 +26,16 @@ import {
   useRemoveProfileSymptom,
   useSymptomCatalogSearch,
 } from "../hooks/health/useSymptoms";
-import type { SymptomCatalog } from "../lib/health/health-export";
-import type { UserSymptom } from "../lib/health/health-export";
-import type { Pagination } from "../lib/api/types";
 import {
   emptySymptomFormValues,
   symptomFormSchema,
   toSymptomSubmitPayload,
+  type SymptomCatalog,
   type SymptomFormSubmitPayload,
   type SymptomFormValues,
+  type UserSymptom,
 } from "../lib/health/health-export";
+import type { Pagination } from "../lib/api/types";
 
 export const SYMPTOMS_PAGE_SIZE = 15;
 

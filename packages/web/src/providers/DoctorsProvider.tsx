@@ -27,18 +27,18 @@ import {
   useSavedClinics,
   useUpdateProfileDoctor,
 } from "../hooks/health/useDoctors";
-import type { Doctor } from "../lib/health/health-export";
-import type { UserClinic } from "../lib/health/health-export";
-import type { UserDoctor } from "../lib/health/health-export";
-import type { Pagination } from "../lib/api/types";
 import {
   emptyDoctorFormValues,
   doctorFormSchema,
   toDoctorFormValues,
   toDoctorSubmitPayload,
+  type Doctor,
   type DoctorFormSubmitPayload,
   type DoctorFormValues,
+  type UserClinic,
+  type UserDoctor,
 } from "../lib/health/health-export";
+import type { Pagination } from "../lib/api/types";
 
 export const DOCTORS_PAGE_SIZE = 15;
 

@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { rateLimiter } from "../middleware/rate-limiter";
 import { ConditionsController } from "../controllers/conditions.controller";
 import { validate } from "../middleware/validate";
 import {conditionIdParamSchema, createConditionSchema, listConditionsQuerySchema, searchConditionsOnlineQuerySchema} from "../schemas/conditions.schema";

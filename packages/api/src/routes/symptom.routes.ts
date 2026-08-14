@@ -8,7 +8,6 @@ import {
 import { validate } from "../middleware/validate";
 import { authenticate } from "../middleware/authenticate";
 import { authorize } from "../middleware/authorize";
-import { rateLimiter } from "../middleware/rate-limiter";
 
 const router = Router();
 

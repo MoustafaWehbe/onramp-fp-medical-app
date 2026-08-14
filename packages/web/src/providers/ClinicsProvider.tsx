@@ -26,17 +26,17 @@ import {
   useRemoveProfileClinic,
   useUpdateProfileClinic,
 } from "../hooks/health/useClinics";
-import type { Clinic } from "../lib/health/health-export";
-import type { UserClinic } from "../lib/health/health-export";
-import type { Pagination } from "../lib/api/types";
 import {
   emptyClinicFormValues,
   clinicFormSchema,
   toClinicFormValues,
   toClinicSubmitPayload,
+  type Clinic,
   type ClinicFormSubmitPayload,
   type ClinicFormValues,
+  type UserClinic,
 } from "../lib/health/health-export";
+import type { Pagination } from "../lib/api/types";
 
 export const CLINICS_PAGE_SIZE = 15;
 

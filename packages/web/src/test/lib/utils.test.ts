@@ -11,6 +11,7 @@ describe("cn utility", () => {
   });
 
   it("handles conditional classes", () => {
-    expect(cn("base", false && "hidden", "extra")).toBe("base extra");
+    const cond = false;
+    expect(cn("base", cond && "hidden", "extra")).toBe("base extra");
   });
 });

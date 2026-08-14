@@ -54,11 +54,6 @@ import type {
   UserClinic,
 } from "../lib/health/health-export";
 
-import type {
-  DailyEntry,
-} from "../lib/daily-entries/daily-entries-exports";
-import type { Pagination } from "../lib/api/types";
-
 import {
   emptyDailyEntryFormValues,
   dailyEntryFormSchema,
@@ -66,8 +61,10 @@ import {
   toCreateDailyEntryRequest,
   toUpdateDailyEntryRequest,
   toDailyEntrySubmitPayload,
+  type DailyEntry,
   type DailyEntryFormValues,
 } from "../lib/daily-entries/daily-entries-exports";
+import type { Pagination } from "../lib/api/types";
 
 import { useAuth } from "../hooks/useAuth";
 
@@ -726,20 +723,6 @@ export function DailyEntriesProvider({
   /**
    * create and update
   **/
-
- function getTodayDate(): string {
-  const today = new Date();
-
-  const year = today.getFullYear();
-  const month = String(
-    today.getMonth() + 1,
-  ).padStart(2, "0");
-  const day = String(
-    today.getDate(),
-  ).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-}
 
 async function submitForm(
   values: DailyEntryFormValues,

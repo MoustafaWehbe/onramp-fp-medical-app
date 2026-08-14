@@ -32,7 +32,6 @@ export function LogView() {
     isInvalidDateRange,
     pagination,
 
-    currentPage,
     pageSize,
 
     goToPage,
