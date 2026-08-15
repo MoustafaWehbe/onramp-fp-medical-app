@@ -6,6 +6,19 @@ interface UpdateReminderSettingsInput {
   timezone?: string;
 }
 
+function toHhMm(value: string | Date | null): string | null {
+  if (!value) {
+    return null;
+  }
+
+  if (value instanceof Date) {
+    return `${String(value.getUTCHours()).padStart(2, "0")}:${String(value.getUTCMinutes()).padStart(2, "0")}`;
+  }
+
+  const match = String(value).match(/^(\d{1,2}):(\d{2})/);
+  return match ? `${match[1].padStart(2, "0")}:${match[2]}` : null;
+}
+
 export class ReminderSettingsService {
   async getSettings(userId: string) {
     let settings = await UserReminderSettings.findOne({
@@ -24,7 +37,7 @@ export class ReminderSettingsService {
 
     return {
       enabled: settings.enabled,
-      reminderTime: settings.reminderTime,
+      reminderTime: toHhMm(settings.reminderTime),
       timezone: settings.timezone
     };
   }
@@ -54,7 +67,7 @@ export class ReminderSettingsService {
 
     return {
       enabled: settings.enabled,
-      reminderTime: settings.reminderTime,
+      reminderTime: toHhMm(settings.reminderTime),
       timezone: settings.timezone
     };
   }

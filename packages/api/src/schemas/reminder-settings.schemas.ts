@@ -3,9 +3,10 @@ import { z } from "zod";
 const reminderTimeSchema = z
   .string()
   .regex(
-    /^([01]\d|2[0-3]):[0-5]\d$/,
+    /^([01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/,
     "Reminder time must be in HH:mm format",
-  );
+  )
+  .transform((value) => value.slice(0, 5));
 
   const timezoneSchema = z
   .string()

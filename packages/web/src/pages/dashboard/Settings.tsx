@@ -121,7 +121,7 @@ useEffect(() => {
   if (settings) {
     resetReminder({
       enabled: settings.enabled,
-      reminderTime: settings.reminderTime,
+      reminderTime: settings.reminderTime?.slice(0, 5) ?? null,
       timezone: settings.timezone,
     });
   }

@@ -8,22 +8,43 @@ import {
   type ReminderJobResult,
 } from "@starter-kit/shared";
 
-function getUserLocalDate(timezone: string): string {
-  return new Intl.DateTimeFormat("en-CA", {
+function getClockParts(timezone: string): { date: string; time: string } {
+  const parts = new Intl.DateTimeFormat("en-GB", {
     timeZone: timezone,
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).format(new Date());
-}
-
-function getUserLocalTime(timezone: string): string {
-  return new Intl.DateTimeFormat("en-GB", {
-    timeZone: timezone,
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
-  }).format(new Date());
+    hourCycle: "h23",
+  }).formatToParts(new Date());
+
+  const read = (type: Intl.DateTimeFormatPartTypes): string =>
+    parts.find((part) => part.type === type)?.value ?? "";
+
+  return {
+    date: `${read("year")}-${read("month").padStart(2, "0")}-${read("day").padStart(2, "0")}`,
+    time: `${read("hour").padStart(2, "0")}:${read("minute").padStart(2, "0")}`,
+  };
+}
+
+function toHhMm(value: string | Date): string | null {
+  if (value instanceof Date) {
+    // TIME is a wall-clock value; Sequelize Date wrappers are UTC-based.
+    return `${String(value.getUTCHours()).padStart(2, "0")}:${String(value.getUTCMinutes()).padStart(2, "0")}`;
+  }
+
+  const match = String(value).match(/^(\d{1,2}):(\d{2})/);
+  if (!match) {
+    return null;
+  }
+
+  return `${match[1].padStart(2, "0")}:${match[2]}`;
+}
+
+function minutesSinceMidnight(hhmm: string): number {
+  const [hours, minutes] = hhmm.split(":").map(Number);
+  return hours * 60 + minutes;
 }
 
 export async function processReminderJob(
@@ -45,17 +66,28 @@ export async function processReminderJob(
 
   for (const settings of reminderSettings) {
     if (!settings.reminderTime) {
+      console.info(
+        `[reminder] skip ${settings.userId}: reminder enabled but no reminderTime`,
+      );
       continue;
     }
 
-    const currentTime = getUserLocalTime(settings.timezone);
-    const configuredTime = settings.reminderTime.slice(0, 5);
+    const { date: today, time: currentTime } = getClockParts(settings.timezone);
+    const configuredTime = toHhMm(settings.reminderTime);
 
-    if (currentTime !== configuredTime) {
+    if (!configuredTime) {
+      console.info(
+        `[reminder] skip ${settings.userId}: could not parse reminderTime`,
+      );
       continue;
     }
 
-    const today = getUserLocalDate(settings.timezone);
+    if (minutesSinceMidnight(currentTime) < minutesSinceMidnight(configuredTime)) {
+      console.info(
+        `[reminder] skip ${settings.userId}: now=${currentTime} want=${configuredTime} tz=${settings.timezone} (too early)`,
+      );
+      continue;
+    }
 
     const existingEntry = await DailyEntry.findOne({
       where: {
@@ -65,6 +97,9 @@ export async function processReminderJob(
     });
 
     if (existingEntry) {
+      console.info(
+        `[reminder] skip ${settings.userId}: already has daily entry for ${today}`,
+      );
       continue;
     }
 
@@ -78,28 +113,57 @@ export async function processReminderJob(
     }
 
     const reminderJobId = `daily-entry-reminder:${settings.userId}:${today}`;
-    await emailQueue.add(
+    const existingJob = await emailQueue.getJob(reminderJobId);
+
+    if (existingJob) {
+      const state = await existingJob.getState();
+
+      if (state === "completed" || state === "active" || state === "waiting" || state === "delayed") {
+        console.info(
+          `[reminder] email job already ${state} for ${today}: ${reminderJobId}`,
+        );
+        continue;
+      }
+
+      if (state === "failed") {
+        await existingJob.remove();
+        console.info(
+          `[reminder] removed failed email job so it can retry: ${reminderJobId}`,
+        );
+      }
+    }
+
+    try {
+      await emailQueue.add(
         "daily-entry-reminder",
         {
-            to: user.email,
-            subject: "Don't forget to complete your daily entry",
-            template: "daily-entry-reminder",
-            variables: {
+          to: user.email,
+          subject: "Don't forget to complete your daily entry",
+          template: "daily-entry-reminder",
+          variables: {
             name: user.name,
-            },
+          },
         },
         {
-            jobId: reminderJobId,
+          jobId: reminderJobId,
+          removeOnFail: true,
         },
-    );
+      );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      if (message.toLowerCase().includes("already exists")) {
+        console.info(
+          `[reminder] email job already queued for ${today}: ${reminderJobId}`,
+        );
+        continue;
+      }
+      throw error;
+    }
 
-    console.info(
-  `[reminder] Email job added to queue: ${reminderJobId}`,
-);
     remindersQueued++;
 
     console.info(
-      `[reminder] Queued daily entry reminder for ${user.email}`,
+      `[reminder] Queued daily entry reminder for ${user.email} (${reminderJobId}) now=${currentTime} want=${configuredTime} tz=${settings.timezone}`,
     );
   }
 

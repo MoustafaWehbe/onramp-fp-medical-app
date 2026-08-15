@@ -5,10 +5,8 @@ import { processEmbeddingsJob } from "../jobs/embeddings.job";
 import { processReminderJob } from "../jobs/reminder.job";
 
 export function createWorkers(): Worker[] {
-  const connection = getRedisConnection();
-
   const emailWorker = new Worker(QUEUE_NAMES.EMAIL, processEmailJob, {
-    connection,
+    connection: getRedisConnection().duplicate(),
     concurrency: 10,
   });
 
@@ -16,19 +14,19 @@ export function createWorkers(): Worker[] {
     QUEUE_NAMES.EMBEDDINGS,
     processEmbeddingsJob,
     {
-      connection,
+      connection: getRedisConnection().duplicate(),
       concurrency: 5,
     },
   );
 
   const reminderWorker = new Worker(
-      QUEUE_NAMES.REMINDERS,
-      processReminderJob,
-      {
-        connection,
-        concurrency: 1,
-      },
-    );
+    QUEUE_NAMES.REMINDERS,
+    processReminderJob,
+    {
+      connection: getRedisConnection().duplicate(),
+      concurrency: 1,
+    },
+  );
   const workers = [emailWorker, embeddingsWorker, reminderWorker];
 
   

@@ -48,7 +48,18 @@ export const reminderSettingsSchema = z
     enabled: z.boolean(),
 
     reminderTime: z.preprocess(
-      (value) => (value === "" ? null : value),
+      (value) => {
+        if (value === "" || value == null) {
+          return null;
+        }
+
+        if (typeof value === "string") {
+          const match = value.match(/^(\d{2}:\d{2})/);
+          return match ? match[1] : value;
+        }
+
+        return value;
+      },
       z
         .string()
         .regex(
