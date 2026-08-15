@@ -6,7 +6,7 @@ import {
   type PaginationInput,
 } from "../lib/pagination";
 import { createError } from "../middleware/error-handler";
-import type { ConditionStatus } from "../../../shared/db/types/enums";
+import type { ConditionStatus } from "@starter-kit/shared/db/types/enums";
 
 export interface ListUserConditionsInput extends PaginationInput {
   userId: string;
