@@ -25,16 +25,17 @@ import {
   useRemoveProfileMedication,
   useUpdateProfileMedication,
 } from "../hooks/health/useMedications";
-import type { Medication, UserMedication } from "../lib/health/health-export";
-import type { Pagination } from "../lib/api/types";
 import {
   emptyMedicationFormValues,
   medicationFormSchema,
   toMedicationFormValues,
   toMedicationSubmitPayload,
+  type Medication,
   type MedicationFormSubmitPayload,
   type MedicationFormValues,
+  type UserMedication,
 } from "../lib/health/health-export";
+import type { Pagination } from "../lib/api/types";
 
 /** 3 columns × 5 rows */
 export const MEDICATIONS_PAGE_SIZE = 15;

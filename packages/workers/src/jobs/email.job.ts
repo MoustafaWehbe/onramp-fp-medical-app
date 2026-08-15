@@ -39,7 +39,6 @@ function renderEmail(
 export async function processEmailJob(
   job: Job<EmailJobData, EmailJobResult>,
 ): Promise<EmailJobResult> {
-
   console.log(
     `[email] Worker received job ${job.id}`,
     job.data,

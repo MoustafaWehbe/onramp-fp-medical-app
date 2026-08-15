@@ -92,14 +92,8 @@ doctorVisits: doctorVisitsQuery.data?.data ?? [],
   },
 }),
 [
-  doctorVisitsQuery.data,
-  doctorVisitsQuery.isLoading,
-  doctorVisitsQuery.isFetching,
-  doctorVisitsQuery.isError,
-  doctorVisitsQuery.error,
-  doctorVisitsQuery.refetch,
+  doctorVisitsQuery,
   currentPage,
-  
 ],
 
 
