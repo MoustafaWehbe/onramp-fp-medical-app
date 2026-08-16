@@ -106,7 +106,7 @@ export function DailyEntryJourney({
         </div>
       </div>
 
-      <div className="sticky bottom-0 shrink-0 border-t border-border/70 bg-card/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-xl sm:px-6">
+      <div className="sticky bottom-0 shrink-0 border-t border-border/70 bg-card px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-6">
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center">
           <Button
             type="button"

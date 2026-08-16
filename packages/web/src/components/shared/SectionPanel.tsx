@@ -22,7 +22,7 @@ export function SectionPanel({
   contentClassName,
 }: SectionPanelProps) {
   return (
-    <section className={cn("overflow-hidden rounded-[1.5rem] border border-border/80 bg-card/90 shadow-soft backdrop-blur-sm", className)}>
+    <section className={cn("overflow-hidden rounded-[1.5rem] border border-border/80 bg-card shadow-soft", className)}>
       <div className="flex flex-col gap-4 border-b border-border/70 bg-muted/20 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div className="flex min-w-0 items-center gap-3">
           {Icon && (

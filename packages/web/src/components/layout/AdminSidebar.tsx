@@ -62,7 +62,7 @@ export function AdminSidebar({ onNavigate }: AdminSidebarProps) {
   return (
     <aside
       ref={rootRef}
-      className="flex h-full w-64 shrink-0 flex-col border-r border-border/60 bg-card/80 backdrop-blur-xl"
+      className="flex h-full w-64 shrink-0 flex-col border-r border-border/60 bg-card"
     >
       <div className="flex h-16 items-center border-b border-border/60 px-5">
         <BrandMark />

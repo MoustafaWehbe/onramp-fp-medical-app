@@ -1,11 +1,14 @@
 import { ClipboardList, ClipboardPenLine } from "lucide-react";
+import { useState } from "react";
 import { LoadingSpinner } from "../../components/shared/LoadingSpinner";
+import { ConfirmDialog } from "../../components/shared/ConfirmDialog";
 import {
   Pagination,
   paginationFromApi,
 } from "../../components/shared/Pagination";
 import { DailyEntryCard } from "../../components/daily-entries/DailyEntryCard";
 import { useDailyEntriesContext } from "../../providers/DailyEntriesProvider";
+import type { DailyEntry } from "../../lib/daily-entries/daily-entries-exports";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { PageHeader } from "../../components/shared/PageHeader";
@@ -29,9 +32,18 @@ export function LogView() {
     setFromDate,
     setToDate,
     clearDateFilters,
-    openDetail,
     openCreate,
+    remove,
+    isRemoving,
+    formError,
   } = useDailyEntriesContext();
+  const [pendingDelete, setPendingDelete] = useState<DailyEntry | null>(null);
+
+  async function confirmDelete() {
+    if (!pendingDelete) return;
+    await remove(pendingDelete.id);
+    setPendingDelete(null);
+  }
 
   if (isLoading) {
     return (
@@ -125,45 +137,86 @@ export function LogView() {
         </div>
       )}
 
-      {entries.length === 0 ? (
-        <div className="rounded-2xl border border-dashed bg-card px-6 py-16 text-center shadow-soft">
-          <ClipboardList className="mx-auto h-12 w-12 text-muted-foreground" aria-hidden />
-          <h2 className="mt-4 text-lg font-semibold">No daily entries found</h2>
-          <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-            {fromDate || toDate
-              ? "No entries match the selected date range."
-              : "You have not created any daily entries yet."}
+      <SectionPanel
+        title="Check-in history"
+        description="Select a log to review mood, sleep, and related records."
+        icon={ClipboardList}
+      >
+        {formError && (
+          <p
+            role="alert"
+            className="mb-4 rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive"
+          >
+            {formError}
           </p>
-          {!fromDate && !toDate && (
-            <Button type="button" className="mt-5" onClick={openCreate}>
-              <ClipboardPenLine className="mr-1.5 h-4 w-4" aria-hidden />
-              Create your first entry
-            </Button>
-          )}
-        </div>
-      ) : (
-        <>
-          <div className="space-y-4">
-            {entries.map((entry) => (
-              <DailyEntryCard
-                key={entry.id}
-                entry={entry}
-                onClick={() => openDetail(entry)}
-              />
-            ))}
+        )}
+
+        {entries.length === 0 ? (
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed bg-muted/20 px-6 py-16 text-center">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+              <ClipboardList className="h-6 w-6" aria-hidden />
+            </div>
+            <p className="font-medium">No daily entries found</p>
+            <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+              {fromDate || toDate
+                ? "No entries match the selected date range."
+                : "You have not created any daily entries yet."}
+            </p>
+            {!fromDate && !toDate && (
+              <Button type="button" className="mt-4" onClick={openCreate}>
+                <ClipboardPenLine className="mr-1.5 h-4 w-4" aria-hidden />
+                Create your first entry
+              </Button>
+            )}
           </div>
-          {pagination && (
-            <Pagination
-              {...paginationFromApi(pagination)}
-              onNext={goToNextPage}
-              onPrev={goToPrevPage}
-              onPageChange={goToPage}
-              pageSize={pageSize}
-            />
-          )}
-        </>
-      )}
+        ) : (
+          <>
+            <ul className="grid grid-cols-1 gap-3">
+              {entries.map((entry) => (
+                <li key={entry.id}>
+                  <DailyEntryCard
+                    entry={entry}
+                    onDelete={() => setPendingDelete(entry)}
+                  />
+                </li>
+              ))}
+            </ul>
+            {pagination && (
+              <div className="mt-5">
+                <Pagination
+                  {...paginationFromApi(pagination)}
+                  onNext={goToNextPage}
+                  onPrev={goToPrevPage}
+                  onPageChange={goToPage}
+                  pageSize={pageSize}
+                />
+              </div>
+            )}
+          </>
+        )}
+      </SectionPanel>
+
       <LogEntry />
+
+      <ConfirmDialog
+        open={pendingDelete != null}
+        onOpenChange={(open) => {
+          if (!open && !isRemoving) setPendingDelete(null);
+        }}
+        title={
+          pendingDelete
+            ? `Delete the log for ${new Intl.DateTimeFormat("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              }).format(new Date(`${pendingDelete.entryDate}T00:00:00`))}?`
+            : "Delete this entry?"
+        }
+        description="This permanently removes the daily log and its related records. This cannot be undone."
+        confirmLabel="Delete entry"
+        loading={isRemoving}
+        onConfirm={confirmDelete}
+      />
     </section>
   );
 }

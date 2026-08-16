@@ -18,7 +18,7 @@ interface RecentEntriesProps {
 
 export function RecentEntries({ entries }: RecentEntriesProps) {
   return (
-    <Card className="h-full bg-card/90 backdrop-blur-sm">
+    <Card className="h-full">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-base">Recent Entries</CardTitle>
 

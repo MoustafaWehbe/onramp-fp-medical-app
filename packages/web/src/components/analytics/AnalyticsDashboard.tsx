@@ -66,7 +66,7 @@ export function AnalyticsDashboard() {
               id="analytics-period"
               value={days}
               onChange={(event) => setDays(Number(event.target.value))}
-              className="h-11 w-full cursor-pointer rounded-xl border border-input bg-card px-3.5 text-sm font-semibold shadow-sm outline-none transition-colors hover:border-primary/40 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/25 sm:w-auto"
+              className="h-11 w-full cursor-pointer rounded-xl border border-input bg-card px-3.5 text-sm font-semibold shadow-sm outline-none transition-[border-color,box-shadow] duration-200 hover:border-primary/40 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/25 sm:w-auto"
             >
               <option value={7}>Last 7 days</option>
               <option value={30}>Last 30 days</option>

@@ -60,7 +60,7 @@ export function StatCard({
     <Card
       ref={cardRef}
       className={cn(
-        "overflow-hidden border-border/70 bg-card/90 backdrop-blur-sm transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-glow",
+        "overflow-hidden border-border/70 bg-card transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-glow",
         className,
       )}
     >

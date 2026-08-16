@@ -38,9 +38,9 @@ export function AmbientBackground() {
       className="pointer-events-none absolute inset-0 overflow-hidden"
       aria-hidden
     >
-      <div className="ambient-orb absolute -left-28 -top-28 h-[22rem] w-[22rem] rounded-full bg-primary/25 blur-3xl dark:bg-primary/20" />
-      <div className="ambient-orb absolute -right-20 top-[18%] h-72 w-72 rounded-full bg-accent/20 blur-3xl dark:bg-accent/16" />
-      <div className="ambient-orb absolute -bottom-24 left-[28%] h-64 w-64 rounded-full bg-primary/12 blur-3xl" />
+      <div className="ambient-orb absolute -left-28 -top-28 h-[22rem] w-[22rem] rounded-full bg-[radial-gradient(circle,hsl(var(--primary)/0.28),transparent_68%)] dark:bg-[radial-gradient(circle,hsl(var(--primary)/0.22),transparent_68%)]" />
+      <div className="ambient-orb absolute -right-20 top-[18%] h-72 w-72 rounded-full bg-[radial-gradient(circle,hsl(var(--accent)/0.22),transparent_70%)] dark:bg-[radial-gradient(circle,hsl(var(--accent)/0.16),transparent_70%)]" />
+      <div className="ambient-orb absolute -bottom-24 left-[28%] h-64 w-64 rounded-full bg-[radial-gradient(circle,hsl(var(--primary)/0.14),transparent_70%)]" />
     </div>
   );
 }

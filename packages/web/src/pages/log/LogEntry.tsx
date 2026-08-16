@@ -19,7 +19,6 @@ import {
   getDoctorName,
   getClinicName,
 } from "../../lib/daily-entries/daily-entries-exports";
-import { getTodayDate } from "../../lib/daily-entries/form";
 
 export function LogEntry() {
   const {
@@ -36,44 +35,26 @@ export function LogEntry() {
     detailErrorMessage,
     formMode,
     closePanel,
-    openEdit,
-    remove,
-    isRemoving,
     formError,
   } = useDailyEntriesContext();
 
-  if (!panelOpen) {
-    return null;
-  }
+  const isForm = formMode === "create" || formMode === "edit";
 
-  const canEdit = selectedEntry && selectedEntry.entryDate === getTodayDate();
-
-  if (formMode === "create" || formMode === "edit") {
-    return (
-      <AsidePanel
-        open={panelOpen}
-        onClose={closePanel}
-        title={panelTitle}
-        className="max-w-lg"
-        contentClassName="flex min-h-0 flex-1 flex-col overflow-hidden p-0"
-      >
-        <DailyEntryForm />
-      </AsidePanel>
-    );
-  }
-
-  if (panel.kind === "detail") {
-    return (
-      <AsidePanel
-        open={panelOpen}
-        onClose={closePanel}
-        title={panelTitle}
-        className="max-w-lg"
-        onEdit={canEdit ? () => openEdit(selectedEntry) : undefined}
-        onDelete={() => selectedEntry && remove(selectedEntry.id)}
-        deleteDisabled={isRemoving}
-      >
-        {isDetailLoading ? (
+  return (
+    <AsidePanel
+      open={panelOpen}
+      onClose={closePanel}
+      title={panelTitle}
+      className="max-w-lg"
+      contentClassName={
+        isForm
+          ? "flex min-h-0 flex-1 flex-col overflow-hidden p-0"
+          : undefined
+      }
+    >
+      {isForm && <DailyEntryForm />}
+      {panel.kind === "detail" && (
+        isDetailLoading ? (
           <div className="flex min-h-[300px] items-center justify-center text-sm text-muted-foreground">
             Loading entry details...
           </div>
@@ -220,12 +201,10 @@ export function LogEntry() {
           </div>
         ) : (
           <p className="text-sm text-muted-foreground">No entry selected.</p>
-        )}
-      </AsidePanel>
-    );
-  }
-
-  return null;
+        )
+      )}
+    </AsidePanel>
+  );
 }
 
 function DetailItem({

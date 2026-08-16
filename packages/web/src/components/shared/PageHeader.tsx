@@ -24,12 +24,12 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        "relative overflow-hidden rounded-[1.75rem] border border-primary/15 bg-card/80 px-5 py-6 shadow-soft backdrop-blur-xl sm:px-7 sm:py-8",
+        "relative overflow-hidden rounded-[1.75rem] border border-primary/15 bg-card px-5 py-6 shadow-soft sm:px-7 sm:py-8",
         className,
       )}
     >
-      <div className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-primary/10 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-24 left-1/3 h-44 w-44 rounded-full bg-accent/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-[radial-gradient(circle,hsl(var(--primary)/0.16),transparent_70%)]" />
+      <div className="pointer-events-none absolute -bottom-24 left-1/3 h-44 w-44 rounded-full bg-[radial-gradient(circle,hsl(var(--accent)/0.12),transparent_70%)]" />
 
       <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex min-w-0 items-start gap-4">
