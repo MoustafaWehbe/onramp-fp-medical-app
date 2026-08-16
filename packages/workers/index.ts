@@ -3,12 +3,14 @@ import dotenv from "dotenv";
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 import { createWorkers } from "./src/queues";
 import { initializeDatabase } from "./src/lib/db";
+import { scheduleReminderJob } from "./src/scheduler";
 
 async function main(): Promise<void> {
   console.info("Starting workers...");
 
   await initializeDatabase();
   const workers = createWorkers();
+  await scheduleReminderJob();
 
   console.info(
     `Started ${workers.length} worker(s): ${workers.map((w) => w.name).join(", ")}`,

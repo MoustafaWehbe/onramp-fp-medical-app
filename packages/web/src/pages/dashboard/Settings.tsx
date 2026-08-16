@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock, Sun, TriangleAlert } from "lucide-react";
+import { Mail, Lock, Sun, TriangleAlert, Bell } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import {
   SettingsProvider,
@@ -12,9 +12,14 @@ import {
   updateEmailSchema,
   updatePasswordSchema,
   deleteAccountSchema,
+  reminderSettingsSchema,
+  timezoneOptions,
+  timezoneLabels,
   type UpdateEmailFormValues,
   type UpdatePasswordFormValues,
   type DeleteAccountFormValues,
+  type ReminderSettingsFormValues,
+
 } from "../../lib/settings/settings-export";
 import { Card, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
@@ -22,9 +27,16 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { useTheme } from "../../providers/ThemeProvider";
 
+import {
+  useReminderSettings,
+  useUpdateReminderSettings,
+} from "../../hooks/useSettings";
+
 function SettingsView() {
   const { user, logout, updateUser } = useAuth();
   const { theme, setTheme } = useTheme();
+  const reminderSettingsQuery = useReminderSettings();
+  const updateReminderSettingsMutation = useUpdateReminderSettings();
   const {
     isEmailBusy,
     isPasswordBusy,
@@ -71,6 +83,22 @@ function SettingsView() {
     resolver: zodResolver(deleteAccountSchema),
   });
 
+  const {
+  register: reminderRegister,
+  handleSubmit: handleReminderSubmit,
+  watch: watchReminder,
+  reset: resetReminder,
+  setValue: setReminderValue,
+  formState: { errors: reminderErrors },
+} = useForm<ReminderSettingsFormValues>({
+  resolver: zodResolver(reminderSettingsSchema),
+  defaultValues: {
+    enabled: false,
+    reminderTime: null,
+    timezone: "UTC",
+  },
+});
+
   const [profileOpen, setProfileOpen] = useState(false);
   const [emailFormOpen, setEmailFormOpen] = useState(false);
   const [passwordFormOpen, setPasswordFormOpen] = useState(false);
@@ -78,6 +106,7 @@ function SettingsView() {
 
   const cancelledRef = useRef(false);
   const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reminderEnabled = watchReminder("enabled");
 
   useEffect(() => {
     cancelledRef.current = false;
@@ -86,6 +115,18 @@ function SettingsView() {
       if (redirectTimer.current) clearTimeout(redirectTimer.current);
     };
   }, []);
+
+useEffect(() => {
+  const settings = reminderSettingsQuery.data?.data.data;
+
+  if (settings) {
+    resetReminder({
+      enabled: settings.enabled,
+      reminderTime: settings.reminderTime?.slice(0, 5) ?? null,
+      timezone: settings.timezone,
+    });
+  }
+}, [reminderSettingsQuery.data, resetReminder]);
 
   async function onUpdateEmail(values: UpdateEmailFormValues) {
     try {
@@ -124,6 +165,16 @@ function SettingsView() {
       // session is already dead; user state is cleared by logout()
     }
     navigate("/login", { replace: true });
+  }
+
+  async function onUpdateReminderSettings(
+    values: ReminderSettingsFormValues,
+  ) {
+    try {
+      await updateReminderSettingsMutation.mutateAsync(values);
+    } catch {
+      // handle error if needed
+    }
   }
 
   const initials = user?.name
@@ -460,6 +511,141 @@ function SettingsView() {
           </CardContent>
         </Card>
       </section>
+
+      {/* Reminder Settings */}
+<section className="space-y-3">
+  <h2 className="text-sm font-medium text-muted-foreground">
+    Reminders
+  </h2>
+
+  <Card>
+    <CardContent className="p-0">
+      <form
+        onSubmit={handleReminderSubmit(onUpdateReminderSettings)}
+        className="space-y-4 p-4"
+      >
+        <div className="flex items-center gap-4">
+          <Bell className="h-5 w-5 shrink-0 text-muted-foreground" />
+
+          <div className="flex-1 min-w-0">
+            <p className="font-medium">Daily entry reminder</p>
+            <p className="text-sm text-muted-foreground">
+              Receive an email reminder if you haven't completed your daily
+              entry.
+            </p>
+          </div>
+
+          <label className="flex items-center gap-2 shrink-0">
+            <input
+              type="checkbox"
+              {...reminderRegister("enabled", {
+                onChange: (e) => {
+                  if (!e.target.checked) {
+                    setReminderValue("reminderTime", null);
+                  }
+                },
+              })}
+              disabled={updateReminderSettingsMutation.isPending}
+              className="h-4 w-4"
+            />
+            <span className="text-sm">
+              {reminderEnabled ? "Enabled" : "Disabled"}
+            </span>
+          </label>
+        </div>
+
+        <div className="border-t" />
+
+        <div className="space-y-2">
+          <Label htmlFor="reminder-time">
+            Reminder time
+          </Label>
+
+          <Input
+            id="reminder-time"
+            type="time"
+            disabled={
+              !reminderEnabled ||
+              updateReminderSettingsMutation.isPending
+            }
+            {...reminderRegister("reminderTime")}
+            className="bg-muted border-muted-foreground/50"
+          />
+
+          {reminderErrors.reminderTime && (
+            <p className="text-xs text-destructive">
+              {reminderErrors.reminderTime.message}
+            </p>
+          )}
+
+          <p className="text-xs text-muted-foreground">
+            You will receive the reminder at this time every day.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="reminder-timezone">
+            Timezone
+          </Label>
+
+          <select
+    id="reminder-timezone"
+    disabled={ !reminderEnabled || updateReminderSettingsMutation.isPending}
+    {...reminderRegister("timezone")}
+    className="flex h-10 w-full rounded-md border border-muted-foreground/50 bg-muted px-3 py-2 text-sm"
+  >
+    {timezoneOptions.map((timezone) => (
+      <option key={timezone} value={timezone}>
+        {timezoneLabels[timezone]}
+      </option>
+    ))}
+  </select>
+
+  {reminderErrors.timezone && (
+    <p className="text-xs text-destructive">
+      {reminderErrors.timezone.message}
+    </p>
+  )}
+
+  <p className="text-xs text-muted-foreground">
+    Select the timezone where you want to receive your daily reminder.
+  </p>
+        </div>
+
+        {reminderSettingsQuery.isError && (
+          <p className="text-sm text-destructive">
+            Failed to load reminder settings.
+          </p>
+        )}
+
+        {updateReminderSettingsMutation.isError && (
+          <p className="text-sm text-destructive">
+            Failed to update reminder settings.
+          </p>
+        )}
+
+        {updateReminderSettingsMutation.isSuccess && (
+          <p className="text-sm text-green-600">
+            Reminder settings updated successfully.
+          </p>
+        )}
+
+        <Button
+          size="sm"
+          type="submit"
+          disabled={
+            reminderSettingsQuery.isLoading ||
+            updateReminderSettingsMutation.isPending
+          }
+        >
+          {updateReminderSettingsMutation.isPending
+            ? "Saving..."
+            : "Save reminder settings"}
+        </Button>
+      </form>
+    </CardContent>
+  </Card>
+</section>
 
       {/* Danger zone */}
       <section className="space-y-3">

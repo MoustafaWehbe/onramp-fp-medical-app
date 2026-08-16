@@ -11,3 +11,15 @@ export interface UpdatePasswordRequest {
 export interface DeleteAccountRequest {
   currentPassword: string;
 }
+
+export interface ReminderSettings {
+  enabled: boolean;
+  reminderTime: string | null;
+  timezone: string;
+}
+
+export interface ReminderSettingsFormValues {
+  enabled: boolean;
+  reminderTime : string | null;
+  timezone: string;
+}
