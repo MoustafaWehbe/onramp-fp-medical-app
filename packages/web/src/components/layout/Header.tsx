@@ -1,7 +1,7 @@
 import { LogOut, Menu } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { BrandMark } from "./BrandMark";
-
+import { ThemeToggle } from "./ThemeToggle";
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -9,19 +9,25 @@ interface HeaderProps {
 
 export function Header({ onMenuClick }: HeaderProps) {
   const { user, logout } = useAuth();
+  const today = new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  }).format(new Date());
 
   return (
-    <header className="z-30 flex h-16 shrink-0 items-center gap-3 border-b border-border/70 bg-card/90 px-3 backdrop-blur-xl sm:px-5 md:px-8">
+    <header className="z-30 flex h-16 shrink-0 items-center gap-3 border-b border-border/60 bg-card/75 px-3 backdrop-blur-xl sm:px-5 md:px-8">
       <button
-          onClick={onMenuClick}
-          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
-          aria-label="Open navigation"
-        >
-          <Menu className="h-5 w-5" aria-hidden />
-        </button>
+        onClick={onMenuClick}
+        className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
+        aria-label="Open navigation"
+      >
+        <Menu className="h-5 w-5" aria-hidden />
+      </button>
       <BrandMark className="md:hidden" />
+      <p className="hidden text-sm font-medium text-muted-foreground lg:block">{today}</p>
       <div className="ml-auto hidden min-w-0 items-center gap-3 sm:flex">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-secondary text-sm font-bold text-secondary-foreground">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-sm font-bold text-primary-foreground shadow-sm">
           {user?.name?.charAt(0).toUpperCase()}
         </div>
         <div className="min-w-0 leading-tight">
@@ -30,14 +36,14 @@ export function Header({ onMenuClick }: HeaderProps) {
         </div>
       </div>
 
+      <ThemeToggle />
+
       <button
         onClick={logout}
         className="flex h-11 cursor-pointer items-center gap-2 rounded-xl px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <LogOut className="h-4 w-4" aria-hidden />
-        <span className="hidden sm:inline">
-          Logout
-        </span>
+        <span className="hidden sm:inline">Logout</span>
       </button>
     </header>
   );

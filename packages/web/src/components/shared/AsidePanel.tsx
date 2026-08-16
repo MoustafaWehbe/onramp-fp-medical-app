@@ -67,7 +67,7 @@ export function AsidePanel({
         type="button"
         aria-label="Close panel"
         className={cn(
-          "absolute inset-0 cursor-default bg-slate-950/55 backdrop-blur-sm transition-opacity duration-300",
+          "absolute inset-0 cursor-default bg-foreground/40 backdrop-blur-md transition-opacity duration-300",
           open ? "opacity-100" : "opacity-0",
         )}
         onClick={onClose}

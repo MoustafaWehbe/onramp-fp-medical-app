@@ -52,7 +52,7 @@ export function Register() {
   };
 
   return (
-    <Card className="rounded-[1.75rem] border-white/60 shadow-lift dark:border-border/80">
+    <Card className="rounded-[1.75rem] border-white/60 bg-card/90 shadow-lift backdrop-blur-xl dark:border-border/80">
       <CardHeader className="space-y-2 pb-5 text-center">
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
           Get started

@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import { Home } from "lucide-react";
 import { buttonVariants } from "../components/ui/button";
 import { BrandMark } from "../components/layout/BrandMark";
+import { AmbientBackground } from "../components/motion/AmbientBackground";
 import { cn } from "../lib/utils";
 
 export function NotFound() {
   return (
-    <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-background px-4 py-10">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,hsl(var(--primary)/0.12),transparent_38%),radial-gradient(circle_at_bottom_right,hsl(var(--accent)/0.10),transparent_34%)]" />
-      <div className="relative w-full max-w-md rounded-[1.75rem] border border-primary/15 bg-card px-6 py-12 text-center shadow-lift">
+    <div className="app-canvas relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-4 py-10">
+      <AmbientBackground />
+      <div className="relative z-10 w-full max-w-md rounded-[1.75rem] border border-primary/15 bg-card/85 px-6 py-12 text-center shadow-lift backdrop-blur-xl">
         <div className="mb-6 flex justify-center">
           <BrandMark />
         </div>

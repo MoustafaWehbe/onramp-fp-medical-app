@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 185 45% 98%;
+    --background: 186 48% 97%;
     --foreground: 193 54% 16%;
     --card: 0 0% 100%;
     --card-foreground: 193 54% 16%;
@@ -25,22 +25,25 @@
     --border: 188 28% 86%;
     --input: 188 28% 80%;
     --ring: 190 91% 32%;
-    --radius: 0.875rem;
+    --radius: 1rem;
     --scrollbar-thumb: 188 16% 68%;
     --scrollbar-track: 185 30% 94%;
+    --shadow-soft: 0 1px 2px hsl(193 54% 16% / 0.05), 0 12px 32px hsl(193 40% 18% / 0.07);
+    --shadow-lift: 0 16px 40px hsl(190 55% 18% / 0.14);
+    --shadow-glow: 0 0 0 1px hsl(190 91% 32% / 0.14), 0 18px 44px hsl(190 91% 32% / 0.16);
     color-scheme: light;
   }
 
   .dark {
-    --background: 194 43% 7%;
+    --background: 196 42% 6%;
     --foreground: 184 28% 94%;
-    --card: 193 36% 10%;
+    --card: 194 34% 9%;
     --card-foreground: 184 28% 94%;
     --primary: 187 78% 46%;
     --primary-foreground: 194 53% 8%;
-    --secondary: 191 27% 17%;
+    --secondary: 191 27% 15%;
     --secondary-foreground: 184 28% 94%;
-    --muted: 192 23% 16%;
+    --muted: 192 23% 14%;
     --muted-foreground: 187 14% 68%;
     --accent: 158 64% 44%;
     --accent-foreground: 194 53% 7%;
@@ -50,11 +53,14 @@
     --warning-foreground: 26 83% 14%;
     --destructive: 0 68% 48%;
     --destructive-foreground: 0 0% 100%;
-    --border: 191 22% 21%;
-    --input: 190 18% 27%;
+    --border: 191 22% 18%;
+    --input: 190 18% 24%;
     --ring: 187 78% 46%;
     --scrollbar-thumb: 191 16% 34%;
-    --scrollbar-track: 193 30% 14%;
+    --scrollbar-track: 193 30% 12%;
+    --shadow-soft: 0 1px 2px hsl(0 0% 0% / 0.35), 0 14px 36px hsl(0 0% 0% / 0.32);
+    --shadow-lift: 0 20px 48px hsl(0 0% 0% / 0.48);
+    --shadow-glow: 0 0 0 1px hsl(187 78% 46% / 0.28), 0 18px 44px hsl(187 78% 46% / 0.12);
     color-scheme: dark;
   }
 
@@ -130,6 +136,13 @@
     text-rendering: optimizeLegibility;
   }
 
+  h1,
+  h2,
+  .font-display {
+    font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.03em;
+  }
+
   ::selection {
     @apply bg-primary/20 text-foreground;
   }
@@ -173,6 +186,28 @@
 
   .page-description {
     @apply mt-1 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base;
+  }
+
+  .app-canvas {
+    background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(1200px circle at 0% -10%, hsl(var(--primary) / 0.11), transparent 42%),
+      radial-gradient(900px circle at 100% 0%, hsl(var(--accent) / 0.08), transparent 38%);
+  }
+
+  .app-canvas::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  }
+
+  .dark .app-canvas::after {
+    opacity: 0.055;
+    mix-blend-mode: overlay;
   }
 }
 

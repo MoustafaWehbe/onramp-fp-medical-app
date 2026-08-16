@@ -22,7 +22,7 @@ const SheetContent = React.forwardRef<
 >(({ className, side="left", children, ...props }, ref) => (
   <SheetPrimitive.Portal>
     <SheetPrimitive.Overlay
-      className="fixed inset-0 z-50 bg-slate-950/55 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out"
+      className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-md data-[state=open]:animate-in data-[state=closed]:animate-out"
     />
 
     <SheetPrimitive.Content

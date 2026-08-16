@@ -17,7 +17,7 @@ export function MobileBottomNav({ onMoreClick }: MobileBottomNavProps) {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-2xl border border-white/50 bg-card/95 p-1.5 shadow-lift backdrop-blur-xl dark:border-border/70 md:hidden"
+      className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-[1.4rem] border border-white/50 bg-card/90 p-1.5 shadow-lift backdrop-blur-xl dark:border-border/60 md:hidden"
     >
       {items.map(({ to, label, icon: Icon }) => (
         <NavLink
@@ -25,8 +25,10 @@ export function MobileBottomNav({ onMoreClick }: MobileBottomNavProps) {
           to={to}
           className={({ isActive }) =>
             cn(
-              "flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl px-1 text-[0.6875rem] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              isActive ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+              "flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl px-1 text-[0.6875rem] font-semibold transition-[color,background-color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              isActive
+                ? "bg-primary text-primary-foreground shadow-glow"
+                : "text-muted-foreground hover:bg-secondary hover:text-foreground",
             )
           }
         >

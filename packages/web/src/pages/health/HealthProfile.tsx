@@ -1,5 +1,7 @@
-import { useRef } from "react";
-import { Activity, ClipboardList, Plus } from "lucide-react";
+import { useRef, useState } from "react";
+import { Activity, ClipboardList, HeartPulse, Plus } from "lucide-react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import {
   ConditionCard,
   ConditionDetail,
@@ -27,6 +29,112 @@ import {
   SymptomsProvider,
   useSymptomsContext,
 } from "../../providers/SymptomsProvider";
+import { cn } from "../../lib/utils";
+
+type ProfileTab = "conditions" | "symptoms";
+
+interface ProfileTabSwitchProps {
+  value: ProfileTab;
+  onChange: (tab: ProfileTab) => void;
+  conditionCount: number | null;
+  symptomCount: number | null;
+}
+
+function ProfileTabSwitch({
+  value,
+  onChange,
+  conditionCount,
+  symptomCount,
+}: ProfileTabSwitchProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const pillRef = useRef<HTMLSpanElement>(null);
+  const conditionsRef = useRef<HTMLButtonElement>(null);
+  const symptomsRef = useRef<HTMLButtonElement>(null);
+
+  useGSAP(
+    () => {
+      const root = rootRef.current;
+      const pill = pillRef.current;
+      const active = value === "conditions" ? conditionsRef.current : symptomsRef.current;
+      if (!root || !pill || !active) return;
+
+      const rootBox = root.getBoundingClientRect();
+      const activeBox = active.getBoundingClientRect();
+      const target = {
+        x: activeBox.left - rootBox.left,
+        y: activeBox.top - rootBox.top,
+        width: activeBox.width,
+        height: activeBox.height,
+      };
+
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(pill, target);
+      });
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.to(pill, { ...target, duration: 0.32, ease: "power2.out" });
+      });
+    },
+    { scope: rootRef, dependencies: [value], revertOnUpdate: false },
+  );
+
+  return (
+    <div
+      ref={rootRef}
+      role="tablist"
+      aria-label="Health profile sections"
+      className="relative grid grid-cols-2 rounded-2xl border border-border/70 bg-muted/70 p-1.5 shadow-soft"
+    >
+      <span
+        ref={pillRef}
+        className="pointer-events-none absolute left-0 top-0 z-0 h-12 w-1/2 rounded-xl bg-card shadow-glow"
+        aria-hidden
+      />
+      <button
+        ref={conditionsRef}
+        type="button"
+        role="tab"
+        id="profile-tab-conditions"
+        aria-controls="profile-panel-conditions"
+        aria-selected={value === "conditions"}
+        className={cn(
+          "relative z-10 flex min-h-12 items-center justify-center gap-2 rounded-xl px-3 text-sm font-semibold transition-colors",
+          value === "conditions" ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+        )}
+        onClick={() => onChange("conditions")}
+      >
+        <HeartPulse className="h-4 w-4" aria-hidden />
+        Conditions
+        {conditionCount != null && (
+          <span className="rounded-full bg-secondary px-2 py-0.5 text-xs tabular-nums">
+            {conditionCount}
+          </span>
+        )}
+      </button>
+      <button
+        ref={symptomsRef}
+        type="button"
+        role="tab"
+        id="profile-tab-symptoms"
+        aria-controls="profile-panel-symptoms"
+        aria-selected={value === "symptoms"}
+        className={cn(
+          "relative z-10 flex min-h-12 items-center justify-center gap-2 rounded-xl px-3 text-sm font-semibold transition-colors",
+          value === "symptoms" ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+        )}
+        onClick={() => onChange("symptoms")}
+      >
+        <Activity className="h-4 w-4" aria-hidden />
+        Symptoms
+        {symptomCount != null && (
+          <span className="rounded-full bg-secondary px-2 py-0.5 text-xs tabular-nums">
+            {symptomCount}
+          </span>
+        )}
+      </button>
+    </div>
+  );
+}
 
 function ConditionsSection() {
   const {
@@ -56,7 +164,7 @@ function ConditionsSection() {
     <SectionPanel
       title="Conditions"
       description="Track diagnosed conditions, status, and notes."
-      icon={Activity}
+      icon={HeartPulse}
       action={(
         <div className="flex flex-wrap items-center gap-2">
           {isSuccess && (
@@ -72,7 +180,6 @@ function ConditionsSection() {
         </div>
       )}
     >
-
       {listErrorMessage && (
         <p className="mt-4 rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {listErrorMessage}
@@ -88,7 +195,7 @@ function ConditionsSection() {
       {isSuccess && conditions.length === 0 && (
         <div className="mt-4 flex flex-col items-center justify-center rounded-xl border border-dashed px-6 py-16 text-center">
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
-            <Activity className="h-6 w-6" aria-hidden />
+            <HeartPulse className="h-6 w-6" aria-hidden />
           </div>
           <p className="font-medium">No conditions yet</p>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
@@ -201,7 +308,6 @@ function SymptomsSection() {
         </div>
       )}
     >
-
       {listErrorMessage && (
         <p className="mt-4 rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {listErrorMessage}
@@ -280,6 +386,86 @@ function SymptomsSection() {
   );
 }
 
+function HealthProfileView({
+  closeConditions,
+  closeSymptoms,
+}: {
+  closeConditions: () => void;
+  closeSymptoms: () => void;
+}) {
+  const [tab, setTab] = useState<ProfileTab>("conditions");
+  const contentRef = useRef<HTMLDivElement>(null);
+  const skipEntrance = useRef(true);
+  const { pagination: conditionPagination, isSuccess: conditionsReady } =
+    useConditionsContext();
+  const { pagination: symptomPagination, isSuccess: symptomsReady } =
+    useSymptomsContext();
+
+  useGSAP(
+    () => {
+      const panel = contentRef.current;
+      if (!panel) return;
+
+      if (skipEntrance.current) {
+        skipEntrance.current = false;
+        gsap.set(panel, { opacity: 1, x: 0 });
+        return;
+      }
+
+      const fromX = tab === "symptoms" ? 28 : -28;
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(panel, { opacity: 1, x: 0 });
+      });
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(
+          panel,
+          { opacity: 0, x: fromX },
+          { opacity: 1, x: 0, duration: 0.34, ease: "power2.out" },
+        );
+      });
+
+    },
+    { scope: contentRef, dependencies: [tab], revertOnUpdate: false },
+  );
+
+  function selectTab(next: ProfileTab) {
+    if (next === tab) return;
+    if (next === "conditions") closeSymptoms();
+    else closeConditions();
+    setTab(next);
+  }
+
+  return (
+    <div className="page-shell">
+      <PageHeader
+        eyebrow="Clinical profile"
+        title="Health Profile"
+        description="Switch between the conditions and symptoms you track."
+        icon={Activity}
+      />
+
+      <ProfileTabSwitch
+        value={tab}
+        onChange={selectTab}
+        conditionCount={conditionsReady ? (conditionPagination?.totalCount ?? 0) : null}
+        symptomCount={symptomsReady ? (symptomPagination?.totalCount ?? 0) : null}
+      />
+
+      <div
+        ref={contentRef}
+        id={tab === "conditions" ? "profile-panel-conditions" : "profile-panel-symptoms"}
+        role="tabpanel"
+        aria-labelledby={
+          tab === "conditions" ? "profile-tab-conditions" : "profile-tab-symptoms"
+        }
+      >
+        {tab === "conditions" ? <ConditionsSection /> : <SymptomsSection />}
+      </div>
+    </div>
+  );
+}
+
 function HealthProfileContent() {
   const symptomsCloseRef = useRef<(() => void) | null>(null);
   const conditionsCloseRef = useRef<(() => void) | null>(null);
@@ -293,19 +479,10 @@ function HealthProfileContent() {
         onActivate={() => conditionsCloseRef.current?.()}
         panelCloseRef={symptomsCloseRef}
       >
-        <div className="page-shell">
-          <PageHeader
-            eyebrow="Clinical profile"
-            title="Health Profile"
-            description="Build a clear, connected view of the conditions and symptoms you track."
-            icon={Activity}
-          />
-
-          <div className="grid items-start gap-5 xl:grid-cols-2">
-            <ConditionsSection />
-            <SymptomsSection />
-          </div>
-        </div>
+        <HealthProfileView
+          closeConditions={() => conditionsCloseRef.current?.()}
+          closeSymptoms={() => symptomsCloseRef.current?.()}
+        />
       </SymptomsProvider>
     </ConditionsProvider>
   );

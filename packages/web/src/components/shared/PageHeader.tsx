@@ -24,7 +24,7 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        "relative overflow-hidden rounded-[1.75rem] border border-primary/15 bg-card px-5 py-6 shadow-soft sm:px-7 sm:py-8",
+        "relative overflow-hidden rounded-[1.75rem] border border-primary/15 bg-card/80 px-5 py-6 shadow-soft backdrop-blur-xl sm:px-7 sm:py-8",
         className,
       )}
     >
@@ -34,7 +34,7 @@ export function PageHeader({
       <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex min-w-0 items-start gap-4">
           {Icon && (
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-md sm:h-14 sm:w-14">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent text-primary-foreground shadow-glow sm:h-14 sm:w-14">
               <Icon className="h-6 w-6 sm:h-7 sm:w-7" aria-hidden />
             </div>
           )}
@@ -45,7 +45,7 @@ export function PageHeader({
               </p>
             )}
             <div className="flex flex-wrap items-center gap-2.5">
-              <h1 className="text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
+              <h1 className="font-display text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
                 {title}
               </h1>
               {badge}

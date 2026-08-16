@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import type { RecentEntryItem } from "../../lib/dashboard/types";
+import { formatDate } from "../../lib/utils";
 
 const MOOD_LABELS: Record<number, string> = {
   1: "Very Low",
@@ -17,7 +18,7 @@ interface RecentEntriesProps {
 
 export function RecentEntries({ entries }: RecentEntriesProps) {
   return (
-    <Card>
+    <Card className="h-full bg-card/90 backdrop-blur-sm">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-base">Recent Entries</CardTitle>
 
@@ -32,7 +33,7 @@ export function RecentEntries({ entries }: RecentEntriesProps) {
 
       <CardContent>
         {entries.length === 0 ? (
-          <div className="rounded-xl border border-dashed bg-muted/30 px-4 py-10 text-center">
+          <div className="rounded-2xl border border-dashed bg-muted/30 px-4 py-10 text-center">
             <p className="text-sm text-muted-foreground">
               No entries yet.
             </p>
@@ -45,15 +46,15 @@ export function RecentEntries({ entries }: RecentEntriesProps) {
             </Link>
           </div>
         ) : (
-          <ul className="divide-y">
+          <ul className="space-y-2">
             {entries.map((entry) => (
               <li
                 key={entry.id}
-                className="flex flex-col items-start justify-between gap-2 py-3 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-4"
+                className="flex flex-col items-start justify-between gap-2 rounded-2xl bg-muted/35 px-3.5 py-3 sm:flex-row sm:items-center sm:gap-4"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium">
-                    {entry.entryDate}
+                  <p className="text-sm font-semibold">
+                    {formatDate(entry.entryDate)}
                   </p>
 
                   {entry.journalSnippet && (
@@ -63,22 +64,16 @@ export function RecentEntries({ entries }: RecentEntriesProps) {
                   )}
                 </div>
 
-                <div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                <div className="flex shrink-0 flex-wrap items-center gap-2 text-xs">
                   {entry.moodRating != null && (
-                    <span>
-                      Mood:{" "}
-                      <span className="font-medium text-foreground">
-                        {MOOD_LABELS[entry.moodRating] ?? entry.moodRating}
-                      </span>
+                    <span className="rounded-full bg-primary/10 px-2.5 py-1 font-semibold text-primary">
+                      {MOOD_LABELS[entry.moodRating] ?? entry.moodRating}
                     </span>
                   )}
 
                   {entry.sleepHours != null && (
-                    <span>
-                      Sleep:{" "}
-                      <span className="font-medium text-foreground">
-                        {entry.sleepHours}h
-                      </span>
+                    <span className="rounded-full bg-secondary px-2.5 py-1 font-semibold text-secondary-foreground">
+                      {entry.sleepHours}h sleep
                     </span>
                   )}
                 </div>
