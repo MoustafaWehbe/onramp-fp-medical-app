@@ -4,3 +4,4 @@ export { ConditionSymptom } from "./ConditionSymptom";
 export { UserMedication } from "./UserMedication";
 export { UserClinic } from "./UserClinic";
 export { UserDoctor } from "./UserDoctor";
+export { UserReminderSettings } from "./UserReminderSettings";
