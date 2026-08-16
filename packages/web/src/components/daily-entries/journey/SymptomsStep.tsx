@@ -43,6 +43,8 @@ export function SymptomsStep({
   const [composerOpen, setComposerOpen] = useState(false);
   const [draft, setDraft] = useState(emptyDraft);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const addedSymptomIds = new Set(fields.map((field) => field.userSymptomId));
+  const availableSymptoms = symptoms.filter((symptom) => !addedSymptomIds.has(symptom.id));
 
   function openComposer() {
     if (!onStartAdd()) return;
@@ -66,6 +68,11 @@ export function SymptomsStep({
       return;
     }
 
+    if (addedSymptomIds.has(parsed.data.userSymptomId)) {
+      setFieldErrors({ userSymptomId: "This symptom is already added" });
+      return;
+    }
+
     onConfirm(parsed.data);
     closeComposer();
   }
@@ -77,7 +84,12 @@ export function SymptomsStep({
           type="button"
           variant="outline"
           onClick={openComposer}
-          disabled={isLoading || Boolean(errorMessage) || composerOpen}
+          disabled={
+            isLoading ||
+            Boolean(errorMessage) ||
+            composerOpen ||
+            (symptoms.length > 0 && availableSymptoms.length === 0)
+          }
         >
           Add symptom
         </Button>
@@ -112,7 +124,7 @@ export function SymptomsStep({
                 }
               >
                 <option value="">Select a symptom</option>
-                {symptoms.map((symptom) => (
+                {availableSymptoms.map((symptom) => (
                   <option key={symptom.id} value={symptom.id}>
                     {symptom.catalog.name}
                   </option>

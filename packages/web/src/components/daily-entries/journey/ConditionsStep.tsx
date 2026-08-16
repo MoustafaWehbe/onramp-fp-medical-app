@@ -42,6 +42,10 @@ export function ConditionsStep({
   const [composerOpen, setComposerOpen] = useState(false);
   const [draft, setDraft] = useState(emptyDraft);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const addedConditionIds = new Set(fields.map((field) => field.userConditionId));
+  const availableConditions = conditions.filter(
+    (condition) => !addedConditionIds.has(condition.id),
+  );
 
   function openComposer() {
     if (!onStartAdd()) return;
@@ -65,6 +69,11 @@ export function ConditionsStep({
       return;
     }
 
+    if (addedConditionIds.has(parsed.data.userConditionId)) {
+      setFieldErrors({ userConditionId: "This condition is already added" });
+      return;
+    }
+
     onConfirm(parsed.data);
     closeComposer();
   }
@@ -76,7 +85,12 @@ export function ConditionsStep({
           type="button"
           variant="outline"
           onClick={openComposer}
-          disabled={isLoading || Boolean(errorMessage) || composerOpen}
+          disabled={
+            isLoading ||
+            Boolean(errorMessage) ||
+            composerOpen ||
+            (conditions.length > 0 && availableConditions.length === 0)
+          }
         >
           Add condition
         </Button>
@@ -111,7 +125,7 @@ export function ConditionsStep({
                 }
               >
                 <option value="">Select a condition</option>
-                {conditions.map((condition) => (
+                {availableConditions.map((condition) => (
                   <option key={condition.id} value={condition.id}>
                     {condition.condition.name}
                   </option>
