@@ -1,201 +1,198 @@
 import {
-  Stethoscope,
   Building2,
+  CalendarDays,
+  ClipboardList,
+  Eye,
   MapPin,
   NotebookPen,
-  CalendarDays,
+  Stethoscope,
 } from "lucide-react";
-
-import type { EntryDoctorVisit } from "@/lib/doctor-visit-entries/doctor-visit-exports";
-import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+import type { EntryDoctorVisit } from "../../lib/doctor-visit-entries/doctor-visit-exports";
+import { cn, formatDate } from "../../lib/utils";
+import { RowActionsMenu } from "../shared/RowActionsMenu";
 
 interface DoctorVisitCardProps {
   visit: EntryDoctorVisit;
-  onClick?: () => void;
+  selected?: boolean;
+  onView: () => void;
+}
+
+function visitDoctorName(visit: EntryDoctorVisit): string {
+  return visit.userDoctor?.doctor?.name ?? "Unknown doctor";
 }
 
 export function DoctorVisitCard({
   visit,
-  onClick,
+  selected = false,
+  onView,
 }: DoctorVisitCardProps) {
-  const doctorName =
-    visit.userDoctor?.doctor?.name ??
-    "Unknown doctor";
-
-  const specialty =
-    visit.userDoctor?.doctor?.specialty;
-
-  const clinic =
-    visit.userClinic?.clinic;
-
-  const parsedDate = new Date(
-    `${visit.entry.entryDate}T00:00:00`,
-  );
-
-  const formattedDate = Number.isNaN(
-    parsedDate.getTime(),
-  )
-    ? visit.entry.entryDate
-    : parsedDate.toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      });
+  const navigate = useNavigate();
+  const doctorName = visitDoctorName(visit);
+  const specialty = visit.userDoctor?.doctor?.specialty;
+  const clinic = visit.userClinic?.clinic;
 
   return (
-    <button
-      type="button"
-      onClick={onClick}
+    <article
       className={cn(
-        "group w-full cursor-pointer rounded-2xl border border-border/80 bg-card p-4 text-left shadow-soft transition-[border-color,box-shadow,transform] duration-200",
+        "group flex items-start gap-1 rounded-2xl border border-border/80 bg-card p-2 pl-4 shadow-soft transition-[border-color,box-shadow,transform] duration-200",
         "hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        selected && "border-primary ring-2 ring-primary/20",
       )}
     >
-      <div className="flex gap-3">
-        {/* Icon */}
-        <div
-          className="
-            flex
-            h-11
-            w-11
-            shrink-0
-            items-center
-            justify-center
-            rounded-xl
-            bg-primary/10
-            text-primary
-            transition-colors
-            group-hover:bg-primary/15
-          "
-        >
-          <Stethoscope
-            className="h-5 w-5"
-            aria-hidden
-          />
+      <button
+        type="button"
+        onClick={onView}
+        aria-label={`View visit with ${doctorName}`}
+        className="flex min-w-0 flex-1 cursor-pointer gap-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+          <Stethoscope className="h-5 w-5" aria-hidden />
         </div>
 
-
         <div className="min-w-0 flex-1 space-y-2">
-
-          {/* Header */}
-          <div>
-            <h3
-              className="
-                truncate
-                font-semibold
-                leading-tight
-                tracking-tight
-              "
-            >
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <h3 className="truncate font-semibold leading-tight tracking-tight">
               {doctorName}
             </h3>
-
             {specialty && (
-              <p className="text-sm text-muted-foreground">
+              <span className="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
                 {specialty}
-              </p>
+              </span>
             )}
           </div>
 
-
-          {/* Date */}
-          <div
-            className="
-              flex
-              items-center
-              gap-1.5
-              text-sm
-              text-muted-foreground
-            "
-          >
-            <CalendarDays
-              className="h-3.5 w-3.5 shrink-0"
-              aria-hidden
-            />
-
-            {formattedDate}
+          <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
+            {clinic && (
+              <span className="inline-flex items-center gap-1.5">
+                <Building2 className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                {clinic.name}
+              </span>
+            )}
+            {clinic?.address && (
+              <span className="inline-flex items-center gap-1.5">
+                <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                <span className="line-clamp-1">{clinic.address}</span>
+              </span>
+            )}
           </div>
 
-
-          {/* Clinic */}
-          {clinic && (
-            <div
-              className="
-                space-y-1
-                text-sm
-                text-muted-foreground
-              "
-            >
-              <div
-                className="
-                  flex
-                  items-center
-                  gap-1.5
-                  font-medium
-                  text-foreground
-                "
-              >
-                <Building2
-                  className="h-3.5 w-3.5 shrink-0"
-                  aria-hidden
-                />
-
-                {clinic.name}
-              </div>
-
-
-              {clinic.address && (
-                <div
-                  className="
-                    flex
-                    items-center
-                    gap-1.5
-                  "
-                >
-                  <MapPin
-                    className="h-3.5 w-3.5 shrink-0"
-                    aria-hidden
-                  />
-
-                  <span className="line-clamp-1">
-                    {clinic.address}
-                  </span>
-                </div>
-              )}
-            </div>
-          )}
-
-
-          {/* Summary */}
           {visit.summary && (
-            <p
-              className="
-                flex
-                items-start
-                gap-1.5
-                text-sm
-                text-muted-foreground
-              "
-            >
+            <p className="flex items-start gap-1.5 text-sm text-muted-foreground">
               <NotebookPen
-                className="
-                  mt-0.5
-                  h-3.5
-                  w-3.5
-                  shrink-0
-                "
+                className="mt-0.5 h-3.5 w-3.5 shrink-0"
                 aria-hidden
               />
-
-              <span className="line-clamp-2">
-                {visit.summary}
-              </span>
+              <span className="line-clamp-2">{visit.summary}</span>
             </p>
           )}
+        </div>
+      </button>
 
+      <RowActionsMenu
+        label={`Actions for visit with ${doctorName}`}
+        actions={[
+          {
+            id: "view",
+            label: "View",
+            icon: Eye,
+            onSelect: onView,
+          },
+          {
+            id: "open-log",
+            label: "Open daily log",
+            icon: ClipboardList,
+            onSelect: () => navigate("/log/view"),
+          },
+        ]}
+      />
+    </article>
+  );
+}
+
+export function DoctorVisitDetail({ visit }: { visit: EntryDoctorVisit }) {
+  const navigate = useNavigate();
+  const doctorName = visitDoctorName(visit);
+  const specialty = visit.userDoctor?.doctor?.specialty;
+  const clinic = visit.userClinic?.clinic;
+
+  const rows = [
+    specialty
+      ? { icon: Stethoscope, label: "Specialty", value: specialty }
+      : null,
+    visit.entry.entryDate
+      ? {
+          icon: CalendarDays,
+          label: "Visit date",
+          value: formatDate(`${visit.entry.entryDate}T00:00:00`),
+        }
+      : null,
+    clinic
+      ? { icon: Building2, label: "Clinic", value: clinic.name }
+      : null,
+    clinic?.address
+      ? { icon: MapPin, label: "Address", value: clinic.address }
+      : null,
+    visit.summary
+      ? { icon: NotebookPen, label: "Summary", value: visit.summary }
+      : null,
+    visit.notes
+      ? { icon: NotebookPen, label: "Notes", value: visit.notes }
+      : null,
+  ].filter(Boolean) as Array<{
+    icon: typeof Stethoscope;
+    label: string;
+    value: string;
+  }>;
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center gap-3">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <Stethoscope className="h-6 w-6" aria-hidden />
+        </div>
+        <div className="min-w-0">
+          <p className="truncate text-lg font-semibold leading-tight">
+            {doctorName}
+          </p>
+          <p className="text-sm text-muted-foreground">Recorded visit</p>
         </div>
       </div>
-    </button>
+
+      {rows.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          No additional details recorded.
+        </p>
+      ) : (
+        <dl className="space-y-3">
+          {rows.map(({ icon: Icon, label, value }) => (
+            <div
+              key={label}
+              className="flex gap-3 rounded-lg border bg-muted/30 px-3 py-2.5"
+            >
+              <Icon
+                className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground"
+                aria-hidden
+              />
+              <div className="min-w-0">
+                <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  {label}
+                </dt>
+                <dd className="mt-0.5 text-sm">{value}</dd>
+              </div>
+            </div>
+          ))}
+        </dl>
+      )}
+
+      <button
+        type="button"
+        className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-input bg-card px-4 text-sm font-semibold shadow-sm transition-colors hover:border-primary/40 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        onClick={() => navigate("/log/view")}
+      >
+        <ClipboardList className="h-4 w-4" aria-hidden />
+        Open daily log
+      </button>
+    </div>
   );
 }

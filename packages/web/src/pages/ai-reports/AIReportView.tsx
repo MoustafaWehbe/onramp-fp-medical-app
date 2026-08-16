@@ -1,31 +1,24 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { isAxiosError } from "axios";
-import { ArrowLeft, CalendarRange, Printer, Trash2 } from "lucide-react";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
+  Activity,
+  ArrowLeft,
+  CalendarRange,
+  HeartPulse,
+  Pill,
+  Printer,
+  Sparkles,
+  Trash2,
+} from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { LoadingSpinner } from "../../components/shared/LoadingSpinner";
-import { ReportSection } from "../../components/ai-reports/ReportSection";
+import { ConfirmDialog } from "../../components/shared/ConfirmDialog";
 import { PageHeader } from "../../components/shared/PageHeader";
+import { SectionPanel } from "../../components/shared/SectionPanel";
+import { ReportSection } from "../../components/ai-reports/ReportSection";
+import { formatReportDate } from "../../components/ai-reports/formatReportDate";
 import { useAiReport, useRemoveAiReport } from "../../hooks/useAIReports";
-
-function formatDate(value: string): string {
-  const date = new Date(
-    value.includes("T") ? value : `${value}T00:00:00`,
-  );
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
-}
 
 function getErrorMessage(error: unknown): string {
   if (isAxiosError(error)) {
@@ -46,16 +39,14 @@ export function AIReportView() {
   const navigate = useNavigate();
   const { data: report, isLoading, isError, error } = useAiReport(id);
   const remove = useRemoveAiReport();
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
-  async function handleDelete() {
+  async function confirmDelete() {
     if (!report) return;
-    const confirmed = window.confirm(
-      "Delete this report permanently? This cannot be undone.",
-    );
-    if (!confirmed) return;
 
     try {
       await remove.mutateAsync(report.id);
+      setConfirmOpen(false);
       void navigate("/ai-reports");
     } catch {
       // Error surfaced via remove.error below
@@ -64,15 +55,29 @@ export function AIReportView() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <LoadingSpinner />
+      <div className="page-shell">
+        <PageHeader
+          eyebrow="AI reports"
+          title="Physician-ready report"
+          description="Loading this summary."
+          icon={CalendarRange}
+        />
+        <div className="flex min-h-64 items-center justify-center rounded-2xl border bg-card shadow-soft">
+          <LoadingSpinner />
+        </div>
       </div>
     );
   }
 
   if (isError || !report) {
     return (
-      <div className="page-shell max-w-3xl">
+      <div className="page-shell">
+        <PageHeader
+          eyebrow="AI reports"
+          title="Physician-ready report"
+          description="This summary could not be loaded."
+          icon={CalendarRange}
+        />
         <div
           role="alert"
           className="rounded-2xl border border-destructive/20 bg-destructive/10 p-6 shadow-soft"
@@ -84,12 +89,14 @@ export function AIReportView() {
             {getErrorMessage(error)}
           </p>
         </div>
-        <Link to="/ai-reports">
-          <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to reports
-          </Button>
-        </Link>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => navigate("/ai-reports")}
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" aria-hidden />
+          Back to reports
+        </Button>
       </div>
     );
   }
@@ -97,21 +104,24 @@ export function AIReportView() {
   const content = report.reportContent ?? {};
   const summary =
     typeof content.summary === "string" ? content.summary : null;
+  const rangeLabel = `${formatReportDate(report.dateRangeStart)} – ${formatReportDate(report.dateRangeEnd)}`;
 
   return (
-    <div className="page-shell max-w-3xl print:max-w-none print:space-y-4">
-      <div className="print:hidden">
-        <Link
-          to="/ai-reports"
-          className="mb-4 inline-flex min-h-11 items-center gap-1 rounded-lg px-2 text-sm font-semibold text-muted-foreground transition hover:bg-secondary hover:text-foreground"
+    <div className="page-shell print:max-w-none print:space-y-4">
+      <div className="space-y-4 print:hidden">
+        <button
+          type="button"
+          className="inline-flex min-h-11 w-fit items-center gap-1 rounded-xl px-2 text-sm font-semibold text-muted-foreground transition hover:bg-secondary hover:text-foreground"
+          onClick={() => navigate("/ai-reports")}
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4" aria-hidden />
           Back to reports
-        </Link>
+        </button>
+
         <PageHeader
           eyebrow="AI reports"
           title="Physician-ready report"
-          description={`${formatDate(report.dateRangeStart)} – ${formatDate(report.dateRangeEnd)}. Generated ${formatDate(report.createdAt)}.`}
+          description={`${rangeLabel}. Generated ${formatReportDate(report.createdAt)}.`}
           icon={CalendarRange}
           action={(
             <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
@@ -121,7 +131,7 @@ export function AIReportView() {
                 className="w-full sm:w-auto"
                 onClick={() => window.print()}
               >
-                <Printer className="mr-2 h-4 w-4" />
+                <Printer className="mr-2 h-4 w-4" aria-hidden />
                 Print
               </Button>
               <Button
@@ -129,12 +139,10 @@ export function AIReportView() {
                 variant="destructive"
                 className="w-full sm:w-auto"
                 disabled={remove.isPending}
-                onClick={() => {
-                  void handleDelete();
-                }}
+                onClick={() => setConfirmOpen(true)}
               >
-                <Trash2 className="mr-2 h-4 w-4" />
-                {remove.isPending ? "Deleting…" : "Delete"}
+                <Trash2 className="mr-2 h-4 w-4" aria-hidden />
+                Delete
               </Button>
             </div>
           )}
@@ -142,75 +150,64 @@ export function AIReportView() {
       </div>
 
       {remove.isError && (
-        <div
+        <p
           role="alert"
-          className="rounded-xl border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive print:hidden"
+          className="rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive print:hidden"
         >
           {getErrorMessage(remove.error)}
-        </div>
+        </p>
       )}
 
-      {/* Print-only header */}
       <div className="hidden print:block">
         <h1 className="text-2xl font-bold">Physician-ready report</h1>
-        <p className="mt-1 text-sm">
-          {formatDate(report.dateRangeStart)} –{" "}
-          {formatDate(report.dateRangeEnd)}
-        </p>
+        <p className="mt-1 text-sm">{rangeLabel}</p>
         <p className="text-xs text-muted-foreground">
-          Generated {formatDate(report.createdAt)}
+          Generated {formatReportDate(report.createdAt)}
         </p>
       </div>
 
-      <Card className="print:border-0 print:shadow-none">
-        <CardHeader>
-          <CardTitle className="text-base">Summary</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {summary ? (
-            <p className="text-sm leading-7 text-foreground">{summary}</p>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              No summary available.
-            </p>
-          )}
-        </CardContent>
-      </Card>
+      <SectionPanel title="Summary" icon={Sparkles} className="print:shadow-none">
+        {summary ? (
+          <p className="text-sm leading-7 text-foreground">{summary}</p>
+        ) : (
+          <p className="text-sm text-muted-foreground">No summary available.</p>
+        )}
+      </SectionPanel>
 
       <div className="grid gap-4 md:grid-cols-2 print:grid-cols-2">
-        <Card className="print:border print:shadow-none">
-          <CardContent className="pt-6">
-            <ReportSection
-              title="Conditions"
-              items={content.conditions as string[] | undefined}
-            />
-          </CardContent>
-        </Card>
-        <Card className="print:border print:shadow-none">
-          <CardContent className="pt-6">
-            <ReportSection
-              title="Medications"
-              items={content.medications as string[] | undefined}
-            />
-          </CardContent>
-        </Card>
-        <Card className="print:border print:shadow-none">
-          <CardContent className="pt-6">
-            <ReportSection
-              title="Symptoms"
-              items={content.symptoms as string[] | undefined}
-            />
-          </CardContent>
-        </Card>
-        <Card className="print:border print:shadow-none">
-          <CardContent className="pt-6">
-            <ReportSection
-              title="Recommendations"
-              items={content.recommendations as string[] | undefined}
-            />
-          </CardContent>
-        </Card>
+        <ReportSection
+          title="Conditions"
+          icon={HeartPulse}
+          items={content.conditions as string[] | undefined}
+        />
+        <ReportSection
+          title="Medications"
+          icon={Pill}
+          items={content.medications as string[] | undefined}
+        />
+        <ReportSection
+          title="Symptoms"
+          icon={Activity}
+          items={content.symptoms as string[] | undefined}
+        />
+        <ReportSection
+          title="Recommendations"
+          icon={Sparkles}
+          items={content.recommendations as string[] | undefined}
+        />
       </div>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={(open) => {
+          if (!open && !remove.isPending) setConfirmOpen(false);
+        }}
+        title="Delete this report?"
+        description="This permanently removes the report. This cannot be undone."
+        confirmLabel="Delete report"
+        loading={remove.isPending}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 }
