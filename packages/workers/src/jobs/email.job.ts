@@ -1,4 +1,5 @@
 import type { Job } from "bullmq";
+import { lookup } from "node:dns/promises";
 import nodemailer from "nodemailer";
 import type { Transporter } from "nodemailer";
 import {
@@ -82,7 +83,7 @@ function env(name: string): string {
   return (process.env[name] ?? "").trim();
 }
 
-function getTransporter(): Transporter {
+async function getTransporter(): Promise<Transporter> {
   if (transporter) {
     return transporter;
   }
@@ -104,21 +105,19 @@ function getTransporter(): Transporter {
   }
 
   const port = Number(env("SMTP_PORT") || "587");
-  const isGmail = host.toLowerCase().includes("gmail.com");
+  const { address } = await lookup(host, { family: 4 });
 
-  // Gmail should use the official `service: "gmail"` transport with an App Password.
-  transporter = isGmail
-    ? nodemailer.createTransport({
-        service: "gmail",
-        auth: { user, pass },
-      })
-    : nodemailer.createTransport({
-        host,
-        port,
-        secure: port === 465,
-        requireTLS: port !== 465,
-        auth: { user, pass },
-      });
+  // Resolve via the OS DNS lookup so Node's c-ares queryA timeouts cannot stall SMTP.
+  transporter = nodemailer.createTransport({
+    host: address,
+    port,
+    secure: port === 465,
+    requireTLS: port !== 465,
+    auth: { user, pass },
+    tls: {
+      servername: host,
+    },
+  });
 
   return transporter;
 }
@@ -159,15 +158,15 @@ export async function processEmailJob(
       return { messageId: recordedMessageId };
     }
 
-    console.info(`[email] Skipping duplicate delivery for job ${job.id}`);
-    return { messageId: recordedMessageId || `pending:${jobId}` };
+    await redis.set(key, "pending", "EX", EMAIL_DELIVERY_TTL_SECONDS);
   }
 
   const from = getFromAddress();
   const { html, text } = renderEmail(template, variables);
 
   try {
-    const info = await getTransporter().sendMail({
+    const mailer = await getTransporter();
+    const info = await mailer.sendMail({
       from,
       to,
       subject,
@@ -196,7 +195,8 @@ export async function processEmailJob(
 
     const message = error instanceof Error ? error.message : String(error);
     const ambiguous =
-      /timeout|timed out|ETIMEDOUT|ECONNRESET|socket hang up/i.test(message);
+      /ECONNRESET|socket hang up/i.test(message) &&
+      !/queryA|queryAAAA|ENOTFOUND|ECONNREFUSED/i.test(message);
 
     if (!ambiguous) {
       await redis.del(key);
