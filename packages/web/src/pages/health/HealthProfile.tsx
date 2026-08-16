@@ -13,6 +13,7 @@ import {
 } from "../../components/health/symptoms/SymptomCard";
 import { SymptomForm } from "../../components/health/symptoms/SymptomForm";
 import { AsidePanel } from "../../components/shared/AsidePanel";
+import { ConfirmDialog } from "../../components/shared/ConfirmDialog";
 import { LoadingSpinner } from "../../components/shared/LoadingSpinner";
 import {
   Pagination,
@@ -30,6 +31,7 @@ import {
   useSymptomsContext,
 } from "../../providers/SymptomsProvider";
 import { cn } from "../../lib/utils";
+import type { UserCondition, UserSymptom } from "../../lib/health/health-export";
 
 type ProfileTab = "conditions" | "symptoms";
 
@@ -153,12 +155,18 @@ function ConditionsSection() {
     formError,
     isRemoving,
     openCreate,
-    openEdit,
     closePanel,
     remove,
   } = useConditionsContext();
 
+  const [pendingDelete, setPendingDelete] = useState<UserCondition | null>(null);
   const totalCount = pagination?.totalCount ?? 0;
+
+  async function confirmDelete() {
+    if (!pendingDelete) return;
+    await remove(pendingDelete.id);
+    setPendingDelete(null);
+  }
 
   return (
     <SectionPanel
@@ -213,7 +221,10 @@ function ConditionsSection() {
         <ul className="mt-4 grid grid-cols-1 gap-3">
           {conditions.map((cond) => (
             <li key={cond.id} className="min-h-0">
-              <ConditionCard condition={cond} />
+              <ConditionCard
+                condition={cond}
+                onDelete={() => setPendingDelete(cond)}
+              />
             </li>
           ))}
         </ul>
@@ -238,17 +249,6 @@ function ConditionsSection() {
         open={panelOpen}
         onClose={closePanel}
         title={panelTitle}
-        onEdit={
-          panel.kind === "detail"
-            ? () => openEdit(panel.condition)
-            : undefined
-        }
-        onDelete={
-          panel.kind === "detail"
-            ? () => void remove(panel.condition.id)
-            : undefined
-        }
-        deleteDisabled={isRemoving}
       >
         {formError && (
           <p className="mb-4 rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -261,6 +261,18 @@ function ConditionsSection() {
           <ConditionForm />
         )}
       </AsidePanel>
+
+      <ConfirmDialog
+        open={pendingDelete != null}
+        onOpenChange={(open) => {
+          if (!open && !isRemoving) setPendingDelete(null);
+        }}
+        title={pendingDelete ? `Delete ${pendingDelete.condition.name}?` : "Delete condition?"}
+        description="This removes the condition from your health profile. This cannot be undone."
+        confirmLabel="Delete"
+        loading={isRemoving}
+        onConfirm={confirmDelete}
+      />
     </SectionPanel>
   );
 }
@@ -286,7 +298,14 @@ function SymptomsSection() {
     remove,
   } = useSymptomsContext();
 
+  const [pendingDelete, setPendingDelete] = useState<UserSymptom | null>(null);
   const totalCount = pagination?.totalCount ?? 0;
+
+  async function confirmDelete() {
+    if (!pendingDelete) return;
+    await remove(pendingDelete.id);
+    setPendingDelete(null);
+  }
 
   return (
     <SectionPanel
@@ -341,7 +360,10 @@ function SymptomsSection() {
         <ul className="mt-4 grid grid-cols-1 gap-3">
           {symptoms.map((sym) => (
             <li key={sym.id} className="min-h-0">
-              <SymptomCard symptom={sym} />
+              <SymptomCard
+                symptom={sym}
+                onDelete={() => setPendingDelete(sym)}
+              />
             </li>
           ))}
         </ul>
@@ -366,12 +388,6 @@ function SymptomsSection() {
         open={panelOpen}
         onClose={closePanel}
         title={panelTitle}
-        onDelete={
-          panel.kind === "detail"
-            ? () => void remove(panel.symptom.id)
-            : undefined
-        }
-        deleteDisabled={isRemoving}
       >
         {formError && (
           <p className="mb-4 rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -382,6 +398,18 @@ function SymptomsSection() {
         {panel.kind === "detail" && <SymptomDetail />}
         {panel.kind === "create" && <SymptomForm />}
       </AsidePanel>
+
+      <ConfirmDialog
+        open={pendingDelete != null}
+        onOpenChange={(open) => {
+          if (!open && !isRemoving) setPendingDelete(null);
+        }}
+        title={pendingDelete ? `Delete ${pendingDelete.catalog.name}?` : "Delete symptom?"}
+        description="This removes the symptom from your health profile. This cannot be undone."
+        confirmLabel="Delete"
+        loading={isRemoving}
+        onConfirm={confirmDelete}
+      />
     </SectionPanel>
   );
 }

@@ -2,10 +2,13 @@ import { useState } from "react";
 import {
   Activity,
   CalendarDays,
+  Eye,
   FileText,
   NotebookPen,
+  Pencil,
   Plus,
   Stethoscope,
+  Trash2,
   X,
 } from "lucide-react";
 import {
@@ -14,10 +17,12 @@ import {
 } from "../../../lib/health/health-export";
 import { cn, formatDate } from "../../../lib/utils";
 import { useConditionsContext } from "../../../providers/ConditionsProvider";
+import { RowActionsMenu } from "../../shared/RowActionsMenu";
 import { Button } from "../../ui/button";
 
 interface ConditionCardProps {
   condition: UserCondition;
+  onDelete: () => void;
 }
 
 const statusColors: Record<string, string> = {
@@ -26,25 +31,31 @@ const statusColors: Record<string, string> = {
   resolved: "bg-blue-600 text-white dark:bg-blue-500 dark:text-white",
 };
 
-export function ConditionCard({ condition }: ConditionCardProps) {
-  const { selectedId, openDetail, linkedSymptomsByConditionId } =
-    useConditionsContext();
+export function ConditionCard({ condition, onDelete }: ConditionCardProps) {
+  const {
+    selectedId,
+    openDetail,
+    openEdit,
+    linkedSymptomsByConditionId,
+  } = useConditionsContext();
   const selected = selectedId === condition.id;
   const { name } = condition.condition;
   const linkedSymptoms = linkedSymptomsByConditionId[condition.id] ?? [];
 
   return (
-    <button
-      type="button"
-      onClick={() => openDetail(condition)}
+    <article
       className={cn(
-        "group w-full cursor-pointer rounded-2xl border border-border/80 bg-card p-4 text-left shadow-soft transition-[border-color,box-shadow,transform] duration-200",
+        "group flex items-start gap-1 rounded-2xl border border-border/80 bg-card p-2 pl-4 shadow-soft transition-[border-color,box-shadow,transform] duration-200",
         "hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         selected && "border-primary ring-2 ring-primary/20",
       )}
     >
-      <div className="flex gap-3">
+      <button
+        type="button"
+        onClick={() => openDetail(condition)}
+        aria-label={`View ${name}`}
+        className="flex min-w-0 flex-1 cursor-pointer gap-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
           <Activity className="h-5 w-5" aria-hidden />
         </div>
@@ -106,8 +117,33 @@ export function ConditionCard({ condition }: ConditionCardProps) {
             </div>
           )}
         </div>
-      </div>
-    </button>
+      </button>
+
+      <RowActionsMenu
+        label={`Actions for ${name}`}
+        actions={[
+          {
+            id: "view",
+            label: "View",
+            icon: Eye,
+            onSelect: () => openDetail(condition),
+          },
+          {
+            id: "edit",
+            label: "Edit",
+            icon: Pencil,
+            onSelect: () => openEdit(condition),
+          },
+          {
+            id: "delete",
+            label: "Delete",
+            icon: Trash2,
+            variant: "destructive",
+            onSelect: onDelete,
+          },
+        ]}
+      />
+    </article>
   );
 }
 
