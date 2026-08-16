@@ -147,6 +147,8 @@ export async function processReminderJob(
               variables: {
                 name: user.name,
               },
+              userId: settings.userId,
+              localDate: today,
             },
             {
               jobId: reminderJobId,

@@ -13,6 +13,8 @@ export interface EmailJobData {
   subject: string;
   template: string;
   variables?: Record<string, string>;
+  userId?: string;
+  localDate?: string;
 }
 
 export interface EmbeddingsJobData {
@@ -21,9 +23,7 @@ export interface EmbeddingsJobData {
   text: string;
 }
 
-export interface ReminderJobData {
-  [key: string]: never;
-}
+export type ReminderJobData = Record<string, never>;
 
 export type JobData = EmailJobData | EmbeddingsJobData | ReminderJobData;
 

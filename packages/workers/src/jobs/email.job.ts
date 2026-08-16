@@ -9,8 +9,14 @@ import {
 
 const EMAIL_DELIVERY_TTL_SECONDS = 60 * 60 * 48;
 
-function deliveryKey(jobId: string): string {
-  return `email:delivered:${jobId}`;
+function deliveryKey(job: Job<EmailJobData>): string {
+  const { userId, localDate } = job.data;
+
+  if (userId && localDate) {
+    return `email:delivered:${userId}:${localDate}`;
+  }
+
+  return `email:delivered:${String(job.id)}`;
 }
 
 let transporter: Transporter | null = null;
@@ -126,7 +132,7 @@ export async function processEmailJob(
 
   const jobId = String(job.id);
   const redis = getRedisConnection();
-  const key = deliveryKey(jobId);
+  const key = deliveryKey(job);
   const existingMessageId = await redis.get(key);
 
   if (existingMessageId && existingMessageId !== "pending") {
