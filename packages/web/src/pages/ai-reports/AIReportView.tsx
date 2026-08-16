@@ -10,6 +10,7 @@ import {
 import { Button } from "../../components/ui/button";
 import { LoadingSpinner } from "../../components/shared/LoadingSpinner";
 import { ReportSection } from "../../components/ai-reports/ReportSection";
+import { PageHeader } from "../../components/shared/PageHeader";
 import { useAiReport, useRemoveAiReport } from "../../hooks/useAIReports";
 
 function formatDate(value: string): string {
@@ -71,12 +72,15 @@ export function AIReportView() {
 
   if (isError || !report) {
     return (
-      <div className="space-y-4">
-        <div className="rounded-lg border border-red-200 bg-red-50 p-6 dark:border-red-900 dark:bg-red-950/40">
-          <h2 className="text-lg font-semibold text-red-800 dark:text-red-200">
+      <div className="page-shell max-w-3xl">
+        <div
+          role="alert"
+          className="rounded-2xl border border-destructive/20 bg-destructive/10 p-6 shadow-soft"
+        >
+          <h2 className="text-lg font-semibold text-destructive">
             Unable to load report
           </h2>
-          <p className="mt-2 text-sm text-red-700 dark:text-red-300">
+          <p className="mt-2 text-sm text-destructive/90">
             {getErrorMessage(error)}
           </p>
         </div>
@@ -95,56 +99,53 @@ export function AIReportView() {
     typeof content.summary === "string" ? content.summary : null;
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 print:max-w-none print:space-y-4">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between print:hidden">
-        <div>
-          <Link
-            to="/ai-reports"
-            className="mb-3 inline-flex items-center gap-1 text-sm text-muted-foreground transition hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to reports
-          </Link>
-          <h1 className="text-2xl font-bold tracking-tight">
-            Physician-ready report
-          </h1>
-          <p className="mt-1 flex flex-wrap items-center gap-2 text-muted-foreground">
-            <CalendarRange className="h-4 w-4" />
-            <span>
-              {formatDate(report.dateRangeStart)} –{" "}
-              {formatDate(report.dateRangeEnd)}
-            </span>
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Generated {formatDate(report.createdAt)}
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => window.print()}
-          >
-            <Printer className="mr-2 h-4 w-4" />
-            Print
-          </Button>
-          <Button
-            type="button"
-            variant="destructive"
-            disabled={remove.isPending}
-            onClick={() => {
-              void handleDelete();
-            }}
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            {remove.isPending ? "Deleting…" : "Delete"}
-          </Button>
-        </div>
+    <div className="page-shell max-w-3xl print:max-w-none print:space-y-4">
+      <div className="print:hidden">
+        <Link
+          to="/ai-reports"
+          className="mb-4 inline-flex min-h-11 items-center gap-1 rounded-lg px-2 text-sm font-semibold text-muted-foreground transition hover:bg-secondary hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to reports
+        </Link>
+        <PageHeader
+          eyebrow="AI reports"
+          title="Physician-ready report"
+          description={`${formatDate(report.dateRangeStart)} – ${formatDate(report.dateRangeEnd)}. Generated ${formatDate(report.createdAt)}.`}
+          icon={CalendarRange}
+          action={(
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full sm:w-auto"
+                onClick={() => window.print()}
+              >
+                <Printer className="mr-2 h-4 w-4" />
+                Print
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                className="w-full sm:w-auto"
+                disabled={remove.isPending}
+                onClick={() => {
+                  void handleDelete();
+                }}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                {remove.isPending ? "Deleting…" : "Delete"}
+              </Button>
+            </div>
+          )}
+        />
       </div>
 
       {remove.isError && (
-        <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700 print:hidden dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
+        <div
+          role="alert"
+          className="rounded-xl border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive print:hidden"
+        >
           {getErrorMessage(remove.error)}
         </div>
       )}

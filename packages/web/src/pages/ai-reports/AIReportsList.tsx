@@ -12,6 +12,7 @@ import {
 import { AiReportCard } from "../../components/ai-reports/AiReportCard";
 import { useAuth } from "../../hooks/useAuth";
 import { useAiReports, useRemoveAiReport } from "../../hooks/useAIReports";
+import { PageHeader } from "../../components/shared/PageHeader";
 
 const PAGE_SIZE = 10;
 
@@ -80,25 +81,18 @@ export function AIReportsList() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <FileText className="h-5 w-5" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">AI Reports</h1>
-              <p className="text-muted-foreground">
-                Previously generated AI reports.
-              </p>
-            </div>
-          </div>
-        </div>
-        <Link to="/ai-reports/generate">
-          <Button>Generate New Report</Button>
-        </Link>
-      </div>
+    <div className="page-shell">
+      <PageHeader
+        eyebrow="Clinical summaries"
+        title="AI Reports"
+        description="Review previous summaries or generate a new physician-ready report."
+        icon={FileText}
+        action={(
+          <Link to="/ai-reports/generate">
+            <Button className="w-full sm:w-auto">Generate New Report</Button>
+          </Link>
+        )}
+      />
 
       {remove.isError && (
         <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
@@ -107,7 +101,7 @@ export function AIReportsList() {
       )}
 
       {reports.length === 0 ? (
-        <div className="rounded-lg border border-dashed p-10 text-center">
+        <div className="rounded-2xl border border-dashed bg-card p-10 text-center shadow-soft">
           <p className="text-sm text-muted-foreground">
             No reports yet. Generate your first physician-ready summary.
           </p>

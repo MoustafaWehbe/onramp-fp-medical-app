@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock, Sun, TriangleAlert, Bell } from "lucide-react";
+import { Mail, Lock, Sun, TriangleAlert, Bell, SlidersHorizontal } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import {
   SettingsProvider,
@@ -26,6 +26,7 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { useTheme } from "../../providers/ThemeProvider";
+import { PageHeader } from "../../components/shared/PageHeader";
 
 import {
   useReminderSettings,
@@ -187,11 +188,13 @@ useEffect(() => {
     : "";
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
-        <p className="text-muted-foreground">Manage your account information.</p>
-      </div>
+    <div className="page-shell">
+      <PageHeader
+        eyebrow="Account preferences"
+        title="Settings"
+        description="Manage your profile, security, reminders, and appearance."
+        icon={SlidersHorizontal}
+      />
 
       {/* Account */}
       <section className="space-y-3">

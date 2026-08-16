@@ -16,6 +16,7 @@ import {
   type UseFormSetValue,
   type UseFormWatch,
   type Control,
+  type UseFormTrigger,
 } from "react-hook-form";
 
 import {
@@ -141,6 +142,7 @@ interface DailyEntriesContextValue {
   setValue: UseFormSetValue<DailyEntryFormValues>;
   formErrors: FieldErrors<DailyEntryFormValues>;
   handleFormSubmit: UseFormHandleSubmit<DailyEntryFormValues>;
+  trigger: UseFormTrigger<DailyEntryFormValues>;
 
   /**
    * Form state.
@@ -365,6 +367,7 @@ export function DailyEntriesProvider({
     watch,
     reset,
     control,
+    trigger,
     formState: {
       errors: formErrors,
       
@@ -567,6 +570,19 @@ export function DailyEntriesProvider({
     createEntry.isPending ||
     updateEntry.isPending;
 
+  function waitForSaveCelebration() {
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return Promise.resolve();
+    }
+
+    return new Promise<void>((resolve) => {
+      window.setTimeout(resolve, 800);
+    });
+  }
+
   /**
    * ----------------------------------------------------
    * Panel information
@@ -742,6 +758,7 @@ async function submitForm(
 
       setCurrentPage(1);
 
+      await waitForSaveCelebration();
       closePanel();
 
       return;
@@ -756,6 +773,7 @@ async function submitForm(
         body: request,
       });
 
+      await waitForSaveCelebration();
       closePanel();
     }
   } catch (error) {
@@ -908,6 +926,8 @@ async function submitForm(
         handleFormSubmit:
           handleSubmit,
 
+        trigger,
+
         /**
          * Form state
          */
@@ -1054,6 +1074,7 @@ async function submitForm(
         setValue,
         formErrors,
         handleSubmit,
+        trigger,
 
         formError,
 

@@ -47,8 +47,8 @@ export function DoctorVisitCard({
       type="button"
       onClick={onClick}
       className={cn(
-        "group w-full rounded-xl border bg-card p-4 text-left shadow-sm transition-all",
-        "hover:border-primary/40 hover:shadow-md",
+        "group w-full cursor-pointer rounded-2xl border border-border/80 bg-card p-4 text-left shadow-soft transition-[border-color,box-shadow,transform] duration-200",
+        "hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       )}
     >
@@ -62,7 +62,7 @@ export function DoctorVisitCard({
             shrink-0
             items-center
             justify-center
-            rounded-lg
+            rounded-xl
             bg-primary/10
             text-primary
             transition-colors

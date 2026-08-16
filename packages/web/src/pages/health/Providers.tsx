@@ -17,6 +17,8 @@ import {
   paginationFromApi,
 } from "../../components/shared/Pagination";
 import { Button } from "../../components/ui/button";
+import { PageHeader } from "../../components/shared/PageHeader";
+import { SectionPanel } from "../../components/shared/SectionPanel";
 import {
   ClinicsProvider,
   useClinicsContext,
@@ -51,28 +53,25 @@ function ClinicsSection() {
   const totalCount = pagination?.totalCount ?? 0;
 
   return (
-    <section>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0 space-y-1.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-xl font-bold tracking-tight">Clinics</h2>
-            {isSuccess && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
-                <ClipboardList className="h-3.5 w-3.5" aria-hidden />
-                {totalCount}{" "}
-                {totalCount === 1 ? "clinic" : "clinics"}
-              </span>
-            )}
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Saved clinics and medical facilities.
-          </p>
+    <SectionPanel
+      title="Clinics"
+      description="Saved clinics and medical facilities."
+      icon={Building2}
+      action={(
+        <div className="flex flex-wrap items-center gap-2">
+          {isSuccess && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
+              <ClipboardList className="h-3.5 w-3.5" aria-hidden />
+              {totalCount} {totalCount === 1 ? "clinic" : "clinics"}
+            </span>
+          )}
+          <Button type="button" className="w-full sm:w-auto" onClick={openCreate}>
+            <Plus className="mr-1.5 h-4 w-4" />
+            Add clinic
+          </Button>
         </div>
-        <Button type="button" className="shrink-0 self-start sm:self-auto" onClick={openCreate}>
-          <Plus className="mr-1.5 h-4 w-4" />
-          Add clinic
-        </Button>
-      </div>
+      )}
+    >
 
       {listErrorMessage && (
         <p className="mt-4 rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -154,7 +153,7 @@ function ClinicsSection() {
           <ClinicForm />
         )}
       </AsidePanel>
-    </section>
+    </SectionPanel>
   );
 }
 
@@ -183,28 +182,25 @@ function DoctorsSection() {
   const totalCount = pagination?.totalCount ?? 0;
 
   return (
-    <section>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0 space-y-1.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-xl font-bold tracking-tight">Doctors</h2>
-            {isSuccess && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
-                <ClipboardList className="h-3.5 w-3.5" aria-hidden />
-                {totalCount}{" "}
-                {totalCount === 1 ? "doctor" : "doctors"}
-              </span>
-            )}
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Saved doctors and healthcare providers.
-          </p>
+    <SectionPanel
+      title="Doctors"
+      description="Saved doctors and healthcare providers."
+      icon={Stethoscope}
+      action={(
+        <div className="flex flex-wrap items-center gap-2">
+          {isSuccess && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
+              <ClipboardList className="h-3.5 w-3.5" aria-hidden />
+              {totalCount} {totalCount === 1 ? "doctor" : "doctors"}
+            </span>
+          )}
+          <Button type="button" className="w-full sm:w-auto" onClick={openCreate}>
+            <Plus className="mr-1.5 h-4 w-4" />
+            Add doctor
+          </Button>
         </div>
-        <Button type="button" className="shrink-0 self-start sm:self-auto" onClick={openCreate}>
-          <Plus className="mr-1.5 h-4 w-4" />
-          Add doctor
-        </Button>
-      </div>
+      )}
+    >
 
       {listErrorMessage && (
         <p className="mt-4 rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -286,7 +282,7 @@ function DoctorsSection() {
           <DoctorForm />
         )}
       </AsidePanel>
-    </section>
+    </SectionPanel>
   );
 }
 
@@ -303,15 +299,15 @@ function ProvidersContent() {
         onActivate={() => clinicsCloseRef.current?.()}
         panelCloseRef={doctorsCloseRef}
       >
-        <div className="space-y-8">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">Providers</h1>
-            <p className="text-muted-foreground">
-              Manage your saved clinics and doctors in one place.
-            </p>
-          </div>
+        <div className="page-shell">
+          <PageHeader
+            eyebrow="Care network"
+            title="Providers"
+            description="Keep your doctors and clinics together for faster access when you need them."
+            icon={Stethoscope}
+          />
 
-          <div className="grid gap-8 xl:grid-cols-2">
+          <div className="grid items-start gap-5 xl:grid-cols-2">
             <ClinicsSection />
             <DoctorsSection />
           </div>

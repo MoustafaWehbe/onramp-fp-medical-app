@@ -17,6 +17,8 @@ import {
   paginationFromApi,
 } from "../../components/shared/Pagination";
 import { Button } from "../../components/ui/button";
+import { PageHeader } from "../../components/shared/PageHeader";
+import { SectionPanel } from "../../components/shared/SectionPanel";
 import {
   ConditionsProvider,
   useConditionsContext,
@@ -51,28 +53,25 @@ function ConditionsSection() {
   const totalCount = pagination?.totalCount ?? 0;
 
   return (
-    <section>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0 space-y-1.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-xl font-bold tracking-tight">Conditions</h2>
-            {isSuccess && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
-                <ClipboardList className="h-3.5 w-3.5" aria-hidden />
-                {totalCount}{" "}
-                {totalCount === 1 ? "condition" : "conditions"}
-              </span>
-            )}
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Track diagnosed conditions, status, and notes.
-          </p>
+    <SectionPanel
+      title="Conditions"
+      description="Track diagnosed conditions, status, and notes."
+      icon={Activity}
+      action={(
+        <div className="flex flex-wrap items-center gap-2">
+          {isSuccess && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
+              <ClipboardList className="h-3.5 w-3.5" aria-hidden />
+              {totalCount} {totalCount === 1 ? "condition" : "conditions"}
+            </span>
+          )}
+          <Button type="button" className="w-full sm:w-auto" onClick={openCreate}>
+            <Plus className="mr-1.5 h-4 w-4" />
+            Add condition
+          </Button>
         </div>
-        <Button type="button" className="shrink-0 self-start sm:self-auto" onClick={openCreate}>
-          <Plus className="mr-1.5 h-4 w-4" />
-          Add condition
-        </Button>
-      </div>
+      )}
+    >
 
       {listErrorMessage && (
         <p className="mt-4 rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -155,7 +154,7 @@ function ConditionsSection() {
           <ConditionForm />
         )}
       </AsidePanel>
-    </section>
+    </SectionPanel>
   );
 }
 
@@ -183,28 +182,25 @@ function SymptomsSection() {
   const totalCount = pagination?.totalCount ?? 0;
 
   return (
-    <section>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0 space-y-1.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-xl font-bold tracking-tight">Symptoms</h2>
-            {isSuccess && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
-                <ClipboardList className="h-3.5 w-3.5" aria-hidden />
-                {totalCount}{" "}
-                {totalCount === 1 ? "symptom" : "symptoms"}
-              </span>
-            )}
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Track symptoms from the catalog or BioPortal (SNOMED).
-          </p>
+    <SectionPanel
+      title="Symptoms"
+      description="Track symptoms from the catalog or BioPortal (SNOMED)."
+      icon={Activity}
+      action={(
+        <div className="flex flex-wrap items-center gap-2">
+          {isSuccess && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
+              <ClipboardList className="h-3.5 w-3.5" aria-hidden />
+              {totalCount} {totalCount === 1 ? "symptom" : "symptoms"}
+            </span>
+          )}
+          <Button type="button" className="w-full sm:w-auto" onClick={openCreate}>
+            <Plus className="mr-1.5 h-4 w-4" />
+            Add symptom
+          </Button>
         </div>
-        <Button type="button" className="shrink-0 self-start sm:self-auto" onClick={openCreate}>
-          <Plus className="mr-1.5 h-4 w-4" />
-          Add symptom
-        </Button>
-      </div>
+      )}
+    >
 
       {listErrorMessage && (
         <p className="mt-4 rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -280,7 +276,7 @@ function SymptomsSection() {
         {panel.kind === "detail" && <SymptomDetail />}
         {panel.kind === "create" && <SymptomForm />}
       </AsidePanel>
-    </section>
+    </SectionPanel>
   );
 }
 
@@ -297,15 +293,15 @@ function HealthProfileContent() {
         onActivate={() => conditionsCloseRef.current?.()}
         panelCloseRef={symptomsCloseRef}
       >
-        <div className="space-y-8">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">Health Profile</h1>
-            <p className="text-muted-foreground">
-              Manage your conditions and symptoms in one place.
-            </p>
-          </div>
+        <div className="page-shell">
+          <PageHeader
+            eyebrow="Clinical profile"
+            title="Health Profile"
+            description="Build a clear, connected view of the conditions and symptoms you track."
+            icon={Activity}
+          />
 
-          <div className="grid gap-8 xl:grid-cols-2">
+          <div className="grid items-start gap-5 xl:grid-cols-2">
             <ConditionsSection />
             <SymptomsSection />
           </div>

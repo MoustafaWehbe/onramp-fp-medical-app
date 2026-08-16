@@ -52,14 +52,14 @@ entry.journalNotes?.trim(),
 
 return ( <article
    className="
- rounded-lg
+ rounded-2xl
  border
  bg-card
  text-card-foreground
  p-5
- shadow-sm
+ shadow-soft
  transition
- hover:shadow-md
+ hover:shadow-lift
  "
  >
 {/* -------------------------------- */}
@@ -69,9 +69,11 @@ return ( <article
   <div
     className="
       flex
+      flex-col
       items-start
       justify-between
       gap-4
+      sm:flex-row
     "
   >
     <div>
@@ -106,7 +108,8 @@ return ( <article
         items-center
         justify-center
         gap-2
-        rounded-md
+        min-h-11
+        rounded-xl
         bg-primary
         px-4
         py-2
@@ -138,7 +141,7 @@ return ( <article
 
     <div
       className="
-        rounded-md
+        rounded-xl
        bg-muted
         p-3
       "
@@ -173,7 +176,7 @@ return ( <article
 
     <div
       className="
-        rounded-md
+        rounded-xl
         bg-muted
         p-3
       "

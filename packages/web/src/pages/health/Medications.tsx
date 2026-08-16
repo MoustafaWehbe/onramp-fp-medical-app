@@ -11,6 +11,8 @@ import {
   paginationFromApi,
 } from "../../components/shared/Pagination";
 import { Button } from "../../components/ui/button";
+import { PageHeader } from "../../components/shared/PageHeader";
+import { SectionPanel } from "../../components/shared/SectionPanel";
 import {
   MedicationsProvider,
   useMedicationsContext,
@@ -41,28 +43,25 @@ function MedicationsView() {
   const totalCount = pagination?.totalCount ?? 0;
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0 space-y-1.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight">Medications</h1>
-            {isSuccess && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
-                <ClipboardList className="h-3.5 w-3.5" aria-hidden />
-                {totalCount}{" "}
-                {totalCount === 1 ? "medication" : "medications"}
-              </span>
-            )}
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Track dosage, frequency, and notes in your personal registry.
-          </p>
-        </div>
-        <Button type="button" className="shrink-0 self-start sm:self-auto" onClick={openCreate}>
-          <Plus className="mr-1.5 h-4 w-4" />
-          Add medication
-        </Button>
-      </div>
+    <div className="page-shell">
+      <PageHeader
+        eyebrow="Personal registry"
+        title="Medications"
+        description="Keep dosages, schedules, and notes organized in one reliable record."
+        icon={Pill}
+        badge={isSuccess ? (
+          <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-1 text-xs font-semibold text-secondary-foreground">
+            <ClipboardList className="h-3.5 w-3.5" aria-hidden />
+            {totalCount} {totalCount === 1 ? "medication" : "medications"}
+          </span>
+        ) : undefined}
+        action={(
+          <Button type="button" className="w-full sm:w-auto" onClick={openCreate}>
+            <Plus className="mr-1.5 h-4 w-4" aria-hidden />
+            Add medication
+          </Button>
+        )}
+      />
 
       {listErrorMessage && (
         <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -70,14 +69,20 @@ function MedicationsView() {
         </p>
       )}
 
-      {isLoading && (
-        <div className="flex justify-center py-16">
-          <LoadingSpinner />
-        </div>
-      )}
+      <SectionPanel
+        title="Medication list"
+        description="Select a medication to view or update its details."
+        icon={ClipboardList}
+        contentClassName="min-h-48"
+      >
+        {isLoading && (
+          <div className="flex justify-center py-16">
+            <LoadingSpinner />
+          </div>
+        )}
 
-      {isSuccess && medications.length === 0 && (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed px-6 py-16 text-center">
+        {isSuccess && medications.length === 0 && (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed bg-muted/20 px-6 py-16 text-center">
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
             <Pill className="h-6 w-6" aria-hidden />
           </div>
@@ -93,8 +98,8 @@ function MedicationsView() {
         </div>
       )}
 
-      {isSuccess && medications.length > 0 && (
-        <ul className="grid grid-cols-1 gap-3 md:grid-cols-3">
+        {isSuccess && medications.length > 0 && (
+        <ul className="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3">
           {medications.map((med) => (
             <li key={med.id} className="min-h-0">
               <MedicationCard medication={med} />
@@ -103,18 +108,21 @@ function MedicationsView() {
         </ul>
       )}
 
-      {isError && !listErrorMessage && (
+        {isError && !listErrorMessage && (
         <p className="text-sm text-destructive">Failed to load medications</p>
       )}
 
-      {isSuccess && pagination && (
+        {isSuccess && pagination && (
+        <div className="mt-5">
         <Pagination
           {...paginationFromApi(pagination)}
           onNext={goToNextPage}
           onPrev={goToPrevPage}
           onPageChange={goToPage}
         />
+        </div>
       )}
+      </SectionPanel>
 
       <AsidePanel
         open={panelOpen}

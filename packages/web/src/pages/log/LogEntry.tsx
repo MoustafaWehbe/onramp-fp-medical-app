@@ -1,6 +1,5 @@
+import type { ReactNode } from "react";
 import {
-  Pencil,
-  Trash2,
   CalendarDays,
   HeartPulse,
   Moon,
@@ -10,53 +9,36 @@ import {
   Stethoscope,
   Building2,
 } from "lucide-react";
-import {AsidePanel} from "../../components/shared/AsidePanel";
-
-import {
-  useDailyEntriesContext,
-} from "../../providers/DailyEntriesProvider";
-
+import { AsidePanel } from "../../components/shared/AsidePanel";
+import { useDailyEntriesContext } from "../../providers/DailyEntriesProvider";
 import { DailyEntryForm } from "../../components/daily-entries/DailyEntryForm";
-import { 
+import {
   getSymptomName,
   getMedicationName,
   getConditionName,
-  getDoctorName, getClinicName, } from "../../lib/daily-entries/daily-entries-exports";
-  import {getTodayDate} from "../../lib/daily-entries/form";
-
-// function handlePanelKeyDown(
-//   event: React.KeyboardEvent<HTMLDivElement>,
-//   onClose: () => void,
-// ) {
-//   if (event.key === "Escape") {
-//     onClose();
-//   }
-// }
+  getDoctorName,
+  getClinicName,
+} from "../../lib/daily-entries/daily-entries-exports";
+import { getTodayDate } from "../../lib/daily-entries/form";
 
 export function LogEntry() {
   const {
     panel,
     panelOpen,
     panelTitle,
-
     selectedEntry,
     symptoms,
     medications,
     conditions,
     doctors,
     clinics,
-
     isDetailLoading,
     detailErrorMessage,
-
     formMode,
-
     closePanel,
     openEdit,
-
     remove,
     isRemoving,
-
     formError,
   } = useDailyEntriesContext();
 
@@ -64,477 +46,181 @@ export function LogEntry() {
     return null;
   }
 
-  // can edit only if the submitted entry is today
-  const canEdit= selectedEntry && selectedEntry.entryDate === getTodayDate();
-  /**
-   * ----------------------------------------------------
-   * CREATE / EDIT
-   * ----------------------------------------------------
-   *
-   * The actual form is handled by DailyEntryForm.
-   */
+  const canEdit = selectedEntry && selectedEntry.entryDate === getTodayDate();
 
-  if (
-    formMode === "create" ||
-    formMode === "edit"
-  ) {
+  if (formMode === "create" || formMode === "edit") {
     return (
       <AsidePanel
-      open={panelOpen}
-      onClose={closePanel}
-      title={panelTitle}
-    >
-      <DailyEntryForm />
-    </AsidePanel>
+        open={panelOpen}
+        onClose={closePanel}
+        title={panelTitle}
+        className="max-w-lg"
+        contentClassName="flex min-h-0 flex-1 flex-col overflow-hidden p-0"
+      >
+        <DailyEntryForm />
+      </AsidePanel>
     );
   }
 
-  /**
-   * ----------------------------------------------------
-   * DETAIL
-   * ----------------------------------------------------
-   */
-
-  if (
-    panel.kind === "detail"
-  ) {
+  if (panel.kind === "detail") {
     return (
       <AsidePanel
-      open={panelOpen}
-      onClose={closePanel}
-      title={panelTitle}
-      onEdit={canEdit ? () =>
-        openEdit(selectedEntry)
-      : undefined}
-      onDelete={() =>
-        selectedEntry && remove(selectedEntry.id)
-      }
-      deleteDisabled={isRemoving}
-    >
-        <div>
-          {/* -------------------------------- */}
-          {/* Header                            */}
-          {/* -------------------------------- */}
-
-          <div
-            className="
-              flex
-              items-center
-              justify-between
-              border-b
-              px-6
-              py-4
-            "
-          >
-            <div>
-              <h2
-              id="daily-entry-panel-title"
-              className="
-                text-lg
-                font-semibold
-                text-foreground
-              "
-            >
-                {panelTitle}
-              </h2>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Daily health entry details
-              </p>
-            </div>
+        open={panelOpen}
+        onClose={closePanel}
+        title={panelTitle}
+        className="max-w-lg"
+        onEdit={canEdit ? () => openEdit(selectedEntry) : undefined}
+        onDelete={() => selectedEntry && remove(selectedEntry.id)}
+        deleteDisabled={isRemoving}
+      >
+        {isDetailLoading ? (
+          <div className="flex min-h-[300px] items-center justify-center text-sm text-muted-foreground">
+            Loading entry details...
           </div>
-
-          {/* -------------------------------- */}
-          {/* Detail content                    */}
-          {/* -------------------------------- */}
-
-          <div className="overflow-y-auto p-6">
-            {isDetailLoading ? (
+        ) : detailErrorMessage ? (
+          <div
+            role="alert"
+            className="rounded-xl border border-destructive/20 bg-destructive/10 p-4 text-sm text-destructive"
+          >
+            {detailErrorMessage}
+          </div>
+        ) : selectedEntry ? (
+          <div className="space-y-4">
+            {formError && (
               <div
-                className="
-                  flex
-                  min-h-[300px]
-                  items-center
-                  justify-center
-                "
+                role="alert"
+                className="rounded-xl border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive"
               >
-                <div className="text-sm text-muted-foreground">
-                  Loading entry details...
-                </div>
+                {formError}
               </div>
-            ) : detailErrorMessage ? (
-              <div className="p-6">
-                <div
-                  className="
-                    rounded-lg
-                    border
-                    border-red-200
-                    bg-red-50
-                    p-4
-                  "
-                >
-                  <p
-                    className="
-                      text-sm
-                      font-medium
-                      text-red-800
-                    "
-                  >
-                    {detailErrorMessage}
+            )}
+
+            <div className="rounded-2xl border border-border/80 bg-muted/40 p-4">
+              <div className="flex items-center gap-3">
+                <CalendarDays className="h-5 w-5 text-primary" aria-hidden />
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                    Entry date
+                  </p>
+                  <p className="mt-1 font-semibold">
+                    {formatEntryDate(selectedEntry.entryDate)}
                   </p>
                 </div>
               </div>
-            ) : selectedEntry ? (
-              <div className="space-y-6 p-6">
-                {/* -------------------------------- */}
-                {/* Actions                            */}
-                {/* -------------------------------- */}
+            </div>
 
-                <div
-                  className="
-                    flex
-                    justify-end
-                    gap-2
-                  "
-                >{canEdit && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      openEdit(selectedEntry)
-                    }
-                    className="
-                      inline-flex
-                      items-center
-                      gap-2
-                      rounded-md
-                      border
-                      px-4
-                      py-2
-                      text-sm
-                      font-medium
-                      text-foreground
-                      transition
-                      hover:bg-muted
-                    "
-                  >
-                    <Pencil className="h-4 w-4" />
-                    Edit
-                  </button>)}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <DetailItem
+                icon={<HeartPulse className="h-5 w-5" aria-hidden />}
+                label="Mood"
+                value={
+                  selectedEntry.moodRating !== null
+                    ? `${selectedEntry.moodRating} / 5`
+                    : "Not recorded"
+                }
+              />
+              <DetailItem
+                icon={<Moon className="h-5 w-5" aria-hidden />}
+                label="Sleep"
+                value={
+                  selectedEntry.sleepHours !== null
+                    ? `${selectedEntry.sleepHours} hours`
+                    : "Not recorded"
+                }
+              />
+            </div>
 
-                  <button
-                    type="button"
-                    disabled={isRemoving}
-                    onClick={() =>
-                      remove(selectedEntry.id)
-                    }
-                    className="
-                      inline-flex
-                      items-center
-                      gap-2
-                      rounded-md
-                      border
-                      border-red-200
-                      px-4
-                      py-2
-                      text-sm
-                      font-medium
-                      text-red-600
-                      transition
-                      hover:bg-red-50
-                      disabled:cursor-not-allowed
-                      disabled:opacity-50
-                    "
-                  >
-                    <Trash2 className="h-4 w-4" />
+            <DetailSection
+              icon={<BookOpen className="h-5 w-5" aria-hidden />}
+              title="Journal"
+            >
+              {selectedEntry.journalNotes?.trim() ? (
+                <p className="whitespace-pre-wrap text-sm leading-6">
+                  {selectedEntry.journalNotes}
+                </p>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  No journal notes recorded.
+                </p>
+              )}
+            </DetailSection>
 
-                    {isRemoving
-                      ? "Deleting..."
-                      : "Delete"}
-                  </button>
-                </div>
+            <DetailSection
+              icon={<Activity className="h-5 w-5" aria-hidden />}
+              title="Symptoms"
+            >
+              {selectedEntry.symptoms.length > 0 ? (
+                <TagList
+                  items={selectedEntry.symptoms.map((item) =>
+                    getSymptomName(item, symptoms),
+                  )}
+                />
+              ) : (
+                <EmptyRelatedData />
+              )}
+            </DetailSection>
 
-                {/* -------------------------------- */}
-                {/* Delete error                      */}
-                {/* -------------------------------- */}
+            <DetailSection
+              icon={<Pill className="h-5 w-5" aria-hidden />}
+              title="Medications"
+            >
+              {selectedEntry.medications.length > 0 ? (
+                <TagList
+                  items={selectedEntry.medications.map((item) =>
+                    getMedicationName(item, medications),
+                  )}
+                />
+              ) : (
+                <EmptyRelatedData />
+              )}
+            </DetailSection>
 
-                {formError && (
-                  <div
-                    className="
-                      rounded-md
-                      border
-                      border-red-200
-                      bg-red-50
-                      p-3
-                      text-sm
-                      text-red-700
-                    "
-                  >
-                    {formError}
-                  </div>
-                )}
+            <DetailSection
+              icon={<HeartPulse className="h-5 w-5" aria-hidden />}
+              title="Conditions"
+            >
+              {selectedEntry.conditions.length > 0 ? (
+                <TagList
+                  items={selectedEntry.conditions.map((item) =>
+                    getConditionName(item, conditions),
+                  )}
+                />
+              ) : (
+                <EmptyRelatedData />
+              )}
+            </DetailSection>
 
-                {/* -------------------------------- */}
-                {/* Entry date                        */}
-                {/* -------------------------------- */}
-
-                <div
-                  className="
-                    rounded-lg
-                    border
-                    bg-muted
-                    p-4
-                  "
-                >
-                  <div className="flex items-center gap-3">
-                    <CalendarDays
-                      className="
-                        h-5
-                        w-5
-                        text-muted-foreground
-                      "
-                    />
-
-                    <div>
-                      <p
-                        className="
-                          text-xs
-                          font-medium
-                          uppercase
-                          tracking-wide
-                          text-muted-foreground
-                        "
-                      >
-                        Entry date
-                      </p>
-
-                      <p
-                        className="
-                          mt-1
-                          font-semibold
-                          text-foreground
-                        "
-                      >
-                        {formatEntryDate(
-                          selectedEntry.entryDate,
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* -------------------------------- */}
-                {/* Basic information                 */}
-                {/* -------------------------------- */}
-
-                <div
-                  className="
-                    grid
-                    grid-cols-1
-                    gap-4
-                    sm:grid-cols-2
-                  "
-                >
-                  {/* Mood */}
-
-                  <DetailItem
-                    icon={
-                      <HeartPulse className="h-5 w-5" />
-                    }
-                    label="Mood"
-                    value={
-                      selectedEntry.moodRating !== null
-                        ? `${selectedEntry.moodRating} / 10`
-                        : "Not recorded"
-                    }
-                  />
-
-                  {/* Sleep */}
-
-                  <DetailItem
-                    icon={
-                      <Moon className="h-5 w-5" />
-                    }
-                    label="Sleep"
-                    value={
-                      selectedEntry.sleepHours !== null
-                        ? `${selectedEntry.sleepHours} hours`
-                        : "Not recorded"
-                    }
-                  />
-                </div>
-
-                {/* -------------------------------- */}
-                {/* Journal                           */}
-                {/* -------------------------------- */}
-
-                <DetailSection
-                  icon={
-                    <BookOpen className="h-5 w-5" />
-                  }
-                  title="Journal"
-                >
-                  {selectedEntry.journalNotes?.trim() ? (
-                    <p
-                      className="
-                        whitespace-pre-wrap
-                        text-sm
-                        leading-6
-                        text-foreground
-                      "
+            <DetailSection
+              icon={<Stethoscope className="h-5 w-5" aria-hidden />}
+              title="Doctor visits"
+            >
+              {selectedEntry.doctorVisits.length > 0 ? (
+                <div className="space-y-3">
+                  {selectedEntry.doctorVisits.map((visit) => (
+                    <div
+                      key={visit.id}
+                      className="rounded-xl border bg-muted/50 p-3"
                     >
-                      {selectedEntry.journalNotes}
-                    </p>
-                  ) : (
-                    <p className="text-sm text-muted-foreground ">
-                      No journal notes recorded.
-                    </p>
-                  )}
-                </DetailSection>
-
-                {/* -------------------------------- */}
-                {/* Symptoms                          */}
-                {/* -------------------------------- */}
-
-                <DetailSection
-                  icon={
-                    <Activity className="h-5 w-5" />
-                  }
-                  title="Symptoms"
-                >
-                  {selectedEntry.symptoms.length > 0 ? (
-                    <TagList
-                      items={selectedEntry.symptoms.map(
-                      (item) =>
-                        getSymptomName(
-                          item,
-                          symptoms,
-                        ),
-                    )}
-                    />
-                  ) : (
-                    <EmptyRelatedData />
-                  )}
-                </DetailSection>
-
-                {/* -------------------------------- */}
-                {/* Medications                       */}
-                {/* -------------------------------- */}
-
-                <DetailSection
-                  icon={
-                    <Pill className="h-5 w-5" />
-                  }
-                  title="Medications"
-                >
-                  {selectedEntry.medications.length > 0 ? (
-                    <TagList
-                      items={selectedEntry.medications.map(
-                      (item) =>
-                        getMedicationName(
-                          item,
-                          medications,
-                        ),
-                    )}
-                    />
-                  ) : (
-                    <EmptyRelatedData />
-                  )}
-                </DetailSection>
-
-                {/* -------------------------------- */}
-                {/* Conditions                        */}
-                {/* -------------------------------- */}
-
-                <DetailSection
-                  icon={
-                    <HeartPulse className="h-5 w-5" />
-                  }
-                  title="Conditions"
-                >
-                  {selectedEntry.conditions.length > 0 ? (
-                    <TagList
-                      items={selectedEntry.conditions.map(
-                      (item) =>
-                        getConditionName(
-                          item,
-                          conditions,
-                        ),
-                    )}
-                    />
-                  ) : (
-                    <EmptyRelatedData />
-                  )}
-                </DetailSection>
-
-                {/* -------------------------------- */}
-                {/* Doctor visits                     */}
-                {/* -------------------------------- */}
-
-                <DetailSection
-                  icon={
-                    <Stethoscope className="h-5 w-5" />
-                  }
-                  title="Doctor visits"
-                >
-                  {selectedEntry.doctorVisits.length > 0 ? (
-                    <div className="space-y-3">
-                      {selectedEntry.doctorVisits.map(
-                        (visit) => (
-                          <div
-                            key={visit.id}
-                            className="
-                              rounded-md
-                              border
-                              bg-muted
-                              p-3
-                            "
-                          >
-                            <p className="font-medium text-foreground">
-                               {getDoctorName(
-                                  visit,
-                                  doctors,
-                                )}
-                            </p>
-
-                            {getClinicName(visit, clinics) && (
-                              <div
-                                className="
-                                  mt-1
-                                  flex
-                                  items-center
-                                  gap-2
-                                  text-sm
-                                  text-muted-foreground
-                                "
-                              >
-                                <Building2
-                                  className="
-                                    h-4
-                                    w-4
-                                  "
-                                />
-
-                                {getClinicName(visit, clinics)}
-                              </div>
-                            )}
-                          </div>
-                        ),
+                      <p className="font-medium">
+                        {getDoctorName(visit, doctors)}
+                      </p>
+                      {getClinicName(visit, clinics) && (
+                        <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
+                          <Building2 className="h-4 w-4" aria-hidden />
+                          {getClinicName(visit, clinics)}
+                        </div>
                       )}
                     </div>
-                  ) : (
-                    <EmptyRelatedData />
-                  )}
-                </DetailSection>
-              </div>
-            ) : (
-              <div className="p-6">
-                <p className="text-sm text-muted-foreground">
-                  No entry selected.
-                </p>
-              </div>
-            )}
+                  ))}
+                </div>
+              ) : (
+                <EmptyRelatedData />
+              )}
+            </DetailSection>
           </div>
-        </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">No entry selected.</p>
+        )}
       </AsidePanel>
     );
   }
@@ -542,63 +228,24 @@ export function LogEntry() {
   return null;
 }
 
-/**
- * ----------------------------------------------------
- * Helper components
- * ----------------------------------------------------
- */
-
 function DetailItem({
   icon,
   label,
   value,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   value: string;
 }) {
   return (
-    <div
-      className="
-        rounded-lg
-        border
-       bg-card
-        p-4
-      "
-    >
-      <div
-        className="
-          flex
-          items-center
-          gap-3
-        "
-      >
-        <div className="text-muted-foreground">
-          {icon}
-        </div>
-
+    <div className="rounded-2xl border border-border/80 bg-card p-4 shadow-soft">
+      <div className="flex items-center gap-3">
+        <div className="text-primary">{icon}</div>
         <div>
-          <p
-            className="
-              text-xs
-              font-medium
-              uppercase
-              tracking-wide
-              text-muted-foreground
-            "
-          >
+          <p className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
             {label}
           </p>
-
-          <p
-            className="
-              mt-1
-              font-semibold
-              text-foreground
-            "
-          >
-            {value}
-          </p>
+          <p className="mt-1 font-semibold">{value}</p>
         </div>
       </div>
     </div>
@@ -610,64 +257,28 @@ function DetailSection({
   title,
   children,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
-    <section
-      className="
-        rounded-lg
-        border
-        bg-card
-        p-4
-      "
-    >
-      <div
-        className="
-          mb-4
-          flex
-          items-center
-          gap-2
-        "
-      >
-        <div className="text-muted-foreground">
-          {icon}
-        </div>
-
-        <h3
-          className="
-            font-semibold
-            text-foreground
-          "
-        >
-          {title}
-        </h3>
+    <section className="rounded-2xl border border-border/80 bg-card p-4 shadow-soft">
+      <div className="mb-4 flex items-center gap-2">
+        <div className="text-primary">{icon}</div>
+        <h3 className="font-semibold">{title}</h3>
       </div>
-
       {children}
     </section>
   );
 }
 
-function TagList({
-  items,
-}: {
-  items: string[];
-}) {
+function TagList({ items }: { items: string[] }) {
   return (
     <div className="flex flex-wrap gap-2">
       {items.map((item, index) => (
         <span
           key={`${item}-${index}`}
-          className="
-            rounded-full
-            bg-muted
-            px-3
-            py-1
-            text-sm
-            text-foreground
-          "
+          className="rounded-full bg-secondary px-3 py-1 text-sm font-medium text-secondary-foreground"
         >
           {item}
         </span>
@@ -677,36 +288,18 @@ function TagList({
 }
 
 function EmptyRelatedData() {
-  return (
-    <p className="text-sm text-muted-foreground">
-      None recorded.
-    </p>
-  );
+  return <p className="text-sm text-muted-foreground">None recorded.</p>;
 }
 
-/**
- * ----------------------------------------------------
- * Date formatting
- * ----------------------------------------------------
- */
-
-function formatEntryDate(
-  entryDate: string,
-): string {
-  const date = new Date(
-    `${entryDate}T00:00:00`,
-  );
-
+function formatEntryDate(entryDate: string): string {
+  const date = new Date(`${entryDate}T00:00:00`);
   if (Number.isNaN(date.getTime())) {
     return entryDate;
   }
 
-  return new Intl.DateTimeFormat(
-    "en-GB",
-    {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    },
-  ).format(date);
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
 }

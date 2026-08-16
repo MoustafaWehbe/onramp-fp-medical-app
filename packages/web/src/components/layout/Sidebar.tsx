@@ -11,6 +11,7 @@ import {
   Settings,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { BrandMark } from "./BrandMark";
 
 const navSections = [
   {
@@ -60,14 +61,14 @@ interface SidebarProps {
 
 export function Sidebar({ onNavigate }: SidebarProps) {
   return (
-    <aside className="flex w-60 shrink-0 flex-col border-r bg-card">
-      <div className="flex h-14 items-center border-b px-6">
-        <span className="font-semibold">HealthTrack</span>
+    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border/70 bg-card">
+      <div className="flex h-16 items-center border-b border-border/70 px-5">
+        <BrandMark />
       </div>
-      <nav className="flex-1 space-y-4 overflow-y-auto p-3">
+      <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-5" aria-label="Primary navigation">
         {navSections.map((section) => (
           <div key={section.label}>
-            <p className="mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <p className="mb-1.5 px-3 text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-muted-foreground/80">
               {section.label}
             </p>
             <div className="space-y-1">
@@ -79,14 +80,14 @@ export function Sidebar({ onNavigate }: SidebarProps) {
                   end
                   className={({ isActive }) =>
                     cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                      "flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-[color,background-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       isActive
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "text-muted-foreground hover:bg-secondary hover:text-secondary-foreground",
                     )
                   }
                 >
-                  <Icon className="h-4 w-4 shrink-0" />
+                  <Icon className="h-[1.125rem] w-[1.125rem] shrink-0" aria-hidden />
                   {label}
                 </NavLink>
               ))}

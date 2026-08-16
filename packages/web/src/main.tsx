@@ -1,9 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { App } from "./App";
 import "./styles/globals.css";
 import { ThemeProvider } from "./providers/ThemeProvider";
+
+gsap.registerPlugin(useGSAP);
 
 const queryClient = new QueryClient({
   defaultOptions: {

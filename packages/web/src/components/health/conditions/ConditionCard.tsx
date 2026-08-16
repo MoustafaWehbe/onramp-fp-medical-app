@@ -38,14 +38,14 @@ export function ConditionCard({ condition }: ConditionCardProps) {
       type="button"
       onClick={() => openDetail(condition)}
       className={cn(
-        "group w-full rounded-xl border bg-card p-4 text-left shadow-sm transition-all",
-        "hover:border-primary/40 hover:shadow-md",
+        "group w-full cursor-pointer rounded-2xl border border-border/80 bg-card p-4 text-left shadow-soft transition-[border-color,box-shadow,transform] duration-200",
+        "hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         selected && "border-primary ring-2 ring-primary/20",
       )}
     >
       <div className="flex gap-3">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
           <Activity className="h-5 w-5" aria-hidden />
         </div>
 
@@ -264,7 +264,7 @@ export function ConditionDetail() {
         ) : (
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <select
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="flex h-11 w-full rounded-xl border border-input bg-card px-3.5 py-2.5 text-base shadow-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:text-sm"
               value={selectedSymptomId}
               onChange={(event) => setSelectedSymptomId(event.target.value)}
               disabled={isLinkingSymptom}

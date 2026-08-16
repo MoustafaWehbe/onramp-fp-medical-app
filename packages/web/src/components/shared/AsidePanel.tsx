@@ -19,6 +19,7 @@ export interface AsidePanelProps {
   editDisabled?: boolean;
   deleteDisabled?: boolean;
   className?: string;
+  contentClassName?: string;
 }
 
 export function AsidePanel({
@@ -33,6 +34,7 @@ export function AsidePanel({
   editDisabled,
   deleteDisabled,
   className,
+  contentClassName,
 }: AsidePanelProps) {
   useEffect(() => {
     if (!open) return;
@@ -65,7 +67,7 @@ export function AsidePanel({
         type="button"
         aria-label="Close panel"
         className={cn(
-          "absolute inset-0 bg-foreground/40 transition-opacity duration-300",
+          "absolute inset-0 cursor-default bg-slate-950/55 backdrop-blur-sm transition-opacity duration-300",
           open ? "opacity-100" : "opacity-0",
         )}
         onClick={onClose}
@@ -76,15 +78,15 @@ export function AsidePanel({
         aria-modal="true"
         aria-label={title ?? "Details"}
         className={cn(
-          "absolute top-0 right-0 bottom-0 flex h-dvh w-full max-w-md flex-col border-l bg-background shadow-xl transition-transform duration-300 ease-out",
+          "absolute bottom-0 right-0 top-0 flex h-dvh w-full max-w-md flex-col border-l border-border/80 bg-card shadow-lift transition-transform duration-300 ease-out",
           open ? "translate-x-0" : "translate-x-full",
           className,
         )}
       >
-        <header className="flex shrink-0 items-start justify-between gap-3 border-b px-4 py-4">
+        <header className="flex shrink-0 items-start justify-between gap-3 border-b border-border/70 px-4 py-4 sm:px-6">
           <div className="min-w-0 flex-1">
             {title && (
-              <h2 className="truncate text-lg font-semibold tracking-tight">
+              <h2 className="truncate text-xl font-bold tracking-tight">
                 {title}
               </h2>
             )}
@@ -100,12 +102,17 @@ export function AsidePanel({
           </Button>
         </header>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+        <div
+          className={cn(
+            "min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6",
+            contentClassName,
+          )}
+        >
           {children}
         </div>
 
         {(onEdit || onDelete) && (
-          <footer className="flex shrink-0 gap-2 border-t px-4 py-4">
+          <footer className="flex shrink-0 gap-3 border-t border-border/70 bg-background/70 px-4 py-4 sm:px-6">
             {onEdit && (
               <Button
                 type="button"

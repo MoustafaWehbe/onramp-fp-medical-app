@@ -21,6 +21,7 @@ import {
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
+import { PageHeader } from "../../components/shared/PageHeader";
 import { AiGeneratingLoader } from "../../components/ai-reports/AiGeneratingLoader";
 import { useGenerateAiReport } from "../../hooks/useAIReports";
 
@@ -149,15 +150,13 @@ export function AIReportGenerate() {
 
   if (generate.isPending) {
     return (
-      <div className="mx-auto max-w-2xl space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            Generating your report
-          </h1>
-          <p className="text-muted-foreground">
-            This usually takes a few seconds.
-          </p>
-        </div>
+      <div className="page-shell max-w-3xl">
+        <PageHeader
+          eyebrow="AI reports"
+          title="Generating your report"
+          description="This usually takes a few seconds."
+          icon={Sparkles}
+        />
         <Card>
           <CardContent className="pt-6">
             <AiGeneratingLoader />
@@ -168,30 +167,22 @@ export function AIReportGenerate() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="page-shell max-w-3xl">
       <div>
         <Link
           to="/ai-reports"
-          className="mb-3 inline-flex items-center gap-1 text-sm text-muted-foreground transition hover:text-foreground"
+          className="mb-4 inline-flex min-h-11 items-center gap-1 rounded-lg px-2 text-sm font-semibold text-muted-foreground transition hover:bg-secondary hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to reports
         </Link>
 
-        <div className="flex items-start gap-3">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Sparkles className="h-5 w-5" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">
-              Generate report
-            </h1>
-            <p className="mt-1 text-muted-foreground">
-              Build a physician-ready summary from your health log for a date
-              range.
-            </p>
-          </div>
-        </div>
+        <PageHeader
+          eyebrow="AI reports"
+          title="Generate report"
+          description="Build a physician-ready summary from your health log for a date range."
+          icon={Sparkles}
+        />
       </div>
 
       <Card>
@@ -206,7 +197,10 @@ export function AIReportGenerate() {
         </CardHeader>
         <CardContent>
           {generate.isError && (
-            <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
+            <div
+              role="alert"
+              className="mb-4 rounded-xl border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive"
+            >
               {getErrorMessage(generate.error)}
             </div>
           )}

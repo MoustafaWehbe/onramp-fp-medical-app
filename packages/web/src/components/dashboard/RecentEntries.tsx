@@ -23,7 +23,7 @@ export function RecentEntries({ entries }: RecentEntriesProps) {
 
         <Link
           to="/log/view"
-          className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+          className="flex min-h-11 items-center gap-1 rounded-lg px-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           View all
           <ArrowRight className="h-3 w-3" />
@@ -32,7 +32,7 @@ export function RecentEntries({ entries }: RecentEntriesProps) {
 
       <CardContent>
         {entries.length === 0 ? (
-          <div className="py-8 text-center">
+          <div className="rounded-xl border border-dashed bg-muted/30 px-4 py-10 text-center">
             <p className="text-sm text-muted-foreground">
               No entries yet.
             </p>
@@ -49,7 +49,7 @@ export function RecentEntries({ entries }: RecentEntriesProps) {
             {entries.map((entry) => (
               <li
                 key={entry.id}
-                className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0"
+                className="flex flex-col items-start justify-between gap-2 py-3 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:gap-4"
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium">
@@ -63,7 +63,7 @@ export function RecentEntries({ entries }: RecentEntriesProps) {
                   )}
                 </div>
 
-                <div className="flex shrink-0 items-center gap-4 text-xs text-muted-foreground">
+                <div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
                   {entry.moodRating != null && (
                     <span>
                       Mood:{" "}

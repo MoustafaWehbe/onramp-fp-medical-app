@@ -52,9 +52,12 @@ export function Register() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create an account</CardTitle>
+    <Card className="rounded-[1.75rem] border-white/60 shadow-lift dark:border-border/80">
+      <CardHeader className="space-y-2 pb-5 text-center">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
+          Get started
+        </p>
+        <CardTitle className="text-2xl tracking-tight">Create your account</CardTitle>
         <CardDescription>
           Fill in the details below to get started
         </CardDescription>
@@ -62,13 +65,13 @@ export function Register() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="space-y-4">
           {error && (
-            <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            <p role="alert" className="rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive">
               {error}
             </p>
           )}
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
-            <Input id="name" placeholder="Alice Smith" {...register("name")} />
+            <Input id="name" autoComplete="name" placeholder="Alice Smith" {...register("name")} />
             {errors.name && (
               <p className="text-xs text-destructive">{errors.name.message}</p>
             )}
@@ -78,6 +81,7 @@ export function Register() {
             <Input
               id="email"
               type="email"
+              autoComplete="email"
               placeholder="you@example.com"
               {...register("email")}
             />
@@ -90,6 +94,7 @@ export function Register() {
             <Input
               id="password"
               type="password"
+              autoComplete="new-password"
               placeholder="••••••••"
               {...register("password")}
             />
@@ -106,7 +111,7 @@ export function Register() {
           </Button>
           <p className="text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link to="/login" className="text-primary hover:underline">
+            <Link to="/login" className="font-semibold text-primary underline-offset-4 hover:underline">
               Sign in
             </Link>
           </p>

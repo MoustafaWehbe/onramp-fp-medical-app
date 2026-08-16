@@ -42,10 +42,10 @@ export function ConfirmDialog({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50" />
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-slate-950/55 backdrop-blur-sm" />
         <Dialog.Content
           className={cn(
-            "fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg border bg-background p-6 shadow-lg focus:outline-none",
+            "fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border/80 bg-card p-5 shadow-lift focus:outline-none sm:p-6",
             className,
           )}
           onEscapeKeyDown={(event) => {
@@ -55,7 +55,7 @@ export function ConfirmDialog({
             if (loading) event.preventDefault();
           }}
         >
-          <Dialog.Title className="text-lg font-semibold tracking-tight text-foreground">
+          <Dialog.Title className="text-xl font-bold tracking-tight text-foreground">
             {title}
           </Dialog.Title>
 
@@ -65,7 +65,7 @@ export function ConfirmDialog({
             </Dialog.Description>
           )}
 
-          <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
             <Button
               type="button"
               variant="outline"

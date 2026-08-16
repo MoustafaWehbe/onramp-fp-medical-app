@@ -39,11 +39,11 @@ export function AiReportCard({
   return (
     <article
       className={cn(
-        "rounded-lg border bg-card p-5 text-card-foreground shadow-sm transition hover:shadow-md",
+        "rounded-2xl border border-border/80 bg-card p-4 text-card-foreground shadow-soft transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-lift sm:p-5",
         className,
       )}
     >
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
         <div className="min-w-0 flex-1 space-y-2">
           <p className="text-xs text-muted-foreground">
             Created {formatDate(report.createdAt)}
@@ -83,7 +83,7 @@ export function AiReportCard({
           )}
           <Link
             to={`/ai-reports/${report.id}`}
-            className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
+            className="inline-flex min-h-11 items-center gap-1 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             View
             <ChevronRight className="h-4 w-4" />
