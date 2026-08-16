@@ -5,15 +5,6 @@ entry: DailyEntry;
 onClick: () => void;
 }
 
-/**
-
-* Formats an ISO date/string into a readable date.
-*
-* Example:
-* 2026-07-28
-* ->
-* 28 July 2026
-  */
   function formatEntryDate(
   entryDate: string,
   ): string {

@@ -10,8 +10,6 @@ import {
 
 const router = Router();
 
-// ── AI reports collection ─────────────────────────────────────────────────────
-
 router.get(
   "/",
   authenticate,
@@ -25,8 +23,6 @@ router.post(
   validate(generateAiReportSchema),
   AiReportController.generate,
 );
-
-// ── AI report by id ───────────────────────────────────────────────────────────
 
 router.get(
   "/:id",

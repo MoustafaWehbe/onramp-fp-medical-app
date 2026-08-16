@@ -60,23 +60,23 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const updatePasswordMutation = useUpdatePassword();
   const deleteAccountMutation = useDeleteAccount();
 
-  async function submitUpdateEmail(values: UpdateEmailFormValues) {
-    setEmailError(null);
-    setEmailSuccess(null);
-    try {
-      await updateEmailMutation.mutateAsync({
-        currentPassword: values.currentPassword,
-        newEmail: values.newEmail,
-      });
-      setEmailSuccess("Email updated successfully.");
-      return { newEmail: values.newEmail };
-    } catch (error) {
-      setEmailError(
-        getErrorMessage(error, "Failed to update email"),
-      );
-      throw error;
+    async function submitUpdateEmail(values: UpdateEmailFormValues) {
+      setEmailError(null);
+      setEmailSuccess(null);
+      try {
+        await updateEmailMutation.mutateAsync({
+          currentPassword: values.currentPassword,
+          newEmail: values.newEmail,
+        });
+        setEmailSuccess("Email updated successfully.");
+        return { newEmail: values.newEmail };
+      } catch (error) {
+        setEmailError(
+          getErrorMessage(error, "Failed to update email"),
+        );
+        throw error;
+      }
     }
-  }
 
   async function submitUpdatePassword(values: UpdatePasswordFormValues) {
     setPasswordError(null);
@@ -144,7 +144,6 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       clearPasswordStatus,
       clearDeleteStatus,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       updateEmailMutation.isPending,
       updatePasswordMutation.isPending,

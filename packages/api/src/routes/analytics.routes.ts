@@ -6,8 +6,6 @@ import { authenticate } from "src/middleware/authenticate";
 
 const router = Router();
 
-// ── Analytics dashboard ───────────────────────────────────────────────────────
-
 router.get(
   "/dashboard",
   authenticate,

@@ -107,7 +107,6 @@ async function getTransporter(): Promise<Transporter> {
   const port = Number(env("SMTP_PORT") || "587");
   const { address } = await lookup(host, { family: 4 });
 
-  // Resolve via the OS DNS lookup so Node's c-ares queryA timeouts cannot stall SMTP.
   transporter = nodemailer.createTransport({
     host: address,
     port,

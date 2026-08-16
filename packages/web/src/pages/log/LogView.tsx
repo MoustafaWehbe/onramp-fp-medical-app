@@ -49,13 +49,6 @@ export function LogView() {
     openCreate,
   } = useDailyEntriesContext();
 
-
-  /**
-   * ----------------------------------------------------
-   * Loading state
-   * ----------------------------------------------------
-   */
-
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">

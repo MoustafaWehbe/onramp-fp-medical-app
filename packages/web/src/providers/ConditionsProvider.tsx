@@ -524,7 +524,6 @@ export function ConditionsProvider({ children, onActivate, panelCloseRef }: Cond
       linkSymptom,
       unlinkSymptom,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       conditions,
       listQuery.isLoading,

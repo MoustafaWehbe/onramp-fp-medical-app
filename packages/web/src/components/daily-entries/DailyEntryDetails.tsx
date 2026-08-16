@@ -22,14 +22,6 @@ interface DailyEntryDetailsProps {
   isRemoving?: boolean;
 }
 
-/**
- * Formats an entry date into a readable date.
- *
- * Example:
- * 2026-07-28
- * ->
- * 28 July 2026
- */
 function formatEntryDate(
   entryDate: string,
 ): string {
@@ -51,9 +43,6 @@ function formatEntryDate(
   ).format(date);
 }
 
-/**
- * Formats a nullable value.
- */
 function displayValue(
   value: string | number | null | undefined,
 ): string {
@@ -81,7 +70,6 @@ export function DailyEntryDetails({
   isRemoving = false,
 }: DailyEntryDetailsProps) {
 
-    // Helper Functions:
     function getSymptomName(userSymptomId: string) {
         const symptom = symptoms.find(
             (item) => item.id === userSymptomId,
@@ -989,9 +977,6 @@ export function DailyEntryDetails({
   );
 }
 
-/**
- * Reusable empty state for a details section.
- */
 function EmptySectionMessage({
   message,
 }: {
@@ -1014,9 +999,6 @@ function EmptySectionMessage({
   );
 }
 
-/**
- * Reusable label/value field.
- */
 function DetailField({
   label,
   value,
@@ -1053,9 +1035,6 @@ function DetailField({
   );
 }
 
-/**
- * Formats a date/time value for display.
- */
 function formatDateTime(
   value: string,
 ): string {

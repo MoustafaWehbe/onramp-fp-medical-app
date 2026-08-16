@@ -16,17 +16,6 @@ import {
   type GenerateAiReportRequest,
 } from "../lib/ai-reports/ai-reports-exports";
 
-/**
- * ----------------------------------------------------
- * React Query Keys
- * ----------------------------------------------------
- *
- * ["ai-reports"]
- * ["ai-reports", userId, "list"]
- * ["ai-reports", userId, "list", filters]
- * ["ai-reports", userId, "detail"]
- * ["ai-reports", userId, "detail", id]
- */
 export const aiReportKeys = {
   all: ["ai-reports"] as const,
 

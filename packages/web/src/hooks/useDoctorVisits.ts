@@ -9,10 +9,6 @@ import {
   type EntryDoctorVisit,
 } from "../lib/doctor-visit-entries/doctor-visit-exports";
 
-// ----------------------------------------------------
-// Centralized query keys for all doctor-visit queries
-// ----------------------------------------------------
-
 export const doctorVisitKeys = {
   all: ["doctor-visits"] as const,
 
@@ -41,11 +37,6 @@ export const doctorVisitKeys = {
     ] as const,
 };
 
-// ----------------------------------------------------
-// GET /profile/doctor-visits
-// Get all doctor visits for the authenticated user
-// ----------------------------------------------------
-
 export function useDoctorVisits(
   userId: string | undefined,
   filters: EntryDoctorVisitsQuery = {},
@@ -70,11 +61,6 @@ export function useDoctorVisits(
     enabled: Boolean(userId) && enabled,
   });
 }
-
-// ----------------------------------------------------
-// GET /profile/doctor-visits/:id
-// Get one doctor visit by ID
-// ----------------------------------------------------
 
 export function useDoctorVisit(
   userId: string | undefined,

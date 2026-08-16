@@ -8,26 +8,23 @@ import { authorize } from "../middleware/authorize";
 const router = Router();
 
 router.use(authenticate, authorize("admin", "user"));
-// get all conditions
+
 router.get("/",
     validate(listConditionsQuerySchema, "query"),
     ConditionsController.list,
 );
 
-// get conditions from external API
 router.get("/search-online",
     validate(searchConditionsOnlineQuerySchema, "query"),
     (req, res,next) => ConditionsController.getConditions(req, res,next)
 );
 
-// get condition by id
 router.get(
   "/:id",
   validate(conditionIdParamSchema, "params"),
   ConditionsController.getById,
 );
 
-// post a new condition
 router.post(
   "/",
   validate(createConditionSchema),

@@ -1,11 +1,5 @@
 import type { ConditionStatus } from "../health/condition-status";
 
-/**
- * ----------------------------------------------------
- * Daily Entry Response Types
- * ----------------------------------------------------
- */
-
 export interface DailyEntrySymptom {
   id: string;
   userSymptomId: string;
@@ -54,12 +48,6 @@ export interface DailyEntry {
   doctorVisits: DailyEntryDoctorVisit[];
 }
 
-/**
- * ----------------------------------------------------
- * Nested Create / Update Request Types
- * ----------------------------------------------------
- */
-
 export interface DailyEntrySymptomRequest {
   userSymptomId: string;
   severity: number;
@@ -88,12 +76,6 @@ export interface DailyEntryDoctorVisitRequest {
   notes?: string | null;
 }
 
-/**
- * ----------------------------------------------------
- * Daily Entry Create Request
- * ----------------------------------------------------
- */
-
 export interface CreateDailyEntryRequest {
   entryDate: string;
   moodRating?: number | null;
@@ -106,12 +88,6 @@ export interface CreateDailyEntryRequest {
   doctorVisits?: DailyEntryDoctorVisitRequest[];
 }
 
-/**
- * ----------------------------------------------------
- * Daily Entry Update Request
- * ----------------------------------------------------
- */
-
 export interface UpdateDailyEntryRequest {
   entryDate?: string;
   moodRating?: number | null;
@@ -123,12 +99,6 @@ export interface UpdateDailyEntryRequest {
   conditions?: DailyEntryConditionRequest[];
   doctorVisits?: DailyEntryDoctorVisitRequest[];
 }
-
-/**
- * ----------------------------------------------------
- * Daily Entry List Query
- * ----------------------------------------------------
- */
 
 export interface DailyEntriesQuery {
   currentPage?: number;

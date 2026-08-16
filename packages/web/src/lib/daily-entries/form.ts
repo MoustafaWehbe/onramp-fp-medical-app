@@ -13,12 +13,6 @@ import type {
 } from "./types";
 import { MEDICATION_UNITS } from "../health/health-export";
 
-/**
- * ----------------------------------------------------
- * Nested Form Schemas
- * ----------------------------------------------------
- */
-
 const dailyEntrySymptomFormSchema = z.object({
   userSymptomId: z
     .string()
@@ -145,17 +139,6 @@ const dailyEntryDoctorVisitFormSchema = z.object({
     .optional(),
 });
 
-/**
- * ----------------------------------------------------
- * Main Daily Entry Form Schema
- * ----------------------------------------------------
- *
- * entryDate is automatically set to today's date.
- *
- * The UI should display it as read-only.
- * The user must not be able to change it.
- */
-
 export const dailyEntryFormSchema = z.object({
   entryDate: z
     .string()
@@ -235,12 +218,6 @@ export const dailyEntryFormSchema = z.object({
 export type DailyEntryFormValues =
   z.infer<typeof dailyEntryFormSchema>;
 
-/**
- * ----------------------------------------------------
- * Form Submit Payload
- * ----------------------------------------------------
- */
-
 export interface DailyEntryFormSubmitPayload {
   entryDate: string;
 
@@ -258,17 +235,6 @@ export interface DailyEntryFormSubmitPayload {
 
   doctorVisits: DailyEntryDoctorVisitRequest[];
 }
-
-/**
- * ----------------------------------------------------
- * Today's Date
- * ----------------------------------------------------
- *
- * Returns today's date in YYYY-MM-DD format.
- *
- * Example:
- * 2026-07-28
- */
 
 export function getTodayDate(): string {
   const now = new Date();
@@ -310,16 +276,6 @@ function buildTodayDateTime(
   return today.toISOString();
 }
 
-/**
- * ----------------------------------------------------
- * Empty Form Values
- * ----------------------------------------------------
- *
- * Used when opening "Submit Current Entry".
- *
- * The entry date is automatically today's date.
- */
-
 export function emptyDailyEntryFormValues(): DailyEntryFormValues {
   return {
     entryDate: getTodayDate(),
@@ -339,20 +295,6 @@ export function emptyDailyEntryFormValues(): DailyEntryFormValues {
     doctorVisits: [],
   };
 }
-
-/**
- * ----------------------------------------------------
- * Existing Entry -> Form Values
- * ----------------------------------------------------
- *
- * Used when editing an existing entry.
- *
- * NOTE:
- * For the current UI flow, the user should only use
- * emptyDailyEntryFormValues() when creating today's entry.
- *
- * This function is kept for future edit functionality.
- */
 
 export function toDailyEntryFormValues(
   initial?: DailyEntry | null,
@@ -390,7 +332,6 @@ export function toDailyEntryFormValues(
       })),
 
     medications:
-      // cast to any to satisfy differing unit typing between initial and target types
       initial.medications.map((medication) => ({
         userMedicationId:
           medication.userMedicationId,
@@ -448,19 +389,6 @@ export function toDailyEntryFormValues(
   };
 }
 
-/**
- * ----------------------------------------------------
- * Form Values -> Submit Payload
- * ----------------------------------------------------
- *
- * IMPORTANT:
- * For a new daily entry, the entry date is ALWAYS
- * today's date.
- *
- * The value from the form is not used to determine
- * the date sent to the backend.
- */
-
 export function toDailyEntrySubmitPayload(
   values: DailyEntryFormValues,
 ): DailyEntryFormSubmitPayload {
@@ -475,9 +403,6 @@ export function toDailyEntrySubmitPayload(
     );
 
   return {
-    /**
-     * Always submit today's date.
-     */
     entryDate: values.entryDate,
 
     moodRating:
@@ -577,12 +502,6 @@ export function toDailyEntrySubmitPayload(
   };
 }
 
-/**
- * ----------------------------------------------------
- * Submit Payload -> Create Request
- * ----------------------------------------------------
- */
-
 export function toCreateDailyEntryRequest(
   payload: DailyEntryFormSubmitPayload,
 ): CreateDailyEntryRequest {
@@ -612,13 +531,6 @@ export function toCreateDailyEntryRequest(
       payload.doctorVisits,
   };
 }
-
-/**
- * ----------------------------------------------------
- * Submit Payload -> Update Request
- * ----------------------------------------------------
- *
- */
 
 export function toUpdateDailyEntryRequest(
   payload: DailyEntryFormSubmitPayload,

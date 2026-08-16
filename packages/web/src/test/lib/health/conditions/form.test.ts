@@ -1,4 +1,3 @@
-// web's date check is looser than api's (no future-date guard on web)
 import { describe, it, expect } from "vitest";
 import { conditionFormSchema } from "../../../../lib/health/conditions/form";
 

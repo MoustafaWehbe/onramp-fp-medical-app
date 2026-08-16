@@ -15,34 +15,6 @@ import { MEDICATION_UNITS } from "../../lib/health/health-export";
 import { Input } from "../../components/ui/input";
 import { useNavigate } from "react-router-dom";
 
-/**
-
-* ---
-* Daily Entry Form
-* ---
-*
-* This component is responsible only for rendering
-* and managing the daily-entry form UI.
-*
-* The main form instance is owned by
-* DailyEntriesProvider.
-*
-* The provider gives us:
-*
-* * register
-* * control
-* * formErrors
-* * handleFormSubmit
-* * submitForm
-* * formError
-* * isFormBusy
-*
-* The dynamic nested arrays are managed here with
-* React Hook Form's useFieldArray.
-  */
-
-
-
 export function DailyEntryForm() {
   const navigate = useNavigate();
 const {
@@ -78,14 +50,6 @@ clinicsErrorMessage,
 
 } = useDailyEntriesContext();
 
-/**
-
-* ---
-* Dynamic Symptoms
-* ---
-
-*/
-
 const {
 fields: symptomFields,
 append: appendSymptom,
@@ -94,14 +58,6 @@ remove: removeSymptom,
 control,
 name: "symptoms",
 });
-
-/**
-
-* ---
-* Dynamic Medications
-* ---
-
-*/
 
 const {
 fields: medicationFields,
@@ -112,14 +68,6 @@ control,
 name: "medications",
 });
 
-/**
-
-* ---
-* Dynamic Conditions
-* ---
-
-*/
-
 const {
 fields: conditionFields,
 append: appendCondition,
@@ -128,14 +76,6 @@ remove: removeCondition,
 control,
 name: "conditions",
 });
-
-/**
-
-* ---
-* Dynamic Doctor Visits
-* ---
-
-*/
 
 const {
 fields: doctorVisitFields,
@@ -146,25 +86,9 @@ control,
 name: "doctorVisits",
 });
 
-/**
-
-* ---
-* Submit
-* ---
-
-*/
-
 const onSubmit: SubmitHandler<DailyEntryFormValues> = async (values) => {
  await submitForm(values);
  };
-
-/**
-
-* ---
-* Helpers
-* ---
-
-*/
 
 const isCreateMode =
 formMode === "create";
