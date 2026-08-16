@@ -10,6 +10,7 @@ import {
 
 export const settingsKeys = {
   all: ["settings"] as const,
+  reminders: ["settings", "reminders"] as const,
 };
 
 export function useUpdateEmail() {
@@ -47,7 +48,7 @@ export function useDeleteAccount() {
 
 export function useReminderSettings() {
   return useQuery({
-    queryKey: settingsKeys.all,
+    queryKey: settingsKeys.reminders,
     queryFn: getReminderSettings,
   });
 }

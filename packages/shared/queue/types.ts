@@ -22,7 +22,7 @@ export interface EmbeddingsJobData {
 }
 
 export interface ReminderJobData {
-
+  [key: string]: never;
 }
 
 export type JobData = EmailJobData | EmbeddingsJobData | ReminderJobData;

@@ -4,6 +4,7 @@ import {
   UserReminderSettings,
   DailyEntry,
   emailQueue,
+  toHhMm,
   type ReminderJobData,
   type ReminderJobResult,
 } from "@starter-kit/shared";
@@ -28,27 +29,13 @@ function getClockParts(timezone: string): { date: string; time: string } {
   };
 }
 
-function toHhMm(value: string | Date): string | null {
-  if (value instanceof Date) {
-    // TIME is a wall-clock value; Sequelize Date wrappers are UTC-based.
-    return `${String(value.getUTCHours()).padStart(2, "0")}:${String(value.getUTCMinutes()).padStart(2, "0")}`;
-  }
-
-  const match = String(value).match(/^(\d{1,2}):(\d{2})/);
-  if (!match) {
-    return null;
-  }
-
-  return `${match[1].padStart(2, "0")}:${match[2]}`;
-}
-
 function minutesSinceMidnight(hhmm: string): number {
   const [hours, minutes] = hhmm.split(":").map(Number);
   return hours * 60 + minutes;
 }
 
 export async function processReminderJob(
-  job: Job<ReminderJobData, ReminderJobResult>,
+  _job: Job<ReminderJobData, ReminderJobResult>,
 ): Promise<ReminderJobResult> {
   console.info(`[reminder] Checking reminder settings...`);
 
@@ -56,115 +43,138 @@ export async function processReminderJob(
     where: {
       enabled: true,
     },
+    include: [{ model: User, as: "user", required: false }],
   });
 
+  const settingsByTimezone = new Map<string, UserReminderSettings[]>();
+
+  for (const settings of reminderSettings) {
+    const timezone = settings.timezone || "UTC";
+    const group = settingsByTimezone.get(timezone) ?? [];
+    group.push(settings);
+    settingsByTimezone.set(timezone, group);
+  }
+
   console.info(
-    `[reminder] Checking ${reminderSettings.length} enabled reminder(s)`,
+    `[reminder] Checking ${reminderSettings.length} enabled reminder(s) across ${settingsByTimezone.size} timezone(s)`,
   );
 
   let remindersQueued = 0;
 
-  for (const settings of reminderSettings) {
-    if (!settings.reminderTime) {
-      console.info(
-        `[reminder] skip ${settings.userId}: reminder enabled but no reminderTime`,
-      );
-      continue;
-    }
-
-    const { date: today, time: currentTime } = getClockParts(settings.timezone);
-    const configuredTime = toHhMm(settings.reminderTime);
-
-    if (!configuredTime) {
-      console.info(
-        `[reminder] skip ${settings.userId}: could not parse reminderTime`,
-      );
-      continue;
-    }
-
-    if (minutesSinceMidnight(currentTime) < minutesSinceMidnight(configuredTime)) {
-      console.info(
-        `[reminder] skip ${settings.userId}: now=${currentTime} want=${configuredTime} tz=${settings.timezone} (too early)`,
-      );
-      continue;
-    }
-
-    const existingEntry = await DailyEntry.findOne({
-      where: {
-        userId: settings.userId,
-        entryDate: today,
-      },
-    });
-
-    if (existingEntry) {
-      console.info(
-        `[reminder] skip ${settings.userId}: already has daily entry for ${today}`,
-      );
-      continue;
-    }
-
-    const user = await User.findByPk(settings.userId);
-
-    if (!user) {
-      console.warn(
-        `[reminder] User ${settings.userId} no longer exists`,
-      );
-      continue;
-    }
-
-    const reminderJobId = `daily-entry-reminder:${settings.userId}:${today}`;
-    const existingJob = await emailQueue.getJob(reminderJobId);
-
-    if (existingJob) {
-      const state = await existingJob.getState();
-
-      if (state === "completed" || state === "active" || state === "waiting" || state === "delayed") {
-        console.info(
-          `[reminder] email job already ${state} for ${today}: ${reminderJobId}`,
-        );
-        continue;
-      }
-
-      if (state === "failed") {
-        await existingJob.remove();
-        console.info(
-          `[reminder] removed failed email job so it can retry: ${reminderJobId}`,
-        );
-      }
-    }
+  for (const [timezone, settingsGroup] of settingsByTimezone) {
+    let clock: { date: string; time: string };
 
     try {
-      await emailQueue.add(
-        "daily-entry-reminder",
-        {
-          to: user.email,
-          subject: "Don't forget to complete your daily entry",
-          template: "daily-entry-reminder",
-          variables: {
-            name: user.name,
-          },
-        },
-        {
-          jobId: reminderJobId,
-          removeOnFail: true,
-        },
-      );
+      clock = getClockParts(timezone);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      if (message.toLowerCase().includes("already exists")) {
-        console.info(
-          `[reminder] email job already queued for ${today}: ${reminderJobId}`,
+      for (const settings of settingsGroup) {
+        console.error(
+          `[reminder] failed processing ${settings.userId}: ${message}`,
         );
-        continue;
       }
-      throw error;
+      continue;
     }
 
-    remindersQueued++;
+    const { date: today, time: currentTime } = clock;
+    const currentMinutes = minutesSinceMidnight(currentTime);
+    const dueSettings = settingsGroup.filter((settings) => {
+      const configuredTime = toHhMm(settings.reminderTime);
+      return (
+        configuredTime != null &&
+        currentMinutes >= minutesSinceMidnight(configuredTime)
+      );
+    });
 
-    console.info(
-      `[reminder] Queued daily entry reminder for ${user.email} (${reminderJobId}) now=${currentTime} want=${configuredTime} tz=${settings.timezone}`,
-    );
+    for (const settings of dueSettings) {
+      try {
+        const configuredTime = toHhMm(settings.reminderTime);
+        if (!configuredTime) {
+          continue;
+        }
+
+        const existingEntry = await DailyEntry.findOne({
+          where: {
+            userId: settings.userId,
+            entryDate: today,
+          },
+        });
+
+        if (existingEntry) {
+          console.info(
+            `[reminder] skip ${settings.userId}: already has daily entry for ${today}`,
+          );
+          continue;
+        }
+
+        const user = settings.get("user") as User | undefined;
+
+        if (!user) {
+          console.warn(
+            `[reminder] User ${settings.userId} no longer exists`,
+          );
+          continue;
+        }
+
+        const reminderJobId = `daily-entry-reminder:${settings.userId}:${today}`;
+        const existingJob = await emailQueue.getJob(reminderJobId);
+
+        if (existingJob) {
+          const state = await existingJob.getState();
+
+          if (state === "completed" || state === "active" || state === "waiting" || state === "delayed") {
+            console.info(
+              `[reminder] email job already ${state} for ${today}: ${reminderJobId}`,
+            );
+            continue;
+          }
+
+          if (state === "failed") {
+            await existingJob.remove();
+            console.info(
+              `[reminder] removed failed email job so it can retry: ${reminderJobId}`,
+            );
+          }
+        }
+
+        try {
+          await emailQueue.add(
+            "daily-entry-reminder",
+            {
+              to: user.email,
+              subject: "Don't forget to complete your daily entry",
+              template: "daily-entry-reminder",
+              variables: {
+                name: user.name,
+              },
+            },
+            {
+              jobId: reminderJobId,
+            },
+          );
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          if (message.toLowerCase().includes("already exists")) {
+            console.info(
+              `[reminder] email job already queued for ${today}: ${reminderJobId}`,
+            );
+            continue;
+          }
+          throw error;
+        }
+
+        remindersQueued++;
+
+        console.info(
+          `[reminder] Queued daily entry reminder for ${settings.userId} (${reminderJobId}) now=${currentTime} want=${configuredTime} tz=${timezone}`,
+        );
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error(
+          `[reminder] failed processing ${settings.userId}: ${message}`,
+        );
+      }
+    }
   }
 
   return { remindersQueued };

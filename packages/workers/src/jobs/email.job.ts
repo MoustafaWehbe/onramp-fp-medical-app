@@ -1,7 +1,17 @@
 import type { Job } from "bullmq";
 import nodemailer from "nodemailer";
 import type { Transporter } from "nodemailer";
-import type { EmailJobData, EmailJobResult } from "@starter-kit/shared";
+import {
+  getRedisConnection,
+  type EmailJobData,
+  type EmailJobResult,
+} from "@starter-kit/shared";
+
+const EMAIL_DELIVERY_TTL_SECONDS = 60 * 60 * 48;
+
+function deliveryKey(jobId: string): string {
+  return `email:delivered:${jobId}`;
+}
 
 let transporter: Transporter | null = null;
 
@@ -100,6 +110,7 @@ function getTransporter(): Transporter {
         host,
         port,
         secure: port === 465,
+        requireTLS: port !== 465,
         auth: { user, pass },
       });
 
@@ -109,13 +120,42 @@ function getTransporter(): Transporter {
 export async function processEmailJob(
   job: Job<EmailJobData, EmailJobResult>,
 ): Promise<EmailJobResult> {
-  console.log(
-    `[email] Worker received job ${job.id}`,
-    job.data,
-  );
   const { to, subject, template, variables } = job.data;
 
-  console.info(`[email] Sending "${subject}" to ${to} (template: ${template})`);
+  console.info(`[email] Worker received job ${job.id} template=${template}`);
+
+  const jobId = String(job.id);
+  const redis = getRedisConnection();
+  const key = deliveryKey(jobId);
+  const existingMessageId = await redis.get(key);
+
+  if (existingMessageId && existingMessageId !== "pending") {
+    console.info(
+      `[email] Skipping duplicate delivery, messageId=${existingMessageId}`,
+    );
+    return { messageId: existingMessageId };
+  }
+
+  const claimed = await redis.set(
+    key,
+    "pending",
+    "EX",
+    EMAIL_DELIVERY_TTL_SECONDS,
+    "NX",
+  );
+
+  if (!claimed) {
+    const recordedMessageId = await redis.get(key);
+    if (recordedMessageId && recordedMessageId !== "pending") {
+      console.info(
+        `[email] Skipping duplicate delivery, messageId=${recordedMessageId}`,
+      );
+      return { messageId: recordedMessageId };
+    }
+
+    console.info(`[email] Skipping duplicate delivery for job ${job.id}`);
+    return { messageId: recordedMessageId || `pending:${jobId}` };
+  }
 
   const from = getFromAddress();
   const { html, text } = renderEmail(template, variables);
@@ -129,21 +169,32 @@ export async function processEmailJob(
       html,
     });
 
-    if (!info.messageId) {
-      throw new Error("Email provider did not return a message ID");
-    }
+    const messageId = info.messageId || `accepted:${jobId}`;
+    await redis.set(key, messageId, "EX", EMAIL_DELIVERY_TTL_SECONDS);
 
-    console.info(
-      `[email] Email sent successfully to ${to}, messageId=${info.messageId}`,
-    );
+    console.info(`[email] Email sent successfully, messageId=${messageId}`);
 
     return {
-      messageId: info.messageId,
+      messageId,
     };
   } catch (error) {
     transporter = null;
 
+    const recordedMessageId = await redis.get(key);
+    if (recordedMessageId && recordedMessageId !== "pending") {
+      console.info(
+        `[email] Reusing recorded delivery, messageId=${recordedMessageId}`,
+      );
+      return { messageId: recordedMessageId };
+    }
+
     const message = error instanceof Error ? error.message : String(error);
+    const ambiguous =
+      /timeout|timed out|ETIMEDOUT|ECONNRESET|socket hang up/i.test(message);
+
+    if (!ambiguous) {
+      await redis.del(key);
+    }
 
     if (message.includes("Invalid login") || message.includes("535")) {
       throw new Error(

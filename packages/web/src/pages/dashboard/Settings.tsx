@@ -2,8 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock, Sun, TriangleAlert } from "lucide-react";
-import { Bell } from "lucide-react";
+import { Mail, Lock, Sun, TriangleAlert, Bell } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import {
   SettingsProvider,
@@ -14,6 +13,8 @@ import {
   updatePasswordSchema,
   deleteAccountSchema,
   reminderSettingsSchema,
+  timezoneOptions,
+  timezoneLabels,
   type UpdateEmailFormValues,
   type UpdatePasswordFormValues,
   type DeleteAccountFormValues,
@@ -185,19 +186,6 @@ useEffect(() => {
         .toUpperCase()
     : "";
 
-    const TIMEZONE_OPTIONS = [
-  { value: "UTC", label: "UTC" },
-  { value: "Asia/Beirut", label: "Beirut (UTC+3)" },
-  { value: "Europe/London", label: "London" },
-  { value: "Europe/Paris", label: "Paris" },
-  { value: "Europe/Berlin", label: "Berlin" },
-  { value: "America/New_York", label: "New York" },
-  { value: "America/Los_Angeles", label: "Los Angeles" },
-  { value: "Asia/Dubai", label: "Dubai" },
-  { value: "Asia/Riyadh", label: "Riyadh" },
-  { value: "Asia/Tokyo", label: "Tokyo" },
-  { value: "Australia/Sydney", label: "Sydney" },
-];
   return (
     <div className="space-y-8">
       <div>
@@ -561,7 +549,7 @@ useEffect(() => {
               className="h-4 w-4"
             />
             <span className="text-sm">
-              {watchReminder("enabled") ? "Enabled" : "Disabled"}
+              {reminderEnabled ? "Enabled" : "Disabled"}
             </span>
           </label>
         </div>
@@ -577,7 +565,7 @@ useEffect(() => {
             id="reminder-time"
             type="time"
             disabled={
-              !watchReminder("enabled") ||
+              !reminderEnabled ||
               updateReminderSettingsMutation.isPending
             }
             {...reminderRegister("reminderTime")}
@@ -602,13 +590,13 @@ useEffect(() => {
 
           <select
     id="reminder-timezone"
-    disabled={ !watchReminder("enabled") || updateReminderSettingsMutation.isPending}
+    disabled={ !reminderEnabled || updateReminderSettingsMutation.isPending}
     {...reminderRegister("timezone")}
     className="flex h-10 w-full rounded-md border border-muted-foreground/50 bg-muted px-3 py-2 text-sm"
   >
-    {TIMEZONE_OPTIONS.map((timezone) => (
-      <option key={timezone.value} value={timezone.value}>
-        {timezone.label}
+    {timezoneOptions.map((timezone) => (
+      <option key={timezone} value={timezone}>
+        {timezoneLabels[timezone]}
       </option>
     ))}
   </select>

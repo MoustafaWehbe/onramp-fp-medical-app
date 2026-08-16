@@ -1,3 +1,6 @@
+import { UniqueConstraintError } from "sequelize";
+import { toHhMm } from "@starter-kit/shared";
+
 import { UserReminderSettings } from "../models";
 
 interface UpdateReminderSettingsInput {
@@ -6,39 +9,45 @@ interface UpdateReminderSettingsInput {
   timezone?: string;
 }
 
-function toHhMm(value: string | Date | null): string | null {
-  if (!value) {
-    return null;
-  }
+async function findOrCreateByUserId(
+  userId: string,
+  defaults: {
+    userId: string;
+    enabled: boolean;
+    reminderTime: string | null;
+    timezone: string;
+  },
+) {
+  try {
+    return await UserReminderSettings.findOrCreate({
+      where: { userId },
+      defaults,
+    });
+  } catch (error) {
+    if (error instanceof UniqueConstraintError) {
+      const existing = await UserReminderSettings.findOne({ where: { userId } });
+      if (existing) {
+        return [existing, false] as const;
+      }
+    }
 
-  if (value instanceof Date) {
-    return `${String(value.getUTCHours()).padStart(2, "0")}:${String(value.getUTCMinutes()).padStart(2, "0")}`;
+    throw error;
   }
-
-  const match = String(value).match(/^(\d{1,2}):(\d{2})/);
-  return match ? `${match[1].padStart(2, "0")}:${match[2]}` : null;
 }
 
 export class ReminderSettingsService {
   async getSettings(userId: string) {
-    let settings = await UserReminderSettings.findOne({
-      where: { userId },
+    const [settings] = await findOrCreateByUserId(userId, {
+      userId,
+      enabled: false,
+      reminderTime: null,
+      timezone: "UTC",
     });
-
-    // Create default settings for users who don't have a record yet
-    if (!settings) {
-      settings = await UserReminderSettings.create({
-        userId,
-        enabled: false,
-        reminderTime: null,
-        timezone: "UTC",
-      });
-    }
 
     return {
       enabled: settings.enabled,
       reminderTime: toHhMm(settings.reminderTime),
-      timezone: settings.timezone
+      timezone: settings.timezone,
     };
   }
 
@@ -46,29 +55,28 @@ export class ReminderSettingsService {
     userId: string,
     input: UpdateReminderSettingsInput,
   ) {
-    let settings = await UserReminderSettings.findOne({
-      where: { userId },
+    const [settings, created] = await findOrCreateByUserId(userId, {
+      userId,
+      enabled: input.enabled,
+      reminderTime:
+        input.reminderTime !== undefined ? input.reminderTime : null,
+      timezone: input.timezone ?? "UTC",
     });
 
-    if (!settings) {
-      settings = await UserReminderSettings.create({
-        userId,
-        enabled: input.enabled,
-        reminderTime: input.reminderTime ?? null,
-        timezone: input.timezone ?? "UTC",
-      });
-    } else {
+    if (!created) {
       await settings.update({
         enabled: input.enabled,
-        reminderTime: input.reminderTime ?? null,
-        timezone: input.timezone ?? settings.timezone,
+        ...(input.reminderTime !== undefined
+          ? { reminderTime: input.reminderTime }
+          : {}),
+        ...(input.timezone !== undefined ? { timezone: input.timezone } : {}),
       });
     }
 
     return {
       enabled: settings.enabled,
       reminderTime: toHhMm(settings.reminderTime),
-      timezone: settings.timezone
+      timezone: settings.timezone,
     };
   }
 }

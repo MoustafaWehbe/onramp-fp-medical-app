@@ -1,5 +1,6 @@
 import { z } from "zod";
-const timezoneOptions = [
+
+export const timezoneOptions = [
   "UTC",
   "Asia/Beirut",
   "Europe/London",
@@ -12,6 +13,20 @@ const timezoneOptions = [
   "Asia/Tokyo",
   "Australia/Sydney",
 ] as const;
+
+export const timezoneLabels: Record<(typeof timezoneOptions)[number], string> = {
+  UTC: "UTC",
+  "Asia/Beirut": "Beirut (UTC+3)",
+  "Europe/London": "London",
+  "Europe/Paris": "Paris",
+  "Europe/Berlin": "Berlin",
+  "America/New_York": "New York",
+  "America/Los_Angeles": "Los Angeles",
+  "Asia/Dubai": "Dubai",
+  "Asia/Riyadh": "Riyadh",
+  "Asia/Tokyo": "Tokyo",
+  "Australia/Sydney": "Sydney",
+};
 
 export const updateEmailSchema = z.object({
   currentPassword: z.string().min(1, "Current password is required"),
@@ -69,7 +84,9 @@ export const reminderSettingsSchema = z
         .nullable(),
     ),
 
-    timezone: z.string().min(1, "Timezone is required"),
+    timezone: z.enum(timezoneOptions, {
+      errorMap: () => ({ message: "Timezone is required" }),
+    }),
   })
   .superRefine((data, ctx) => {
     if (data.enabled && !data.reminderTime) {

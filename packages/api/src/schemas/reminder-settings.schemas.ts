@@ -15,6 +15,10 @@ const reminderTimeSchema = z
   .refine(
     (timezone) => {
       try {
+        if (typeof Intl.supportedValuesOf === "function") {
+          return Intl.supportedValuesOf("timeZone").includes(timezone);
+        }
+
         Intl.DateTimeFormat(undefined, {
           timeZone: timezone,
         });
