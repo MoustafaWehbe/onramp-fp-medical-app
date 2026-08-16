@@ -24,15 +24,6 @@ import {
   getDoctorName, getClinicName, } from "../../lib/daily-entries/daily-entries-exports";
   import {getTodayDate} from "../../lib/daily-entries/form";
 
-// function handlePanelKeyDown(
-//   event: React.KeyboardEvent<HTMLDivElement>,
-//   onClose: () => void,
-// ) {
-//   if (event.key === "Escape") {
-//     onClose();
-//   }
-// }
-
 export function LogEntry() {
   const {
     panel,
@@ -64,15 +55,7 @@ export function LogEntry() {
     return null;
   }
 
-  // can edit only if the submitted entry is today
   const canEdit= selectedEntry && selectedEntry.entryDate === getTodayDate();
-  /**
-   * ----------------------------------------------------
-   * CREATE / EDIT
-   * ----------------------------------------------------
-   *
-   * The actual form is handled by DailyEntryForm.
-   */
 
   if (
     formMode === "create" ||
@@ -542,12 +525,6 @@ export function LogEntry() {
   return null;
 }
 
-/**
- * ----------------------------------------------------
- * Helper components
- * ----------------------------------------------------
- */
-
 function DetailItem({
   icon,
   label,
@@ -683,12 +660,6 @@ function EmptyRelatedData() {
     </p>
   );
 }
-
-/**
- * ----------------------------------------------------
- * Date formatting
- * ----------------------------------------------------
- */
 
 function formatEntryDate(
   entryDate: string,

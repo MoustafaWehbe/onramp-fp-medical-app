@@ -27,8 +27,6 @@ interface GeneratedReportContent {
   [key: string]: unknown;
 }
 
-// Local deadline for the OpenAI call so a hung request cannot hold the
-// HTTP request open indefinitely.
 const AI_GENERATION_TIMEOUT_MS = 60_000;
 
 async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {

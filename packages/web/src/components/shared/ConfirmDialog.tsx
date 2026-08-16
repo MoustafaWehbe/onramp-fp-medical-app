@@ -10,7 +10,6 @@ export interface ConfirmDialogProps {
   description?: ReactNode;
   confirmLabel?: string;
   cancelLabel?: string;
-  /** Visual style for the confirm action. Defaults to destructive. */
   confirmVariant?: "default" | "destructive";
   loading?: boolean;
   onConfirm: () => void | Promise<void>;

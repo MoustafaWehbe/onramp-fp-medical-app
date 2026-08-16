@@ -5,8 +5,6 @@ import { paginationQuerySchema } from "./pagination.schemas";
 const MAX_RANGE_DAYS = 366;
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-// Canonical YYYY-MM-DD for "today" in server-local time, so a user's
-// current-day request is not rejected by a UTC-instant comparison.
 function todayLocalIso(): string {
   const now = new Date();
   const year = now.getFullYear();

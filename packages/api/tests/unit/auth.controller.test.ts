@@ -2,7 +2,6 @@ import type { Request } from "express";
 import request from "supertest";
 import { app } from "../../app";
 
-// Mock the DB so we don't need a real database in unit tests
 jest.mock("../../src/lib/db", () => ({
   initializeDatabase: jest.fn().mockResolvedValue(undefined),
   getDatabase: jest.fn(),

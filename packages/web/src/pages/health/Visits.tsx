@@ -57,9 +57,8 @@ return ( <div>
 }
 
 return ( <div className="container mx-auto px-4 py-6">
-{/* Page header */} <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"> <div> <h1 className="text-2xl font-bold tracking-tight">Doctor Visits </h1>
-
-
+{/* Page header */} 
+<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"> <div> <h1 className="text-2xl font-bold tracking-tight">Doctor Visits </h1>
       <p className="text-sm text-muted-foreground">
         View your doctor visits and appointment history.
       </p>

@@ -79,7 +79,6 @@ export const medicationController = {
     }
   },
 
-  // profile medication controller methods
   async listProfile(
   req: Request,
   res: Response,

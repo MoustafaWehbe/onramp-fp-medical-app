@@ -420,7 +420,6 @@ export function DoctorsProvider({
       submitForm,
       remove,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       doctors,
       listQuery.isLoading,

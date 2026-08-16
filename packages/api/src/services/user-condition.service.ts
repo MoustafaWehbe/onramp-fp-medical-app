@@ -35,7 +35,6 @@ function escapeLike(value: string): string {
   return value.replace(/[%_\\]/g, "\\$&");
 }
 
-// builds a Sequelize where clause for searching conditions by name
 function conditionInclude(search?: string) {
   const trimmed = search?.trim();
   const pattern = trimmed ? `%${escapeLike(trimmed)}%` : undefined;
@@ -57,7 +56,6 @@ function conditionInclude(search?: string) {
   };
 }
 
-// checks if a condition exists in the catalog, throws an error if not found
 async function assertConditionExists(conditionId: string) {
   const condition = await ConditionCatalog.findByPk(conditionId, {
     attributes: ["id"],
@@ -68,7 +66,6 @@ async function assertConditionExists(conditionId: string) {
   }
 }
 
-// finds a user condition by userId and id, throws an error if not found
 async function findOwnedUserCondition(
   userId: string,
   id: string,
@@ -91,7 +88,6 @@ async function findOwnedUserCondition(
 
 export class UserConditionService {
 
-// list user conditions with pagination and optional search
   async list(input: ListUserConditionsInput) {
     const {
       currentPage,
@@ -126,7 +122,7 @@ export class UserConditionService {
       pageSize,
     );
   }
-//   get a user condition by id and userId
+
   async getById(
     userId:string,
     id:string,
@@ -136,7 +132,7 @@ export class UserConditionService {
       id,
     );
   }
-// creates a new user condition
+
   async create(
     input:CreateUserConditionInput,
   ){
@@ -187,7 +183,6 @@ export class UserConditionService {
     }
   }
 
-//updates an existing user condition 
   async update(
     input:UpdateUserConditionInput,
   ){
@@ -238,7 +233,6 @@ export class UserConditionService {
     );
   }
 
-// removes a user condition by setting its active status to false
   async remove(
     userId:string,
     id:string,

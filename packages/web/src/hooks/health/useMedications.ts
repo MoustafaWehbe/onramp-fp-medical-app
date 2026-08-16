@@ -74,8 +74,6 @@ export function useEnsureCatalogMedication() {
       const existing = await findCatalogMedicationByName(name);
       if (existing) return existing;
 
-      // Only insert when missing. Category lookup at submit time —
-      // the catalog has no update endpoint.
       const category = await lookupMedicationCategoryOnline(name).catch(
         () => null,
       );

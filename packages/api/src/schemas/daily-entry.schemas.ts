@@ -9,8 +9,6 @@ const notesField = z
   .nullable()
   .optional();
 
-// Compare calendar dates in server-local time so a user's current-day entry is not
-// rejected by a UTC-instant comparison (en-CA yields a YYYY-MM-DD string).
 const isNotFutureDate = (date: string) =>
   date <= new Date().toLocaleDateString("en-CA");
 

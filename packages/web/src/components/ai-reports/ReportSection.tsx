@@ -11,7 +11,7 @@ export function ReportSection({
   items,
   className,
 }: ReportSectionProps) {
-  // reportContent comes from JSONB, so guard against non-array values.
+
   const list = (Array.isArray(items) ? items : []).filter(
     (item): item is string => typeof item === "string" && item.trim().length > 0,
   );

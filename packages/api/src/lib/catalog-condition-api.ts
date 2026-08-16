@@ -6,7 +6,6 @@ export interface ExternalCondition {
   name: string;
 }
 
-// clean name if it contains any of the following characters: { } " \
 function cleanName(raw:string):string{
   return raw.replace(/[{}"\\]/g, "").trim();
 }

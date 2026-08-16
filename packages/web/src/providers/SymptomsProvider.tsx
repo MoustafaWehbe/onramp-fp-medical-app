@@ -389,7 +389,6 @@ export function SymptomsProvider({ children, onActivate, panelCloseRef }: Sympto
       submitForm,
       remove,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       symptoms,
       listQuery.isLoading,

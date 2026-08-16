@@ -11,18 +11,6 @@ import type {
   UpdateDailyEntryRequest,
 } from "./types";
 
-/**
- * ----------------------------------------------------
- * List Daily Entries
- * ----------------------------------------------------
- *
- * GET /profile/daily-entries
- *
- * Supports:
- * - Pagination
- * - Optional date filtering
- */
-
 export async function listDailyEntries(
   query: DailyEntriesQuery = {},
 ): Promise<PaginatedResponse<DailyEntry>> {
@@ -35,20 +23,6 @@ export async function listDailyEntries(
   return data;
 }
 
-/**
- * ----------------------------------------------------
- * Get Daily Entry By ID
- * ----------------------------------------------------
- *
- * GET /profile/daily-entries/:id
- *
- * Returns the full entry including:
- * - Symptoms
- * - Medications
- * - Conditions
- * - Doctor visits
- */
-
 export async function getDailyEntry(
   id: string,
 ): Promise<DailyEntry> {
@@ -58,24 +32,6 @@ export async function getDailyEntry(
 
   return data.data;
 }
-
-/**
- * ----------------------------------------------------
- * Create Daily Entry
- * ----------------------------------------------------
- *
- * POST /profile/daily-entries
- *
- * The request includes:
- * - Basic daily information
- * - Symptoms
- * - Medications
- * - Conditions
- * - Doctor visits
- *
- * The backend prevents duplicate entries
- * for the same date.
- */
 
 export async function createDailyEntry(
   body: CreateDailyEntryRequest,
@@ -87,18 +43,6 @@ export async function createDailyEntry(
   return data.data;
 }
 
-/**
- * ----------------------------------------------------
- * Update Daily Entry
- * ----------------------------------------------------
- *
- * PATCH /profile/daily-entries/:id
- *
- * Important:
- * If a child collection is provided,
- * the backend replaces the entire collection.
- */
-
 export async function updateDailyEntry(
   id: string,
   body: UpdateDailyEntryRequest,
@@ -109,16 +53,6 @@ export async function updateDailyEntry(
 
   return data.data;
 }
-
-/**
- * ----------------------------------------------------
- * Delete Daily Entry
- * ----------------------------------------------------
- *
- * DELETE /profile/daily-entries/:id
- *
- * The backend cascade-deletes the children.
- */
 
 export async function removeDailyEntry(
   id: string,

@@ -6,15 +6,6 @@ import type {
   GenerateAiReportRequest,
 } from "./types";
 
-/**
- * ----------------------------------------------------
- * List AI Reports
- * ----------------------------------------------------
- *
- * GET /ai-reports
- *
- * Supports pagination via currentPage / pageSize.
- */
 export async function listAiReports(
   query: AiReportsQuery = {},
 ): Promise<PaginatedResponse<AiReport>> {
@@ -25,13 +16,6 @@ export async function listAiReports(
   return data;
 }
 
-/**
- * ----------------------------------------------------
- * Get AI Report By ID
- * ----------------------------------------------------
- *
- * GET /ai-reports/:id
- */
 export async function getAiReport(id: string): Promise<AiReport> {
   const { data } = await apiClient.get<DataResponse<AiReport>>(
     `/ai-reports/${id}`,
@@ -39,15 +23,6 @@ export async function getAiReport(id: string): Promise<AiReport> {
   return data.data;
 }
 
-/**
- * ----------------------------------------------------
- * Generate AI Report
- * ----------------------------------------------------
- *
- * POST /ai-reports/generate
- *
- * Synchronously calls OpenAI and persists the report.
- */
 export async function generateAiReport(
   body: GenerateAiReportRequest,
 ): Promise<AiReport> {
@@ -58,15 +33,6 @@ export async function generateAiReport(
   return data.data;
 }
 
-/**
- * ----------------------------------------------------
- * Delete AI Report
- * ----------------------------------------------------
- *
- * DELETE /ai-reports/:id
- *
- * Hard-deletes the report row (no soft delete).
- */
 export async function removeAiReport(
   id: string,
 ): Promise<{ id: string; message: string }> {

@@ -1,5 +1,3 @@
-// Asserts frontend validation only. API enforces separately with different
-// bounds in places (see BACKEND note).
 import { describe, it, expect } from "vitest";
 import {
   dailyEntryFormSchema,
