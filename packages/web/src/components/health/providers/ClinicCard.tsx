@@ -1,29 +1,41 @@
-import { Building2, MapPin, NotebookPen, Phone } from "lucide-react";
+import {
+  Building2,
+  Eye,
+  MapPin,
+  NotebookPen,
+  Pencil,
+  Phone,
+  Trash2,
+} from "lucide-react";
 import type { UserClinic } from "../../../lib/health/health-export";
 import { cn } from "../../../lib/utils";
 import { useClinicsContext } from "../../../providers/ClinicsProvider";
+import { RowActionsMenu } from "../../shared/RowActionsMenu";
 
 interface ClinicCardProps {
   clinic: UserClinic;
+  onDelete: () => void;
 }
 
-export function ClinicCard({ clinic }: ClinicCardProps) {
-  const { selectedId, openDetail } = useClinicsContext();
+export function ClinicCard({ clinic, onDelete }: ClinicCardProps) {
+  const { selectedId, openDetail, openEdit } = useClinicsContext();
   const selected = selectedId === clinic.id;
   const { name, address, phone } = clinic.clinic;
 
   return (
-    <button
-      type="button"
-      onClick={() => openDetail(clinic)}
+    <article
       className={cn(
-        "group w-full cursor-pointer rounded-2xl border border-border/80 bg-card p-4 text-left shadow-soft transition-[border-color,box-shadow,transform] duration-200",
+        "group flex items-start gap-1 rounded-2xl border border-border/80 bg-card p-2 pl-4 shadow-soft transition-[border-color,box-shadow,transform] duration-200",
         "hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         selected && "border-primary ring-2 ring-primary/20",
       )}
     >
-      <div className="flex gap-3">
+      <button
+        type="button"
+        onClick={() => openDetail(clinic)}
+        aria-label={`View ${name}`}
+        className="flex min-w-0 flex-1 cursor-pointer gap-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
           <Building2 className="h-5 w-5" aria-hidden />
         </div>
@@ -60,8 +72,33 @@ export function ClinicCard({ clinic }: ClinicCardProps) {
             </p>
           )}
         </div>
-      </div>
-    </button>
+      </button>
+
+      <RowActionsMenu
+        label={`Actions for ${name}`}
+        actions={[
+          {
+            id: "view",
+            label: "View",
+            icon: Eye,
+            onSelect: () => openDetail(clinic),
+          },
+          {
+            id: "edit",
+            label: "Edit",
+            icon: Pencil,
+            onSelect: () => openEdit(clinic),
+          },
+          {
+            id: "delete",
+            label: "Delete",
+            icon: Trash2,
+            variant: "destructive",
+            onSelect: onDelete,
+          },
+        ]}
+      />
+    </article>
   );
 }
 
