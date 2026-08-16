@@ -205,6 +205,7 @@ export async function processEmailJob(
     if (message.includes("Invalid login") || message.includes("535")) {
       throw new Error(
         "Gmail rejected SMTP login (535 BadCredentials). SMTP_USER must be the Google account email, and SMTP_PASS must be a 16-character App Password for that same account — not the Gmail login password. Restart npm run dev after changing .env.",
+        { cause: error },
       );
     }
 

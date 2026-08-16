@@ -1,5 +1,5 @@
 import type { PaginationInput } from "../../lib/pagination";
-import type { ConditionStatus } from "../../../../shared/db/types/enums";
+import type { ConditionStatus } from "@starter-kit/shared/db/types/enums";
 
 export interface EntrySymptomInput {
   userSymptomId: string;

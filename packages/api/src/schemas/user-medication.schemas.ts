@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { paginationQuerySchema } from "./pagination.schemas";
-import { DOSAGE_MEASUREMENTS } from "../../../shared/db/types/enums";
+import { DOSAGE_MEASUREMENTS } from "@starter-kit/shared/db/types/enums";
 
 export const createUserMedicationSchema = z
   .object({

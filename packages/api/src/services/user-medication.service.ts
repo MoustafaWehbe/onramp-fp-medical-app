@@ -6,7 +6,7 @@ import {
   type PaginationInput,
 } from "../lib/pagination";
 import { createError } from "../middleware/error-handler";
-import type { DosageMeasurement } from "../../../shared/db/types/enums";
+import type { DosageMeasurement } from "@starter-kit/shared/db/types/enums";
 
 export interface ListUserMedicationsInput extends PaginationInput {
   userId: string;
