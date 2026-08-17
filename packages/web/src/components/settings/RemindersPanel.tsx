@@ -161,7 +161,9 @@ export function RemindersPanel() {
         <Button
           type="submit"
           disabled={
-            reminderSettingsQuery.isLoading || updateReminderSettings.isPending
+            reminderSettingsQuery.isLoading ||
+            !reminderSettingsQuery.data ||
+            updateReminderSettings.isPending
           }
         >
           {updateReminderSettings.isPending ? "Saving…" : "Save reminders"}

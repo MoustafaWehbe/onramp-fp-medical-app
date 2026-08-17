@@ -4,6 +4,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useTheme } from "../../providers/ThemeProvider";
 import { cn } from "../../lib/utils";
+import { prefersReducedMotion } from "../../lib/motion";
 import { SectionPanel } from "../shared/SectionPanel";
 
 export function AppearancePanel() {
@@ -20,22 +21,33 @@ export function AppearancePanel() {
       const active = theme === "light" ? lightRef.current : darkRef.current;
       if (!root || !pill || !active) return;
 
-      const rootBox = root.getBoundingClientRect();
-      const activeBox = active.getBoundingClientRect();
-      const target = {
-        x: activeBox.left - rootBox.left,
-        y: activeBox.top - rootBox.top,
-        width: activeBox.width,
-        height: activeBox.height,
-      };
+      function applyTarget() {
+        const currentRoot = rootRef.current;
+        const currentPill = pillRef.current;
+        const currentActive = theme === "light" ? lightRef.current : darkRef.current;
+        if (!currentRoot || !currentPill || !currentActive) return;
 
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set(pill, target);
-      });
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.to(pill, { ...target, duration: 0.32, ease: "power2.out" });
-      });
+        const rootBox = currentRoot.getBoundingClientRect();
+        const activeBox = currentActive.getBoundingClientRect();
+        const target = {
+          x: activeBox.left - rootBox.left,
+          y: activeBox.top - rootBox.top,
+          width: activeBox.width,
+          height: activeBox.height,
+        };
+
+        if (prefersReducedMotion()) {
+          gsap.set(currentPill, target);
+          return;
+        }
+
+        gsap.to(currentPill, { ...target, duration: 0.32, ease: "power2.out" });
+      }
+
+      applyTarget();
+      const observer = new ResizeObserver(applyTarget);
+      observer.observe(root);
+      return () => observer.disconnect();
     },
     { scope: rootRef, dependencies: [theme], revertOnUpdate: false },
   );

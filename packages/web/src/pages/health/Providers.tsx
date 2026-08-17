@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 import { Building2, ClipboardList, Plus, Stethoscope } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -76,9 +76,20 @@ function ProviderTabSwitch({
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         gsap.to(pill, { ...target, duration: 0.32, ease: "power2.out" });
       });
+      return () => mm.revert();
     },
     { scope: rootRef, dependencies: [value], revertOnUpdate: false },
   );
+
+  function handleTabListKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    const next: ProviderTab = value === "clinics" ? "doctors" : "clinics";
+    onChange(next);
+    requestAnimationFrame(() => {
+      (next === "clinics" ? clinicsRef : doctorsRef).current?.focus();
+    });
+  }
 
   return (
     <div
@@ -86,6 +97,7 @@ function ProviderTabSwitch({
       role="tablist"
       aria-label="Provider sections"
       className="relative grid grid-cols-2 rounded-2xl border border-border/70 bg-muted/70 p-1.5 shadow-soft"
+      onKeyDown={handleTabListKeyDown}
     >
       <span
         ref={pillRef}
@@ -97,8 +109,9 @@ function ProviderTabSwitch({
         type="button"
         role="tab"
         id="providers-tab-clinics"
-        aria-controls="providers-panel-clinics"
+        aria-controls={value === "clinics" ? "providers-panel-clinics" : undefined}
         aria-selected={value === "clinics"}
+        tabIndex={value === "clinics" ? 0 : -1}
         className={cn(
           "relative z-10 flex min-h-12 items-center justify-center gap-2 rounded-xl px-3 text-sm font-semibold transition-colors",
           value === "clinics" ? "text-foreground" : "text-muted-foreground hover:text-foreground",
@@ -118,8 +131,9 @@ function ProviderTabSwitch({
         type="button"
         role="tab"
         id="providers-tab-doctors"
-        aria-controls="providers-panel-doctors"
+        aria-controls={value === "doctors" ? "providers-panel-doctors" : undefined}
         aria-selected={value === "doctors"}
+        tabIndex={value === "doctors" ? 0 : -1}
         className={cn(
           "relative z-10 flex min-h-12 items-center justify-center gap-2 rounded-xl px-3 text-sm font-semibold transition-colors",
           value === "doctors" ? "text-foreground" : "text-muted-foreground hover:text-foreground",
@@ -164,8 +178,12 @@ function ClinicsSection() {
 
   async function confirmDelete() {
     if (!pendingDelete) return;
-    await remove(pendingDelete.id);
-    setPendingDelete(null);
+    try {
+      await remove(pendingDelete.id);
+      setPendingDelete(null);
+    } catch {
+      // Keep the confirmation dialog open after a failed remove.
+    }
   }
 
   return (
@@ -268,7 +286,14 @@ function ClinicsSection() {
           if (!open && !isRemoving) setPendingDelete(null);
         }}
         title={pendingDelete ? `Delete ${pendingDelete.clinic.name}?` : "Delete clinic?"}
-        description="This removes the clinic from your saved providers. This cannot be undone."
+        description={
+          <>
+            This removes the clinic from your saved providers. This cannot be undone.
+            {listErrorMessage ? (
+              <span className="mt-2 block text-destructive">{listErrorMessage}</span>
+            ) : null}
+          </>
+        }
         confirmLabel="Delete"
         loading={isRemoving}
         onConfirm={confirmDelete}
@@ -303,8 +328,12 @@ function DoctorsSection() {
 
   async function confirmDelete() {
     if (!pendingDelete) return;
-    await remove(pendingDelete.id);
-    setPendingDelete(null);
+    try {
+      await remove(pendingDelete.id);
+      setPendingDelete(null);
+    } catch {
+      // Keep the confirmation dialog open after a failed remove.
+    }
   }
 
   return (
@@ -407,7 +436,14 @@ function DoctorsSection() {
           if (!open && !isRemoving) setPendingDelete(null);
         }}
         title={pendingDelete ? `Delete ${pendingDelete.doctor.name}?` : "Delete doctor?"}
-        description="This removes the doctor from your saved providers. This cannot be undone."
+        description={
+          <>
+            This removes the doctor from your saved providers. This cannot be undone.
+            {listErrorMessage ? (
+              <span className="mt-2 block text-destructive">{listErrorMessage}</span>
+            ) : null}
+          </>
+        }
         confirmLabel="Delete"
         loading={isRemoving}
         onConfirm={confirmDelete}
@@ -454,6 +490,7 @@ function ProvidersView({
           { opacity: 1, x: 0, duration: 0.34, ease: "power2.out" },
         );
       });
+      return () => mm.revert();
     },
     { scope: contentRef, dependencies: [tab], revertOnUpdate: false },
   );

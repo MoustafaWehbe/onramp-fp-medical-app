@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 import { Activity, ClipboardList, HeartPulse, Plus } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -76,9 +76,20 @@ function ProfileTabSwitch({
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         gsap.to(pill, { ...target, duration: 0.32, ease: "power2.out" });
       });
+      return () => mm.revert();
     },
     { scope: rootRef, dependencies: [value], revertOnUpdate: false },
   );
+
+  function handleTabListKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    const next: ProfileTab = value === "conditions" ? "symptoms" : "conditions";
+    onChange(next);
+    requestAnimationFrame(() => {
+      (next === "conditions" ? conditionsRef : symptomsRef).current?.focus();
+    });
+  }
 
   return (
     <div
@@ -86,6 +97,7 @@ function ProfileTabSwitch({
       role="tablist"
       aria-label="Health profile sections"
       className="relative grid grid-cols-2 rounded-2xl border border-border/70 bg-muted/70 p-1.5 shadow-soft"
+      onKeyDown={handleTabListKeyDown}
     >
       <span
         ref={pillRef}
@@ -97,8 +109,9 @@ function ProfileTabSwitch({
         type="button"
         role="tab"
         id="profile-tab-conditions"
-        aria-controls="profile-panel-conditions"
+        aria-controls={value === "conditions" ? "profile-panel-conditions" : undefined}
         aria-selected={value === "conditions"}
+        tabIndex={value === "conditions" ? 0 : -1}
         className={cn(
           "relative z-10 flex min-h-12 items-center justify-center gap-2 rounded-xl px-3 text-sm font-semibold transition-colors",
           value === "conditions" ? "text-foreground" : "text-muted-foreground hover:text-foreground",
@@ -118,8 +131,9 @@ function ProfileTabSwitch({
         type="button"
         role="tab"
         id="profile-tab-symptoms"
-        aria-controls="profile-panel-symptoms"
+        aria-controls={value === "symptoms" ? "profile-panel-symptoms" : undefined}
         aria-selected={value === "symptoms"}
+        tabIndex={value === "symptoms" ? 0 : -1}
         className={cn(
           "relative z-10 flex min-h-12 items-center justify-center gap-2 rounded-xl px-3 text-sm font-semibold transition-colors",
           value === "symptoms" ? "text-foreground" : "text-muted-foreground hover:text-foreground",
@@ -164,8 +178,12 @@ function ConditionsSection() {
 
   async function confirmDelete() {
     if (!pendingDelete) return;
-    await remove(pendingDelete.id);
-    setPendingDelete(null);
+    try {
+      await remove(pendingDelete.id);
+      setPendingDelete(null);
+    } catch {
+      // Keep the confirmation dialog open after a failed remove.
+    }
   }
 
   return (
@@ -268,7 +286,14 @@ function ConditionsSection() {
           if (!open && !isRemoving) setPendingDelete(null);
         }}
         title={pendingDelete ? `Delete ${pendingDelete.condition.name}?` : "Delete condition?"}
-        description="This removes the condition from your health profile. This cannot be undone."
+        description={
+          <>
+            This removes the condition from your health profile. This cannot be undone.
+            {listErrorMessage ? (
+              <span className="mt-2 block text-destructive">{listErrorMessage}</span>
+            ) : null}
+          </>
+        }
         confirmLabel="Delete"
         loading={isRemoving}
         onConfirm={confirmDelete}
@@ -303,8 +328,12 @@ function SymptomsSection() {
 
   async function confirmDelete() {
     if (!pendingDelete) return;
-    await remove(pendingDelete.id);
-    setPendingDelete(null);
+    try {
+      await remove(pendingDelete.id);
+      setPendingDelete(null);
+    } catch {
+      // Keep the confirmation dialog open after a failed remove.
+    }
   }
 
   return (
@@ -405,7 +434,14 @@ function SymptomsSection() {
           if (!open && !isRemoving) setPendingDelete(null);
         }}
         title={pendingDelete ? `Delete ${pendingDelete.catalog.name}?` : "Delete symptom?"}
-        description="This removes the symptom from your health profile. This cannot be undone."
+        description={
+          <>
+            This removes the symptom from your health profile. This cannot be undone.
+            {listErrorMessage ? (
+              <span className="mt-2 block text-destructive">{listErrorMessage}</span>
+            ) : null}
+          </>
+        }
         confirmLabel="Delete"
         loading={isRemoving}
         onConfirm={confirmDelete}
@@ -452,7 +488,7 @@ function HealthProfileView({
           { opacity: 1, x: 0, duration: 0.34, ease: "power2.out" },
         );
       });
-
+      return () => mm.revert();
     },
     { scope: contentRef, dependencies: [tab], revertOnUpdate: false },
   );

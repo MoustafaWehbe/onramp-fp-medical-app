@@ -56,6 +56,8 @@ export function RowActionsMenu({ label, actions }: RowActionsMenuProps) {
   useLayoutEffect(() => {
     if (!open) return;
     updatePosition();
+    const items = menuRef.current?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]');
+    items?.[0]?.focus();
   }, [open, actions.length]);
 
   useEffect(() => {
@@ -73,11 +75,41 @@ export function RowActionsMenu({ label, actions }: RowActionsMenuProps) {
     }
 
     function onKeyDown(event: KeyboardEvent) {
+      const items = menuRef.current
+        ? Array.from(menuRef.current.querySelectorAll<HTMLButtonElement>('[role="menuitem"]'))
+        : [];
+
       if (event.key === "Escape") {
         event.preventDefault();
         event.stopPropagation();
         setOpen(false);
         buttonRef.current?.focus();
+        return;
+      }
+
+      if (items.length === 0) return;
+
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        const currentIndex = items.findIndex((item) => item === document.activeElement);
+        const delta = event.key === "ArrowDown" ? 1 : -1;
+        const nextIndex =
+          currentIndex < 0
+            ? 0
+            : (currentIndex + delta + items.length) % items.length;
+        items[nextIndex]?.focus();
+        return;
+      }
+
+      if (event.key === "Home") {
+        event.preventDefault();
+        items[0]?.focus();
+        return;
+      }
+
+      if (event.key === "End") {
+        event.preventDefault();
+        items[items.length - 1]?.focus();
       }
     }
 

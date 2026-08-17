@@ -37,6 +37,11 @@ export function SleepChart({ data }: SleepChartProps) {
         </p>
       ) : (
         <div className="h-[260px] w-full sm:h-[300px]" role="img" aria-label="Line chart showing sleep duration over time">
+          <p className="sr-only">
+            {chartData
+              .map((item) => `On ${item.date}, ${item.hours} hours of sleep.`)
+              .join(" ")}
+          </p>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} />

@@ -335,6 +335,7 @@ export function SymptomsProvider({ children, onActivate, panelCloseRef }: Sympto
       closePanel();
     } catch (error) {
       setListError(getErrorMessage(error, "Failed to remove symptom"));
+      throw error;
     }
   }
 

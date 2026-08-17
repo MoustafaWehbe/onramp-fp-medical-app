@@ -9,6 +9,7 @@ import {
 import { DailyEntryCard } from "../../components/daily-entries/DailyEntryCard";
 import { useDailyEntriesContext } from "../../providers/DailyEntriesProvider";
 import type { DailyEntry } from "../../lib/daily-entries/daily-entries-exports";
+import { formatEntryDate } from "../../lib/daily-entries/daily-entries-exports";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { PageHeader } from "../../components/shared/PageHeader";
@@ -205,11 +206,7 @@ export function LogView() {
         }}
         title={
           pendingDelete
-            ? `Delete the log for ${new Intl.DateTimeFormat("en-GB", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              }).format(new Date(`${pendingDelete.entryDate}T00:00:00`))}?`
+            ? `Delete the log for ${formatEntryDate(pendingDelete.entryDate)}?`
             : "Delete this entry?"
         }
         description="This permanently removes the daily log and its related records. This cannot be undone."

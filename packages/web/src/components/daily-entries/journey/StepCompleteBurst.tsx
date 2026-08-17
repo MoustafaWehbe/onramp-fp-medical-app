@@ -2,7 +2,6 @@ import { useRef } from "react";
 import { Check, HeartPulse } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { FINISH_MESSAGE } from "./encouragement";
 
 interface StepCompleteBurstProps {
   message: string;
@@ -62,7 +61,7 @@ export function StepCompleteBurst({ message, finish = false }: StepCompleteBurst
           )}
         </span>
         <p data-burst-copy className="text-xl font-bold tracking-tight sm:text-2xl">
-          {finish ? FINISH_MESSAGE : message}
+          {message}
         </p>
         {finish && (
           <p className="text-sm text-muted-foreground">Saving your check-in…</p>

@@ -16,6 +16,7 @@ import { StatCard } from "../../components/dashboard/StatCard";
 import { RecentEntries } from "../../components/dashboard/RecentEntries";
 import { DashboardSkeleton } from "../../components/dashboard/DashboardSkeleton";
 import { PageHeader } from "../../components/shared/PageHeader";
+import { formatDate } from "../../lib/utils";
 
 function greetingForNow() {
   const hour = new Date().getHours();
@@ -110,7 +111,7 @@ export function Dashboard() {
               <>
                 <p className="text-lg font-bold tracking-tight">{data.lastVisit.doctorName}</p>
                 <p className="text-sm text-muted-foreground">
-                  {data.lastVisit.date}
+                  {formatDate(`${data.lastVisit.date}T00:00:00`)}
                   {data.lastVisit.clinicName && ` — ${data.lastVisit.clinicName}`}
                 </p>
 

@@ -3,6 +3,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -26,6 +27,7 @@ import {
   useRemoveDailyEntry,
   useUpdateDailyEntry,
 } from "../hooks/useDailyEntries";
+import { SAVE_CELEBRATION_MS, wait } from "../lib/motion";
 
 import {
   useProfileSymptoms,
@@ -249,6 +251,8 @@ export function DailyEntriesProvider({
     useState<DailyEntryPanelState>({
       kind: "closed",
     });
+  const panelRef = useRef(panel);
+  panelRef.current = panel;
 
   const [formError, setFormError] =
     useState<string | null>(null);
@@ -571,16 +575,7 @@ export function DailyEntriesProvider({
     updateEntry.isPending;
 
   function waitForSaveCelebration() {
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return Promise.resolve();
-    }
-
-    return new Promise<void>((resolve) => {
-      window.setTimeout(resolve, 800);
-    });
+    return wait(SAVE_CELEBRATION_MS);
   }
 
   /**
@@ -743,12 +738,14 @@ export function DailyEntriesProvider({
 async function submitForm(
   values: DailyEntryFormValues,
 ) {
+  const submittedPanel = panelRef.current;
+
   try {
     setFormError(null);
 
     const payload = toDailyEntrySubmitPayload(values);
 
-    if (panel.kind === "create") {
+    if (submittedPanel.kind === "create") {
       const request =
         toCreateDailyEntryRequest(payload);
 
@@ -759,28 +756,32 @@ async function submitForm(
       setCurrentPage(1);
 
       await waitForSaveCelebration();
-      closePanel();
+      if (panelRef.current === submittedPanel) {
+        closePanel();
+      }
 
       return;
     }
 
-    if (panel.kind === "edit") {
+    if (submittedPanel.kind === "edit") {
       const request =
         toUpdateDailyEntryRequest(payload);
 
       await updateEntry.mutateAsync({
-        id: panel.entry.id,
+        id: submittedPanel.entry.id,
         body: request,
       });
 
       await waitForSaveCelebration();
-      closePanel();
+      if (panelRef.current === submittedPanel) {
+        closePanel();
+      }
     }
   } catch (error) {
     setFormError(
       getErrorMessage(
         error,
-        panel.kind === "edit"
+        submittedPanel.kind === "edit"
           ? "Failed to update daily entry"
           : "Failed to create daily entry",
       ),

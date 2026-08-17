@@ -43,6 +43,7 @@ export function DailyEntryJourney({
   const isLast = currentStep === LAST_JOURNEY_STEP;
   const canSkip = currentStep > 0 && !isLast;
   const stepMeta = JOURNEY_STEPS[currentStep];
+  const burstLocked = Boolean(burstMessage);
 
   useGSAP(
     () => {
@@ -60,8 +61,6 @@ export function DailyEntryJourney({
           { opacity: 1, x: 0, duration: 0.28, ease: "power2.out", pointerEvents: "auto" },
         );
       });
-
-      return () => mm.revert();
     },
     { scope: rootRef, dependencies: [currentStep], revertOnUpdate: true },
   );
@@ -69,7 +68,9 @@ export function DailyEntryJourney({
   const submitLabel = isBusy
     ? isCreateMode
       ? "Submitting..."
-      : "Updating..."
+      : isEditMode
+        ? "Updating..."
+        : "Saving..."
     : isCreateMode
       ? "Save entry"
       : isEditMode
@@ -113,7 +114,7 @@ export function DailyEntryJourney({
             variant="ghost"
             className="w-full sm:w-auto"
             onClick={currentStep === 0 ? onCancel : onBack}
-            disabled={isBusy || finishing || navLocked}
+            disabled={isBusy || finishing || navLocked || burstLocked}
           >
             {currentStep === 0 ? "Cancel" : "Back"}
           </Button>
@@ -125,13 +126,13 @@ export function DailyEntryJourney({
                 variant="outline"
                 className="w-full sm:w-auto"
                 onClick={onSkip}
-                disabled={isBusy || finishing || navLocked}
+                disabled={isBusy || finishing || navLocked || burstLocked}
               >
                 Skip
               </Button>
             )}
             {isLast ? (
-              <Button type="submit" className="w-full sm:w-auto" disabled={isBusy || finishing || navLocked}>
+              <Button type="submit" className="w-full sm:w-auto" disabled={isBusy || finishing || navLocked || burstLocked}>
                 {submitLabel}
               </Button>
             ) : (
@@ -139,7 +140,7 @@ export function DailyEntryJourney({
                 type="button"
                 className="w-full sm:w-auto"
                 onClick={onContinue}
-                disabled={isBusy || finishing || navLocked}
+                disabled={isBusy || finishing || navLocked || burstLocked}
               >
                 Continue
               </Button>

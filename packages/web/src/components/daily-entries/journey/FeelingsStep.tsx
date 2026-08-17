@@ -49,13 +49,14 @@ export function FeelingsStep({
             <p id="mood-label" className="text-sm font-semibold">
               Mood rating
             </p>
-            <div className="mt-2.5 grid grid-cols-5 gap-1.5" role="group" aria-labelledby="mood-label">
+            <div className="mt-2.5 grid grid-cols-5 gap-1.5" role="radiogroup" aria-labelledby="mood-label">
               {MOOD_OPTIONS.map((option) => {
                 const selected = field.value === option.value;
                 return (
                   <button
                     key={option.value}
                     type="button"
+                    role="radio"
                     onClick={() => field.onChange(option.value)}
                     className={cn(
                       "flex min-h-14 flex-col items-center justify-center rounded-2xl border px-1 py-2 text-center shadow-sm transition-[border-color,background-color,transform] duration-200",
@@ -63,7 +64,7 @@ export function FeelingsStep({
                         ? "border-primary bg-primary text-primary-foreground shadow-md"
                         : "border-border/80 bg-card hover:border-primary/40 hover:bg-secondary",
                     )}
-                    aria-pressed={selected}
+                    aria-checked={selected}
                   >
                     <span className="text-base font-bold">{option.value}</span>
                     <span className="text-[0.65rem] font-semibold uppercase tracking-wide">
@@ -99,7 +100,10 @@ export function FeelingsStep({
                 >
                   −
                 </button>
-                <p className="min-w-0 flex-1 text-center text-2xl font-bold tabular-nums">
+                <p
+                  className="min-w-0 flex-1 text-center text-2xl font-bold tabular-nums"
+                  aria-live="polite"
+                >
                   {sleepHours === "" ? "—" : sleepHours}
                   <span className="ml-1 text-sm font-semibold text-muted-foreground">hrs</span>
                 </p>
@@ -122,6 +126,11 @@ export function FeelingsStep({
                 onChange={(event) => field.onChange(event.target.value)}
                 className="mt-3 h-2 w-full cursor-pointer appearance-none bg-transparent accent-primary"
                 aria-label="Sleep hours slider"
+                aria-valuetext={
+                  sleepHours === "" || sleepNumber == null || Number.isNaN(sleepNumber)
+                    ? "Not set"
+                    : `${sleepNumber} hours`
+                }
               />
               {formErrors.sleepHours && (
                 <p className="mt-1.5 text-sm text-destructive">{formErrors.sleepHours.message}</p>

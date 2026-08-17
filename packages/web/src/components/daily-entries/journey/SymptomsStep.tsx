@@ -9,6 +9,8 @@ import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { AddedItemCard } from "./AddedItemCard";
+import { ComposerFieldError, composerControlProps } from "./composerField";
+import { EmptyCatalogHint } from "./EmptyCatalogHint";
 import { ItemComposer } from "./ItemComposer";
 import { parseComposer } from "./composerValidation";
 import { selectFieldClass, textareaFieldClass } from "./fieldStyles";
@@ -88,7 +90,8 @@ export function SymptomsStep({
             isLoading ||
             Boolean(errorMessage) ||
             composerOpen ||
-            (symptoms.length > 0 && availableSymptoms.length === 0)
+            symptoms.length === 0 ||
+            availableSymptoms.length === 0
           }
         >
           Add symptom
@@ -122,6 +125,7 @@ export function SymptomsStep({
                     userSymptomId: event.target.value,
                   }))
                 }
+                {...composerControlProps("composer-symptom-error", fieldErrors.userSymptomId)}
               >
                 <option value="">Select a symptom</option>
                 {availableSymptoms.map((symptom) => (
@@ -130,9 +134,7 @@ export function SymptomsStep({
                   </option>
                 ))}
               </select>
-              {fieldErrors.userSymptomId && (
-                <p className="mt-1.5 text-sm text-destructive">{fieldErrors.userSymptomId}</p>
-              )}
+              <ComposerFieldError id="composer-symptom-error" error={fieldErrors.userSymptomId} />
             </div>
             <div>
               <Label htmlFor="composer-severity">Severity</Label>
@@ -151,10 +153,9 @@ export function SymptomsStep({
                     severity: event.target.value,
                   }))
                 }
+                {...composerControlProps("composer-severity-error", fieldErrors.severity)}
               />
-              {fieldErrors.severity && (
-                <p className="mt-1.5 text-sm text-destructive">{fieldErrors.severity}</p>
-              )}
+              <ComposerFieldError id="composer-severity-error" error={fieldErrors.severity} />
             </div>
           </div>
           <div className="mt-4">
@@ -179,7 +180,11 @@ export function SymptomsStep({
         </ItemComposer>
       )}
 
-      {!isLoading && !errorMessage && fields.length === 0 && !composerOpen && (
+      {!isLoading && !errorMessage && symptoms.length === 0 && (
+        <EmptyCatalogHint to="/health-profile" actionLabel="Add a symptom in Health Profile" />
+      )}
+
+      {!isLoading && !errorMessage && fields.length === 0 && !composerOpen && symptoms.length > 0 && (
         <div className="rounded-2xl border border-dashed bg-muted/30 px-4 py-10 text-center text-sm text-muted-foreground">
           No symptoms added. You can skip this stop.
         </div>

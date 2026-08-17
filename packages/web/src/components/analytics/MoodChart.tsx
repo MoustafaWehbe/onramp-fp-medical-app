@@ -36,6 +36,11 @@ export function MoodChart({ data }: MoodChartProps) {
         </p>
       ) : (
         <div className="h-[260px] w-full sm:h-[300px]" role="img" aria-label="Line chart showing mood ratings over time">
+          <p className="sr-only">
+            {chartData
+              .map((item) => `On ${item.date}, mood rating ${item.value}.`)
+              .join(" ")}
+          </p>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} />

@@ -18,6 +18,8 @@ export function ItemComposer({
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (event.key !== "Enter") return;
     if (event.target instanceof HTMLTextAreaElement) return;
+    if (event.target instanceof HTMLButtonElement) return;
+    if (event.target instanceof HTMLElement && event.target.closest("button")) return;
 
     event.preventDefault();
     onConfirm();

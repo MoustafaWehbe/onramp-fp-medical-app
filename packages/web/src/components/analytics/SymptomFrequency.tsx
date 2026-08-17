@@ -39,6 +39,11 @@ export function SymptomFrequency({
         </p>
       ) : (
         <div className="h-[280px] w-full sm:h-[320px]" role="img" aria-label="Bar chart showing the frequency of recorded symptoms">
+          <p className="sr-only">
+            {chartData
+              .map((item) => `${item.symptom}: ${item.count} ${item.count === 1 ? "record" : "records"}.`)
+              .join(" ")}
+          </p>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData}>
               <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} />

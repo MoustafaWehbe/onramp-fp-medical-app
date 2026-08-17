@@ -18,6 +18,7 @@ import {
   getConditionName,
   getDoctorName,
   getClinicName,
+  formatEntryDate,
 } from "../../lib/daily-entries/daily-entries-exports";
 
 export function LogEntry() {
@@ -268,17 +269,4 @@ function TagList({ items }: { items: string[] }) {
 
 function EmptyRelatedData() {
   return <p className="text-sm text-muted-foreground">None recorded.</p>;
-}
-
-function formatEntryDate(entryDate: string): string {
-  const date = new Date(`${entryDate}T00:00:00`);
-  if (Number.isNaN(date.getTime())) {
-    return entryDate;
-  }
-
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
 }

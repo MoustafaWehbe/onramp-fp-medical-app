@@ -1,4 +1,5 @@
 import type { DailyEntry } from "../../lib/daily-entries/daily-entries-exports";
+import { formatEntryDate } from "../../lib/daily-entries/daily-entries-exports";
 
 import type {
   UserSymptom,
@@ -20,35 +21,6 @@ interface DailyEntryDetailsProps {
   onDelete: () => void;
   onClose: () => void;
   isRemoving?: boolean;
-}
-
-/**
- * Formats an entry date into a readable date.
- *
- * Example:
- * 2026-07-28
- * ->
- * 28 July 2026
- */
-function formatEntryDate(
-  entryDate: string,
-): string {
-  const date = new Date(
-    `${entryDate}T00:00:00`,
-  );
-
-  if (Number.isNaN(date.getTime())) {
-    return entryDate;
-  }
-
-  return new Intl.DateTimeFormat(
-    "en-GB",
-    {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    },
-  ).format(date);
 }
 
 /**

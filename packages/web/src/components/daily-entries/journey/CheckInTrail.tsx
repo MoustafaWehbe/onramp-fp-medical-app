@@ -27,7 +27,17 @@ export function CheckInTrail({ currentStep }: CheckInTrailProps) {
                 )}
                 aria-current={isCurrent ? "step" : undefined}
               >
-                {isComplete ? <Check className="h-4 w-4" aria-hidden /> : index + 1}
+                {isComplete ? (
+                  <>
+                    <Check className="h-4 w-4" aria-hidden />
+                    <span className="sr-only">Completed</span>
+                  </>
+                ) : (
+                  <>
+                    {index + 1}
+                    <span className="sr-only">{isCurrent ? "Current" : "Pending"}</span>
+                  </>
+                )}
               </span>
               <span
                 className={cn(

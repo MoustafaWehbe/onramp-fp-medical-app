@@ -74,7 +74,11 @@ export function StatCard({
             {label}
           </p>
 
-          <p ref={valueRef} className="font-display text-2xl font-bold tabular-nums tracking-tight">
+          <p
+            ref={valueRef}
+            aria-label={String(canCount ? formatCount(numericValue, value) : value)}
+            className="font-display text-2xl font-bold tabular-nums tracking-tight"
+          >
             {canCount ? formatCount(0, value) : value}
           </p>
 

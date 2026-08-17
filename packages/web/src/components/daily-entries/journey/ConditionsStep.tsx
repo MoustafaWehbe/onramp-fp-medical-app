@@ -8,6 +8,8 @@ import type { UserCondition } from "../../../lib/health/health-export";
 import { Button } from "../../ui/button";
 import { Label } from "../../ui/label";
 import { AddedItemCard } from "./AddedItemCard";
+import { ComposerFieldError, composerControlProps } from "./composerField";
+import { EmptyCatalogHint } from "./EmptyCatalogHint";
 import { ItemComposer } from "./ItemComposer";
 import { parseComposer } from "./composerValidation";
 import { selectFieldClass, textareaFieldClass } from "./fieldStyles";
@@ -89,7 +91,8 @@ export function ConditionsStep({
             isLoading ||
             Boolean(errorMessage) ||
             composerOpen ||
-            (conditions.length > 0 && availableConditions.length === 0)
+            conditions.length === 0 ||
+            availableConditions.length === 0
           }
         >
           Add condition
@@ -123,6 +126,7 @@ export function ConditionsStep({
                     userConditionId: event.target.value,
                   }))
                 }
+                {...composerControlProps("composer-condition-error", fieldErrors.userConditionId)}
               >
                 <option value="">Select a condition</option>
                 {availableConditions.map((condition) => (
@@ -131,9 +135,7 @@ export function ConditionsStep({
                   </option>
                 ))}
               </select>
-              {fieldErrors.userConditionId && (
-                <p className="mt-1.5 text-sm text-destructive">{fieldErrors.userConditionId}</p>
-              )}
+              <ComposerFieldError id="composer-condition-error" error={fieldErrors.userConditionId} />
             </div>
             <div>
               <Label htmlFor="composer-condition-status">Status</Label>
@@ -168,15 +170,18 @@ export function ConditionsStep({
                   notes: event.target.value,
                 }))
               }
+              {...composerControlProps("composer-condition-notes-error", fieldErrors.notes)}
             />
-            {fieldErrors.notes && (
-              <p className="mt-1.5 text-sm text-destructive">{fieldErrors.notes}</p>
-            )}
+            <ComposerFieldError id="composer-condition-notes-error" error={fieldErrors.notes} />
           </div>
         </ItemComposer>
       )}
 
-      {!isLoading && !errorMessage && fields.length === 0 && !composerOpen && (
+      {!isLoading && !errorMessage && conditions.length === 0 && (
+        <EmptyCatalogHint to="/health-profile" actionLabel="Add a condition in Health Profile" />
+      )}
+
+      {!isLoading && !errorMessage && fields.length === 0 && !composerOpen && conditions.length > 0 && (
         <div className="rounded-2xl border border-dashed bg-muted/30 px-4 py-10 text-center text-sm text-muted-foreground">
           No conditions added. You can skip this stop.
         </div>

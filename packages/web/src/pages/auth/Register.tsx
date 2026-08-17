@@ -71,9 +71,18 @@ export function Register() {
           )}
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
-            <Input id="name" autoComplete="name" placeholder="Alice Smith" {...register("name")} />
+            <Input
+              id="name"
+              autoComplete="name"
+              placeholder="Alice Smith"
+              aria-invalid={Boolean(errors.name)}
+              aria-describedby={errors.name ? "register-name-error" : undefined}
+              {...register("name")}
+            />
             {errors.name && (
-              <p className="text-xs text-destructive">{errors.name.message}</p>
+              <p id="register-name-error" className="text-xs text-destructive">
+                {errors.name.message}
+              </p>
             )}
           </div>
           <div className="space-y-2">
@@ -83,10 +92,14 @@ export function Register() {
               type="email"
               autoComplete="email"
               placeholder="you@example.com"
+              aria-invalid={Boolean(errors.email)}
+              aria-describedby={errors.email ? "register-email-error" : undefined}
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-xs text-destructive">{errors.email.message}</p>
+              <p id="register-email-error" className="text-xs text-destructive">
+                {errors.email.message}
+              </p>
             )}
           </div>
           <div className="space-y-2">
@@ -96,10 +109,12 @@ export function Register() {
               type="password"
               autoComplete="new-password"
               placeholder="••••••••"
+              aria-invalid={Boolean(errors.password)}
+              aria-describedby={errors.password ? "register-password-error" : undefined}
               {...register("password")}
             />
             {errors.password && (
-              <p className="text-xs text-destructive">
+              <p id="register-password-error" className="text-xs text-destructive">
                 {errors.password.message}
               </p>
             )}

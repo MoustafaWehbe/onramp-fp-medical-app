@@ -8,6 +8,8 @@ import type { UserClinic, UserDoctor } from "../../../lib/health/health-export";
 import { Button } from "../../ui/button";
 import { Label } from "../../ui/label";
 import { AddedItemCard } from "./AddedItemCard";
+import { ComposerFieldError, composerControlProps } from "./composerField";
+import { EmptyCatalogHint } from "./EmptyCatalogHint";
 import { ItemComposer } from "./ItemComposer";
 import { parseComposer } from "./composerValidation";
 import { selectFieldClass, textareaFieldClass } from "./fieldStyles";
@@ -85,7 +87,13 @@ export function VisitsStep({
           type="button"
           variant="outline"
           onClick={openComposer}
-          disabled={isLoading || Boolean(errorMessage) || composerOpen}
+          disabled={
+            isLoading ||
+            Boolean(errorMessage) ||
+            composerOpen ||
+            doctors.length === 0 ||
+            clinics.length === 0
+          }
         >
           Add doctor visit
         </Button>
@@ -125,6 +133,7 @@ export function VisitsStep({
                     userDoctorId: event.target.value,
                   }))
                 }
+                {...composerControlProps("composer-doctor-error", fieldErrors.userDoctorId)}
               >
                 <option value="">Select a doctor</option>
                 {doctors.map((doctor) => (
@@ -133,9 +142,7 @@ export function VisitsStep({
                   </option>
                 ))}
               </select>
-              {fieldErrors.userDoctorId && (
-                <p className="mt-1.5 text-sm text-destructive">{fieldErrors.userDoctorId}</p>
-              )}
+              <ComposerFieldError id="composer-doctor-error" error={fieldErrors.userDoctorId} />
             </div>
             <div>
               <Label htmlFor="composer-clinic">Clinic</Label>
@@ -149,6 +156,7 @@ export function VisitsStep({
                     userClinicId: event.target.value,
                   }))
                 }
+                {...composerControlProps("composer-clinic-error", fieldErrors.userClinicId)}
               >
                 <option value="">Select a clinic</option>
                 {clinics.map((clinic) => (
@@ -157,9 +165,7 @@ export function VisitsStep({
                   </option>
                 ))}
               </select>
-              {fieldErrors.userClinicId && (
-                <p className="mt-1.5 text-sm text-destructive">{fieldErrors.userClinicId}</p>
-              )}
+              <ComposerFieldError id="composer-clinic-error" error={fieldErrors.userClinicId} />
             </div>
           </div>
           <div className="mt-4">
@@ -203,7 +209,16 @@ export function VisitsStep({
         </ItemComposer>
       )}
 
-      {!isLoading && !errorMessage && fields.length === 0 && !composerOpen && (
+      {!isLoading && !errorMessage && (doctors.length === 0 || clinics.length === 0) && (
+        <EmptyCatalogHint to="/providers" actionLabel="Add a doctor or clinic in Providers" />
+      )}
+
+      {!isLoading &&
+        !errorMessage &&
+        fields.length === 0 &&
+        !composerOpen &&
+        doctors.length > 0 &&
+        clinics.length > 0 && (
         <div className="rounded-2xl border border-dashed bg-muted/30 px-4 py-10 text-center text-sm text-muted-foreground">
           No doctor visits added. Save whenever you are ready.
         </div>
@@ -212,11 +227,14 @@ export function VisitsStep({
       {fields.map((field, index) => {
         const doctorName =
           doctors.find((doctor) => doctor.id === field.userDoctorId)?.doctor.name ?? "Doctor";
-        const clinicName =
-          clinics.find((clinic) => clinic.id === field.userClinicId)?.clinic.name ?? "Clinic";
-        const details = [clinicName];
-        if (field.summary?.trim()) details.push(field.summary.trim());
-        if (field.notes?.trim()) details.push(field.notes.trim());
+        const clinicName = clinics.find(
+          (clinic) => clinic.id === field.userClinicId,
+        )?.clinic.name;
+        const details = [
+          ...(clinicName ? [clinicName] : []),
+          ...(field.summary?.trim() ? [field.summary.trim()] : []),
+          ...(field.notes?.trim() ? [field.notes.trim()] : []),
+        ];
 
         return (
           <AddedItemCard

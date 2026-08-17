@@ -1,13 +1,18 @@
-import type { ZodTypeAny } from "zod";
+import type { z } from "zod";
 
-export function parseComposer<T>(schema: ZodTypeAny, value: T) {
+export function parseComposer<S extends z.ZodTypeAny>(
+  schema: S,
+  value: unknown,
+):
+  | { success: true; data: z.infer<S>; errors: Record<string, string> }
+  | { success: false; errors: Record<string, string> } {
   const result = schema.safeParse(value);
 
   if (result.success) {
     return {
-      success: true as const,
-      data: result.data as T,
-      errors: {} as Record<string, string>,
+      success: true,
+      data: result.data,
+      errors: {},
     };
   }
 
@@ -20,8 +25,7 @@ export function parseComposer<T>(schema: ZodTypeAny, value: T) {
   }
 
   return {
-    success: false as const,
-    data: value,
+    success: false,
     errors,
   };
 }

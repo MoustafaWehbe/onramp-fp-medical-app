@@ -9,6 +9,8 @@ import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { AddedItemCard } from "./AddedItemCard";
+import { ComposerFieldError, composerControlProps } from "./composerField";
+import { EmptyCatalogHint } from "./EmptyCatalogHint";
 import { ItemComposer } from "./ItemComposer";
 import { parseComposer } from "./composerValidation";
 import { selectFieldClass, textareaFieldClass } from "./fieldStyles";
@@ -80,7 +82,7 @@ export function MedicationsStep({
           type="button"
           variant="outline"
           onClick={openComposer}
-          disabled={isLoading || Boolean(errorMessage) || composerOpen}
+          disabled={isLoading || Boolean(errorMessage) || composerOpen || medications.length === 0}
         >
           Add medication
         </Button>
@@ -113,6 +115,10 @@ export function MedicationsStep({
                     userMedicationId: event.target.value,
                   }))
                 }
+                {...composerControlProps(
+                  "composer-medication-error",
+                  fieldErrors.userMedicationId,
+                )}
               >
                 <option value="">Select a medication</option>
                 {medications.map((medication) => (
@@ -121,9 +127,10 @@ export function MedicationsStep({
                   </option>
                 ))}
               </select>
-              {fieldErrors.userMedicationId && (
-                <p className="mt-1.5 text-sm text-destructive">{fieldErrors.userMedicationId}</p>
-              )}
+              <ComposerFieldError
+                id="composer-medication-error"
+                error={fieldErrors.userMedicationId}
+              />
             </div>
             <div>
               <Label htmlFor="composer-quantity">Quantity</Label>
@@ -141,10 +148,9 @@ export function MedicationsStep({
                     quantity: event.target.value,
                   }))
                 }
+                {...composerControlProps("composer-quantity-error", fieldErrors.quantity)}
               />
-              {fieldErrors.quantity && (
-                <p className="mt-1.5 text-sm text-destructive">{fieldErrors.quantity}</p>
-              )}
+              <ComposerFieldError id="composer-quantity-error" error={fieldErrors.quantity} />
             </div>
             <div>
               <Label htmlFor="composer-unit">Unit</Label>
@@ -158,23 +164,21 @@ export function MedicationsStep({
                     unit: event.target.value as DailyEntryFormValues["medications"][number]["unit"],
                   }))
                 }
+                {...composerControlProps("composer-unit-error", fieldErrors.unit)}
               >
-                <option value="">Select a unit</option>
                 {MEDICATION_UNITS.map((unit) => (
                   <option key={unit} value={unit}>
                     {unit}
                   </option>
                 ))}
               </select>
-              {fieldErrors.unit && (
-                <p className="mt-1.5 text-sm text-destructive">{fieldErrors.unit}</p>
-              )}
+              <ComposerFieldError id="composer-unit-error" error={fieldErrors.unit} />
             </div>
             <div className="flex items-center gap-3 pt-7">
-              <Input
+              <input
                 id="composer-taken"
                 type="checkbox"
-                className="h-5 w-5 rounded"
+                className="h-5 w-5 shrink-0 rounded border border-input bg-card accent-primary"
                 checked={draft.taken}
                 onChange={(event) =>
                   setDraft((current) => ({
@@ -223,7 +227,11 @@ export function MedicationsStep({
         </ItemComposer>
       )}
 
-      {!isLoading && !errorMessage && fields.length === 0 && !composerOpen && (
+      {!isLoading && !errorMessage && medications.length === 0 && (
+        <EmptyCatalogHint to="/medications" actionLabel="Add a medication" />
+      )}
+
+      {!isLoading && !errorMessage && fields.length === 0 && !composerOpen && medications.length > 0 && (
         <div className="rounded-2xl border border-dashed bg-muted/30 px-4 py-10 text-center text-sm text-muted-foreground">
           No medications added. You can skip this stop.
         </div>

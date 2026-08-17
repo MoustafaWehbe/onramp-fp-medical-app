@@ -8,7 +8,7 @@ import {
   Trash2,
 } from "lucide-react";
 import type { DailyEntry } from "../../lib/daily-entries/daily-entries-exports";
-import { getTodayDate } from "../../lib/daily-entries/form";
+import { formatEntryDate, getTodayDate } from "../../lib/daily-entries/daily-entries-exports";
 import { cn } from "../../lib/utils";
 import { useDailyEntriesContext } from "../../providers/DailyEntriesProvider";
 import { RowActionsMenu } from "../shared/RowActionsMenu";
@@ -16,16 +16,6 @@ import { RowActionsMenu } from "../shared/RowActionsMenu";
 interface DailyEntryCardProps {
   entry: DailyEntry;
   onDelete: () => void;
-}
-
-function formatEntryDate(entryDate: string): string {
-  const date = new Date(`${entryDate}T00:00:00`);
-  if (Number.isNaN(date.getTime())) return entryDate;
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
 }
 
 export function DailyEntryCard({ entry, onDelete }: DailyEntryCardProps) {
