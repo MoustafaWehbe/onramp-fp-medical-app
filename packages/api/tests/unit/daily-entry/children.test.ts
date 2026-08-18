@@ -1,4 +1,4 @@
-import { UniqueConstraintError } from "sequelize";
+import { Op, UniqueConstraintError } from "sequelize";
 import { EntryCondition, UserCondition } from "../../../src/models";
 import {
   insertChildren,
@@ -30,9 +30,10 @@ const mockCreateError = createError as jest.MockedFunction<typeof createError>;
 
 const fakeTx = { isTransaction: true };
 
-function existingRow(userConditionId: string) {
+function existingRow(userConditionId: string, status: string = "active") {
   return {
     userConditionId,
+    status,
     update: jest.fn().mockResolvedValue(undefined),
   };
 }
@@ -85,7 +86,13 @@ describe("reconcileConditions", () => {
 
     expect(mockUserCondition.update).toHaveBeenCalledWith(
       { status: "active" },
-      { where: { id: ["cond-stays", "cond-added"] }, transaction: fakeTx },
+      {
+        where: {
+          id: ["cond-stays", "cond-added"],
+          status: { [Op.in]: ["active", "inactive"] },
+        },
+        transaction: fakeTx,
+      },
     );
 
     expect(mockUserCondition.update).toHaveBeenCalledWith(
@@ -95,7 +102,7 @@ describe("reconcileConditions", () => {
   });
 
   it("does not downgrade resolved user conditions to inactive when removed", async () => {
-    const removed = existingRow("cond-resolved");
+    const removed = existingRow("cond-resolved", "resolved");
     mockEntryCondition.findAll.mockResolvedValue([removed] as never);
     mockUserCondition.update.mockResolvedValue([1] as never);
 
@@ -105,14 +112,66 @@ describe("reconcileConditions", () => {
       fakeTx as never,
     );
 
+    expect(removed.update).not.toHaveBeenCalled();
+
     expect(mockUserCondition.update).toHaveBeenCalledWith(
       { status: "active" },
-      { where: { id: ["cond-added"] }, transaction: fakeTx },
+      {
+        where: {
+          id: ["cond-added"],
+          status: { [Op.in]: ["active", "inactive"] },
+        },
+        transaction: fakeTx,
+      },
     );
 
     expect(mockUserCondition.update).toHaveBeenCalledWith(
       { status: "inactive" },
       { where: { id: ["cond-resolved"], status: "active" }, transaction: fakeTx },
+    );
+  });
+
+  it("preserves resolved EntryCondition and UserCondition records when submitted", async () => {
+    const resolved = existingRow("cond-resolved", "resolved");
+    mockEntryCondition.findAll.mockResolvedValue([resolved] as never);
+    mockUserCondition.update.mockResolvedValue([1] as never);
+
+    await reconcileConditions(
+      "entry-1",
+      [{ userConditionId: "cond-resolved" }],
+      fakeTx as never,
+    );
+
+    expect(resolved.update).toHaveBeenCalledWith(
+      { status: "resolved", notes: undefined },
+      { transaction: fakeTx },
+    );
+
+    expect(mockUserCondition.update).toHaveBeenCalledWith(
+      { status: "active" },
+      {
+        where: {
+          id: ["cond-resolved"],
+          status: { [Op.in]: ["active", "inactive"] },
+        },
+        transaction: fakeTx,
+      },
+    );
+  });
+
+  it("clears notes when condition.notes is null", async () => {
+    const stays = existingRow("cond-stays");
+    mockEntryCondition.findAll.mockResolvedValue([stays] as never);
+
+    await reconcileConditions(
+      "entry-1",
+      [{ userConditionId: "cond-stays", notes: null }],
+      fakeTx as never,
+    );
+
+    expect(stays.update).toHaveBeenCalledWith(
+      { status: "active", notes: null },
+      { transaction: fakeTx },
     );
   });
 

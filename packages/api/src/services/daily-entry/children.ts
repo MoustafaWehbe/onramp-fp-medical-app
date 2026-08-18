@@ -1,4 +1,4 @@
-import { UniqueConstraintError, type Transaction } from "sequelize";
+import { Op, UniqueConstraintError, type Transaction } from "sequelize";
 import {
   EntryCondition,
   EntryDoctorVisit,
@@ -41,8 +41,8 @@ export async function reconcileConditions(
     if (row) {
       await row.update(
         {
-          status: "active",
-          notes: condition.notes ?? undefined,
+          status: row.status === "resolved" ? "resolved" : "active",
+          notes: condition.notes,
         },
         { transaction },
       );
@@ -68,7 +68,10 @@ export async function reconcileConditions(
     .map((row) => row.userConditionId);
 
   for (const row of existing) {
-    if (!submittedIds.has(row.userConditionId)) {
+    if (
+      !submittedIds.has(row.userConditionId) &&
+      row.status !== "resolved"
+    ) {
       await row.update({ status: "inactive" }, { transaction });
     }
   }
@@ -76,7 +79,13 @@ export async function reconcileConditions(
   if (conditions.length) {
     await UserCondition.update(
       { status: "active" },
-      { where: { id: [...submittedIds] }, transaction },
+      {
+        where: {
+          id: [...submittedIds],
+          status: { [Op.in]: ["active", "inactive"] },
+        },
+        transaction,
+      },
     );
   }
 
