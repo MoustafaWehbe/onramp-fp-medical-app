@@ -16,7 +16,6 @@ import { selectFieldClass, textareaFieldClass } from "./fieldStyles";
 
 const emptyDraft: DailyEntryFormValues["conditions"][number] = {
   userConditionId: "",
-  status: "active",
   notes: "",
 };
 
@@ -137,24 +136,6 @@ export function ConditionsStep({
               </select>
               <ComposerFieldError id="composer-condition-error" error={fieldErrors.userConditionId} />
             </div>
-            <div>
-              <Label htmlFor="composer-condition-status">Status</Label>
-              <select
-                id="composer-condition-status"
-                className={selectFieldClass}
-                value={draft.status}
-                onChange={(event) =>
-                  setDraft((current) => ({
-                    ...current,
-                    status: event.target.value as DailyEntryFormValues["conditions"][number]["status"],
-                  }))
-                }
-              >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-                <option value="resolved">Resolved</option>
-              </select>
-            </div>
           </div>
           <div className="mt-4">
             <Label htmlFor="composer-condition-notes">Notes</Label>
@@ -191,9 +172,7 @@ export function ConditionsStep({
         const conditionName =
           conditions.find((condition) => condition.id === field.userConditionId)?.condition
             .name ?? "Condition";
-        const details = [
-          field.status.charAt(0).toUpperCase() + field.status.slice(1),
-        ];
+        const details = [];
         if (field.notes?.trim()) details.push(field.notes.trim());
 
         return (

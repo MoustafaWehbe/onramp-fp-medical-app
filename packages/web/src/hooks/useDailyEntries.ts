@@ -6,6 +6,7 @@ import {
 
 import { useAuth } from "./useAuth";
 import { dashboardKeys } from "./useDashboard";
+import { conditionKeys } from "./health/useConditions";
 
 import {
   createDailyEntry,
@@ -142,6 +143,10 @@ export function useCreateDailyEntry() {
         queryKey: dashboardKeys.all(user.id),
       });
 
+      void queryClient.invalidateQueries({
+        queryKey: conditionKeys.all,
+      });
+
       queryClient.setQueryData(
         dailyEntryKeys.detail(
           user.id,
@@ -195,6 +200,10 @@ export function useUpdateDailyEntry() {
 
       void queryClient.invalidateQueries({
         queryKey: dashboardKeys.all(user.id),
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: conditionKeys.all,
       });
     },
   });
