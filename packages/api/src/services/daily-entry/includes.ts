@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import {
   Clinic,
   ConditionCatalog,
@@ -38,6 +39,8 @@ export function entryIncludes() {
     {
       model: EntryCondition,
       as: "conditions" as const,
+      where: { status: { [Op.ne]: "inactive" } },
+      required: false,
       include: [
         {
           model: UserCondition,
