@@ -3,7 +3,7 @@ import { doctorService } from "../services/doctor.service";
 import { userDoctorService } from "../services/user-doctor.service";
 
 export const doctorController = {
-  // ── Catalog (/api/doctors) ─────────────────────────────────────────────────
+  // Catalog 
 
   async list(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -32,7 +32,7 @@ export const doctorController = {
     }
   },
 
-  // ── Profile (/api/profile/doctors) ─────────────────────────────────────────
+  // Profile
 
   async listProfile(
     req: Request,

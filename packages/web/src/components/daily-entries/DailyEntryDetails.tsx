@@ -23,9 +23,6 @@ interface DailyEntryDetailsProps {
   isRemoving?: boolean;
 }
 
-/**
- * Formats a nullable value.
- */
 function displayValue(
   value: string | number | null | undefined,
 ): string {
@@ -53,7 +50,6 @@ export function DailyEntryDetails({
   isRemoving = false,
 }: DailyEntryDetailsProps) {
 
-    // Helper Functions:
     function getSymptomName(userSymptomId: string) {
         const symptom = symptoms.find(
             (item) => item.id === userSymptomId,
@@ -961,9 +957,6 @@ export function DailyEntryDetails({
   );
 }
 
-/**
- * Reusable empty state for a details section.
- */
 function EmptySectionMessage({
   message,
 }: {
@@ -986,9 +979,6 @@ function EmptySectionMessage({
   );
 }
 
-/**
- * Reusable label/value field.
- */
 function DetailField({
   label,
   value,
@@ -1025,9 +1015,6 @@ function DetailField({
   );
 }
 
-/**
- * Formats a date/time value for display.
- */
 function formatDateTime(
   value: string,
 ): string {

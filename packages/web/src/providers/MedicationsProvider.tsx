@@ -37,7 +37,6 @@ import {
 } from "../lib/health/health-export";
 import type { Pagination } from "../lib/api/types";
 
-/** 3 columns × 5 rows */
 export const MEDICATIONS_PAGE_SIZE = 15;
 export const MEDICATIONS_GRID_COLUMNS = 3;
 export const MEDICATIONS_GRID_ROWS = 5;
@@ -309,7 +308,6 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
     if (!payload.onlineName) {
       throw new Error("Select a medication from the suggestions");
     }
-    // Insert into catalog only if missing; otherwise reuse existing row
     const catalog = await ensureCatalog.mutateAsync(payload.onlineName);
     return catalog.id;
   }
@@ -420,7 +418,6 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
       submitForm,
       remove,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       medications,
       listQuery.isLoading,

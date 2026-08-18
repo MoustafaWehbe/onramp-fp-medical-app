@@ -10,8 +10,6 @@ import {
 
 const router = Router();
 
-// ── Daily entries collection ──────────────────────────────────────────────────
-
 router.get(
   "/",
   validate(listDailyEntriesQuerySchema, "query"),
@@ -23,8 +21,6 @@ router.post(
   validate(createDailyEntrySchema),
   DailyEntryController.create,
 );
-
-// ── Daily entry by id ─────────────────────────────────────────────────────────
 
 router.get(
   "/:id",

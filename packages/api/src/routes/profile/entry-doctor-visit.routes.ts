@@ -8,15 +8,11 @@ import {
 
 const router = Router();
 
-// ── Doctor visits collection ─────────────────────────────────────────────────
-
 router.get(
   "/",
   validate(listEntryDoctorVisitsQuerySchema, "query"),
   EntryDoctorVisitController.list,
 );
-
-// ── Doctor visit by id ────────────────────────────────────────────────────────
 
 router.get(
   "/:id",

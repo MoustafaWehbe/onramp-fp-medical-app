@@ -71,14 +71,8 @@ import type { Pagination } from "../lib/api/types";
 
 import { useAuth } from "../hooks/useAuth";
 
-/**
- * Number of entries displayed per page.
- */
 export const DAILY_ENTRIES_PAGE_SIZE = 15;
 
-/**
- * Defines the state of the daily-entry side panel.
- */
 export type DailyEntryPanelState =
   | { kind: "closed" }
   | { kind: "create" }
@@ -86,9 +80,6 @@ export type DailyEntryPanelState =
   | { kind: "edit"; entry: DailyEntry };
 
 interface DailyEntriesContextValue {
-  /**
-   * Daily entry list.
-   */
   entries: DailyEntry[];
 
   isLoading: boolean;
@@ -97,9 +88,6 @@ interface DailyEntriesContextValue {
 
   listErrorMessage: string | null;
 
-  /**
-   * Pagination.
-   */
   pagination: Pagination | null;
   currentPage: number;
   pageSize: number;
@@ -108,9 +96,6 @@ interface DailyEntriesContextValue {
   goToNextPage: () => void;
   goToPrevPage: () => void;
 
-  /**
-   * Date filters.
-   */
   fromDate: string | undefined;
   toDate: string | undefined;
   isInvalidDateRange: boolean;
@@ -119,25 +104,16 @@ interface DailyEntriesContextValue {
   setToDate: (date: string | undefined) => void;
   clearDateFilters: () => void;
 
-  /**
-   * Currently selected daily-entry detail.
-   */
   selectedEntry: DailyEntry | null;
   isDetailLoading: boolean;
   detailErrorMessage: string | null;
 
-  /**
-   * Panel state.
-   */
   panel: DailyEntryPanelState;
   panelOpen: boolean;
   panelTitle: string | undefined;
   selectedId: string | null;
   formMode: "create" | "edit" | null;
 
-  /**
-   * Form.
-   */
   control: Control<DailyEntryFormValues>;
   register: UseFormRegister<DailyEntryFormValues>;
   watch: UseFormWatch<DailyEntryFormValues>;
@@ -146,56 +122,34 @@ interface DailyEntriesContextValue {
   handleFormSubmit: UseFormHandleSubmit<DailyEntryFormValues>;
   trigger: UseFormTrigger<DailyEntryFormValues>;
 
-  /**
-   * Form state.
-   */
   formError: string | null;
   isFormBusy: boolean;
   isRemoving: boolean;
 
-  /**
-   * User profile resources used by
-   * daily-entry dropdowns.
-   *
-   * All resources are already sorted
-   * alphabetically by display name.
-   */
   symptoms: UserSymptom[];
   medications: UserMedication[];
   conditions: UserCondition[];
   doctors: UserDoctor[];
   clinics: UserClinic[];
 
-  /**
-   * Dropdown loading states.
-   */
   isLoadingSymptoms: boolean;
   isLoadingMedications: boolean;
   isLoadingConditions: boolean;
   isLoadingDoctors: boolean;
   isLoadingClinics: boolean;
 
-  /**
-   * Dropdown errors.
-   */
   symptomsErrorMessage: string | null;
   medicationsErrorMessage: string | null;
   conditionsErrorMessage: string | null;
   doctorsErrorMessage: string | null;
   clinicsErrorMessage: string | null;
 
-  /**
-   * Panel actions.
-   */
   openCreate: () => void;
   openDetail: (entry: DailyEntry) => void;
   openEdit: (entry: DailyEntry) => void;
   closePanel: () => void;
   cancelForm: () => void;
 
-  /**
-   * Daily-entry actions.
-   */
   submitForm: (values: DailyEntryFormValues) => Promise<void>;
   remove: (id: string) => Promise<void>;
 }
@@ -203,9 +157,6 @@ interface DailyEntriesContextValue {
 const DailyEntriesContext =
   createContext<DailyEntriesContextValue | null>(null);
 
-/**
- * Extracts a useful error message from Axios/API errors.
- */
 function getErrorMessage(
   error: unknown,
   fallback: string,
@@ -227,9 +178,6 @@ function getErrorMessage(
   return fallback;
 }
 
-/**
- * Sorts an array alphabetically.
- */
 function sortAlphabetically<T>(
   items: T[],
   getName: (item: T) => string,
@@ -275,11 +223,6 @@ export function DailyEntriesProvider({
     toDate &&
     fromDate > toDate,
   );
-  /**
-   * ----------------------------------------------------
-   * Daily-entry queries
-   * ----------------------------------------------------
-   */
 
   const listQuery = useDailyEntries(
     user?.id,{
@@ -290,10 +233,6 @@ export function DailyEntriesProvider({
   },
     !isInvalidDateRange,);
 
-  /**
-   * The detail query is enabled only when
-   * a detail/edit panel has an entry selected.
-   */
   const detailEntryId =
     panel.kind === "detail" || panel.kind === "edit"
       ? panel.entry.id
@@ -301,12 +240,6 @@ export function DailyEntriesProvider({
 
   const detailQuery =
     useDailyEntry(detailEntryId);
-
-  /**
-   * ----------------------------------------------------
-   * Daily-entry mutations
-   * ----------------------------------------------------
-   */
 
   const createEntry =
     useCreateDailyEntry();
@@ -316,17 +249,6 @@ export function DailyEntriesProvider({
 
   const removeEntry =
     useRemoveDailyEntry();
-
-  /**
-   * ----------------------------------------------------
-   * Profile resources for dropdowns
-   * ----------------------------------------------------
-   *
-   * We intentionally request 100 records here.
-   *
-   * The dropdown is expected to contain the user's
-   * saved profile resources, not just the first 15.
-   */
 
   const symptomsQuery =
     useProfileSymptoms({
@@ -358,12 +280,6 @@ export function DailyEntriesProvider({
       pageSize: 100,
     });
 
-  /**
-   * ----------------------------------------------------
-   * React Hook Form
-   * ----------------------------------------------------
-   */
-
   const {
     register,
     handleSubmit,
@@ -386,27 +302,11 @@ export function DailyEntriesProvider({
     
   });
 
-  /**
-   * ----------------------------------------------------
-   * List data
-   * ----------------------------------------------------
-   */
-
   const entries =
     listQuery.data?.data ?? [];
 
   const pagination =
     listQuery.data?.pagination ?? null;
-
-  /**
-   * ----------------------------------------------------
-   * Detail data
-   * ----------------------------------------------------
-   *
-   * Prefer the detail endpoint result when
-   * available because it is the source of truth
-   * for the complete entry.
-   */
 
   const selectedEntry =
     detailQuery.data ??
@@ -416,12 +316,6 @@ export function DailyEntriesProvider({
         ? panel.entry
         : null
     );
-
-  /**
-   * ----------------------------------------------------
-   * Alphabetically sorted dropdown resources
-   * ----------------------------------------------------
-   */
 
   const symptoms = useMemo(
     () =>
@@ -472,23 +366,11 @@ export function DailyEntriesProvider({
     [clinicsQuery.data?.data],
   );
 
-  /**
-   * ----------------------------------------------------
-   * Form mode
-   * ----------------------------------------------------
-   */
-
   const formMode =
     panel.kind === "create" ||
     panel.kind === "edit"
       ? panel.kind
       : null;
-
-  /**
-   * ----------------------------------------------------
-   * Reset form when panel changes
-   * ----------------------------------------------------
-   */
 
   useEffect(() => {
     if (panel.kind === "create") {
@@ -502,10 +384,6 @@ export function DailyEntriesProvider({
     }
 
     if (panel.kind === "edit") {
-      /**
-       * If detail data is already loaded,
-       * use it to populate the form.
-       */
       if (detailQuery.data) {
         reset(
           toDailyEntryFormValues(
@@ -513,10 +391,6 @@ export function DailyEntriesProvider({
           ),
         );
       } else {
-        /**
-         * Fallback to the entry from the list
-         * while detail data is loading.
-         */
         reset(
           toDailyEntryFormValues(
             panel.entry,
@@ -531,12 +405,6 @@ export function DailyEntriesProvider({
     detailQuery.data,
     reset,
   ]);
-
-  /**
-   * ----------------------------------------------------
-   * Keep current page valid
-   * ----------------------------------------------------
-   */
 
   useEffect(() => {
     if (!pagination) {
@@ -564,12 +432,6 @@ export function DailyEntriesProvider({
     currentPage,
   ]);
 
-  /**
-   * ----------------------------------------------------
-   * Busy states
-   * ----------------------------------------------------
-   */
-
   const isFormBusy =
     createEntry.isPending ||
     updateEntry.isPending;
@@ -577,12 +439,6 @@ export function DailyEntriesProvider({
   function waitForSaveCelebration() {
     return wait(SAVE_CELEBRATION_MS);
   }
-
-  /**
-   * ----------------------------------------------------
-   * Panel information
-   * ----------------------------------------------------
-   */
 
   const panelOpen =
     panel.kind !== "closed";
@@ -601,12 +457,6 @@ export function DailyEntriesProvider({
         : panel.kind === "detail"
           ? `Entry - ${panel.entry.entryDate}`
           : undefined;
-
-  /**
-   * ----------------------------------------------------
-   * Pagination actions
-   * ----------------------------------------------------
-   */
 
   function goToPage(
     page: number,
@@ -645,12 +495,6 @@ export function DailyEntriesProvider({
     }
   }
 
-  /**
-   * ----------------------------------------------------
-   * Date filter actions
-   * ----------------------------------------------------
-   */
-
   function handleSetFromDate(
     date: string | undefined,
   ) {
@@ -673,12 +517,6 @@ export function DailyEntriesProvider({
     setCurrentPage(1);
     setListError(null);
   }
-
-  /**
-   * ----------------------------------------------------
-   * Panel actions
-   * ----------------------------------------------------
-   */
 
   function openCreate() {
     setFormError(null);
@@ -729,11 +567,6 @@ export function DailyEntriesProvider({
 
     closePanel();
   }
-
-
-  /**
-   * create and update
-  **/
 
 async function submitForm(
   values: DailyEntryFormValues,
@@ -789,12 +622,6 @@ async function submitForm(
   }
 }
 
-  /**
-   * ----------------------------------------------------
-   * Delete
-   * ----------------------------------------------------
-   */
-
   async function remove(
     id: string,
   ) {
@@ -817,18 +644,9 @@ async function submitForm(
     }
   }
 
-  /**
-   * ----------------------------------------------------
-   * Context value
-   * ----------------------------------------------------
-   */
-
   const value =
     useMemo<DailyEntriesContextValue>(
       () => ({
-        /**
-         * List
-         */
         entries,
 
         isLoading:
@@ -850,10 +668,6 @@ async function submitForm(
                 )
               : null
           ),
-
-        /**
-         * Pagination
-         */
         pagination,
 
         currentPage,
@@ -866,10 +680,6 @@ async function submitForm(
         goToNextPage,
 
         goToPrevPage,
-
-        /**
-         * Date filters
-         */
         fromDate,
 
         toDate,
@@ -883,9 +693,6 @@ async function submitForm(
 
         clearDateFilters,
 
-        /**
-         * Detail
-         */
         selectedEntry,
 
         isDetailLoading:
@@ -899,9 +706,6 @@ async function submitForm(
               )
             : null,
 
-        /**
-         * Panel
-         */
         panel,
 
         panelOpen,
@@ -912,9 +716,6 @@ async function submitForm(
 
         formMode,
 
-        /**
-         * Form
-         */
         control,
         register,
 
@@ -929,9 +730,6 @@ async function submitForm(
 
         trigger,
 
-        /**
-         * Form state
-         */
         formError,
 
         isFormBusy,
@@ -939,9 +737,6 @@ async function submitForm(
         isRemoving:
           removeEntry.isPending,
 
-        /**
-         * Dropdown data
-         */
         symptoms,
 
         medications,
@@ -952,9 +747,6 @@ async function submitForm(
 
         clinics,
 
-        /**
-         * Dropdown loading
-         */
         isLoadingSymptoms:
           symptomsQuery.isLoading,
 
@@ -969,10 +761,6 @@ async function submitForm(
 
         isLoadingClinics:
           clinicsQuery.isLoading,
-
-        /**
-         * Dropdown errors
-         */
         symptomsErrorMessage:
           symptomsQuery.isError
             ? getErrorMessage(
@@ -1013,9 +801,6 @@ async function submitForm(
               )
             : null,
 
-        /**
-         * Panel actions
-         */
         openCreate,
 
         openDetail,
@@ -1026,17 +811,9 @@ async function submitForm(
 
         cancelForm,
 
-        /**
-         * Form actions
-         */
         submitForm,
-
-        /**
-         * Delete
-         */
         remove,
       }),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       [
         entries,
 
@@ -1118,9 +895,6 @@ async function submitForm(
   );
 }
 
-/**
- * Access the DailyEntriesProvider context.
- */
 export function useDailyEntriesContext(): DailyEntriesContextValue {
   const context =
     useContext(

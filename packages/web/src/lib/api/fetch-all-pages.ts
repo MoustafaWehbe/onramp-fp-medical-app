@@ -2,10 +2,6 @@ import type { PaginatedResponse } from "./types";
 
 const DEFAULT_PAGE_SIZE = 100;
 
-/**
- * Fetches every page of a paginated endpoint and returns one combined
- * PaginatedResponse (same shape consumers already expect).
- */
 export async function fetchAllPages<T>(
   fetchPage: (
     currentPage: number,

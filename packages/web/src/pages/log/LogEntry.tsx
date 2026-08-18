@@ -19,6 +19,7 @@ import {
   getDoctorName,
   getClinicName,
   formatEntryDate,
+  getTodayDate,
 } from "../../lib/daily-entries/daily-entries-exports";
 
 export function LogEntry() {
@@ -36,16 +37,34 @@ export function LogEntry() {
     detailErrorMessage,
     formMode,
     closePanel,
+    openEdit,
+    remove,
+    isRemoving,
     formError,
   } = useDailyEntriesContext();
 
   const isForm = formMode === "create" || formMode === "edit";
+  const canEdit =
+    selectedEntry != null && selectedEntry.entryDate === getTodayDate();
 
   return (
     <AsidePanel
       open={panelOpen}
       onClose={closePanel}
       title={panelTitle}
+      onEdit={
+        panel.kind === "detail" && canEdit && selectedEntry
+          ? () => openEdit(selectedEntry)
+          : undefined
+      }
+      onDelete={
+        panel.kind === "detail" && selectedEntry
+          ? () => {
+              void remove(selectedEntry.id);
+            }
+          : undefined
+      }
+      deleteDisabled={isRemoving}
       className="max-w-lg"
       contentClassName={
         isForm

@@ -34,7 +34,7 @@ export async function searchSymptomsFromApi(
     params: {
       q: query,
       ontologies: "SNOMEDCT",
-      semantic_types: "T184,T033", // Sign or Symptom + Finding
+      semantic_types: "T184,T033", 
       include: "prefLabel",
       page: 1,
       pagesize: 10,

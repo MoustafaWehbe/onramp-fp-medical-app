@@ -167,7 +167,6 @@ export class UserDoctorService {
 
     if (input.userClinicId !== undefined) {
       await assertUserClinicBelongsToUser(input.userId, input.userClinicId);
-      // Sequelize stores SQL NULL; model attrs are typed as string | undefined
       userDoctor.setDataValue(
         "userClinicId",
         input.userClinicId as string | undefined,

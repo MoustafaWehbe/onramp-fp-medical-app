@@ -13,8 +13,6 @@ import {
 
 const router = Router();
 
-// ── User conditions ───────────────────────────────────────────────────────────
-
 router.get(
   "/",
   validate(listUserConditionsQuerySchema, "query"),
@@ -26,8 +24,6 @@ router.post(
   validate(createUserConditionSchema),
   ConditionsController.createProfile,
 );
-
-// ── Condition–symptom links ───────────────────────────────────────────────────
 
 router.get(
   "/symptoms",
@@ -54,8 +50,6 @@ router.delete(
   validate(conditionSymptomParamsSchema, "params"),
   ConditionsController.unlinkProfileSymptom,
 );
-
-// ── User condition by id ──────────────────────────────────────────────────────
 
 router.get(
   "/:id",

@@ -1,4 +1,3 @@
-// no upper bound on dosage exists on either side, don't test for one
 import { describe, it, expect } from "vitest";
 import { medicationFormSchema } from "../../../../lib/health/medications/form";
 

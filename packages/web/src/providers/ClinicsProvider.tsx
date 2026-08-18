@@ -411,7 +411,6 @@ export function ClinicsProvider({
       submitForm,
       remove,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       clinics,
       listQuery.isLoading,

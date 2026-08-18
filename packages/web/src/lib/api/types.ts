@@ -18,7 +18,6 @@ export interface PaginationQuery {
   currentPage?: number;
   pageSize?: number;
   search?: string;
-  /** When true, hooks/clients should walk all pages and return the full set. */
   fetchAll?: boolean;
 }
 

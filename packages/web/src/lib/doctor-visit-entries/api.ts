@@ -7,7 +7,6 @@ import type {
 
 } from "./types";
 
-// list doctor visits
 export const listDoctorVisits = async (
   query: EntryDoctorVisitsQuery,
 ): Promise<EntryDoctorVisitsResponse> => {
@@ -21,7 +20,6 @@ export const listDoctorVisits = async (
   return data;
 };
 
-// list doctor visits by entry id
 export const getDoctorVisitById = async (
   id: string,
 ): Promise<EntryDoctorVisit> => {
