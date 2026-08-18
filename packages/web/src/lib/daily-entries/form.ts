@@ -1,7 +1,5 @@
 import { z } from "zod";
 
-import type { ConditionStatus } from "../health/condition-status";
-
 import type {
   CreateDailyEntryRequest,
   DailyEntry,
@@ -99,10 +97,6 @@ const dailyEntryConditionFormSchema = z.object({
   userConditionId: z
     .string()
     .min(1, "Condition is required"),
-
-  status: z.enum(
-    ["active", "inactive", "resolved"] as const,
-  ),
 
   notes: z
     .string()
@@ -361,16 +355,15 @@ export function toDailyEntryFormValues(
       })) as any,
 
     conditions:
-      initial.conditions.map((condition) => ({
-        userConditionId:
-          condition.userConditionId,
+      initial.conditions
+        .filter((condition) => condition.status !== "inactive")
+        .map((condition) => ({
+          userConditionId:
+            condition.userConditionId,
 
-        status:
-          condition.status,
-
-        notes:
-          condition.notes ?? "",
-      })),
+          notes:
+            condition.notes ?? "",
+        })),
 
     doctorVisits:
       initial.doctorVisits.map((visit) => ({
@@ -470,9 +463,6 @@ export function toDailyEntrySubmitPayload(
         (condition) => ({
           userConditionId:
             condition.userConditionId,
-
-          status:
-            condition.status as ConditionStatus,
 
           notes:
             condition.notes?.trim()

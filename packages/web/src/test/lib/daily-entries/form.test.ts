@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   dailyEntryFormSchema,
+  toDailyEntryFormValues,
   toDailyEntrySubmitPayload,
   type DailyEntryFormValues,
 } from "../../../lib/daily-entries/form";
@@ -183,7 +184,7 @@ describe("dailyEntryFormSchema", () => {
           notes: "after lunch",
         },
       ],
-      conditions: [{ userConditionId: USER_ID, status: "active" }],
+      conditions: [{ userConditionId: USER_ID }],
       doctorVisits: [
         { userDoctorId: USER_ID, userClinicId: USER_ID, summary: "Checkup" },
       ],
@@ -245,5 +246,44 @@ describe("toDailyEntrySubmitPayload", () => {
     expect(payload.moodRating).toBe(4);
     expect(payload.sleepHours).toBe(7.5);
     expect(payload.symptoms[0].severity).toBe(3);
+  });
+});
+
+// ─── conditions auto status ───────────────────────────────────────────────────
+
+describe("daily entry conditions", () => {
+  it("submits condition entries without a status", () => {
+    const payload = toDailyEntrySubmitPayload({
+      ...validEntry(),
+      conditions: [{ userConditionId: USER_ID, notes: "ok" }],
+    });
+
+    expect(payload.conditions).toEqual([
+      { userConditionId: USER_ID, notes: "ok" },
+    ]);
+  });
+
+  it("excludes inactive conditions when loading an entry into the form", () => {
+    const values = toDailyEntryFormValues({
+      id: "entry-1",
+      userId: USER_ID,
+      entryDate: "2026-07-28",
+      moodRating: 3,
+      sleepHours: 7.5,
+      journalNotes: null,
+      createdAt: "2026-07-28T00:00:00.000Z",
+      updatedAt: "2026-07-28T00:00:00.000Z",
+      symptoms: [],
+      medications: [],
+      doctorVisits: [],
+      conditions: [
+        { id: "c1", userConditionId: "cond-active", status: "active", notes: null },
+        { id: "c2", userConditionId: "cond-inactive", status: "inactive", notes: null },
+      ],
+    });
+
+    expect(values.conditions).toEqual([
+      { userConditionId: "cond-active", notes: "" },
+    ]);
   });
 });

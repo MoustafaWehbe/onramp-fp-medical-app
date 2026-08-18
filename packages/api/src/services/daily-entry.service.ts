@@ -1,7 +1,6 @@
 import { Op } from "sequelize";
 import {
   DailyEntry,
-  EntryCondition,
   EntryDoctorVisit,
   EntryMedication,
   EntrySymptom,
@@ -14,7 +13,11 @@ import { createError } from "../middleware/error-handler";
 import { getDatabase } from "../lib/db";
 import { entryIncludes } from "./daily-entry/includes";
 import { assertOwnedReferences } from "./daily-entry/ownership";
-import { insertChildren, rethrowUnique } from "./daily-entry/children";
+import {
+  insertChildren,
+  reconcileConditions,
+  rethrowUnique,
+} from "./daily-entry/children";
 import type {
   CreateDailyEntryInput,
   ListDailyEntriesInput,
@@ -133,6 +136,7 @@ export class DailyEntryService {
         rethrowUnique(error, "Daily entry already exists for this date");
       }
 
+      await reconcileConditions(entry.id, input.conditions ?? [], transaction);
       await insertChildren(entry.id, input, transaction);
 
       return entry.id;
@@ -182,10 +186,7 @@ export class DailyEntryService {
         });
       }
       if (input.conditions !== undefined) {
-        await EntryCondition.destroy({
-          where: { entryId: entry.id },
-          transaction,
-        });
+        await reconcileConditions(entry.id, input.conditions, transaction);
       }
       if (input.medications !== undefined) {
         await EntryMedication.destroy({
