@@ -6,6 +6,7 @@ import {
   type KeyboardEvent,
 } from "react";
 import type { SymptomCatalog } from "../../../lib/health/health-export";
+import { PenLine, Search } from "lucide-react";
 import { cn } from "../../../lib/utils";
 import { useSymptomsContext } from "../../../providers/SymptomsProvider";
 import { Input } from "../../ui/input";
@@ -14,7 +15,8 @@ const MIN_CHARS = 2;
 
 type FlatOption =
   | { kind: "catalog"; symptom: SymptomCatalog }
-  | { kind: "online"; name: string };
+  | { kind: "online"; name: string }
+  | { kind: "custom"; name: string };
 
 interface SymptomAutocompleteProps {
   id?: string;
@@ -41,6 +43,17 @@ export function SymptomAutocomplete({
   const [open, setOpen] = useState(false);
   const [highlightIndex, setHighlightIndex] = useState(-1);
 
+  const normalizedQuery = nameQuery.trim();
+  const suggestionNames = [
+    ...catalogResults.map((symptom) => symptom.name),
+    ...onlineResults,
+  ];
+  const canUseCustomWording =
+    normalizedQuery.length >= MIN_CHARS &&
+    !suggestionNames.some(
+      (name) => name.trim().toLocaleLowerCase() === normalizedQuery.toLocaleLowerCase(),
+    );
+
   const flatOptions: FlatOption[] = [
     ...catalogResults.map(
       (symptom): FlatOption => ({ kind: "catalog", symptom }),
@@ -48,6 +61,9 @@ export function SymptomAutocomplete({
     ...onlineResults.map(
       (name): FlatOption => ({ kind: "online", name }),
     ),
+    ...(canUseCustomWording
+      ? [{ kind: "custom", name: normalizedQuery } satisfies FlatOption]
+      : []),
   ];
 
   const showDropdown =
@@ -129,6 +145,7 @@ export function SymptomAutocomplete({
         onFocus={() => setOpen(true)}
         onKeyDown={onKeyDown}
       />
+      <Search className="pointer-events-none absolute right-3.5 top-3 h-4 w-4 text-muted-foreground" aria-hidden />
       {showDropdown && (
         <div
           id={listId}
@@ -201,6 +218,30 @@ export function SymptomAutocomplete({
                   </button>
                 );
               })}
+            </div>
+          )}
+          {canUseCustomWording && (
+            <div className="border-t border-border/70 p-1.5">
+              <button
+                id={`${listId}-option-${flatOptions.length - 1}`}
+                role="option"
+                type="button"
+                aria-selected={highlightIndex === flatOptions.length - 1}
+                className={cn(
+                  "flex min-h-11 w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-primary/10",
+                  highlightIndex === flatOptions.length - 1 && "bg-primary/10",
+                )}
+                onMouseEnter={() => setHighlightIndex(flatOptions.length - 1)}
+                onClick={() => selectOption({ kind: "custom", name: normalizedQuery })}
+              >
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <PenLine className="h-4 w-4" aria-hidden />
+                </span>
+                <span className="min-w-0">
+                  <span className="block font-semibold">Use your wording</span>
+                  <span className="block truncate text-xs text-muted-foreground">“{normalizedQuery}”</span>
+                </span>
+              </button>
             </div>
           )}
           {isAutocompleteLoading && flatOptions.length > 0 && (

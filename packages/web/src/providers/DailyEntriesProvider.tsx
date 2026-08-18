@@ -3,6 +3,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -16,6 +17,7 @@ import {
   type UseFormSetValue,
   type UseFormWatch,
   type Control,
+  type UseFormTrigger,
 } from "react-hook-form";
 
 import {
@@ -25,6 +27,7 @@ import {
   useRemoveDailyEntry,
   useUpdateDailyEntry,
 } from "../hooks/useDailyEntries";
+import { SAVE_CELEBRATION_MS, wait } from "../lib/motion";
 
 import {
   useProfileSymptoms,
@@ -117,6 +120,7 @@ interface DailyEntriesContextValue {
   setValue: UseFormSetValue<DailyEntryFormValues>;
   formErrors: FieldErrors<DailyEntryFormValues>;
   handleFormSubmit: UseFormHandleSubmit<DailyEntryFormValues>;
+  trigger: UseFormTrigger<DailyEntryFormValues>;
 
   formError: string | null;
   isFormBusy: boolean;
@@ -195,6 +199,8 @@ export function DailyEntriesProvider({
     useState<DailyEntryPanelState>({
       kind: "closed",
     });
+  const panelRef = useRef(panel);
+  panelRef.current = panel;
 
   const [formError, setFormError] =
     useState<string | null>(null);
@@ -281,6 +287,7 @@ export function DailyEntriesProvider({
     watch,
     reset,
     control,
+    trigger,
     formState: {
       errors: formErrors,
       
@@ -429,6 +436,10 @@ export function DailyEntriesProvider({
     createEntry.isPending ||
     updateEntry.isPending;
 
+  function waitForSaveCelebration() {
+    return wait(SAVE_CELEBRATION_MS);
+  }
+
   const panelOpen =
     panel.kind !== "closed";
 
@@ -560,12 +571,14 @@ export function DailyEntriesProvider({
 async function submitForm(
   values: DailyEntryFormValues,
 ) {
+  const submittedPanel = panelRef.current;
+
   try {
     setFormError(null);
 
     const payload = toDailyEntrySubmitPayload(values);
 
-    if (panel.kind === "create") {
+    if (submittedPanel.kind === "create") {
       const request =
         toCreateDailyEntryRequest(payload);
 
@@ -575,27 +588,33 @@ async function submitForm(
 
       setCurrentPage(1);
 
-      closePanel();
+      await waitForSaveCelebration();
+      if (panelRef.current === submittedPanel) {
+        closePanel();
+      }
 
       return;
     }
 
-    if (panel.kind === "edit") {
+    if (submittedPanel.kind === "edit") {
       const request =
         toUpdateDailyEntryRequest(payload);
 
       await updateEntry.mutateAsync({
-        id: panel.entry.id,
+        id: submittedPanel.entry.id,
         body: request,
       });
 
-      closePanel();
+      await waitForSaveCelebration();
+      if (panelRef.current === submittedPanel) {
+        closePanel();
+      }
     }
   } catch (error) {
     setFormError(
       getErrorMessage(
         error,
-        panel.kind === "edit"
+        submittedPanel.kind === "edit"
           ? "Failed to update daily entry"
           : "Failed to create daily entry",
       ),
@@ -708,6 +727,9 @@ async function submitForm(
 
         handleFormSubmit:
           handleSubmit,
+
+        trigger,
+
         formError,
 
         isFormBusy,
@@ -830,6 +852,7 @@ async function submitForm(
         setValue,
         formErrors,
         handleSubmit,
+        trigger,
 
         formError,
 

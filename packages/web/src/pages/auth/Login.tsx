@@ -52,9 +52,12 @@ export function Login() {
   if (user) return <Navigate to={homePathForRole(user.role)} replace />;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Sign in</CardTitle>
+    <Card className="rounded-[1.75rem] border-white/60 bg-card/90 shadow-lift backdrop-blur-xl dark:border-border/80">
+      <CardHeader className="space-y-2 pb-5 text-center">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
+          Welcome back
+        </p>
+        <CardTitle className="text-2xl tracking-tight">Sign in</CardTitle>
         <CardDescription>
           Enter your credentials to access your account
         </CardDescription>
@@ -62,7 +65,7 @@ export function Login() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="space-y-4">
           {error && (
-            <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            <p role="alert" className="rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive">
               {error}
             </p>
           )}
@@ -71,6 +74,7 @@ export function Login() {
             <Input
               id="email"
               type="email"
+              autoComplete="email"
               placeholder="you@example.com"
               {...register("email")}
             />
@@ -83,6 +87,7 @@ export function Login() {
             <Input
               id="password"
               type="password"
+              autoComplete="current-password"
               placeholder="••••••••"
               {...register("password")}
             />
@@ -99,7 +104,7 @@ export function Login() {
           </Button>
           <p className="text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link to="/register" className="text-primary hover:underline">
+            <Link to="/register" className="font-semibold text-primary underline-offset-4 hover:underline">
               Register
             </Link>
           </p>

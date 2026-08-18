@@ -8,6 +8,7 @@ import { useAnalyticsContext } from "../../providers/AnalyticsProvider";
 import { MoodChart } from "./MoodChart";
 import { SleepChart } from "./SleepChart";
 import { SymptomFrequency } from "./SymptomFrequency";
+import { PageHeader } from "../shared/PageHeader";
 
 export function AnalyticsDashboard() {
   const {
@@ -21,7 +22,7 @@ export function AnalyticsDashboard() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-64 items-center justify-center rounded-xl border bg-card shadow-sm">
+      <div className="flex min-h-64 items-center justify-center rounded-2xl border bg-card shadow-soft">
         <div className="flex items-center gap-2 text-muted-foreground">
           <Loader2 className="h-5 w-5 animate-spin" />
           Loading analytics...
@@ -32,7 +33,7 @@ export function AnalyticsDashboard() {
 
   if (isError) {
     return (
-      <div className="flex min-h-64 items-center justify-center rounded-xl border bg-card shadow-sm">
+      <div className="flex min-h-64 items-center justify-center rounded-2xl border border-destructive/20 bg-destructive/5 shadow-soft">
         <div className="flex items-center gap-2 text-destructive">
           <AlertCircle className="h-5 w-5" aria-hidden />
           {errorMessage ?? "Failed to load analytics"}
@@ -43,7 +44,7 @@ export function AnalyticsDashboard() {
 
   if (!data) {
     return (
-      <div className="flex min-h-64 items-center justify-center rounded-xl border bg-card shadow-sm">
+      <div className="flex min-h-64 items-center justify-center rounded-2xl border border-dashed bg-card shadow-soft">
         <p className="text-sm text-muted-foreground">
           No analytics data available.
         </p>
@@ -52,54 +53,30 @@ export function AnalyticsDashboard() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
-            <Activity
-              className="h-5 w-5"
-              aria-hidden
-            />
-          </div>
+    <div className="page-shell">
+      <PageHeader
+        eyebrow="Trends and patterns"
+        title="Health Analytics"
+        description={`A visual overview of your recorded health data for the last ${days} days.`}
+        icon={Activity}
+        action={(
+          <>
+            <label className="sr-only" htmlFor="analytics-period">Analytics period</label>
+            <select
+              id="analytics-period"
+              value={days}
+              onChange={(event) => setDays(Number(event.target.value))}
+              className="h-11 w-full cursor-pointer rounded-xl border border-input bg-card px-3.5 text-sm font-semibold shadow-sm outline-none transition-[border-color,box-shadow] duration-200 hover:border-primary/40 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/25 sm:w-auto"
+            >
+              <option value={7}>Last 7 days</option>
+              <option value={30}>Last 30 days</option>
+              <option value={90}>Last 90 days</option>
+            </select>
+          </>
+        )}
+      />
 
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight">
-              Health Analytics
-            </h2>
-
-            <p className="text-sm text-muted-foreground">
-              Overview for the last {days} days
-            </p>
-          </div>
-        </div>
-
-        <label className="sr-only" htmlFor="analytics-period">
-          Analytics period
-        </label>
-
-        <select
-          id="analytics-period"
-          value={days}
-          onChange={(event) =>
-            setDays(Number(event.target.value))
-          }
-          className="rounded-lg border bg-background px-3 py-2 text-sm"
-        >
-          <option value={7}>
-            Last 7 days
-          </option>
-
-          <option value={30}>
-            Last 30 days
-          </option>
-
-          <option value={90}>
-            Last 90 days
-          </option>
-        </select>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
         <MoodChart
           data={data.moodTrend}
         />

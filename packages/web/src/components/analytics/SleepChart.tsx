@@ -20,7 +20,7 @@ export function SleepChart({ data }: SleepChartProps) {
   }));
 
   return (
-    <div className="rounded-xl border bg-card p-4 shadow-sm transition-all hover:border-primary/40 hover:shadow-md">
+    <section className="rounded-2xl border border-border/80 bg-card p-4 shadow-soft transition-[border-color,box-shadow] duration-200 hover:border-primary/30 hover:shadow-lift sm:p-5">
       <div className="mb-4">
         <h3 className="font-semibold">
           Sleep Trend
@@ -36,10 +36,15 @@ export function SleepChart({ data }: SleepChartProps) {
           No sleep data available.
         </p>
       ) : (
-        <div className="h-[300px] w-full">
+        <div className="h-[260px] w-full sm:h-[300px]" role="img" aria-label="Line chart showing sleep duration over time">
+          <p className="sr-only">
+            {chartData
+              .map((item) => `On ${item.date}, ${item.hours} hours of sleep.`)
+              .join(" ")}
+          </p>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} />
 
               <XAxis
                 dataKey="date"
@@ -73,7 +78,7 @@ export function SleepChart({ data }: SleepChartProps) {
               <Line
                 type="monotone"
                 dataKey="hours"
-                stroke="currentColor"
+                stroke="hsl(var(--accent))"
                 strokeWidth={2}
                 dot
               />
@@ -81,6 +86,6 @@ export function SleepChart({ data }: SleepChartProps) {
           </ResponsiveContainer>
         </div>
       )}
-    </div>
+    </section>
   );
 }

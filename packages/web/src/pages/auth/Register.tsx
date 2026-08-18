@@ -52,9 +52,12 @@ export function Register() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create an account</CardTitle>
+    <Card className="rounded-[1.75rem] border-white/60 bg-card/90 shadow-lift backdrop-blur-xl dark:border-border/80">
+      <CardHeader className="space-y-2 pb-5 text-center">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
+          Get started
+        </p>
+        <CardTitle className="text-2xl tracking-tight">Create your account</CardTitle>
         <CardDescription>
           Fill in the details below to get started
         </CardDescription>
@@ -62,15 +65,24 @@ export function Register() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="space-y-4">
           {error && (
-            <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            <p role="alert" className="rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive">
               {error}
             </p>
           )}
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
-            <Input id="name" placeholder="Alice Smith" {...register("name")} />
+            <Input
+              id="name"
+              autoComplete="name"
+              placeholder="Alice Smith"
+              aria-invalid={Boolean(errors.name)}
+              aria-describedby={errors.name ? "register-name-error" : undefined}
+              {...register("name")}
+            />
             {errors.name && (
-              <p className="text-xs text-destructive">{errors.name.message}</p>
+              <p id="register-name-error" className="text-xs text-destructive">
+                {errors.name.message}
+              </p>
             )}
           </div>
           <div className="space-y-2">
@@ -78,11 +90,16 @@ export function Register() {
             <Input
               id="email"
               type="email"
+              autoComplete="email"
               placeholder="you@example.com"
+              aria-invalid={Boolean(errors.email)}
+              aria-describedby={errors.email ? "register-email-error" : undefined}
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-xs text-destructive">{errors.email.message}</p>
+              <p id="register-email-error" className="text-xs text-destructive">
+                {errors.email.message}
+              </p>
             )}
           </div>
           <div className="space-y-2">
@@ -90,11 +107,14 @@ export function Register() {
             <Input
               id="password"
               type="password"
+              autoComplete="new-password"
               placeholder="••••••••"
+              aria-invalid={Boolean(errors.password)}
+              aria-describedby={errors.password ? "register-password-error" : undefined}
               {...register("password")}
             />
             {errors.password && (
-              <p className="text-xs text-destructive">
+              <p id="register-password-error" className="text-xs text-destructive">
                 {errors.password.message}
               </p>
             )}
@@ -106,7 +126,7 @@ export function Register() {
           </Button>
           <p className="text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link to="/login" className="text-primary hover:underline">
+            <Link to="/login" className="font-semibold text-primary underline-offset-4 hover:underline">
               Sign in
             </Link>
           </p>

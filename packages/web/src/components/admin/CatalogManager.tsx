@@ -4,7 +4,7 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
-import { Plus, Search } from "lucide-react";
+import { Database, Plus, Search } from "lucide-react";
 import { isAxiosError } from "axios";
 import type { Pagination as ApiPagination } from "../../lib/api/types";
 import { AsidePanel } from "../shared/AsidePanel";
@@ -15,6 +15,7 @@ import {
 } from "../shared/Pagination";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { PageHeader } from "../shared/PageHeader";
 
 export interface CatalogColumn<T> {
   header: string;
@@ -94,23 +95,21 @@ export function CatalogManager<T>({
   const totalCount = pagination?.totalCount ?? 0;
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0 space-y-1.5">
-          <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
-          <p className="text-sm text-muted-foreground">{description}</p>
-        </div>
-        <Button
-          type="button"
-          className="shrink-0 self-start sm:self-auto"
-          onClick={onCreateOpen}
-        >
-          <Plus className="mr-1.5 h-4 w-4" />
-          Add
-        </Button>
-      </div>
+    <div className="page-shell">
+      <PageHeader
+        eyebrow="Reference catalog"
+        title={title}
+        description={description}
+        icon={Database}
+        action={(
+          <Button type="button" className="w-full sm:w-auto" onClick={onCreateOpen}>
+            <Plus className="mr-1.5 h-4 w-4" aria-hidden />
+            Add record
+          </Button>
+        )}
+      />
 
-      <div className="relative max-w-md">
+      <div className="relative max-w-xl">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           value={search}
@@ -121,7 +120,7 @@ export function CatalogManager<T>({
       </div>
 
       {(isError || errorMessage) && (
-        <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
+        <p role="alert" className="rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive">
           {errorMessage ?? "Failed to load catalog"}
         </p>
       )}
@@ -133,13 +132,13 @@ export function CatalogManager<T>({
       )}
 
       {!isLoading && items.length === 0 && (
-        <div className="rounded-xl border border-dashed px-6 py-16 text-center text-sm text-muted-foreground">
+        <div className="rounded-2xl border border-dashed bg-card px-6 py-16 text-center text-sm text-muted-foreground shadow-soft">
           {emptyLabel}
         </div>
       )}
 
       {!isLoading && items.length > 0 && (
-        <div className="overflow-x-auto rounded-lg border">
+        <div className="overflow-x-auto rounded-2xl border border-border/80 bg-card shadow-soft">
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead className="border-b bg-muted/40">
               <tr>
@@ -155,7 +154,7 @@ export function CatalogManager<T>({
             </thead>
             <tbody>
               {items.map((item) => (
-                <tr key={getRowKey(item)} className="border-b last:border-0">
+                <tr key={getRowKey(item)} className="border-b transition-colors hover:bg-muted/40 last:border-0">
                   {columns.map((column) => (
                     <td key={column.header} className="px-4 py-3 align-top">
                       {column.cell(item)}

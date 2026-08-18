@@ -1,95 +1,79 @@
-import { Link } from "react-router-dom";
-import { CalendarRange, ChevronRight, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { CalendarRange, Eye, FileText, Trash2 } from "lucide-react";
 import type { AiReport } from "../../lib/ai-reports/ai-reports-exports";
 import { cn } from "../../lib/utils";
-import { Button } from "../ui/button";
+import { RowActionsMenu } from "../shared/RowActionsMenu";
+import { formatReportDate } from "./formatReportDate";
 
 interface AiReportCardProps {
   report: AiReport;
-  className?: string;
-  onDelete?: (id: string) => void;
-  isDeleting?: boolean;
+  onDelete: () => void;
 }
 
-function formatDate(value: string): string {
-  const date = new Date(
-    value.includes("T") ? value : `${value}T00:00:00`,
-  );
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }).format(date);
-}
-
-export function AiReportCard({
-  report,
-  className,
-  onDelete,
-  isDeleting = false,
-}: AiReportCardProps) {
+export function AiReportCard({ report, onDelete }: AiReportCardProps) {
+  const navigate = useNavigate();
   const summary =
     typeof report.reportContent?.summary === "string"
       ? report.reportContent.summary
       : null;
+  const rangeLabel = `${formatReportDate(report.dateRangeStart)} – ${formatReportDate(report.dateRangeEnd)}`;
+
+  function openReport() {
+    navigate(`/ai-reports/${report.id}`);
+  }
 
   return (
     <article
       className={cn(
-        "rounded-lg border bg-card p-5 text-card-foreground shadow-sm transition hover:shadow-md",
-        className,
+        "group flex items-start gap-1 rounded-2xl border border-border/80 bg-card p-2 pl-4 shadow-soft transition-[border-color,box-shadow,transform] duration-200",
+        "hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift",
       )}
     >
-      <div className="flex items-start justify-between gap-4">
+      <button
+        type="button"
+        onClick={openReport}
+        aria-label={`View report for ${rangeLabel}`}
+        className="flex min-w-0 flex-1 cursor-pointer gap-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+          <FileText className="h-5 w-5" aria-hidden />
+        </div>
+
         <div className="min-w-0 flex-1 space-y-2">
-          <p className="text-xs text-muted-foreground">
-            Created {formatDate(report.createdAt)}
-          </p>
-
-          <h3 className="flex items-center gap-2 text-base font-semibold text-foreground">
-            <CalendarRange className="h-4 w-4 shrink-0 text-muted-foreground" />
-            <span>
-              {formatDate(report.dateRangeStart)} –{" "}
-              {formatDate(report.dateRangeEnd)}
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <h3 className="truncate font-semibold leading-tight tracking-tight">
+              {rangeLabel}
+            </h3>
+            <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+              <CalendarRange className="h-3.5 w-3.5 shrink-0" aria-hidden />
+              Created {formatReportDate(report.createdAt)}
             </span>
-          </h3>
+          </div>
 
-          {summary ? (
-            <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">
-              {summary}
-            </p>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              No summary available for this report.
-            </p>
-          )}
+          <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">
+            {summary ?? "No summary available for this report."}
+          </p>
         </div>
+      </button>
 
-        <div className="flex shrink-0 items-center gap-2">
-          {onDelete && (
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              disabled={isDeleting}
-              aria-label="Delete report"
-              onClick={() => onDelete(report.id)}
-            >
-              <Trash2 className="h-4 w-4 text-destructive" />
-            </Button>
-          )}
-          <Link
-            to={`/ai-reports/${report.id}`}
-            className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
-          >
-            View
-            <ChevronRight className="h-4 w-4" />
-          </Link>
-        </div>
-      </div>
+      <RowActionsMenu
+        label={`Actions for report ${rangeLabel}`}
+        actions={[
+          {
+            id: "view",
+            label: "View",
+            icon: Eye,
+            onSelect: openReport,
+          },
+          {
+            id: "delete",
+            label: "Delete",
+            icon: Trash2,
+            variant: "destructive",
+            onSelect: onDelete,
+          },
+        ]}
+      />
     </article>
   );
 }

@@ -366,6 +366,7 @@ export function DoctorsProvider({
       closePanel();
     } catch (error) {
       setListError(getErrorMessage(error, "Failed to remove doctor"));
+      throw error;
     }
   }
 

@@ -1,30 +1,34 @@
-import { Activity, Tag } from "lucide-react";
+import { Activity, Eye, Tag, Trash2 } from "lucide-react";
 import type { UserSymptom } from "../../../lib/health/health-export";
 import { cn } from "../../../lib/utils";
 import { useSymptomsContext } from "../../../providers/SymptomsProvider";
+import { RowActionsMenu } from "../../shared/RowActionsMenu";
 
 interface SymptomCardProps {
   symptom: UserSymptom;
+  onDelete: () => void;
 }
 
-export function SymptomCard({ symptom }: SymptomCardProps) {
+export function SymptomCard({ symptom, onDelete }: SymptomCardProps) {
   const { selectedId, openDetail } = useSymptomsContext();
   const selected = selectedId === symptom.id;
   const { name, category } = symptom.catalog;
 
   return (
-    <button
-      type="button"
-      onClick={() => openDetail(symptom)}
+    <article
       className={cn(
-        "group w-full rounded-xl border bg-card p-4 text-left shadow-sm transition-all",
-        "hover:border-primary/40 hover:shadow-md",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "group flex items-start gap-1 rounded-2xl border border-border/80 bg-card p-2 pl-4 shadow-soft transition-[border-color,box-shadow,transform] duration-200",
+        "hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift",
         selected && "border-primary ring-2 ring-primary/20",
       )}
     >
-      <div className="flex gap-3">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+      <button
+        type="button"
+        onClick={() => openDetail(symptom)}
+        aria-label={`View ${name}`}
+        className="flex min-w-0 flex-1 cursor-pointer gap-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
           <Activity className="h-5 w-5" aria-hidden />
         </div>
 
@@ -41,8 +45,27 @@ export function SymptomCard({ symptom }: SymptomCardProps) {
             )}
           </div>
         </div>
-      </div>
-    </button>
+      </button>
+
+      <RowActionsMenu
+        label={`Actions for ${name}`}
+        actions={[
+          {
+            id: "view",
+            label: "View",
+            icon: Eye,
+            onSelect: () => openDetail(symptom),
+          },
+          {
+            id: "delete",
+            label: "Delete",
+            icon: Trash2,
+            variant: "destructive",
+            onSelect: onDelete,
+          },
+        ]}
+      />
+    </article>
   );
 }
 

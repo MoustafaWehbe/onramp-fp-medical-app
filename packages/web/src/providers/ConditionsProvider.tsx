@@ -427,6 +427,7 @@ export function ConditionsProvider({ children, onActivate, panelCloseRef }: Cond
       closePanel();
     } catch (error) {
       setListError(getErrorMessage(error, "Failed to remove condition"));
+      throw error;
     }
   }
 

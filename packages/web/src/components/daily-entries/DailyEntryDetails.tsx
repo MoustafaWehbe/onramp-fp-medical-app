@@ -1,4 +1,5 @@
 import type { DailyEntry } from "../../lib/daily-entries/daily-entries-exports";
+import { formatEntryDate } from "../../lib/daily-entries/daily-entries-exports";
 
 import type {
   UserSymptom,
@@ -20,27 +21,6 @@ interface DailyEntryDetailsProps {
   onDelete: () => void;
   onClose: () => void;
   isRemoving?: boolean;
-}
-
-function formatEntryDate(
-  entryDate: string,
-): string {
-  const date = new Date(
-    `${entryDate}T00:00:00`,
-  );
-
-  if (Number.isNaN(date.getTime())) {
-    return entryDate;
-  }
-
-  return new Intl.DateTimeFormat(
-    "en-GB",
-    {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    },
-  ).format(date);
 }
 
 function displayValue(

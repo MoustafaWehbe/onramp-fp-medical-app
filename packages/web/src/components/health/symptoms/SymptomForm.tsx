@@ -28,8 +28,8 @@ export function SymptomForm() {
             {formErrors.nameQuery.message}
           </p>
         )}
-        <p className="text-xs text-muted-foreground">
-          Search the catalog or BioPortal (SNOMED) for symptoms.
+        <p className="text-sm leading-5 text-muted-foreground">
+          Choose a suggested symptom, or select “Use your wording” to save exactly what you typed.
         </p>
       </div>
 

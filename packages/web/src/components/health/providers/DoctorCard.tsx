@@ -1,19 +1,24 @@
 import {
   Building2,
+  Eye,
   NotebookPen,
+  Pencil,
   Phone,
   Stethoscope,
+  Trash2,
 } from "lucide-react";
 import type { UserDoctor } from "../../../lib/health/health-export";
 import { cn } from "../../../lib/utils";
 import { useDoctorsContext } from "../../../providers/DoctorsProvider";
+import { RowActionsMenu } from "../../shared/RowActionsMenu";
 
 interface DoctorCardProps {
   doctor: UserDoctor;
+  onDelete: () => void;
 }
 
-export function DoctorCard({ doctor }: DoctorCardProps) {
-  const { selectedId, openDetail, savedClinics } = useDoctorsContext();
+export function DoctorCard({ doctor, onDelete }: DoctorCardProps) {
+  const { selectedId, openDetail, openEdit, savedClinics } = useDoctorsContext();
   const selected = selectedId === doctor.id;
   const { name, specialty, phone } = doctor.doctor;
   const linkedClinic = doctor.userClinic
@@ -21,18 +26,20 @@ export function DoctorCard({ doctor }: DoctorCardProps) {
     : null;
 
   return (
-    <button
-      type="button"
-      onClick={() => openDetail(doctor)}
+    <article
       className={cn(
-        "group w-full rounded-xl border bg-card p-4 text-left shadow-sm transition-all",
-        "hover:border-primary/40 hover:shadow-md",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "group flex items-start gap-1 rounded-2xl border border-border/80 bg-card p-2 pl-4 shadow-soft transition-[border-color,box-shadow,transform] duration-200",
+        "hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift",
         selected && "border-primary ring-2 ring-primary/20",
       )}
     >
-      <div className="flex gap-3">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+      <button
+        type="button"
+        onClick={() => openDetail(doctor)}
+        aria-label={`View ${name}`}
+        className="flex min-w-0 flex-1 cursor-pointer gap-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
           <Stethoscope className="h-5 w-5" aria-hidden />
         </div>
 
@@ -73,8 +80,33 @@ export function DoctorCard({ doctor }: DoctorCardProps) {
             </p>
           )}
         </div>
-      </div>
-    </button>
+      </button>
+
+      <RowActionsMenu
+        label={`Actions for ${name}`}
+        actions={[
+          {
+            id: "view",
+            label: "View",
+            icon: Eye,
+            onSelect: () => openDetail(doctor),
+          },
+          {
+            id: "edit",
+            label: "Edit",
+            icon: Pencil,
+            onSelect: () => openEdit(doctor),
+          },
+          {
+            id: "delete",
+            label: "Delete",
+            icon: Trash2,
+            variant: "destructive",
+            onSelect: onDelete,
+          },
+        ]}
+      />
+    </article>
   );
 }
 

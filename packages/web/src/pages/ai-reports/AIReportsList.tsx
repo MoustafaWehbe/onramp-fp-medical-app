@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { FileText } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { FileText, Sparkles } from "lucide-react";
 import { isAxiosError } from "axios";
 import { Button } from "../../components/ui/button";
 import { LoadingSpinner } from "../../components/shared/LoadingSpinner";
@@ -9,6 +9,8 @@ import {
   Pagination,
   paginationFromApi,
 } from "../../components/shared/Pagination";
+import { PageHeader } from "../../components/shared/PageHeader";
+import { SectionPanel } from "../../components/shared/SectionPanel";
 import { AiReportCard } from "../../components/ai-reports/AiReportCard";
 import { useAuth } from "../../hooks/useAuth";
 import { useAiReports, useRemoveAiReport } from "../../hooks/useAIReports";
@@ -30,6 +32,7 @@ function getErrorMessage(error: unknown): string {
 }
 
 export function AIReportsList() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
@@ -42,7 +45,6 @@ export function AIReportsList() {
 
   const reports = data?.data ?? [];
   const pagination = data?.pagination;
-  const isConfirmOpen = pendingDeleteId != null;
 
   async function confirmDelete() {
     if (!pendingDeleteId) return;
@@ -58,88 +60,104 @@ export function AIReportsList() {
     }
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="rounded-lg border border-red-200 bg-red-50 p-6 dark:border-red-900 dark:bg-red-950/40">
-        <h2 className="text-lg font-semibold text-red-800 dark:text-red-200">
-          Unable to load AI reports
-        </h2>
-        <p className="mt-2 text-sm text-red-700 dark:text-red-300">
-          {getErrorMessage(error)}
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <FileText className="h-5 w-5" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">AI Reports</h1>
-              <p className="text-muted-foreground">
-                Previously generated AI reports.
-              </p>
-            </div>
-          </div>
-        </div>
-        <Link to="/ai-reports/generate">
-          <Button>Generate New Report</Button>
-        </Link>
-      </div>
+    <div className="page-shell">
+      <PageHeader
+        eyebrow="Clinical summaries"
+        title="AI Reports"
+        description="Review previous summaries or generate a new physician-ready report."
+        icon={FileText}
+        badge={
+          !isLoading && pagination ? (
+            <span className="inline-flex items-center rounded-full border bg-secondary/80 px-2.5 py-1 text-xs font-semibold tabular-nums text-secondary-foreground">
+              {pagination.totalCount}{" "}
+              {pagination.totalCount === 1 ? "report" : "reports"}
+            </span>
+          ) : undefined
+        }
+        action={(
+          <Button
+            type="button"
+            className="w-full sm:w-auto"
+            onClick={() => navigate("/ai-reports/generate")}
+          >
+            <Sparkles className="mr-1.5 h-4 w-4" aria-hidden />
+            Generate report
+          </Button>
+        )}
+      />
 
-      {remove.isError && (
-        <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
-          {getErrorMessage(remove.error)}
-        </div>
-      )}
-
-      {reports.length === 0 ? (
-        <div className="rounded-lg border border-dashed p-10 text-center">
-          <p className="text-sm text-muted-foreground">
-            No reports yet. Generate your first physician-ready summary.
-          </p>
-          <Link to="/ai-reports/generate" className="mt-4 inline-block">
-            <Button variant="outline">Generate New Report</Button>
-          </Link>
+      {isError ? (
+        <div
+          role="alert"
+          className="rounded-2xl border border-destructive/20 bg-destructive/10 p-6 text-center shadow-soft"
+        >
+          <p className="text-sm text-destructive">{getErrorMessage(error)}</p>
         </div>
       ) : (
-        <div className={`space-y-4 ${isFetching ? "opacity-70" : ""}`}>
-          {reports.map((report) => (
-            <AiReportCard
-              key={report.id}
-              report={report}
-              isDeleting={
-                remove.isPending && pendingDeleteId === report.id
-              }
-              onDelete={setPendingDeleteId}
-            />
-          ))}
-        </div>
-      )}
-
-      {pagination && (
-        <Pagination
-          {...paginationFromApi(pagination)}
-          onPageChange={setCurrentPage}
-          disabled={isFetching || remove.isPending}
-        />
+        <SectionPanel
+          title="Report history"
+          description="Select a report to read the full summary."
+          icon={FileText}
+        >
+          {isLoading ? (
+            <div className="flex justify-center py-16">
+              <LoadingSpinner />
+            </div>
+          ) : reports.length === 0 ? (
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed bg-muted/20 px-6 py-16 text-center">
+              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                <FileText className="h-6 w-6" aria-hidden />
+              </div>
+              <p className="font-medium">No reports yet</p>
+              <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+                Generate a physician-ready summary from your health log.
+              </p>
+              <Button
+                type="button"
+                className="mt-4"
+                onClick={() => navigate("/ai-reports/generate")}
+              >
+                <Sparkles className="mr-1.5 h-4 w-4" aria-hidden />
+                Generate report
+              </Button>
+            </div>
+          ) : (
+            <div className={isFetching ? "opacity-70" : undefined}>
+              {remove.isError && (
+                <p
+                  role="alert"
+                  className="mb-4 rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive"
+                >
+                  {getErrorMessage(remove.error)}
+                </p>
+              )}
+              <ul className="grid grid-cols-1 gap-3">
+                {reports.map((report) => (
+                  <li key={report.id}>
+                    <AiReportCard
+                      report={report}
+                      onDelete={() => setPendingDeleteId(report.id)}
+                    />
+                  </li>
+                ))}
+              </ul>
+              {pagination && (
+                <div className="mt-5">
+                  <Pagination
+                    {...paginationFromApi(pagination)}
+                    onPageChange={setCurrentPage}
+                    disabled={isFetching || remove.isPending}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+        </SectionPanel>
       )}
 
       <ConfirmDialog
-        open={isConfirmOpen}
+        open={pendingDeleteId != null}
         onOpenChange={(open) => {
           if (!open && !remove.isPending) {
             setPendingDeleteId(null);

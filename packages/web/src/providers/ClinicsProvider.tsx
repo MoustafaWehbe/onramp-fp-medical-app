@@ -357,6 +357,7 @@ export function ClinicsProvider({
       closePanel();
     } catch (error) {
       setListError(getErrorMessage(error, "Failed to remove clinic"));
+      throw error;
     }
   }
 

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { isAxiosError } from "axios";
 import {
   ArrowLeft,
@@ -11,16 +11,11 @@ import {
   Sparkles,
   Stethoscope,
 } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
+import { PageHeader } from "../../components/shared/PageHeader";
+import { SectionPanel } from "../../components/shared/SectionPanel";
 import { AiGeneratingLoader } from "../../components/ai-reports/AiGeneratingLoader";
 import { useGenerateAiReport } from "../../hooks/useAIReports";
 
@@ -147,168 +142,144 @@ export function AIReportGenerate() {
     });
   }
 
-  if (generate.isPending) {
-    return (
-      <div className="mx-auto max-w-2xl space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            Generating your report
-          </h1>
-          <p className="text-muted-foreground">
-            This usually takes a few seconds.
-          </p>
-        </div>
-        <Card>
-          <CardContent className="pt-6">
-            <AiGeneratingLoader />
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <div>
-        <Link
-          to="/ai-reports"
-          className="mb-3 inline-flex items-center gap-1 text-sm text-muted-foreground transition hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to reports
-        </Link>
+    <div className="page-shell">
+      <button
+        type="button"
+        className="inline-flex min-h-11 w-fit items-center gap-1 rounded-xl px-2 text-sm font-semibold text-muted-foreground transition hover:bg-secondary hover:text-foreground"
+        onClick={() => navigate("/ai-reports")}
+      >
+        <ArrowLeft className="h-4 w-4" aria-hidden />
+        Back to reports
+      </button>
 
-        <div className="flex items-start gap-3">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Sparkles className="h-5 w-5" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">
-              Generate report
-            </h1>
-            <p className="mt-1 text-muted-foreground">
-              Build a physician-ready summary from your health log for a date
-              range.
-            </p>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="AI reports"
+        title={generate.isPending ? "Generating your report" : "Generate report"}
+        description={
+          generate.isPending
+            ? "This usually takes a few seconds."
+            : "Build a physician-ready summary from your health log for a date range."
+        }
+        icon={Sparkles}
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base">
-            <CalendarRange className="h-4 w-4 text-muted-foreground" />
-            Date range
-          </CardTitle>
-          <CardDescription>
-            Only entries and profile data in this window are used.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {generate.isError && (
-            <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
-              {getErrorMessage(generate.error)}
-            </div>
-          )}
-
-          <form
-            className="space-y-5"
-            onSubmit={(event) => {
-              void handleSubmit(onSubmit)(event);
-            }}
+      {generate.isPending ? (
+        <SectionPanel title="Working" icon={Sparkles}>
+          <AiGeneratingLoader />
+        </SectionPanel>
+      ) : (
+        <>
+          <SectionPanel
+            title="Date range"
+            description="Only entries and profile data in this window are used."
+            icon={CalendarRange}
           >
-            <div className="flex flex-wrap gap-2">
-              {PRESETS.map((preset) => {
-                const isActive =
-                  startDate === preset.start() && endDate === preset.end();
-                return (
-                  <Button
-                    key={preset.label}
-                    type="button"
-                    size="sm"
-                    variant={isActive ? "default" : "outline"}
-                    onClick={() => applyPreset(preset)}
-                  >
-                    {preset.label}
-                  </Button>
-                );
-              })}
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="startDate">Start date</Label>
-                <Input
-                  id="startDate"
-                  type="date"
-                  max={todayIso()}
-                  {...register("startDate")}
-                />
-                {errors.startDate && (
-                  <p className="text-sm text-destructive">
-                    {errors.startDate.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="endDate">End date</Label>
-                <Input
-                  id="endDate"
-                  type="date"
-                  max={todayIso()}
-                  {...register("endDate")}
-                />
-                {errors.endDate && (
-                  <p className="text-sm text-destructive">
-                    {errors.endDate.message}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="flex flex-col-reverse gap-3 border-t pt-5 sm:flex-row sm:justify-end">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => {
-                  void navigate("/ai-reports");
-                }}
+            {generate.isError && (
+              <p
+                role="alert"
+                className="mb-4 rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive"
               >
-                Cancel
-              </Button>
-              <Button type="submit" className="gap-2">
-                <Sparkles className="h-4 w-4" />
-                Generate report
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+                {getErrorMessage(generate.error)}
+              </p>
+            )}
 
-      <Card className="border-dashed bg-muted/30">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">What gets included</CardTitle>
-          <CardDescription>
-            The AI reviews this data and drafts a printable clinical overview.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-3">
-            {INCLUDED.map(({ icon: Icon, title, description }) => (
-              <li key={title} className="flex gap-3">
-                <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-background text-primary shadow-sm ring-1 ring-border">
-                  <Icon className="h-4 w-4" />
-                </span>
-                <div>
-                  <p className="text-sm font-medium text-foreground">{title}</p>
-                  <p className="text-sm text-muted-foreground">{description}</p>
+            <form
+              className="space-y-5"
+              onSubmit={(event) => {
+                void handleSubmit(onSubmit)(event);
+              }}
+            >
+              <div className="flex flex-wrap gap-2">
+                {PRESETS.map((preset) => {
+                  const isActive =
+                    startDate === preset.start() && endDate === preset.end();
+                  return (
+                    <Button
+                      key={preset.label}
+                      type="button"
+                      size="sm"
+                      variant={isActive ? "default" : "outline"}
+                      onClick={() => applyPreset(preset)}
+                    >
+                      {preset.label}
+                    </Button>
+                  );
+                })}
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="startDate">Start date</Label>
+                  <Input
+                    id="startDate"
+                    type="date"
+                    max={todayIso()}
+                    {...register("startDate")}
+                  />
+                  {errors.startDate && (
+                    <p className="text-sm text-destructive">
+                      {errors.startDate.message}
+                    </p>
+                  )}
                 </div>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
+
+                <div className="space-y-2">
+                  <Label htmlFor="endDate">End date</Label>
+                  <Input
+                    id="endDate"
+                    type="date"
+                    max={todayIso()}
+                    {...register("endDate")}
+                  />
+                  {errors.endDate && (
+                    <p className="text-sm text-destructive">
+                      {errors.endDate.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex flex-col-reverse gap-3 border-t pt-5 sm:flex-row sm:justify-end">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => navigate("/ai-reports")}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" className="gap-2">
+                  <Sparkles className="h-4 w-4" aria-hidden />
+                  Generate report
+                </Button>
+              </div>
+            </form>
+          </SectionPanel>
+
+          <SectionPanel
+            title="What gets included"
+            description="The AI reviews this data and drafts a printable clinical overview."
+            icon={ClipboardList}
+          >
+            <ul className="grid gap-3 sm:grid-cols-3">
+              {INCLUDED.map(({ icon: Icon, title, description }) => (
+                <li
+                  key={title}
+                  className="rounded-2xl border border-border/70 bg-muted/20 p-4"
+                >
+                  <span className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-primary">
+                    <Icon className="h-5 w-5" aria-hidden />
+                  </span>
+                  <p className="text-sm font-semibold">{title}</p>
+                  <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                    {description}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </SectionPanel>
+        </>
+      )}
     </div>
   );
 }

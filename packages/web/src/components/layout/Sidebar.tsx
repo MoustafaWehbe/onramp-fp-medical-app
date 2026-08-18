@@ -1,4 +1,7 @@
+import { useRef } from "react";
 import { NavLink } from "react-router-dom";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import {
   LayoutDashboard,
   ClipboardPlus,
@@ -11,19 +14,16 @@ import {
   Settings,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { BrandMark } from "./BrandMark";
 
 const navSections = [
   {
     label: "Main",
-    items: [
-      { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    ],
+    items: [{ to: "/dashboard", label: "Dashboard", icon: LayoutDashboard }],
   },
   {
     label: "Daily Log",
-    items: [
-      { to: "/log/view", label: "View Log", icon: ClipboardPlus },
-    ],
+    items: [{ to: "/log/view", label: "View Log", icon: ClipboardPlus }],
   },
   {
     label: "Health",
@@ -35,9 +35,7 @@ const navSections = [
   },
   {
     label: "History",
-    items: [
-      { to: "/visits", label: "Doctor Visits", icon: CalendarDays },
-    ],
+    items: [{ to: "/visits", label: "Doctor Visits", icon: CalendarDays }],
   },
   {
     label: "Insights",
@@ -48,9 +46,7 @@ const navSections = [
   },
   {
     label: "Account",
-    items: [
-      { to: "/settings", label: "Settings", icon: Settings },
-    ],
+    items: [{ to: "/settings", label: "Settings", icon: Settings }],
   },
 ];
 
@@ -59,15 +55,42 @@ interface SidebarProps {
 }
 
 export function Sidebar({ onNavigate }: SidebarProps) {
+  const rootRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const items = rootRef.current?.querySelectorAll(".nav-item");
+      if (!items?.length) return;
+
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(items, { opacity: 1, x: 0 });
+      });
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(
+          items,
+          { opacity: 0, x: -10 },
+          { opacity: 1, x: 0, duration: 0.32, stagger: 0.035, ease: "power2.out" },
+        );
+      });
+
+      return () => mm.revert();
+    },
+    { scope: rootRef },
+  );
+
   return (
-    <aside className="flex w-60 shrink-0 flex-col border-r bg-card">
-      <div className="flex h-14 items-center border-b px-6">
-        <span className="font-semibold">HealthTrack</span>
+    <aside
+      ref={rootRef}
+      className="flex h-full w-64 shrink-0 flex-col border-r border-border/60 bg-card"
+    >
+      <div className="flex h-16 items-center border-b border-border/60 px-5">
+        <BrandMark />
       </div>
-      <nav className="flex-1 space-y-4 overflow-y-auto p-3">
+      <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-5" aria-label="Primary navigation">
         {navSections.map((section) => (
           <div key={section.label}>
-            <p className="mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <p className="mb-1.5 px-3 text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-muted-foreground/80">
               {section.label}
             </p>
             <div className="space-y-1">
@@ -79,14 +102,14 @@ export function Sidebar({ onNavigate }: SidebarProps) {
                   end
                   className={({ isActive }) =>
                     cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                      "nav-item flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-[color,background-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       isActive
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                        ? "bg-primary text-primary-foreground shadow-glow"
+                        : "text-muted-foreground hover:bg-secondary hover:text-secondary-foreground",
                     )
                   }
                 >
-                  <Icon className="h-4 w-4 shrink-0" />
+                  <Icon className="h-[1.125rem] w-[1.125rem] shrink-0" aria-hidden />
                   {label}
                 </NavLink>
               ))}
@@ -94,6 +117,9 @@ export function Sidebar({ onNavigate }: SidebarProps) {
           </div>
         ))}
       </nav>
+      <p className="border-t border-border/60 px-5 py-4 text-xs text-muted-foreground">
+        Care, recorded with clarity.
+      </p>
     </aside>
   );
 }

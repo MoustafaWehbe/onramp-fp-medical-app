@@ -1,11 +1,16 @@
 import { Link } from "react-router-dom";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import {
   Activity,
   Building2,
   HeartPulse,
+  LayoutDashboard,
   Pill,
   Stethoscope,
 } from "lucide-react";
+import { PageHeader } from "../../components/shared/PageHeader";
 
 const catalogs = [
   {
@@ -41,27 +46,50 @@ const catalogs = [
 ];
 
 export function AdminDashboard() {
-  return (
-    <div className="space-y-6">
-      <div className="space-y-1.5">
-        <h1 className="text-2xl font-bold tracking-tight">Catalog admin</h1>
-        <p className="text-sm text-muted-foreground">
-          Manage shared reference data. Patient profiles and daily entries stay
-          on the user app.
-        </p>
-      </div>
+  const gridRef = useRef<HTMLDivElement>(null);
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+  useGSAP(
+    () => {
+      const cards = gridRef.current?.querySelectorAll(".catalog-card");
+      if (!cards?.length) return;
+
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(cards, { opacity: 1, y: 0 });
+      });
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(
+          cards,
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.38, stagger: 0.07, ease: "power2.out" },
+        );
+      });
+
+      return () => mm.revert();
+    },
+    { scope: gridRef },
+  );
+
+  return (
+    <div className="page-shell">
+      <PageHeader
+        eyebrow="Administration"
+        title="Catalog admin"
+        description="Manage the shared reference data used across patient profiles and daily entries."
+        icon={LayoutDashboard}
+      />
+
+      <div ref={gridRef} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {catalogs.map(({ to, title, description, icon: Icon }) => (
           <Link
             key={to}
             to={to}
-            className="rounded-lg border bg-card p-5 transition-colors hover:bg-accent/40"
+            className="catalog-card group rounded-2xl border border-border/80 bg-card/90 p-5 shadow-soft backdrop-blur-sm transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary">
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
               <Icon className="h-4 w-4" />
             </div>
-            <h2 className="font-semibold">{title}</h2>
+            <h2 className="text-base font-bold">{title}</h2>
             <p className="mt-1 text-sm text-muted-foreground">{description}</p>
           </Link>
         ))}
