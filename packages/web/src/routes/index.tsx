@@ -24,6 +24,7 @@ import { AdminSymptoms } from "../pages/admin/AdminSymptoms";
 import { AdminClinics } from "../pages/admin/AdminClinics";
 import { AdminDoctors } from "../pages/admin/AdminDoctors";
 import { NotFound } from "../pages/NotFound";
+import { Landing } from "../pages/landing/Landing";
 import { useAuth } from "../hooks/useAuth";
 import { homePathForRole } from "../lib/auth/roles";
 import { LoadingSpinner } from "../components/shared/LoadingSpinner";
@@ -42,7 +43,7 @@ function HomeRedirect() {
     );
   }
 
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Landing />;
   return <Navigate to={homePathForRole(user.role)} replace />;
 }
 
