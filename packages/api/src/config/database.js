@@ -22,13 +22,13 @@ function parseDbUrl(dbUrl) {
 
 const dbUrl =
   process.env.DATABASE_URL ||
-  "postgresql://postgres:postgres@localhost:5432/starter_kit";
+  "postgresql://postgres:123456@localhost:5432/starter_kit";
 
 module.exports = {
   development: parseDbUrl(dbUrl),
   test: parseDbUrl(
     process.env.DATABASE_URL || 
-      "postgresql://postgres:postgres@localhost:5432/starter_kit_test",
+      "postgresql://postgres:123456@localhost:5432/starter_kit_test",
   ),
   production: parseDbUrl(process.env.DATABASE_URL || dbUrl),
 };
