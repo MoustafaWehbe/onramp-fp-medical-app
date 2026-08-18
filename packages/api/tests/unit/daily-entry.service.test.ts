@@ -11,6 +11,7 @@ import { entryIncludes } from "../../src/services/daily-entry/includes";
 import { assertOwnedReferences } from "../../src/services/daily-entry/ownership";
 import {
   insertChildren,
+  reconcileConditions,
   rethrowUnique,
 } from "../../src/services/daily-entry/children";
 import { createError } from "../../src/middleware/error-handler";
@@ -24,7 +25,11 @@ jest.mock("../../src/models", () => ({
     create: jest.fn(),
     destroy: jest.fn(),
   },
-  EntryCondition: { destroy: jest.fn() },
+  EntryCondition: {
+    destroy: jest.fn(),
+    findAll: jest.fn(),
+    create: jest.fn(),
+  },
   EntrySymptom: { destroy: jest.fn() },
   EntryMedication: { destroy: jest.fn() },
   EntryDoctorVisit: { destroy: jest.fn() },
@@ -44,6 +49,7 @@ jest.mock("../../src/services/daily-entry/ownership", () => ({
 
 jest.mock("../../src/services/daily-entry/children", () => ({
   insertChildren: jest.fn(),
+  reconcileConditions: jest.fn(),
   rethrowUnique: jest.fn(),
 }));
 
@@ -61,6 +67,9 @@ const mockAssertOwnedReferences = assertOwnedReferences as jest.MockedFunction<
 >;
 const mockInsertChildren = insertChildren as jest.MockedFunction<
   typeof insertChildren
+>;
+const mockReconcileConditions = reconcileConditions as jest.MockedFunction<
+  typeof reconcileConditions
 >;
 const mockRethrowUnique = rethrowUnique as jest.MockedFunction<typeof rethrowUnique>;
 const service = new DailyEntryService();
@@ -240,6 +249,7 @@ describe("DailyEntryService.create", () => {
       { transaction: fakeTx },
     );
     expect(mockInsertChildren).toHaveBeenCalledWith("entry-1", input, fakeTx);
+    expect(mockReconcileConditions).toHaveBeenCalledWith("entry-1", [], fakeTx);
     expect(mockDailyEntry.findOne).toHaveBeenCalledWith({
       where: { id: "entry-1", userId },
       include: [],
@@ -332,10 +342,6 @@ describe("DailyEntryService.update", () => {
       where: { entryId: "entry-1" },
       transaction: fakeTx,
     });
-    expect(mockEntryCondition.destroy).toHaveBeenCalledWith({
-      where: { entryId: "entry-1" },
-      transaction: fakeTx,
-    });
     expect(mockEntryMedication.destroy).toHaveBeenCalledWith({
       where: { entryId: "entry-1" },
       transaction: fakeTx,
@@ -344,6 +350,12 @@ describe("DailyEntryService.update", () => {
       where: { entryId: "entry-1" },
       transaction: fakeTx,
     });
+    expect(mockEntryCondition.destroy).not.toHaveBeenCalled();
+    expect(mockReconcileConditions).toHaveBeenCalledWith(
+      "entry-1",
+      [{ userConditionId: "user-condition-1" }],
+      fakeTx,
+    );
   });
 
   it("skips child destroy when no child arrays are provided", async () => {
@@ -352,11 +364,13 @@ describe("DailyEntryService.update", () => {
       .mockResolvedValueOnce(entryRow);
     mockAssertOwnedReferences.mockResolvedValue(undefined);
     mockInsertChildren.mockResolvedValue(undefined);
+    mockReconcileConditions.mockResolvedValue(undefined);
 
     await service.update({ userId, id: "entry-1", moodRating: 3 });
 
     expect(mockEntrySymptom.destroy).not.toHaveBeenCalled();
     expect(mockEntryCondition.destroy).not.toHaveBeenCalled();
+    expect(mockReconcileConditions).not.toHaveBeenCalled();
   });
 });
 

@@ -65,7 +65,6 @@ export interface DailyEntryMedicationRequest {
 
 export interface DailyEntryConditionRequest {
   userConditionId: string;
-  status: ConditionStatus;
   notes?: string | null;
 }
 
