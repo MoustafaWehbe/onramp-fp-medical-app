@@ -4,6 +4,8 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ClipboardList, LineChart, Stethoscope } from "lucide-react";
 import { LANDING_IMAGES } from "../images";
+import { refreshScrollTriggerOnImageLoad } from "../refreshOnImageLoad";
+import { LANDING_SECTION_SCROLL_MARGIN_CLASS } from "../scroll";
 
 const STEPS = [
   {
@@ -92,10 +94,7 @@ export function HowItWorks() {
           });
         });
 
-        const refresh = () => ScrollTrigger.refresh();
-        const images = Array.from(root.querySelectorAll("img"));
-        images.forEach((image) => image.addEventListener("load", refresh));
-        return () => images.forEach((image) => image.removeEventListener("load", refresh));
+        return refreshScrollTriggerOnImageLoad(root);
       });
 
       return () => mm.revert();
@@ -107,7 +106,7 @@ export function HowItWorks() {
     <section
       id="how-it-works"
       ref={rootRef}
-      className="scroll-mt-24 mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14"
+      className={`${LANDING_SECTION_SCROLL_MARGIN_CLASS} mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14`}
     >
       <div
         data-how-heading

@@ -6,6 +6,8 @@ import { ArrowRight } from "lucide-react";
 import { buttonVariants } from "../../../components/ui/button";
 import { cn } from "../../../lib/utils";
 import { LANDING_IMAGES } from "../images";
+import { refreshScrollTriggerOnImageLoad } from "../refreshOnImageLoad";
+import { LANDING_SECTION_SCROLL_MARGIN_CLASS } from "../scroll";
 
 export function FinalCta() {
   const rootRef = useRef<HTMLElement>(null);
@@ -61,6 +63,8 @@ export function FinalCta() {
             "-=0.12",
           )
           .to(arrow, { x: 0, duration: 0.35, ease: "power2.out" }, "-=0.2");
+
+        return refreshScrollTriggerOnImageLoad(root);
       });
 
       return () => mm.revert();
@@ -72,7 +76,7 @@ export function FinalCta() {
     <section
       id="get-started"
       ref={rootRef}
-      className="scroll-mt-24 mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14"
+      className={`${LANDING_SECTION_SCROLL_MARGIN_CLASS} mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14`}
     >
       <div
         data-cta-panel

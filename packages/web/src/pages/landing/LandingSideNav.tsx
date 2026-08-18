@@ -105,7 +105,7 @@ export function LandingSideNav({ activeId }: LandingSideNavProps) {
         });
 
         const collapse = contextSafe(() => {
-          if (pointerInsideRef.current) return;
+          if (pointerInsideRef.current || panel.contains(document.activeElement)) return;
           panel.setAttribute("data-expanded", "false");
           gsap.to(labels, {
             autoAlpha: 0,
@@ -131,14 +131,27 @@ export function LandingSideNav({ activeId }: LandingSideNavProps) {
           leaveTimer = window.setTimeout(collapse, 80);
         });
 
+        const onFocusIn = contextSafe(() => {
+          window.clearTimeout(leaveTimer);
+          expand();
+        });
+        const onFocusOut = contextSafe(() => {
+          window.clearTimeout(leaveTimer);
+          leaveTimer = window.setTimeout(collapse, 80);
+        });
+
         panel.addEventListener("pointerenter", onEnter);
         panel.addEventListener("pointerleave", onLeave);
+        panel.addEventListener("focusin", onFocusIn);
+        panel.addEventListener("focusout", onFocusOut);
 
         return () => {
           window.clearTimeout(leaveTimer);
           pointerInsideRef.current = false;
           panel.removeEventListener("pointerenter", onEnter);
           panel.removeEventListener("pointerleave", onLeave);
+          panel.removeEventListener("focusin", onFocusIn);
+          panel.removeEventListener("focusout", onFocusOut);
         };
       });
 
@@ -181,7 +194,9 @@ export function LandingSideNav({ activeId }: LandingSideNavProps) {
                     onClick={(event) => {
                       event.preventDefault();
                       scrollToLandingSection(section.id);
-                      event.currentTarget.blur();
+                      if (event.detail !== 0) {
+                        event.currentTarget.blur();
+                      }
                     }}
                   >
                     <span

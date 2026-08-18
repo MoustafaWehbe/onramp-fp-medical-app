@@ -1,6 +1,9 @@
 import { type RefObject } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { type LandingSectionId } from "./sections";
+
+const SKIP_LANDING_MOTION = ["how-it-works", "features", "get-started"] as const satisfies ReadonlyArray<LandingSectionId>;
 
 export function useLandingMotion(rootRef: RefObject<HTMLDivElement>) {
   useGSAP(
@@ -31,11 +34,7 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement>) {
         });
 
         sections.forEach((section) => {
-          if (
-            section.id === "how-it-works" ||
-            section.id === "features" ||
-            section.id === "get-started"
-          ) {
+          if ((SKIP_LANDING_MOTION as readonly string[]).includes(section.id)) {
             return;
           }
 

@@ -6,10 +6,11 @@ import { z } from "zod";
 import { ArrowRight } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { homePathForRole } from "../../lib/auth/roles";
+import { type LoginLocationState } from "../../lib/auth/location-state";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
 import { LoadingSpinner } from "../../components/shared/LoadingSpinner";
+import { FormField } from "./FormField";
 import { PasswordField } from "./PasswordField";
 
 const loginSchema = z.object({
@@ -18,10 +19,6 @@ const loginSchema = z.object({
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
-
-interface LoginLocationState {
-  registered?: boolean;
-}
 
 export function Login() {
   const { user, isLoading, login } = useAuth();
@@ -85,40 +82,13 @@ export function Login() {
         </p>
       )}
 
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          autoComplete="email"
-          placeholder="you@example.com"
-          aria-invalid={Boolean(errors.email)}
-          aria-describedby={errors.email ? "login-email-error" : undefined}
-          {...register("email")}
-        />
-        {errors.email && (
-          <p id="login-email-error" className="text-xs text-destructive">
-            {errors.email.message}
-          </p>
-        )}
-      </div>
+      <FormField id="email" label="Email" error={errors.email?.message}>
+        <Input type="email" autoComplete="email" placeholder="you@example.com" {...register("email")} />
+      </FormField>
 
-      <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <PasswordField
-          id="password"
-          autoComplete="current-password"
-          placeholder="••••••••"
-          aria-invalid={Boolean(errors.password)}
-          aria-describedby={errors.password ? "login-password-error" : undefined}
-          {...register("password")}
-        />
-        {errors.password && (
-          <p id="login-password-error" className="text-xs text-destructive">
-            {errors.password.message}
-          </p>
-        )}
-      </div>
+      <FormField id="password" label="Password" error={errors.password?.message}>
+        <PasswordField autoComplete="current-password" placeholder="••••••••" {...register("password")} />
+      </FormField>
 
       <Button type="submit" className="w-full rounded-full shadow-glow" disabled={isSubmitting}>
         {isSubmitting ? "Signing in…" : "Sign in"}

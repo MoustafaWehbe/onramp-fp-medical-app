@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -36,6 +36,23 @@ export function AuthLayout() {
   const formRef = useRef<HTMLDivElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
   const enteredRef = useRef(false);
+  const moveIndicatorRef = useRef<(animate: boolean) => void>(() => {});
+  const [requestedPhotos, setRequestedPhotos] = useState({
+    login: !isRegister,
+    register: isRegister,
+  });
+
+  useEffect(() => {
+    setRequestedPhotos((current) =>
+      isRegister ? { ...current, register: true } : { ...current, login: true },
+    );
+  }, [isRegister]);
+
+  useEffect(() => {
+    const onResize = () => moveIndicatorRef.current(false);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   useGSAP(
     () => {
@@ -151,11 +168,8 @@ export function AuthLayout() {
         }
       }
 
+      moveIndicatorRef.current = moveIndicator;
       moveIndicator(!firstVisit && !reduced);
-
-      const onResize = () => moveIndicator(false);
-      window.addEventListener("resize", onResize);
-      return () => window.removeEventListener("resize", onResize);
     },
     { dependencies: [isRegister], revertOnUpdate: false, scope: rootRef },
   );
@@ -193,20 +207,22 @@ export function AuthLayout() {
           <aside className="relative min-h-[14rem] overflow-hidden rounded-[2rem] border border-primary/15 shadow-lift sm:min-h-[18rem] lg:min-h-[38rem]">
             <img
               data-auth-photo="login"
-              src={LANDING_IMAGES.clinician}
+              src={requestedPhotos.login ? LANDING_IMAGES.clinician : undefined}
               alt=""
               width={1200}
               height={800}
               decoding="async"
+              fetchPriority={!isRegister && requestedPhotos.login ? "high" : undefined}
               className="absolute inset-0 h-full w-full origin-center object-cover"
             />
             <img
               data-auth-photo="register"
-              src={LANDING_IMAGES.wellness}
+              src={requestedPhotos.register ? LANDING_IMAGES.wellness : undefined}
               alt=""
               width={1600}
               height={900}
               decoding="async"
+              fetchPriority={isRegister && requestedPhotos.register ? "high" : undefined}
               className="absolute inset-0 h-full w-full origin-center object-cover opacity-0"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/70 to-background/20 lg:bg-gradient-to-r lg:from-background/90 lg:via-background/55 lg:to-background/15" />

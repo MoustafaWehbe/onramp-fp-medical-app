@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { RoleRoute } from "./RoleRoute";
@@ -24,13 +25,16 @@ import { AdminSymptoms } from "../pages/admin/AdminSymptoms";
 import { AdminClinics } from "../pages/admin/AdminClinics";
 import { AdminDoctors } from "../pages/admin/AdminDoctors";
 import { NotFound } from "../pages/NotFound";
-import { Landing } from "../pages/landing/Landing";
 import { useAuth } from "../hooks/useAuth";
 import { homePathForRole } from "../lib/auth/roles";
 import { LoadingSpinner } from "../components/shared/LoadingSpinner";
 import { DailyEntriesProvider } from "@/providers/DailyEntriesProvider";
 import { DoctorVisitsProvider } from "@/providers/DoctorVisitsProvider";
 import { DashboardProvider } from "@/providers/DashboardProvider";
+
+const Landing = lazy(() =>
+  import("../pages/landing/Landing").then((module) => ({ default: module.Landing })),
+);
 
 function HomeRedirect() {
   const { user, isLoading } = useAuth();
@@ -43,7 +47,19 @@ function HomeRedirect() {
     );
   }
 
-  if (!user) return <Landing />;
+  if (!user) {
+    return (
+      <Suspense
+        fallback={
+          <div className="flex h-screen items-center justify-center">
+            <LoadingSpinner />
+          </div>
+        }
+      >
+        <Landing />
+      </Suspense>
+    );
+  }
   return <Navigate to={homePathForRole(user.role)} replace />;
 }
 

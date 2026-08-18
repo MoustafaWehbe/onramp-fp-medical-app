@@ -4,6 +4,8 @@ import { useGSAP } from "@gsap/react";
 import { Check, FileText, HeartPulse, Pill } from "lucide-react";
 import { cn } from "../../../lib/utils";
 import { LANDING_IMAGES } from "../images";
+import { refreshScrollTriggerOnImageLoad } from "../refreshOnImageLoad";
+import { LANDING_SECTION_SCROLL_MARGIN_CLASS } from "../scroll";
 
 const STOPS = [
   { id: "feel", label: "Feel", detail: "Mood 4/5 · 7.5 hours of sleep" },
@@ -108,6 +110,8 @@ export function Showcase() {
           { autoAlpha: 1, y: 0, scale: 1, duration: 0.5, ease: "power3.out" },
           "-=0.05",
         );
+
+        return refreshScrollTriggerOnImageLoad(root);
       });
 
       return () => mm.revert();
@@ -119,7 +123,7 @@ export function Showcase() {
     <section
       id="showcase"
       ref={rootRef}
-      className="scroll-mt-24 mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14"
+      className={`${LANDING_SECTION_SCROLL_MARGIN_CLASS} mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14`}
     >
       <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-12">
         <div className="relative overflow-hidden rounded-[2rem] border border-primary/15 shadow-lift">
@@ -155,7 +159,7 @@ export function Showcase() {
             </p>
           </div>
 
-          <ol className="relative mt-6 space-y-3">
+          <div className="relative mt-6">
             <span
               aria-hidden
               className="absolute bottom-5 left-9 top-5 w-px bg-border"
@@ -165,30 +169,32 @@ export function Showcase() {
               aria-hidden
               className="absolute left-9 top-5 h-[calc(100%-2.5rem)] w-px origin-top bg-primary"
             />
-            {STOPS.map((stop, index) => (
-              <li
-                key={stop.id}
-                data-showcase-step
-                data-active="false"
-                className={cn(
-                  "relative flex items-start gap-4 rounded-2xl border bg-card px-4 py-4 shadow-soft transition-[border-color,box-shadow] duration-300",
-                  "border-primary/15 data-[active=true]:border-primary/45 data-[active=true]:shadow-lift",
-                )}
-              >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
-                  {index === STOPS.length - 1 ? (
-                    <Check className="h-4 w-4" aria-hidden />
-                  ) : (
-                    index + 1
+            <ol className="space-y-3">
+              {STOPS.map((stop, index) => (
+                <li
+                  key={stop.id}
+                  data-showcase-step
+                  data-active="false"
+                  className={cn(
+                    "relative flex items-start gap-4 rounded-2xl border bg-card px-4 py-4 shadow-soft transition-[border-color,box-shadow] duration-300",
+                    "border-primary/15 data-[active=true]:border-primary/45 data-[active=true]:shadow-lift",
                   )}
-                </span>
-                <div>
-                  <p className="font-display font-bold tracking-tight">{stop.label}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{stop.detail}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+                >
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+                    {index === STOPS.length - 1 ? (
+                      <Check className="h-4 w-4" aria-hidden />
+                    ) : (
+                      index + 1
+                    )}
+                  </span>
+                  <div>
+                    <p className="font-display font-bold tracking-tight">{stop.label}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{stop.detail}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
 
           <article
             data-showcase-report

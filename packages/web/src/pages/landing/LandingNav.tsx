@@ -33,12 +33,17 @@ export function LandingNav({ activeId }: LandingNavProps) {
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: reduce)", () => {
-        const ratio =
-          document.documentElement.scrollHeight - window.innerHeight;
-        gsap.set(progress, {
-          scaleX: ratio > 0 ? window.scrollY / ratio : 0,
-          transformOrigin: "left center",
-        });
+        const setProgress = () => {
+          const ratio = document.documentElement.scrollHeight - window.innerHeight;
+          gsap.set(progress, {
+            scaleX: ratio > 0 ? window.scrollY / ratio : 0,
+            transformOrigin: "left center",
+          });
+        };
+
+        setProgress();
+        window.addEventListener("scroll", setProgress, { passive: true });
+        return () => window.removeEventListener("scroll", setProgress);
       });
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
@@ -124,6 +129,9 @@ export function LandingNav({ activeId }: LandingNavProps) {
           aria-label="HealthTrack home"
           className="shrink-0 rounded-full px-1 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           onClick={(event) => {
+            if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+              return;
+            }
             event.preventDefault();
             scrollToLandingSection("hero");
           }}

@@ -3,13 +3,15 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { isAxiosError } from "axios";
 import { ArrowRight } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { homePathForRole } from "../../lib/auth/roles";
+import { type LoginLocationState } from "../../lib/auth/location-state";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
 import { LoadingSpinner } from "../../components/shared/LoadingSpinner";
+import { FormField } from "./FormField";
 import { PasswordField } from "./PasswordField";
 
 const registerSchema = z.object({
@@ -41,9 +43,14 @@ export function Register() {
     try {
       setError(null);
       await registerUser(data.email, data.password, data.name);
-      navigate("/login", { state: { registered: true } });
-    } catch {
-      setError("Registration failed. That email may already be in use.");
+      const state: LoginLocationState = { registered: true };
+      navigate("/login", { state });
+    } catch (err) {
+      if (isAxiosError(err) && err.response?.status === 409) {
+        setError("Registration failed. That email may already be in use.");
+        return;
+      }
+      setError("Registration failed. Please try again.");
     }
   };
 
@@ -75,60 +82,22 @@ export function Register() {
         </p>
       )}
 
-      <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
-        <Input
-          id="name"
-          autoComplete="name"
-          placeholder="Alice Smith"
-          aria-invalid={Boolean(errors.name)}
-          aria-describedby={errors.name ? "register-name-error" : undefined}
-          {...register("name")}
-        />
-        {errors.name && (
-          <p id="register-name-error" className="text-xs text-destructive">
-            {errors.name.message}
-          </p>
-        )}
-      </div>
+      <FormField id="name" label="Name" error={errors.name?.message}>
+        <Input autoComplete="name" placeholder="Alice Smith" {...register("name")} />
+      </FormField>
 
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          autoComplete="email"
-          placeholder="you@example.com"
-          aria-invalid={Boolean(errors.email)}
-          aria-describedby={errors.email ? "register-email-error" : undefined}
-          {...register("email")}
-        />
-        {errors.email && (
-          <p id="register-email-error" className="text-xs text-destructive">
-            {errors.email.message}
-          </p>
-        )}
-      </div>
+      <FormField id="email" label="Email" error={errors.email?.message}>
+        <Input type="email" autoComplete="email" placeholder="you@example.com" {...register("email")} />
+      </FormField>
 
-      <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <PasswordField
-          id="password"
-          autoComplete="new-password"
-          placeholder="••••••••"
-          aria-invalid={Boolean(errors.password)}
-          aria-describedby={errors.password ? "register-password-error" : undefined}
-          {...register("password")}
-        />
-        {errors.password && (
-          <p id="register-password-error" className="text-xs text-destructive">
-            {errors.password.message}
-          </p>
-        )}
-        <p className="text-xs leading-5 text-muted-foreground">
-          At least 8 characters, with one uppercase letter and one number.
-        </p>
-      </div>
+      <FormField
+        id="password"
+        label="Password"
+        error={errors.password?.message}
+        description="At least 8 characters, with one uppercase letter and one number."
+      >
+        <PasswordField autoComplete="new-password" placeholder="••••••••" {...register("password")} />
+      </FormField>
 
       <Button type="submit" className="w-full rounded-full shadow-glow" disabled={isSubmitting}>
         {isSubmitting ? "Creating account…" : "Create account"}

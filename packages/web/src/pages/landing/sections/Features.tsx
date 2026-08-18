@@ -12,6 +12,8 @@ import {
   Pill,
 } from "lucide-react";
 import { LANDING_IMAGES } from "../images";
+import { refreshScrollTriggerOnImageLoad } from "../refreshOnImageLoad";
+import { LANDING_SECTION_SCROLL_MARGIN_CLASS } from "../scroll";
 
 const FEATURES = [
   {
@@ -124,6 +126,8 @@ export function Features() {
               overwrite: true,
             }),
         });
+
+        return refreshScrollTriggerOnImageLoad(root);
       });
 
       return () => mm.revert();
@@ -135,7 +139,7 @@ export function Features() {
     <section
       id="features"
       ref={rootRef}
-      className="scroll-mt-24 mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14"
+      className={`${LANDING_SECTION_SCROLL_MARGIN_CLASS} mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14`}
     >
       <div data-features-heading className="max-w-2xl">
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">Features</p>

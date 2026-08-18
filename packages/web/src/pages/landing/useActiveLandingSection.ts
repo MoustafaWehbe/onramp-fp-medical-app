@@ -21,13 +21,21 @@ export function useActiveLandingSection() {
       ];
     });
 
-    const refresh = () => ScrollTrigger.refresh();
+    let frame = 0;
+    const refresh = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        ScrollTrigger.refresh();
+      });
+    };
     const images = Array.from(document.querySelectorAll<HTMLImageElement>("#landing-main img"));
     images.forEach((image) => image.addEventListener("load", refresh));
     window.addEventListener("load", refresh);
     refresh();
 
     return () => {
+      if (frame) window.cancelAnimationFrame(frame);
       triggers.forEach((trigger) => trigger.kill());
       images.forEach((image) => image.removeEventListener("load", refresh));
       window.removeEventListener("load", refresh);

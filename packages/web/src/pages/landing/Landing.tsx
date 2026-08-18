@@ -28,7 +28,7 @@ export function Landing() {
         </a>
         <div className="relative z-10 pb-28 md:pb-8">
           <LandingNav activeId={activeId} />
-          <main id="landing-main">
+          <main id="landing-main" tabIndex={-1}>
             <Hero />
             <HowItWorks />
             <Features />

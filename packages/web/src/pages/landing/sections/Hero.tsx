@@ -3,6 +3,7 @@ import { ArrowRight, HeartPulse, Moon, NotebookPen, Sparkles } from "lucide-reac
 import { buttonVariants } from "../../../components/ui/button";
 import { cn } from "../../../lib/utils";
 import { LANDING_IMAGES } from "../images";
+import { LANDING_SECTION_SCROLL_MARGIN_CLASS } from "../scroll";
 
 const STATS = [
   { value: "1", label: "guided check-in" },
@@ -14,7 +15,10 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative mx-auto max-w-7xl scroll-mt-24 px-4 pb-10 pt-8 sm:px-6 sm:pb-14 sm:pt-10 lg:pt-12"
+      className={cn(
+        "relative mx-auto max-w-7xl px-4 pb-10 pt-8 sm:px-6 sm:pb-14 sm:pt-10 lg:pt-12",
+        LANDING_SECTION_SCROLL_MARGIN_CLASS,
+      )}
     >
       <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-16">
         <div>
