@@ -10,10 +10,7 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement>) {
 
       const heroItems = gsap.utils.toArray<HTMLElement>("[data-hero-item]", root);
       const sections = gsap.utils.toArray<HTMLElement>("[data-landing-section]", root);
-      const steps = gsap.utils.toArray<HTMLElement>("[data-showcase-step]", root);
-      const report = root.querySelector<HTMLElement>("[data-showcase-report]");
-      const showcase = root.querySelector<HTMLElement>("#showcase");
-      const visibleTargets = [...heroItems, ...sections, ...steps, ...(report ? [report] : [])];
+      const visibleTargets = [...heroItems, ...sections];
 
       const mm = gsap.matchMedia();
 
@@ -34,7 +31,13 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement>) {
         });
 
         sections.forEach((section) => {
-          if (section.id === "how-it-works" || section.id === "features") return;
+          if (
+            section.id === "how-it-works" ||
+            section.id === "features" ||
+            section.id === "get-started"
+          ) {
+            return;
+          }
 
           const cards = gsap.utils.toArray<HTMLElement>("[data-landing-card]", section);
 
@@ -67,35 +70,6 @@ export function useLandingMotion(rootRef: RefObject<HTMLDivElement>) {
             });
           }
         });
-
-        if (showcase && steps.length > 0 && report) {
-          gsap.from(steps, {
-            autoAlpha: 0,
-            y: 16,
-            duration: 0.4,
-            stagger: 0.08,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: showcase,
-              start: "top 80%",
-              toggleActions: "play none none none",
-              once: true,
-            },
-          });
-
-          gsap.from(report, {
-            autoAlpha: 0,
-            y: 16,
-            duration: 0.45,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: showcase,
-              start: "top 72%",
-              toggleActions: "play none none none",
-              once: true,
-            },
-          });
-        }
       });
 
       return () => mm.revert();
