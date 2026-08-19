@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import {
@@ -15,37 +16,33 @@ import { PageHeader } from "../../components/shared/PageHeader";
 const catalogs = [
   {
     to: "/admin/medications",
-    title: "Medications",
-    description: "Shared medication names, strength, and category.",
+    key: "medications",
     icon: Pill,
   },
   {
     to: "/admin/conditions",
-    title: "Conditions",
-    description: "Standard condition names for patient profiles.",
+    key: "conditions",
     icon: HeartPulse,
   },
   {
     to: "/admin/symptoms",
-    title: "Symptoms",
-    description: "Symptom catalog used for tracking and autocomplete.",
+    key: "symptoms",
     icon: Activity,
   },
   {
     to: "/admin/clinics",
-    title: "Clinics",
-    description: "Clinic directory patients can link to their providers.",
+    key: "clinics",
     icon: Building2,
   },
   {
     to: "/admin/doctors",
-    title: "Doctors",
-    description: "Doctor directory with specialty and contact info.",
+    key: "doctors",
     icon: Stethoscope,
   },
 ];
 
 export function AdminDashboard() {
+  const { t } = useTranslation();
   const gridRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -73,14 +70,14 @@ export function AdminDashboard() {
   return (
     <div className="page-shell">
       <PageHeader
-        eyebrow="Administration"
-        title="Catalog admin"
-        description="Manage the shared reference data used across patient profiles and daily entries."
+        eyebrow={t("admin.dashboardEyebrow")}
+        title={t("admin.dashboardTitle")}
+        description={t("admin.dashboardDescription")}
         icon={LayoutDashboard}
       />
 
       <div ref={gridRef} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {catalogs.map(({ to, title, description, icon: Icon }) => (
+        {catalogs.map(({ to, key, icon: Icon }) => (
           <Link
             key={to}
             to={to}
@@ -89,8 +86,8 @@ export function AdminDashboard() {
             <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
               <Icon className="h-4 w-4" />
             </div>
-            <h2 className="text-base font-bold">{title}</h2>
-            <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+            <h2 className="text-base font-bold">{t(`admin.catalogs.${key}.title`)}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{t(`admin.catalogs.${key}.description`)}</p>
           </Link>
         ))}
       </div>

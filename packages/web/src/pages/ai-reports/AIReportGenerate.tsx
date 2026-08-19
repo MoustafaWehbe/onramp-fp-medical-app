@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
@@ -61,26 +62,23 @@ const generateSchema = z
 type GenerateFormValues = z.infer<typeof generateSchema>;
 
 const PRESETS = [
-  { label: "Last 7 days", start: () => daysAgoIso(6), end: todayIso },
-  { label: "Last 30 days", start: () => daysAgoIso(29), end: todayIso },
-  { label: "This month", start: startOfMonthIso, end: todayIso },
+  { key: "last7", start: () => daysAgoIso(6), end: todayIso },
+  { key: "last30", start: () => daysAgoIso(29), end: todayIso },
+  { key: "thisMonth", start: startOfMonthIso, end: todayIso },
 ] as const;
 
 const INCLUDED = [
   {
     icon: ClipboardList,
-    title: "Daily entries",
-    description: "Mood, sleep, journal notes, and logged events",
+    key: "dailyEntries",
   },
   {
     icon: Stethoscope,
-    title: "Conditions & symptoms",
-    description: "Active profile items tied to the selected window",
+    key: "conditionsSymptoms",
   },
   {
     icon: Pill,
-    title: "Medications",
-    description: "Active meds and adherence signals from your log",
+    key: "medications",
   },
 ] as const;
 
@@ -100,6 +98,7 @@ function getErrorMessage(error: unknown): string {
 
 export function AIReportGenerate() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const generate = useGenerateAiReport();
 
   const {
@@ -124,6 +123,7 @@ export function AIReportGenerate() {
       const report = await generate.mutateAsync({
         ...values,
         reportType: DEFAULT_REPORT_TYPE,
+        language: i18n.language === "ar" ? "ar" : "en",
       });
       void navigate(`/ai-reports/${report.id}`);
     } catch {
@@ -150,29 +150,29 @@ export function AIReportGenerate() {
         onClick={() => navigate("/ai-reports")}
       >
         <ArrowLeft className="h-4 w-4" aria-hidden />
-        Back to reports
+          {t("aiReports.back")}
       </button>
 
       <PageHeader
-        eyebrow="AI reports"
-        title={generate.isPending ? "Generating your report" : "Generate report"}
+        eyebrow={t("aiReports.generateEyebrow")}
+        title={generate.isPending ? t("aiReports.generatingTitle") : t("aiReports.generateTitle")}
         description={
           generate.isPending
-            ? "This usually takes a few seconds."
-            : "Build a physician-ready summary from your health log for a date range."
+            ? t("aiReports.generatingDescription")
+            : t("aiReports.generateDescription")
         }
         icon={Sparkles}
       />
 
       {generate.isPending ? (
-        <SectionPanel title="Working" icon={Sparkles}>
+        <SectionPanel title={t("aiReports.working")} icon={Sparkles}>
           <AiGeneratingLoader />
         </SectionPanel>
       ) : (
         <>
           <SectionPanel
-            title="Date range"
-            description="Only entries and profile data in this window are used."
+            title={t("aiReports.dateRange")}
+            description={t("aiReports.dateRangeDescription")}
             icon={CalendarRange}
           >
             {generate.isError && (
@@ -196,13 +196,13 @@ export function AIReportGenerate() {
                     startDate === preset.start() && endDate === preset.end();
                   return (
                     <Button
-                      key={preset.label}
+                      key={preset.key}
                       type="button"
                       size="sm"
                       variant={isActive ? "default" : "outline"}
                       onClick={() => applyPreset(preset)}
                     >
-                      {preset.label}
+                      {t(`aiReports.${preset.key}`)}
                     </Button>
                   );
                 })}
@@ -210,7 +210,7 @@ export function AIReportGenerate() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="startDate">Start date</Label>
+                  <Label htmlFor="startDate">{t("aiReports.startDate")}</Label>
                   <Input
                     id="startDate"
                     type="date"
@@ -225,7 +225,7 @@ export function AIReportGenerate() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="endDate">End date</Label>
+                  <Label htmlFor="endDate">{t("aiReports.endDate")}</Label>
                   <Input
                     id="endDate"
                     type="date"
@@ -246,33 +246,33 @@ export function AIReportGenerate() {
                   variant="outline"
                   onClick={() => navigate("/ai-reports")}
                 >
-                  Cancel
+                  {t("aiReports.cancel")}
                 </Button>
                 <Button type="submit" className="gap-2">
                   <Sparkles className="h-4 w-4" aria-hidden />
-                  Generate report
+                  {t("aiReports.generate")}
                 </Button>
               </div>
             </form>
           </SectionPanel>
 
           <SectionPanel
-            title="What gets included"
-            description="The AI reviews this data and drafts a printable clinical overview."
+            title={t("aiReports.includedTitle")}
+            description={t("aiReports.includedDescription")}
             icon={ClipboardList}
           >
             <ul className="grid gap-3 sm:grid-cols-3">
-              {INCLUDED.map(({ icon: Icon, title, description }) => (
+              {INCLUDED.map(({ icon: Icon, key }) => (
                 <li
-                  key={title}
+                  key={key}
                   className="rounded-2xl border border-border/70 bg-muted/20 p-4"
                 >
                   <span className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-primary">
                     <Icon className="h-5 w-5" aria-hidden />
                   </span>
-                  <p className="text-sm font-semibold">{title}</p>
+                  <p className="text-sm font-semibold">{t(`aiReports.${key}`)}</p>
                   <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                    {description}
+                    {t(`aiReports.${key}Description`)}
                   </p>
                 </li>
               ))}

@@ -142,13 +142,17 @@ export async function processReminderJob(
             "daily-entry-reminder",
             {
               to: user.email,
-              subject: "Don't forget to complete your daily entry",
+              subject:
+                settings.language === "ar"
+                  ? "تذكير بإكمال إدخالك اليومي"
+                  : "Don't forget to complete your daily entry",
               template: "daily-entry-reminder",
               variables: {
                 name: user.name,
               },
               userId: settings.userId,
               localDate: today,
+              language: settings.language ?? "en",
             },
             {
               jobId: reminderJobId,

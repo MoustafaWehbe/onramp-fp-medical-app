@@ -11,6 +11,7 @@ export interface UserReminderSettingsAttributes {
   enabled: boolean;
   reminderTime: string | null;
   timezone: string;
+  language: "en" | "ar";
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -33,6 +34,7 @@ export class UserReminderSettings
   declare enabled: boolean;
   declare reminderTime: string | null;
   declare timezone: string;
+  declare language: "en" | "ar";
 
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
@@ -72,6 +74,12 @@ export class UserReminderSettings
           type: DataTypes.STRING(100),
           allowNull: false,
           defaultValue: "UTC",
+        },
+        language: {
+          type: DataTypes.STRING(2),
+          allowNull: false,
+          defaultValue: "en",
+          validate: { isIn: [["en", "ar"]] },
         },
       },
         

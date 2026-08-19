@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { cn } from "../../lib/utils";
 
 interface ReportSectionProps {
@@ -14,6 +15,7 @@ export function ReportSection({
   icon: Icon,
   className,
 }: ReportSectionProps) {
+  const { t } = useTranslation();
   const list = (Array.isArray(items) ? items : []).filter(
     (item): item is string => typeof item === "string" && item.trim().length > 0,
   );
@@ -35,7 +37,7 @@ export function ReportSection({
       </div>
 
       {list.length === 0 ? (
-        <p className="text-sm text-muted-foreground">None recorded.</p>
+        <p className="text-sm text-muted-foreground">{t("aiReports.noneRecorded")}</p>
       ) : (
         <ul className="space-y-2">
           {list.map((item) => (

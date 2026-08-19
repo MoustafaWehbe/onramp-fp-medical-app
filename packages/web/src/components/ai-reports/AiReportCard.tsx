@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { CalendarRange, Eye, FileText, Trash2 } from "lucide-react";
 import type { AiReport } from "../../lib/ai-reports/ai-reports-exports";
 import { cn } from "../../lib/utils";
@@ -12,11 +13,13 @@ interface AiReportCardProps {
 
 export function AiReportCard({ report, onDelete }: AiReportCardProps) {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "ar" ? "ar-EG" : "en-US";
   const summary =
     typeof report.reportContent?.summary === "string"
       ? report.reportContent.summary
       : null;
-  const rangeLabel = `${formatReportDate(report.dateRangeStart)} – ${formatReportDate(report.dateRangeEnd)}`;
+  const rangeLabel = `${formatReportDate(report.dateRangeStart, locale)} – ${formatReportDate(report.dateRangeEnd, locale)}`;
 
   function openReport() {
     navigate(`/ai-reports/${report.id}`);
@@ -32,7 +35,7 @@ export function AiReportCard({ report, onDelete }: AiReportCardProps) {
       <button
         type="button"
         onClick={openReport}
-        aria-label={`View report for ${rangeLabel}`}
+        aria-label={t("aiReports.actionsFor", { range: rangeLabel })}
         className="flex min-w-0 flex-1 cursor-pointer gap-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
@@ -46,28 +49,28 @@ export function AiReportCard({ report, onDelete }: AiReportCardProps) {
             </h3>
             <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
               <CalendarRange className="h-3.5 w-3.5 shrink-0" aria-hidden />
-              Created {formatReportDate(report.createdAt)}
+              {t("aiReports.created", { date: formatReportDate(report.createdAt, locale) })}
             </span>
           </div>
 
           <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">
-            {summary ?? "No summary available for this report."}
+            {summary ?? t("aiReports.noSummary")}
           </p>
         </div>
       </button>
 
       <RowActionsMenu
-        label={`Actions for report ${rangeLabel}`}
+        label={t("aiReports.actionsFor", { range: rangeLabel })}
         actions={[
           {
             id: "view",
-            label: "View",
+            label: t("aiReports.view"),
             icon: Eye,
             onSelect: openReport,
           },
           {
             id: "delete",
-            label: "Delete",
+            label: t("aiReports.delete"),
             icon: Trash2,
             variant: "destructive",
             onSelect: onDelete,

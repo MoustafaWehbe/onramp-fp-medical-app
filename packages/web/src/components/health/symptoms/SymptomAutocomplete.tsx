@@ -5,6 +5,7 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
+import { useTranslation } from "react-i18next";
 import type { SymptomCatalog } from "../../../lib/health/health-export";
 import { PenLine, Search } from "lucide-react";
 import { cn } from "../../../lib/utils";
@@ -25,8 +26,9 @@ interface SymptomAutocompleteProps {
 
 export function SymptomAutocomplete({
   id,
-  placeholder = "Search symptoms…",
+  placeholder,
 }: SymptomAutocompleteProps) {
+  const { t } = useTranslation();
   const {
     nameQuery,
     onNameQueryChange,
@@ -136,7 +138,7 @@ export function SymptomAutocomplete({
         }
         autoComplete="off"
         disabled={isFormBusy}
-        placeholder={placeholder}
+        placeholder={placeholder ?? t("health.symptoms.searchPlaceholder")}
         value={nameQuery}
         onChange={(e) => {
           onNameQueryChange(e.target.value);
@@ -154,18 +156,18 @@ export function SymptomAutocomplete({
         >
           {isAutocompleteLoading && flatOptions.length === 0 && (
             <p className="px-3 py-2 text-sm text-muted-foreground">
-              Searching…
+              {t("health.symptoms.searching")}
             </p>
           )}
           {!isAutocompleteLoading && flatOptions.length === 0 && (
             <p className="px-3 py-2 text-sm text-muted-foreground">
-              No symptoms found
+              {t("health.symptoms.noneFound")}
             </p>
           )}
           {catalogResults.length > 0 && (
             <div>
               <p className="sticky top-0 bg-muted/80 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur">
-                In catalog
+                {t("health.symptoms.inCatalog")}
               </p>
               {catalogResults.map((symptom, index) => (
                 <button
@@ -196,7 +198,7 @@ export function SymptomAutocomplete({
           {onlineResults.length > 0 && (
             <div>
               <p className="sticky top-0 bg-muted/80 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur">
-                BioPortal
+                {t("health.symptoms.bioPortal")}
               </p>
               {onlineResults.map((name, index) => {
                 const flatIndex = catalogResults.length + index;
@@ -238,7 +240,7 @@ export function SymptomAutocomplete({
                   <PenLine className="h-4 w-4" aria-hidden />
                 </span>
                 <span className="min-w-0">
-                  <span className="block font-semibold">Use your wording</span>
+                  <span className="block font-semibold">{t("health.symptoms.useYourWording")}</span>
                   <span className="block truncate text-xs text-muted-foreground">“{normalizedQuery}”</span>
                 </span>
               </button>
@@ -246,7 +248,7 @@ export function SymptomAutocomplete({
           )}
           {isAutocompleteLoading && flatOptions.length > 0 && (
             <p className="border-t px-3 py-1.5 text-xs text-muted-foreground">
-              Searching BioPortal…
+              {t("health.symptoms.searchingBioPortal")}
             </p>
           )}
         </div>

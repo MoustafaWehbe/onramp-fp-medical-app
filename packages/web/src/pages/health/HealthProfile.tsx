@@ -1,4 +1,5 @@
 import { useRef, useState, type KeyboardEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { Activity, ClipboardList, HeartPulse, Plus } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -48,6 +49,7 @@ function ProfileTabSwitch({
   conditionCount,
   symptomCount,
 }: ProfileTabSwitchProps) {
+  const { t } = useTranslation();
   const rootRef = useRef<HTMLDivElement>(null);
   const pillRef = useRef<HTMLSpanElement>(null);
   const conditionsRef = useRef<HTMLButtonElement>(null);
@@ -95,7 +97,7 @@ function ProfileTabSwitch({
     <div
       ref={rootRef}
       role="tablist"
-      aria-label="Health profile sections"
+      aria-label={t("health.profile.sections")}
       className="relative grid grid-cols-2 rounded-2xl border border-border/70 bg-muted/70 p-1.5 shadow-soft"
       onKeyDown={handleTabListKeyDown}
     >
@@ -119,7 +121,7 @@ function ProfileTabSwitch({
         onClick={() => onChange("conditions")}
       >
         <HeartPulse className="h-4 w-4" aria-hidden />
-        Conditions
+        {t("health.conditions.condition")}
         {conditionCount != null && (
           <span className="rounded-full bg-secondary px-2 py-0.5 text-xs tabular-nums">
             {conditionCount}
@@ -141,7 +143,7 @@ function ProfileTabSwitch({
         onClick={() => onChange("symptoms")}
       >
         <Activity className="h-4 w-4" aria-hidden />
-        Symptoms
+        {t("health.symptoms.symptom")}
         {symptomCount != null && (
           <span className="rounded-full bg-secondary px-2 py-0.5 text-xs tabular-nums">
             {symptomCount}
@@ -153,6 +155,7 @@ function ProfileTabSwitch({
 }
 
 function ConditionsSection() {
+  const { t } = useTranslation();
   const {
     conditions,
     isLoading,
@@ -188,20 +191,20 @@ function ConditionsSection() {
 
   return (
     <SectionPanel
-      title="Conditions"
-      description="Track diagnosed conditions, status, and notes."
+      title={t("health.conditions.condition")}
+      description={t("health.profile.conditionsDescription")}
       icon={HeartPulse}
       action={(
         <div className="flex flex-wrap items-center gap-2">
           {isSuccess && (
             <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
               <ClipboardList className="h-3.5 w-3.5" aria-hidden />
-              {totalCount} {totalCount === 1 ? "condition" : "conditions"}
+              {totalCount} {t(totalCount === 1 ? "health.profile.conditionsCountOne" : "health.profile.conditionsCountOther")}
             </span>
           )}
           <Button type="button" className="w-full sm:w-auto" onClick={openCreate}>
             <Plus className="mr-1.5 h-4 w-4" />
-            Add condition
+            {t("health.profile.addCondition")}
           </Button>
         </div>
       )}
@@ -223,14 +226,13 @@ function ConditionsSection() {
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
             <HeartPulse className="h-6 w-6" aria-hidden />
           </div>
-          <p className="font-medium">No conditions yet</p>
+          <p className="font-medium">{t("health.profile.noConditions")}</p>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            Add a condition to track its status and details. Search the catalog
-            or NLM when you type.
+            {t("health.profile.noConditionsDescription")}
           </p>
           <Button type="button" className="mt-4" onClick={openCreate}>
             <Plus className="mr-1.5 h-4 w-4" />
-            Add condition
+            {t("health.profile.addCondition")}
           </Button>
         </div>
       )}
@@ -249,7 +251,7 @@ function ConditionsSection() {
       )}
 
       {isError && !listErrorMessage && (
-        <p className="mt-4 text-sm text-destructive">Failed to load conditions</p>
+        <p className="mt-4 text-sm text-destructive">{t("health.profile.failedConditions")}</p>
       )}
 
       {isSuccess && pagination && (
@@ -285,16 +287,18 @@ function ConditionsSection() {
         onOpenChange={(open) => {
           if (!open && !isRemoving) setPendingDelete(null);
         }}
-        title={pendingDelete ? `Delete ${pendingDelete.condition.name}?` : "Delete condition?"}
+        title={pendingDelete
+          ? t("health.profile.deleteConditionTitle", { name: pendingDelete.condition.name })
+          : t("health.profile.deleteConditionFallback")}
         description={
           <>
-            This removes the condition from your health profile. This cannot be undone.
+            {t("health.profile.deleteDescription", { type: t("health.conditions.condition").toLowerCase() })}
             {listErrorMessage ? (
               <span className="mt-2 block text-destructive">{listErrorMessage}</span>
             ) : null}
           </>
         }
-        confirmLabel="Delete"
+        confirmLabel={t("health.profile.delete")}
         loading={isRemoving}
         onConfirm={confirmDelete}
       />
@@ -303,6 +307,7 @@ function ConditionsSection() {
 }
 
 function SymptomsSection() {
+  const { t } = useTranslation();
   const {
     symptoms,
     isLoading,
@@ -338,20 +343,20 @@ function SymptomsSection() {
 
   return (
     <SectionPanel
-      title="Symptoms"
-      description="Track symptoms from the catalog or BioPortal (SNOMED)."
+      title={t("health.symptoms.symptom")}
+      description={t("health.profile.symptomsDescription")}
       icon={Activity}
       action={(
         <div className="flex flex-wrap items-center gap-2">
           {isSuccess && (
             <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
               <ClipboardList className="h-3.5 w-3.5" aria-hidden />
-              {totalCount} {totalCount === 1 ? "symptom" : "symptoms"}
+              {totalCount} {t(totalCount === 1 ? "health.profile.symptomsCountOne" : "health.profile.symptomsCountOther")}
             </span>
           )}
           <Button type="button" className="w-full sm:w-auto" onClick={openCreate}>
             <Plus className="mr-1.5 h-4 w-4" />
-            Add symptom
+            {t("health.profile.addSymptom")}
           </Button>
         </div>
       )}
@@ -373,14 +378,13 @@ function SymptomsSection() {
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
             <Activity className="h-6 w-6" aria-hidden />
           </div>
-          <p className="font-medium">No symptoms yet</p>
+          <p className="font-medium">{t("health.profile.noSymptoms")}</p>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            Add a symptom to track. Search the catalog or BioPortal when you
-            type.
+            {t("health.profile.noSymptomsDescription")}
           </p>
           <Button type="button" className="mt-4" onClick={openCreate}>
             <Plus className="mr-1.5 h-4 w-4" />
-            Add symptom
+            {t("health.profile.addSymptom")}
           </Button>
         </div>
       )}
@@ -399,7 +403,7 @@ function SymptomsSection() {
       )}
 
       {isError && !listErrorMessage && (
-        <p className="mt-4 text-sm text-destructive">Failed to load symptoms</p>
+        <p className="mt-4 text-sm text-destructive">{t("health.profile.failedSymptoms")}</p>
       )}
 
       {isSuccess && pagination && (
@@ -433,16 +437,18 @@ function SymptomsSection() {
         onOpenChange={(open) => {
           if (!open && !isRemoving) setPendingDelete(null);
         }}
-        title={pendingDelete ? `Delete ${pendingDelete.catalog.name}?` : "Delete symptom?"}
+        title={pendingDelete
+          ? t("health.profile.deleteSymptomTitle", { name: pendingDelete.catalog.name })
+          : t("health.profile.deleteSymptomFallback")}
         description={
           <>
-            This removes the symptom from your health profile. This cannot be undone.
+            {t("health.profile.deleteDescription", { type: t("health.symptoms.symptom").toLowerCase() })}
             {listErrorMessage ? (
               <span className="mt-2 block text-destructive">{listErrorMessage}</span>
             ) : null}
           </>
         }
-        confirmLabel="Delete"
+        confirmLabel={t("health.profile.delete")}
         loading={isRemoving}
         onConfirm={confirmDelete}
       />
@@ -457,6 +463,7 @@ function HealthProfileView({
   closeConditions: () => void;
   closeSymptoms: () => void;
 }) {
+  const { t } = useTranslation();
   const [tab, setTab] = useState<ProfileTab>("conditions");
   const contentRef = useRef<HTMLDivElement>(null);
   const skipEntrance = useRef(true);
@@ -503,9 +510,9 @@ function HealthProfileView({
   return (
     <div className="page-shell">
       <PageHeader
-        eyebrow="Clinical profile"
-        title="Health Profile"
-        description="Switch between the conditions and symptoms you track."
+        eyebrow={t("health.profile.eyebrow")}
+        title={t("health.profile.title")}
+        description={t("health.profile.description")}
         icon={Activity}
       />
 

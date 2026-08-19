@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -18,44 +19,45 @@ import { LANDING_SECTION_SCROLL_MARGIN_CLASS } from "../scroll";
 const FEATURES = [
   {
     icon: ClipboardList,
-    title: "Daily check-in",
-    body: "Mood, sleep, and a journal note in a guided journey you can finish in minutes.",
+    titleKey: "dailyCheckIn",
+    bodyKey: "dailyCheckInBody",
     image: LANDING_IMAGES.checkIn,
     alt: "Person using a health app on a phone during a consultation",
     wide: true,
   },
   {
     icon: Activity,
-    title: "Symptoms and conditions",
-    body: "Keep the health profile you actually live with, then attach it to a day’s log.",
+    titleKey: "symptomsConditions",
+    bodyKey: "symptomsConditionsBody",
   },
   {
     icon: Pill,
-    title: "Medications",
-    body: "Dosages, units, and whether a dose was taken—organized in one reliable record.",
+    titleKey: "medications",
+    bodyKey: "medicationsBody",
     image: LANDING_IMAGES.medications,
     alt: "Assorted medication capsules and tablets",
   },
   {
     icon: Building2,
-    title: "Care network",
-    body: "Save clinics and doctors, then note visits alongside the rest of the day.",
+    titleKey: "careNetwork",
+    bodyKey: "careNetworkBody",
     image: LANDING_IMAGES.clinic,
     alt: "Bright clinic corridor with seating",
   },
   {
     icon: LineChart,
-    title: "Analytics",
-    body: "Mood, sleep, and symptom frequency across 7, 30, or 90 days.",
+    titleKey: "analytics",
+    bodyKey: "analyticsBody",
   },
   {
     icon: FileText,
-    title: "AI reports",
-    body: "A physician-ready summary from your entries for a date range you choose.",
+    titleKey: "aiReports",
+    bodyKey: "aiReportsBody",
   },
 ] as const;
 
 export function Features() {
+  const { t } = useTranslation();
   const rootRef = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -142,9 +144,9 @@ export function Features() {
       className={`${LANDING_SECTION_SCROLL_MARGIN_CLASS} mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14`}
     >
       <div data-features-heading className="max-w-2xl">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">Features</p>
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">{t("landing.featuresEyebrow")}</p>
         <h2 className="mt-3 font-display text-3xl font-bold tracking-[-0.03em] sm:text-4xl">
-          Everything you already track, in one HealthTrack record.
+          {t("landing.featuresTitle")}
         </h2>
       </div>
 
@@ -157,7 +159,7 @@ export function Features() {
 
           return (
             <article
-              key={feature.title}
+              key={feature.titleKey}
               data-feature-card
               className={cn(
                 "overflow-hidden rounded-[1.75rem] border border-primary/15 bg-card shadow-soft",
@@ -179,8 +181,8 @@ export function Features() {
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <Icon className="h-5 w-5" aria-hidden />
                 </span>
-                <h3 className="mt-4 font-display text-lg font-bold tracking-tight">{feature.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">{feature.body}</p>
+                <h3 className="mt-4 font-display text-lg font-bold tracking-tight">{t(`landing.${feature.titleKey}`)}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">{t(`landing.${feature.bodyKey}`)}</p>
               </div>
             </article>
           );

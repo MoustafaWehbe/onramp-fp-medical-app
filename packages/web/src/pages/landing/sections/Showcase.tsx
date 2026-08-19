@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Check, FileText, HeartPulse, Pill } from "lucide-react";
@@ -8,13 +9,14 @@ import { refreshScrollTriggerOnImageLoad } from "../refreshOnImageLoad";
 import { LANDING_SECTION_SCROLL_MARGIN_CLASS } from "../scroll";
 
 const STOPS = [
-  { id: "feel", label: "Feel", detail: "Mood 4/5 · 7.5 hours of sleep" },
-  { id: "symptoms", label: "Symptoms", detail: "Mild headache noted at noon" },
-  { id: "meds", label: "Meds", detail: "Evening dose marked as taken" },
-  { id: "save", label: "Save", detail: "Check-in stored in your log" },
+  { id: "feel", labelKey: "feel", detailKey: "feelDetail" },
+  { id: "symptoms", labelKey: "symptoms", detailKey: "symptomsDetail" },
+  { id: "meds", labelKey: "meds", detailKey: "medsDetail" },
+  { id: "save", labelKey: "save", detailKey: "saveDetail" },
 ] as const;
 
 export function Showcase() {
+  const { t } = useTranslation();
   const rootRef = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -141,21 +143,20 @@ export function Showcase() {
             data-showcase-caption
             className="absolute bottom-4 left-4 right-4 rounded-2xl bg-card/90 px-4 py-3 text-sm font-semibold shadow-soft backdrop-blur-xl"
           >
-            Bring a week of context into a 15-minute visit.
+            {t("landing.bringContext")}
           </p>
         </div>
 
         <div>
           <div data-showcase-copy>
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
-              See it in action
+              {t("landing.showcaseEyebrow")}
             </p>
             <h2 className="mt-3 font-display text-3xl font-bold tracking-[-0.03em] sm:text-4xl">
-              A day’s check-in becomes a visit-ready story.
+              {t("landing.showcaseTitle")}
             </h2>
             <p className="mt-3 text-base leading-7 text-muted-foreground">
-              Move through the same stops you will use in the app, then open a summary
-              you can take to care.
+              {t("landing.showcaseBody")}
             </p>
           </div>
 
@@ -188,8 +189,8 @@ export function Showcase() {
                     )}
                   </span>
                   <div>
-                    <p className="font-display font-bold tracking-tight">{stop.label}</p>
-                    <p className="mt-1 text-sm text-muted-foreground">{stop.detail}</p>
+                    <p className="font-display font-bold tracking-tight">{t(`landing.${stop.labelKey}`)}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{t(`landing.${stop.detailKey}`)}</p>
                   </div>
                 </li>
               ))}
@@ -206,23 +207,22 @@ export function Showcase() {
               </span>
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
-                  Physician-ready report
+                  {t("landing.reportEyebrow")}
                 </p>
                 <h3 className="font-display text-lg font-bold tracking-tight">11–18 Aug 2026</h3>
               </div>
             </div>
             <p className="mt-4 text-sm leading-6 text-muted-foreground">
-              Mood stayed mostly steady. Sleep dipped mid-week. Headache appeared on two
-              days and eased after the evening dose.
+              {t("landing.reportSummary")}
             </p>
             <ul className="mt-4 space-y-2 text-sm">
               <li className="flex items-center gap-2 rounded-xl bg-muted/50 px-3 py-2">
                 <HeartPulse className="h-4 w-4 text-primary" aria-hidden />
-                Average mood 3.8 / 5
+                {t("landing.averageMood")}
               </li>
               <li className="flex items-center gap-2 rounded-xl bg-muted/50 px-3 py-2">
                 <Pill className="h-4 w-4 text-primary" aria-hidden />
-                Medication taken 6 of 7 evenings
+                {t("landing.medicationTaken")}
               </li>
             </ul>
           </article>

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   useFieldArray,
   type FieldPath,
@@ -27,6 +28,7 @@ const STEP_FIELDS: FieldPath<DailyEntryFormValues>[][] = [
 ];
 
 export function DailyEntryForm() {
+  const { t } = useTranslation();
   const {
     control,
     register,
@@ -143,8 +145,8 @@ export function DailyEntryForm() {
         isEditMode={isEditMode}
         navLocked={composerOpen}
         onBack={() => setCurrentStep((step) => Math.max(0, step - 1))}
-        onContinue={() => void advance(continueMessageFor(JOURNEY_STEPS[currentStep].id))}
-        onSkip={() => void advance(skipMessageFor(JOURNEY_STEPS[currentStep].id))}
+        onContinue={() => void advance(continueMessageFor(JOURNEY_STEPS[currentStep].id, t))}
+        onSkip={() => void advance(skipMessageFor(JOURNEY_STEPS[currentStep].id, t))}
         onCancel={cancelForm}
       >
         {currentStep === 0 && (

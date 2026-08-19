@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import {
   CalendarDays,
   HeartPulse,
@@ -23,6 +24,7 @@ import {
 } from "../../lib/daily-entries/daily-entries-exports";
 
 export function LogEntry() {
+  const { t } = useTranslation();
   const {
     panel,
     panelOpen,
@@ -64,6 +66,8 @@ export function LogEntry() {
             }
           : undefined
       }
+      editLabel={t("dailyEntries.edit")}
+      deleteLabel={t("dailyEntries.delete")}
       deleteDisabled={isRemoving}
       className="max-w-lg"
       contentClassName={
@@ -101,7 +105,7 @@ export function LogEntry() {
                 <CalendarDays className="h-5 w-5 text-primary" aria-hidden />
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
-                    Entry date
+                    {t("dailyEntries.detail.entryDate")}
                   </p>
                   <p className="mt-1 font-semibold">
                     {formatEntryDate(selectedEntry.entryDate)}
@@ -113,27 +117,27 @@ export function LogEntry() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <DetailItem
                 icon={<HeartPulse className="h-5 w-5" aria-hidden />}
-                label="Mood"
+                label={t("dailyEntries.detail.mood")}
                 value={
                   selectedEntry.moodRating !== null
                     ? `${selectedEntry.moodRating} / 5`
-                    : "Not recorded"
+                    : t("dailyEntries.notRecorded")
                 }
               />
               <DetailItem
                 icon={<Moon className="h-5 w-5" aria-hidden />}
-                label="Sleep"
+                label={t("dailyEntries.detail.sleep")}
                 value={
                   selectedEntry.sleepHours !== null
-                    ? `${selectedEntry.sleepHours} hours`
-                    : "Not recorded"
+                    ? `${selectedEntry.sleepHours} ${t("dailyEntries.detail.hours")}`
+                    : t("dailyEntries.notRecorded")
                 }
               />
             </div>
 
             <DetailSection
               icon={<BookOpen className="h-5 w-5" aria-hidden />}
-              title="Journal"
+              title={t("dailyEntries.detail.journal")}
             >
               {selectedEntry.journalNotes?.trim() ? (
                 <p className="whitespace-pre-wrap text-sm leading-6">
@@ -141,14 +145,14 @@ export function LogEntry() {
                 </p>
               ) : (
                 <p className="text-sm text-muted-foreground">
-                  No journal notes recorded.
+                  {t("dailyEntries.detail.noJournalNotes")}
                 </p>
               )}
             </DetailSection>
 
             <DetailSection
               icon={<Activity className="h-5 w-5" aria-hidden />}
-              title="Symptoms"
+              title={t("dailyEntries.detail.symptoms")}
             >
               {selectedEntry.symptoms.length > 0 ? (
                 <TagList
@@ -157,13 +161,13 @@ export function LogEntry() {
                   )}
                 />
               ) : (
-                <EmptyRelatedData />
+                <EmptyRelatedData t={t} />
               )}
             </DetailSection>
 
             <DetailSection
               icon={<Pill className="h-5 w-5" aria-hidden />}
-              title="Medications"
+              title={t("dailyEntries.detail.medications")}
             >
               {selectedEntry.medications.length > 0 ? (
                 <TagList
@@ -172,13 +176,13 @@ export function LogEntry() {
                   )}
                 />
               ) : (
-                <EmptyRelatedData />
+                <EmptyRelatedData t={t} />
               )}
             </DetailSection>
 
             <DetailSection
               icon={<HeartPulse className="h-5 w-5" aria-hidden />}
-              title="Conditions"
+              title={t("dailyEntries.detail.conditions")}
             >
               {selectedEntry.conditions.length > 0 ? (
                 <TagList
@@ -187,13 +191,13 @@ export function LogEntry() {
                   )}
                 />
               ) : (
-                <EmptyRelatedData />
+                <EmptyRelatedData t={t} />
               )}
             </DetailSection>
 
             <DetailSection
               icon={<Stethoscope className="h-5 w-5" aria-hidden />}
-              title="Doctor visits"
+              title={t("dailyEntries.detail.doctorVisits")}
             >
               {selectedEntry.doctorVisits.length > 0 ? (
                 <div className="space-y-3">
@@ -215,12 +219,12 @@ export function LogEntry() {
                   ))}
                 </div>
               ) : (
-                <EmptyRelatedData />
+                <EmptyRelatedData t={t} />
               )}
             </DetailSection>
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">No entry selected.</p>
+          <p className="text-sm text-muted-foreground">{t("dailyEntries.detail.noEntrySelected")}</p>
         )
       )}
     </AsidePanel>
@@ -286,6 +290,6 @@ function TagList({ items }: { items: string[] }) {
   );
 }
 
-function EmptyRelatedData() {
-  return <p className="text-sm text-muted-foreground">None recorded.</p>;
+function EmptyRelatedData({ t }: { t: (key: string) => string }) {
+  return <p className="text-sm text-muted-foreground">{t("dailyEntries.detail.noneRecorded")}</p>;
 }

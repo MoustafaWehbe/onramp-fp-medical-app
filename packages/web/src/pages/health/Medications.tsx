@@ -1,4 +1,5 @@
 import { ClipboardList, Pill, Plus } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   MedicationCard,
   MedicationDetail,
@@ -19,6 +20,7 @@ import {
 } from "../../providers/MedicationsProvider";
 
 function MedicationsView() {
+  const { t } = useTranslation();
   const {
     medications,
     isLoading,
@@ -45,20 +47,20 @@ function MedicationsView() {
   return (
     <div className="page-shell">
       <PageHeader
-        eyebrow="Personal registry"
-        title="Medications"
-        description="Keep dosages, schedules, and notes organized in one reliable record."
+        eyebrow={t("health.medications.eyebrow")}
+        title={t("health.medications.pageTitle")}
+        description={t("health.medications.pageDescription")}
         icon={Pill}
         badge={isSuccess ? (
           <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-1 text-xs font-semibold text-secondary-foreground">
             <ClipboardList className="h-3.5 w-3.5" aria-hidden />
-            {totalCount} {totalCount === 1 ? "medication" : "medications"}
+            {totalCount} {t(totalCount === 1 ? "health.medications.countOne" : "health.medications.countOther")}
           </span>
         ) : undefined}
         action={(
           <Button type="button" className="w-full sm:w-auto" onClick={openCreate}>
             <Plus className="mr-1.5 h-4 w-4" aria-hidden />
-            Add medication
+            {t("health.medications.add")}
           </Button>
         )}
       />
@@ -70,8 +72,8 @@ function MedicationsView() {
       )}
 
       <SectionPanel
-        title="Medication list"
-        description="Select a medication to view or update its details."
+        title={t("health.medications.listTitle")}
+        description={t("health.medications.listDescription")}
         icon={ClipboardList}
         contentClassName="min-h-48"
       >
@@ -86,14 +88,13 @@ function MedicationsView() {
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
             <Pill className="h-6 w-6" aria-hidden />
           </div>
-          <p className="font-medium">No medications yet</p>
+          <p className="font-medium">{t("health.medications.noMedications")}</p>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            Add a medication to build your registry. Search the catalog or
-            OpenFDA when you type.
+            {t("health.medications.noMedicationsDescription")}
           </p>
           <Button type="button" className="mt-4" onClick={openCreate}>
             <Plus className="mr-1.5 h-4 w-4" />
-            Add medication
+            {t("health.medications.add")}
           </Button>
         </div>
       )}
@@ -109,7 +110,7 @@ function MedicationsView() {
       )}
 
         {isError && !listErrorMessage && (
-        <p className="text-sm text-destructive">Failed to load medications</p>
+        <p className="text-sm text-destructive">{t("health.medications.failedLoad")}</p>
       )}
 
         {isSuccess && pagination && (

@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -10,6 +11,7 @@ import { refreshScrollTriggerOnImageLoad } from "../refreshOnImageLoad";
 import { LANDING_SECTION_SCROLL_MARGIN_CLASS } from "../scroll";
 
 export function FinalCta() {
+  const { t } = useTranslation();
   const rootRef = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -98,17 +100,16 @@ export function FinalCta() {
         />
         <div className="relative flex min-h-[22rem] flex-col justify-center px-6 py-14 sm:min-h-[24rem] sm:px-12 sm:py-16">
           <p data-cta-item className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
-            Ready when you are
+            {t("landing.ctaEyebrow")}
           </p>
           <h2
             data-cta-item
             className="mt-3 max-w-xl font-display text-3xl font-bold tracking-[-0.03em] sm:text-4xl"
           >
-            Start a log you can actually bring to a visit.
+            {t("landing.ctaTitle")}
           </h2>
           <p data-cta-item className="mt-3 max-w-lg text-base leading-7 text-muted-foreground">
-            Create an account, record today, and keep the week visible—without scattering
-            notes across apps. Your logs stay in your account.
+            {t("landing.ctaBody")}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
@@ -116,7 +117,7 @@ export function FinalCta() {
               to="/register"
               className={cn(buttonVariants({ size: "lg" }), "rounded-full shadow-glow")}
             >
-              Get started
+              {t("landing.getStarted")}
               <ArrowRight data-cta-arrow className="ml-2 h-4 w-4" aria-hidden />
             </Link>
             <Link
@@ -124,7 +125,7 @@ export function FinalCta() {
               to="/login"
               className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full")}
             >
-              Sign in
+              {t("landing.signIn")}
             </Link>
           </div>
         </div>

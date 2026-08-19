@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useClinicsContext } from "../../../providers/ClinicsProvider";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
@@ -5,6 +6,7 @@ import { Label } from "../../ui/label";
 import { ClinicAutocomplete } from "./ClinicAutocomplete";
 
 export function ClinicForm() {
+  const { t } = useTranslation();
   const {
     formMode,
     isFormBusy,
@@ -28,7 +30,7 @@ export function ClinicForm() {
       className="space-y-4"
     >
       <div className="space-y-2">
-        <Label htmlFor="clinic-name">Clinic</Label>
+        <Label htmlFor="clinic-name">{t("health.clinics.clinic")}</Label>
         {formMode === "edit" ? (
           <Input
             id="clinic-name"
@@ -46,8 +48,7 @@ export function ClinicForm() {
         )}
         {formMode === "create" && (
           <p className="text-xs text-muted-foreground">
-            Search the clinic catalog. Fill in the details below if not
-            found.
+            {t("health.clinics.searchHelp")}
           </p>
         )}
       </div>
@@ -55,10 +56,10 @@ export function ClinicForm() {
       {isNewClinic && formMode === "create" && (
         <>
           <div className="space-y-2">
-            <Label htmlFor="clinic-address">Address</Label>
+            <Label htmlFor="clinic-address">{t("health.clinics.address")}</Label>
             <Input
               id="clinic-address"
-              placeholder="e.g. 123 Main St"
+              placeholder={t("health.clinics.addressPlaceholder")}
               disabled={isFormBusy}
               {...register("address")}
             />
@@ -70,10 +71,10 @@ export function ClinicForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="clinic-phone">Phone</Label>
+            <Label htmlFor="clinic-phone">{t("health.clinics.phone")}</Label>
             <Input
               id="clinic-phone"
-              placeholder="e.g. +1-555-0100"
+              placeholder={t("health.clinics.phonePlaceholder")}
               disabled={isFormBusy}
               {...register("phone")}
             />
@@ -87,10 +88,10 @@ export function ClinicForm() {
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="clinic-notes">Notes</Label>
+        <Label htmlFor="clinic-notes">{t("health.clinics.notes")}</Label>
         <Input
           id="clinic-notes"
-          placeholder="Optional notes"
+          placeholder={t("health.clinics.optionalNotes")}
           disabled={isFormBusy}
           {...register("notes")}
         />
@@ -105,11 +106,11 @@ export function ClinicForm() {
         <Button type="submit" disabled={isFormBusy}>
           {isFormBusy
             ? formMode === "edit"
-              ? "Saving\u2026"
-              : "Adding\u2026"
+              ? t("health.clinics.saving")
+              : t("health.clinics.adding")
             : formMode === "edit"
-              ? "Save changes"
-              : "Add clinic"}
+              ? t("health.clinics.saveChanges")
+              : t("health.clinics.addClinic")}
         </Button>
         <Button
           type="button"
@@ -117,7 +118,7 @@ export function ClinicForm() {
           disabled={isFormBusy}
           onClick={cancelForm}
         >
-          Cancel
+          {t("health.clinics.cancel")}
         </Button>
       </div>
     </form>

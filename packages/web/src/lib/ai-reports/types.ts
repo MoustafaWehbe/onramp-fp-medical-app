@@ -27,4 +27,5 @@ export interface GenerateAiReportRequest {
   startDate: string;
   endDate: string;
   reportType: string;
+  language?: "en" | "ar";
 }

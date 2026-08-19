@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Controller, type Control, type FieldErrors, type UseFormRegister } from "react-hook-form";
 import type { DailyEntryFormValues } from "../../../lib/daily-entries/daily-entries-exports";
 import { Input } from "../../ui/input";
@@ -6,11 +7,11 @@ import { cn } from "../../../lib/utils";
 import { textareaFieldClass } from "./fieldStyles";
 
 const MOOD_OPTIONS = [
-  { value: "1", label: "Low" },
-  { value: "2", label: "Off" },
-  { value: "3", label: "Okay" },
-  { value: "4", label: "Good" },
-  { value: "5", label: "Great" },
+  { value: "1" },
+  { value: "2" },
+  { value: "3" },
+  { value: "4" },
+  { value: "5" },
 ] as const;
 
 interface FeelingsStepProps {
@@ -31,10 +32,12 @@ export function FeelingsStep({
   register,
   formErrors,
 }: FeelingsStepProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-6">
       <div>
-        <Label htmlFor="entryDate">Entry date</Label>
+        <Label htmlFor="entryDate">{t("dailyEntries.journey.entryDate")}</Label>
         <Input id="entryDate" type="date" readOnly className="mt-1.5" {...register("entryDate")} />
         {formErrors.entryDate && (
           <p className="mt-1.5 text-sm text-destructive">{formErrors.entryDate.message}</p>
@@ -47,11 +50,21 @@ export function FeelingsStep({
         render={({ field }) => (
           <div>
             <p id="mood-label" className="text-sm font-semibold">
-              Mood rating
+              {t("dailyEntries.journey.moodRating")}
             </p>
             <div className="mt-2.5 grid grid-cols-5 gap-1.5" role="radiogroup" aria-labelledby="mood-label">
               {MOOD_OPTIONS.map((option) => {
                 const selected = field.value === option.value;
+                const moodKey =
+                  option.value === "1"
+                    ? "low"
+                    : option.value === "2"
+                      ? "off"
+                      : option.value === "3"
+                        ? "okay"
+                        : option.value === "4"
+                          ? "good"
+                          : "great";
                 return (
                   <button
                     key={option.value}
@@ -68,7 +81,7 @@ export function FeelingsStep({
                   >
                     <span className="text-base font-bold">{option.value}</span>
                     <span className="text-[0.65rem] font-semibold uppercase tracking-wide">
-                      {option.label}
+                      {t(`dailyEntries.journey.moodOptions.${moodKey}`)}
                     </span>
                   </button>
                 );
@@ -90,13 +103,13 @@ export function FeelingsStep({
 
           return (
             <div>
-              <Label htmlFor="sleepHours">Sleep hours</Label>
+              <Label htmlFor="sleepHours">{t("dailyEntries.journey.sleepHours")}</Label>
               <div className="mt-1.5 flex items-center gap-3">
                 <button
                   type="button"
                   className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-input bg-card text-lg font-bold shadow-sm hover:border-primary/40"
                   onClick={() => field.onChange(nextSleepHours(field.value, -0.5))}
-                  aria-label="Decrease sleep hours"
+                  aria-label={t("dailyEntries.journey.decreaseSleep")}
                 >
                   −
                 </button>
@@ -105,13 +118,13 @@ export function FeelingsStep({
                   aria-live="polite"
                 >
                   {sleepHours === "" ? "—" : sleepHours}
-                  <span className="ml-1 text-sm font-semibold text-muted-foreground">hrs</span>
+                  <span className="ml-1 text-sm font-semibold text-muted-foreground">{t("dailyEntries.journey.hoursShort")}</span>
                 </p>
                 <button
                   type="button"
                   className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-input bg-card text-lg font-bold shadow-sm hover:border-primary/40"
                   onClick={() => field.onChange(nextSleepHours(field.value, 0.5))}
-                  aria-label="Increase sleep hours"
+                  aria-label={t("dailyEntries.journey.increaseSleep")}
                 >
                   +
                 </button>
@@ -125,11 +138,11 @@ export function FeelingsStep({
                 value={sleepNumber == null || Number.isNaN(sleepNumber) ? 0 : sleepNumber}
                 onChange={(event) => field.onChange(event.target.value)}
                 className="mt-3 h-2 w-full cursor-pointer appearance-none bg-transparent accent-primary"
-                aria-label="Sleep hours slider"
+                aria-label={t("dailyEntries.journey.sleepHours")}
                 aria-valuetext={
                   sleepHours === "" || sleepNumber == null || Number.isNaN(sleepNumber)
-                    ? "Not set"
-                    : `${sleepNumber} hours`
+                    ? t("dailyEntries.journey.notSet")
+                    : `${sleepNumber} ${t("dailyEntries.detail.hours")}`
                 }
               />
               {formErrors.sleepHours && (
@@ -141,11 +154,11 @@ export function FeelingsStep({
       />
 
       <div>
-        <Label htmlFor="journalNotes">Journal notes</Label>
+        <Label htmlFor="journalNotes">{t("dailyEntries.journey.journalNotes")}</Label>
         <textarea
           id="journalNotes"
           rows={4}
-          placeholder="Write anything you would like to remember about today..."
+          placeholder={t("dailyEntries.journey.journalPlaceholder")}
           className={textareaFieldClass}
           {...register("journalNotes")}
         />

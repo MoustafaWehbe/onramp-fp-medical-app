@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import {
   CatalogManager,
   getCatalogErrorMessage,
@@ -13,6 +14,7 @@ import {
 import type { SymptomCatalog } from "../../lib/health/symptoms/types";
 
 export function AdminSymptoms() {
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search, 300);
@@ -43,7 +45,7 @@ export function AdminSymptoms() {
     event.preventDefault();
     const trimmedName = name.trim();
     if (!trimmedName) {
-      setFormError("Name is required");
+      setFormError(t("admin.validation.nameRequired"));
       return;
     }
 
@@ -56,21 +58,21 @@ export function AdminSymptoms() {
       setCurrentPage(1);
       closeCreate();
     } catch (error) {
-      setFormError(getCatalogErrorMessage(error, "Failed to add symptom"));
+      setFormError(getCatalogErrorMessage(error, t("admin.errors.addSymptom")));
     }
   }
 
   return (
     <CatalogManager<SymptomCatalog>
-      title="Symptoms"
-      description="Shared symptom catalog used by patient tracking and autocomplete."
+      title={t("admin.catalogs.symptoms.title")}
+      description={t("admin.catalogs.symptoms.description")}
       columns={[
         {
-          header: "Name",
+          header: t("admin.fields.name"),
           cell: (item) => <span className="font-medium">{item.name}</span>,
         },
         {
-          header: "Category",
+          header: t("admin.fields.category"),
           cell: (item) => item.category || "—",
         },
       ]}
@@ -79,14 +81,14 @@ export function AdminSymptoms() {
       isError={listQuery.isError}
       errorMessage={
         listQuery.isError
-          ? getCatalogErrorMessage(listQuery.error, "Failed to load symptoms")
+          ? getCatalogErrorMessage(listQuery.error, t("admin.errors.loadSymptoms"))
           : null
       }
       pagination={listQuery.data?.pagination ?? null}
       search={search}
       onSearchChange={setSearch}
       onPageChange={setCurrentPage}
-      createTitle="Add symptom"
+      createTitle={t("admin.catalogs.symptoms.title")}
       createOpen={createOpen}
       onCreateOpen={() => {
         resetForm();
@@ -96,12 +98,12 @@ export function AdminSymptoms() {
       formError={formError}
       isCreating={createMutation.isPending}
       onCreateSubmit={onCreateSubmit}
-      emptyLabel="No symptoms in the catalog yet."
+      emptyLabel={t("admin.catalogs.symptoms.empty")}
       getRowKey={(item) => item.id}
       createForm={
         <>
           <div className="space-y-2">
-            <Label htmlFor="symptom-name">Name</Label>
+            <Label htmlFor="symptom-name">{t("admin.fields.name")}</Label>
             <Input
               id="symptom-name"
               value={name}
@@ -110,12 +112,12 @@ export function AdminSymptoms() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="symptom-category">Category</Label>
+            <Label htmlFor="symptom-category">{t("admin.fields.category")}</Label>
             <Input
               id="symptom-category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              placeholder="Optional"
+              placeholder={t("admin.fields.optional")}
             />
           </div>
         </>

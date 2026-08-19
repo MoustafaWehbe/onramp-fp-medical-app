@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { CONDITION_STATUSES } from "../../../lib/health/health-export";
 import { useConditionsContext } from "../../../providers/ConditionsProvider";
 import { Button } from "../../ui/button";
@@ -6,6 +7,7 @@ import { Label } from "../../ui/label";
 import { ConditionAutocomplete } from "./ConditionAutocomplete";
 
 export function ConditionForm() {
+  const { t } = useTranslation();
   const {
     formMode,
     isFormBusy,
@@ -25,7 +27,7 @@ export function ConditionForm() {
       className="space-y-4"
     >
       <div className="space-y-2">
-        <Label htmlFor="condition-name">Condition</Label>
+        <Label htmlFor="condition-name">{t("health.conditions.condition")}</Label>
         {formMode === "edit" ? (
           <Input
             id="condition-name"
@@ -43,13 +45,13 @@ export function ConditionForm() {
         )}
         {formMode === "create" && (
           <p className="text-xs text-muted-foreground">
-            Search the catalog or NLM Clinical Tables for conditions.
+            {t("health.conditions.searchHelp")}
           </p>
         )}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="status">Status</Label>
+        <Label htmlFor="status">{t("health.conditions.status")}</Label>
         <select
           id="status"
           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -58,14 +60,14 @@ export function ConditionForm() {
         >
           {CONDITION_STATUSES.map((s) => (
             <option key={s} value={s}>
-              {s.charAt(0).toUpperCase() + s.slice(1)}
+              {t(`health.conditions.status${s.charAt(0).toUpperCase()}${s.slice(1)}`)}
             </option>
           ))}
         </select>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="diagnosedDate">Diagnosed date</Label>
+        <Label htmlFor="diagnosedDate">{t("health.conditions.diagnosedDate")}</Label>
         <Input
           id="diagnosedDate"
           type="date"
@@ -80,10 +82,10 @@ export function ConditionForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">{t("health.conditions.description")}</Label>
         <Input
           id="description"
-          placeholder="Brief description"
+          placeholder={t("health.conditions.briefDescription")}
           disabled={isFormBusy}
           {...register("description")}
         />
@@ -95,10 +97,10 @@ export function ConditionForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="notes">Notes</Label>
+        <Label htmlFor="notes">{t("health.conditions.notes")}</Label>
         <Input
           id="notes"
-          placeholder="Optional notes"
+          placeholder={t("health.conditions.optionalNotes")}
           disabled={isFormBusy}
           {...register("notes")}
         />
@@ -111,11 +113,11 @@ export function ConditionForm() {
         <Button type="submit" disabled={isFormBusy}>
           {isFormBusy
             ? formMode === "edit"
-              ? "Saving…"
-              : "Adding…"
+              ? t("health.conditions.saving")
+              : t("health.conditions.adding")
             : formMode === "edit"
-              ? "Save changes"
-              : "Add condition"}
+              ? t("health.conditions.saveChanges")
+              : t("health.conditions.addCondition")}
         </Button>
         <Button
           type="button"
@@ -123,7 +125,7 @@ export function ConditionForm() {
           disabled={isFormBusy}
           onClick={cancelForm}
         >
-          Cancel
+          {t("health.conditions.cancel")}
         </Button>
       </div>
     </form>

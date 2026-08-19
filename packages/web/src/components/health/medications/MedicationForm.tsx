@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { DOSAGE_MEASUREMENTS } from "../../../lib/health/health-export";
 import { useMedicationsContext } from "../../../providers/MedicationsProvider";
 import { Button } from "../../ui/button";
@@ -6,6 +7,7 @@ import { Label } from "../../ui/label";
 import { MedicationAutocomplete } from "./MedicationAutocomplete";
 
 export function MedicationForm() {
+  const { t } = useTranslation();
   const {
     formMode,
     isFormBusy,
@@ -25,7 +27,7 @@ export function MedicationForm() {
       className="space-y-4"
     >
       <div className="space-y-2">
-        <Label htmlFor="medication-name">Medication</Label>
+        <Label htmlFor="medication-name">{t("health.medications.medication")}</Label>
         {formMode === "edit" ? (
           <Input
             id="medication-name"
@@ -43,21 +45,20 @@ export function MedicationForm() {
         )}
         {formMode === "create" && (
           <p className="text-xs text-muted-foreground">
-            The category is looked up automatically when the medication is
-            added.
+            {t("health.medications.searchHelp")}
           </p>
         )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="dosage">Dosage</Label>
+          <Label htmlFor="dosage">{t("health.medications.dosage")}</Label>
           <Input
             id="dosage"
             type="number"
             step="any"
             min="0"
-            placeholder="e.g. 500"
+            placeholder={t("health.medications.dosagePlaceholder")}
             disabled={isFormBusy}
             {...register("dosage")}
           />
@@ -68,14 +69,14 @@ export function MedicationForm() {
           )}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="dosageMeasurement">Unit</Label>
+          <Label htmlFor="dosageMeasurement">{t("health.medications.unit")}</Label>
           <select
             id="dosageMeasurement"
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={isFormBusy}
             {...register("dosageMeasurement")}
           >
-            <option value="">Select unit</option>
+            <option value="">{t("health.medications.selectUnit")}</option>
             {DOSAGE_MEASUREMENTS.map((unit) => (
               <option key={unit} value={unit}>
                 {unit}
@@ -91,10 +92,10 @@ export function MedicationForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="frequency">Frequency</Label>
+        <Label htmlFor="frequency">{t("health.medications.frequency")}</Label>
         <Input
           id="frequency"
-          placeholder="e.g. twice daily"
+          placeholder={t("health.medications.frequencyPlaceholder")}
           disabled={isFormBusy}
           {...register("frequency")}
         />
@@ -106,10 +107,10 @@ export function MedicationForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="notes">Notes</Label>
+        <Label htmlFor="notes">{t("health.medications.notes")}</Label>
         <Input
           id="notes"
-          placeholder="Optional notes"
+          placeholder={t("health.medications.optionalNotes")}
           disabled={isFormBusy}
           {...register("notes")}
         />
@@ -122,11 +123,11 @@ export function MedicationForm() {
         <Button type="submit" disabled={isFormBusy}>
           {isFormBusy
             ? formMode === "edit"
-              ? "Saving…"
-              : "Adding…"
+              ? t("health.medications.saving")
+              : t("health.medications.adding")
             : formMode === "edit"
-              ? "Save changes"
-              : "Add medication"}
+              ? t("health.medications.saveChanges")
+              : t("health.medications.addMedication")}
         </Button>
         <Button
           type="button"
@@ -134,7 +135,7 @@ export function MedicationForm() {
           disabled={isFormBusy}
           onClick={cancelForm}
         >
-          Cancel
+          {t("health.medications.cancel")}
         </Button>
       </div>
     </form>

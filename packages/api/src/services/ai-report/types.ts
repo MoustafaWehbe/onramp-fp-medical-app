@@ -9,4 +9,5 @@ export interface GenerateAiReportInput {
   startDate: string;
   endDate: string;
   reportType: string;
+  language?: "en" | "ar";
 }

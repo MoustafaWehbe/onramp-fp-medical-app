@@ -5,6 +5,7 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
+import { useTranslation } from "react-i18next";
 import type { Medication } from "../../../lib/health/health-export";
 import { cn } from "../../../lib/utils";
 import { useMedicationsContext } from "../../../providers/MedicationsProvider";
@@ -23,8 +24,9 @@ interface MedicationAutocompleteProps {
 
 export function MedicationAutocomplete({
   id,
-  placeholder = "Search medications…",
+  placeholder,
 }: MedicationAutocompleteProps) {
+  const { t } = useTranslation();
   const {
     nameQuery,
     onNameQueryChange,
@@ -109,7 +111,7 @@ export function MedicationAutocomplete({
         aria-autocomplete="list"
         autoComplete="off"
         disabled={isFormBusy}
-        placeholder={placeholder}
+        placeholder={placeholder ?? t("health.medications.searchPlaceholder")}
         value={nameQuery}
         onChange={(e) => {
           onNameQueryChange(e.target.value);
@@ -126,18 +128,18 @@ export function MedicationAutocomplete({
         >
           {isAutocompleteLoading && flatOptions.length === 0 && (
             <p className="px-3 py-2 text-sm text-muted-foreground">
-              Searching…
+              {t("health.medications.searching")}
             </p>
           )}
           {!isAutocompleteLoading && flatOptions.length === 0 && (
             <p className="px-3 py-2 text-sm text-muted-foreground">
-              No medications found
+              {t("health.medications.noneFound")}
             </p>
           )}
           {catalogResults.length > 0 && (
             <div>
               <p className="sticky top-0 bg-muted/80 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur">
-                In catalog
+                {t("health.medications.inCatalog")}
               </p>
               <ul>
                 {catalogResults.map((medication, index) => (
@@ -157,7 +159,7 @@ export function MedicationAutocomplete({
                       <span className="text-xs text-muted-foreground">
                         {[medication.strength, medication.category]
                           .filter(Boolean)
-                          .join(" · ") || "No strength / category"}
+                          .join(" · ") || t("health.medications.noStrengthCategory")}
                       </span>
                     </button>
                   </li>
@@ -168,7 +170,7 @@ export function MedicationAutocomplete({
           {onlineResults.length > 0 && (
             <div>
               <p className="sticky top-0 bg-muted/80 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur">
-                OpenFDA
+                {t("health.medications.openFda")}
               </p>
               <ul>
                 {onlineResults.map((name, index) => {
@@ -194,7 +196,7 @@ export function MedicationAutocomplete({
           )}
           {isAutocompleteLoading && flatOptions.length > 0 && (
             <p className="border-t px-3 py-1.5 text-xs text-muted-foreground">
-              Searching OpenFDA…
+              {t("health.medications.searchingOpenFda")}
             </p>
           )}
         </div>

@@ -7,6 +7,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useTranslation } from "react-i18next";
 import type { SleepTrendPoint } from "../../lib/analytics/types";
 
 interface SleepChartProps {
@@ -14,6 +15,7 @@ interface SleepChartProps {
 }
 
 export function SleepChart({ data }: SleepChartProps) {
+  const { t } = useTranslation();
   const chartData = data.map((item) => ({
     date: item.date,
     hours: item.hours,
@@ -23,20 +25,20 @@ export function SleepChart({ data }: SleepChartProps) {
     <section className="rounded-2xl border border-border/80 bg-card p-4 shadow-soft transition-[border-color,box-shadow] duration-200 hover:border-primary/30 hover:shadow-lift sm:p-5">
       <div className="mb-4">
         <h3 className="font-semibold">
-          Sleep Trend
+          {t("analytics.sleepTrend")}
         </h3>
 
         <p className="text-sm text-muted-foreground">
-          Your sleep duration over time
+          {t("analytics.sleepTrendDescription")}
         </p>
       </div>
 
       {chartData.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          No sleep data available.
+          {t("analytics.noSleepData")}
         </p>
       ) : (
-        <div className="h-[260px] w-full sm:h-[300px]" role="img" aria-label="Line chart showing sleep duration over time">
+        <div className="h-[260px] w-full sm:h-[300px]" role="img" aria-label={t("analytics.sleepTrend")}>
           <p className="sr-only">
             {chartData
               .map((item) => `On ${item.date}, ${item.hours} hours of sleep.`)

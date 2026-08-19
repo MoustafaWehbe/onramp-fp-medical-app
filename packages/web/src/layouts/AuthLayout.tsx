@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -11,23 +12,13 @@ import { cn } from "../lib/utils";
 import { prefersReducedMotion } from "../lib/motion";
 import { LANDING_IMAGES } from "../pages/landing/images";
 
-const COPY = {
-  login: {
-    eyebrow: "Welcome back",
-    title: "Pick up the log you already started.",
-    body: "Sign in to record the day and keep your record ready for care. Your logs stay in your account.",
-  },
-  register: {
-    eyebrow: "Get started",
-    title: "Start a log you can bring to a visit.",
-    body: "Create an account for mood, sleep, medications, and visits—in one calm place.",
-  },
-} as const;
-
 export function AuthLayout() {
+  const { t } = useTranslation();
   const location = useLocation();
   const isRegister = location.pathname.startsWith("/register");
-  const copy = isRegister ? COPY.register : COPY.login;
+  const copy = isRegister
+    ? { eyebrow: t("auth.getStarted"), title: t("auth.registerTitle"), body: t("auth.registerBody") }
+    : { eyebrow: t("auth.welcomeBack"), title: t("auth.loginTitle"), body: t("auth.loginBody") };
 
   const rootRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLElement>(null);
@@ -182,19 +173,19 @@ export function AuthLayout() {
         <header className="flex items-center justify-between gap-2">
           <Link
             to="/"
-            aria-label="Back to website"
+            aria-label={t("auth.backToWebsite")}
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
               "rounded-full px-3",
             )}
           >
             <ArrowLeft className="mr-1.5 h-4 w-4" aria-hidden />
-            <span className="sm:hidden">Back</span>
-            <span className="hidden sm:inline">Back to website</span>
+            <span className="sm:hidden">{t("auth.back")}</span>
+            <span className="hidden sm:inline">{t("auth.backToWebsite")}</span>
           </Link>
           <Link
             to="/"
-            aria-label="HealthTrack home"
+            aria-label={t("auth.home")}
             className="rounded-full px-1 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <BrandMark compact className="sm:hidden" />
@@ -246,7 +237,7 @@ export function AuthLayout() {
             <nav
               ref={tabsRef}
               className="relative mx-auto flex w-full max-w-sm items-center rounded-full bg-secondary/70 p-1"
-              aria-label="Account"
+              aria-label={t("auth.account")}
             >
               <span
                 ref={indicatorRef}
@@ -263,7 +254,7 @@ export function AuthLayout() {
                 )}
               >
                 <LogIn className="h-4 w-4" aria-hidden />
-                Sign in
+                {t("auth.signIn")}
               </Link>
               <Link
                 to="/register"
@@ -275,7 +266,7 @@ export function AuthLayout() {
                 )}
               >
                 <UserPlus className="h-4 w-4" aria-hidden />
-                Get started
+                {t("auth.getStarted")}
               </Link>
             </nav>
 

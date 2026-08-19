@@ -1,9 +1,10 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, LogIn } from "lucide-react";
+import { ArrowRight, Languages, LogIn } from "lucide-react";
 import { BrandMark } from "../../components/layout/BrandMark";
 import { ThemeToggle } from "../../components/layout/ThemeToggle";
 import { buttonVariants } from "../../components/ui/button";
@@ -19,6 +20,7 @@ interface LandingNavProps {
 }
 
 export function LandingNav({ activeId }: LandingNavProps) {
+  const { t, i18n } = useTranslation();
   const headerRef = useRef<HTMLElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLSpanElement>(null);
@@ -126,7 +128,7 @@ export function LandingNav({ activeId }: LandingNavProps) {
       >
         <Link
           to="/"
-          aria-label="HealthTrack home"
+          aria-label={t("landing.home")}
           className="shrink-0 rounded-full px-1 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           onClick={(event) => {
             if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
@@ -142,7 +144,7 @@ export function LandingNav({ activeId }: LandingNavProps) {
 
         <nav
           className="hidden min-w-0 flex-1 items-center justify-center lg:flex"
-          aria-label="Landing"
+          aria-label={t("landing.navigation")}
         >
           <div
             ref={linksRef}
@@ -172,7 +174,7 @@ export function LandingNav({ activeId }: LandingNavProps) {
                   }}
                 >
                   <Icon className="h-4 w-4 shrink-0" aria-hidden />
-                  {link.label}
+                  {t(link.label)}
                 </a>
               );
             })}
@@ -180,6 +182,20 @@ export function LandingNav({ activeId }: LandingNavProps) {
         </nav>
 
         <div className="ml-auto flex items-center gap-1">
+          <button
+            type="button"
+            className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "rounded-full px-2")}
+            aria-label={t(i18n.language === "ar" ? "landing.switchToEnglish" : "landing.switchToArabic")}
+            title={t("landing.language")}
+            onClick={() => {
+              const language = i18n.language === "ar" ? "en" : "ar";
+              void i18n.changeLanguage(language);
+              localStorage.setItem("healthtracker-language", language);
+            }}
+          >
+            <Languages className="mr-1 h-4 w-4" aria-hidden />
+            {t(i18n.language === "ar" ? "landing.englishShort" : "landing.arabicShort")}
+          </button>
           <ThemeToggle className="rounded-full" />
           <Link
             to="/login"
@@ -189,13 +205,13 @@ export function LandingNav({ activeId }: LandingNavProps) {
             )}
           >
             <LogIn className="mr-1.5 h-4 w-4" aria-hidden />
-            Sign in
+            {t("landing.signIn")}
           </Link>
           <Link
             to="/register"
             className={cn(buttonVariants({ size: "sm" }), "rounded-full shadow-glow")}
           >
-            Get started
+            {t("landing.getStarted")}
             <ArrowRight className="ml-1.5 h-4 w-4" aria-hidden />
           </Link>
         </div>

@@ -11,8 +11,8 @@ function toDisplayDate(date: string | Date): Date {
   return new Date(date);
 }
 
-export function formatDate(date: string | Date): string {
-  return new Intl.DateTimeFormat("en-US", {
+export function formatDate(date: string | Date, locale = "en-US"): string {
+  return new Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "short",
     day: "numeric",

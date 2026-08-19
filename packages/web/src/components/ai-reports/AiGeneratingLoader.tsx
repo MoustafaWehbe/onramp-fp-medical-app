@@ -1,24 +1,20 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Sparkles } from "lucide-react";
 import { cn } from "../../lib/utils";
-
-const STATUS_MESSAGES = [
-  "Reading your entries…",
-  "Spotting symptom patterns…",
-  "Drafting the clinical summary…",
-  "Polishing recommendations…",
-] as const;
 
 interface AiGeneratingLoaderProps {
   className?: string;
 }
 
 export function AiGeneratingLoader({ className }: AiGeneratingLoaderProps) {
+  const { t } = useTranslation();
+  const statusMessages = t("aiReports.statusMessages", { returnObjects: true }) as string[];
   const [messageIndex, setMessageIndex] = useState(0);
 
   useEffect(() => {
     const id = window.setInterval(() => {
-      setMessageIndex((prev) => (prev + 1) % STATUS_MESSAGES.length);
+      setMessageIndex((prev) => (prev + 1) % statusMessages.length);
     }, 2400);
     return () => window.clearInterval(id);
   }, []);
@@ -42,10 +38,10 @@ export function AiGeneratingLoader({ className }: AiGeneratingLoaderProps) {
 
       <div className="space-y-2">
         <p className="text-lg font-semibold tracking-tight">
-          Generating your report
+          {t("aiReports.loadingTitle")}
         </p>
         <p className="min-h-5 text-sm text-muted-foreground">
-          {STATUS_MESSAGES[messageIndex]}
+          {statusMessages[messageIndex]}
         </p>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   CalendarDays,
   ClipboardList,
@@ -19,7 +20,7 @@ import type { EntryDoctorVisit } from "../../lib/doctor-visit-entries/doctor-vis
 import { formatDate } from "../../lib/utils";
 import { useDoctorVisitsContext } from "../../providers/DoctorVisitsProvider";
 
-function visitDayLabel(isoDate: string): string {
+function visitDayLabel(isoDate: string, locale: string, todayLabel: string, yesterdayLabel: string): string {
   const visitDay = new Date(`${isoDate}T00:00:00`);
   if (Number.isNaN(visitDay.getTime())) return isoDate;
 
@@ -32,9 +33,9 @@ function visitDayLabel(isoDate: string): string {
     (today.getTime() - that.getTime()) / 86_400_000,
   );
 
-  if (diffDays === 0) return "Today";
-  if (diffDays === 1) return "Yesterday";
-  return visitDay.toLocaleDateString("en-US", {
+  if (diffDays === 0) return todayLabel;
+  if (diffDays === 1) return yesterdayLabel;
+  return visitDay.toLocaleDateString(locale, {
     weekday: "long",
     month: "short",
     day: "numeric",
@@ -42,7 +43,12 @@ function visitDayLabel(isoDate: string): string {
   });
 }
 
-function groupVisitsByDate(visits: EntryDoctorVisit[]) {
+function groupVisitsByDate(
+  visits: EntryDoctorVisit[],
+  locale: string,
+  todayLabel: string,
+  yesterdayLabel: string,
+) {
   const groups: { date: string; label: string; visits: EntryDoctorVisit[] }[] =
     [];
 
@@ -54,7 +60,7 @@ function groupVisitsByDate(visits: EntryDoctorVisit[]) {
     } else {
       groups.push({
         date,
-        label: visitDayLabel(date),
+        label: visitDayLabel(date, locale, todayLabel, yesterdayLabel),
         visits: [visit],
       });
     }
@@ -65,6 +71,8 @@ function groupVisitsByDate(visits: EntryDoctorVisit[]) {
 
 export function DoctorVisitsPage() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "ar" ? "ar-EG" : "en-US";
   const {
     doctorVisits,
     currentPage,
@@ -82,9 +90,11 @@ export function DoctorVisitsPage() {
     null,
   );
 
+  const todayLabel = t("doctorVisits.today");
+  const yesterdayLabel = t("doctorVisits.yesterday");
   const groupedVisits = useMemo(
-    () => groupVisitsByDate(doctorVisits),
-    [doctorVisits],
+    () => groupVisitsByDate(doctorVisits, locale, todayLabel, yesterdayLabel),
+    [doctorVisits, locale, todayLabel, yesterdayLabel],
   );
 
   useEffect(() => {
@@ -94,15 +104,15 @@ export function DoctorVisitsPage() {
   return (
     <div className="page-shell">
       <PageHeader
-        eyebrow="Appointments"
-        title="Doctor Visits"
-        description="A timeline of clinic visits recorded in your daily logs."
+        eyebrow={t("doctorVisits.eyebrow")}
+        title={t("doctorVisits.title")}
+        description={t("doctorVisits.description")}
         icon={CalendarDays}
         badge={
           !isLoading && totalCount > 0 ? (
             <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-1 text-xs font-semibold text-secondary-foreground">
               <ClipboardList className="h-3.5 w-3.5" aria-hidden />
-              {totalCount} {totalCount === 1 ? "visit" : "visits"}
+              {totalCount} {t("doctorVisits.count", { count: totalCount })}
             </span>
           ) : undefined
         }
@@ -113,7 +123,7 @@ export function DoctorVisitsPage() {
             onClick={() => navigate("/log/view")}
           >
             <ClipboardPenLine className="mr-1.5 h-4 w-4" aria-hidden />
-            Log a visit
+            {t("doctorVisits.logVisit")}
           </Button>
         )}
       />
@@ -124,7 +134,7 @@ export function DoctorVisitsPage() {
           className="rounded-2xl border border-destructive/20 bg-destructive/10 p-6 text-center shadow-soft"
         >
           <p className="text-sm text-destructive">
-            {error?.message ?? "Failed to load doctor visits."}
+            {error?.message ?? t("doctorVisits.failedLoad")}
           </p>
           <Button
             type="button"
@@ -132,15 +142,15 @@ export function DoctorVisitsPage() {
             className="mt-4"
             onClick={() => refetch()}
           >
-            Try again
+            {t("doctorVisits.tryAgain")}
           </Button>
         </div>
       )}
 
       {!isError && (
         <SectionPanel
-          title="Visit history"
-          description="Select a visit to review doctor, clinic, and notes."
+          title={t("doctorVisits.historyTitle")}
+          description={t("doctorVisits.historyDescription")}
           icon={CalendarDays}
         >
           {isLoading ? (
@@ -152,10 +162,9 @@ export function DoctorVisitsPage() {
               <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
                 <CalendarDays className="h-6 w-6" aria-hidden />
               </div>
-              <p className="font-medium">No doctor visits yet</p>
+              <p className="font-medium">{t("doctorVisits.noVisits")}</p>
               <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-                Record a visit when you log a daily entry. It will show up here
-                by date.
+                {t("doctorVisits.noVisitsDescription")}
               </p>
               <Button
                 type="button"
@@ -163,7 +172,7 @@ export function DoctorVisitsPage() {
                 onClick={() => navigate("/log/view")}
               >
                 <ClipboardPenLine className="mr-1.5 h-4 w-4" aria-hidden />
-                Add a daily entry
+                {t("doctorVisits.addDailyEntry")}
               </Button>
             </div>
           ) : (
@@ -177,9 +186,9 @@ export function DoctorVisitsPage() {
                     >
                       {group.label}
                     </time>
-                    {(group.label === "Today" || group.label === "Yesterday") && (
+                    {(group.label === todayLabel || group.label === yesterdayLabel) && (
                       <span className="hidden text-xs text-muted-foreground sm:inline">
-                        {formatDate(`${group.date}T00:00:00`)}
+                        {formatDate(`${group.date}T00:00:00`, locale)}
                       </span>
                     )}
                     <span
@@ -221,7 +230,7 @@ export function DoctorVisitsPage() {
       <AsidePanel
         open={selectedVisit != null}
         onClose={() => setSelectedVisit(null)}
-        title="Visit details"
+        title={t("doctorVisits.detailsTitle")}
       >
         {selectedVisit && <DoctorVisitDetail visit={selectedVisit} />}
       </AsidePanel>

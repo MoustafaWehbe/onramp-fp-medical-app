@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { cn } from "../../lib/utils";
@@ -11,13 +12,14 @@ interface LandingSideNavProps {
 }
 
 export function LandingSideNav({ activeId }: LandingSideNavProps) {
+  const { t } = useTranslation();
   const rootRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const indicatorRef = useRef<HTMLSpanElement>(null);
   const syncIndicatorRef = useRef(() => {});
   const pointerInsideRef = useRef(false);
-  const activeLabel = LANDING_SECTIONS.find((section) => section.id === activeId)?.label ?? "";
+  const activeLabel = t(LANDING_SECTIONS.find((section) => section.id === activeId)?.label ?? "landing.overview");
 
   useGSAP(
     () => {
@@ -163,7 +165,7 @@ export function LandingSideNav({ activeId }: LandingSideNavProps) {
   return (
     <nav
       ref={rootRef}
-      aria-label="Section"
+      aria-label={t("landing.sectionNavigation")}
       className="pointer-events-none fixed inset-x-0 bottom-4 z-30 flex justify-center px-4 md:inset-auto md:bottom-auto md:right-5 md:top-1/2 md:-translate-y-1/2 md:justify-end lg:right-7"
     >
       <div className="pointer-events-auto flex flex-col items-center gap-2">
@@ -189,7 +191,7 @@ export function LandingSideNav({ activeId }: LandingSideNavProps) {
                     href={`#${section.id}`}
                     data-section={section.id}
                     aria-current={active ? "true" : undefined}
-                    aria-label={section.label}
+                    aria-label={t(section.label)}
                     className="flex min-h-11 items-center justify-center p-1 text-left text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:flex-row-reverse md:justify-start"
                     onClick={(event) => {
                       event.preventDefault();
@@ -212,7 +214,7 @@ export function LandingSideNav({ activeId }: LandingSideNavProps) {
                       data-section-label
                       className="hidden overflow-hidden whitespace-nowrap text-sm font-semibold text-foreground md:inline-block md:w-0 md:opacity-0"
                     >
-                      {section.label}
+                      {t(section.label)}
                     </span>
                   </a>
                 </li>

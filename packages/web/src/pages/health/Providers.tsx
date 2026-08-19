@@ -1,4 +1,5 @@
 import { useRef, useState, type KeyboardEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { Building2, ClipboardList, Plus, Stethoscope } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -48,6 +49,7 @@ function ProviderTabSwitch({
   clinicCount,
   doctorCount,
 }: ProviderTabSwitchProps) {
+  const { t } = useTranslation();
   const rootRef = useRef<HTMLDivElement>(null);
   const pillRef = useRef<HTMLSpanElement>(null);
   const clinicsRef = useRef<HTMLButtonElement>(null);
@@ -95,7 +97,7 @@ function ProviderTabSwitch({
     <div
       ref={rootRef}
       role="tablist"
-      aria-label="Provider sections"
+      aria-label={t("health.providers.sections")}
       className="relative grid grid-cols-2 rounded-2xl border border-border/70 bg-muted/70 p-1.5 shadow-soft"
       onKeyDown={handleTabListKeyDown}
     >
@@ -119,7 +121,7 @@ function ProviderTabSwitch({
         onClick={() => onChange("clinics")}
       >
         <Building2 className="h-4 w-4" aria-hidden />
-        Clinics
+        {t("health.providers.clinics")}
         {clinicCount != null && (
           <span className="rounded-full bg-secondary px-2 py-0.5 text-xs tabular-nums">
             {clinicCount}
@@ -141,7 +143,7 @@ function ProviderTabSwitch({
         onClick={() => onChange("doctors")}
       >
         <Stethoscope className="h-4 w-4" aria-hidden />
-        Doctors
+        {t("health.providers.doctors")}
         {doctorCount != null && (
           <span className="rounded-full bg-secondary px-2 py-0.5 text-xs tabular-nums">
             {doctorCount}
@@ -153,6 +155,7 @@ function ProviderTabSwitch({
 }
 
 function ClinicsSection() {
+  const { t } = useTranslation();
   const {
     clinics,
     isLoading,
@@ -188,20 +191,20 @@ function ClinicsSection() {
 
   return (
     <SectionPanel
-      title="Clinics"
-      description="Saved clinics and medical facilities."
+      title={t("health.providers.clinics")}
+      description={t("health.providers.clinicsDescription")}
       icon={Building2}
       action={(
         <div className="flex flex-wrap items-center gap-2">
           {isSuccess && (
             <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
               <ClipboardList className="h-3.5 w-3.5" aria-hidden />
-              {totalCount} {totalCount === 1 ? "clinic" : "clinics"}
+              {totalCount} {t("health.providers.clinicCount", { count: totalCount })}
             </span>
           )}
           <Button type="button" className="w-full sm:w-auto" onClick={openCreate}>
             <Plus className="mr-1.5 h-4 w-4" />
-            Add clinic
+            {t("health.providers.addClinic")}
           </Button>
         </div>
       )}
@@ -224,13 +227,13 @@ function ClinicsSection() {
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
             <Building2 className="h-6 w-6" aria-hidden />
           </div>
-          <p className="font-medium">No clinics yet</p>
+          <p className="font-medium">{t("health.providers.noClinics")}</p>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            Add a clinic to your saved list. Search the catalog by name.
+            {t("health.providers.noClinicsDescription")}
           </p>
           <Button type="button" className="mt-4" onClick={openCreate}>
             <Plus className="mr-1.5 h-4 w-4" />
-            Add clinic
+            {t("health.providers.addClinic")}
           </Button>
         </div>
       )}
@@ -249,7 +252,7 @@ function ClinicsSection() {
       )}
 
       {isError && !listErrorMessage && (
-        <p className="mt-4 text-sm text-destructive">Failed to load clinics</p>
+        <p className="mt-4 text-sm text-destructive">{t("health.providers.failedClinics")}</p>
       )}
 
       {isSuccess && pagination && (
@@ -285,16 +288,16 @@ function ClinicsSection() {
         onOpenChange={(open) => {
           if (!open && !isRemoving) setPendingDelete(null);
         }}
-        title={pendingDelete ? `Delete ${pendingDelete.clinic.name}?` : "Delete clinic?"}
+        title={pendingDelete ? t("health.clinics.deleteTitle", { name: pendingDelete.clinic.name }) : t("health.clinics.deleteFallback")}
         description={
           <>
-            This removes the clinic from your saved providers. This cannot be undone.
+            {t("health.clinics.deleteDescription")}
             {listErrorMessage ? (
               <span className="mt-2 block text-destructive">{listErrorMessage}</span>
             ) : null}
           </>
         }
-        confirmLabel="Delete"
+        confirmLabel={t("health.clinics.delete")}
         loading={isRemoving}
         onConfirm={confirmDelete}
       />
@@ -303,6 +306,7 @@ function ClinicsSection() {
 }
 
 function DoctorsSection() {
+  const { t } = useTranslation();
   const {
     doctors,
     isLoading,
@@ -338,20 +342,20 @@ function DoctorsSection() {
 
   return (
     <SectionPanel
-      title="Doctors"
-      description="Saved doctors and healthcare providers."
+      title={t("health.providers.doctors")}
+      description={t("health.providers.doctorsDescription")}
       icon={Stethoscope}
       action={(
         <div className="flex flex-wrap items-center gap-2">
           {isSuccess && (
             <span className="inline-flex items-center gap-1.5 rounded-full border bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
               <ClipboardList className="h-3.5 w-3.5" aria-hidden />
-              {totalCount} {totalCount === 1 ? "doctor" : "doctors"}
+              {totalCount} {t("health.providers.doctorCount", { count: totalCount })}
             </span>
           )}
           <Button type="button" className="w-full sm:w-auto" onClick={openCreate}>
             <Plus className="mr-1.5 h-4 w-4" />
-            Add doctor
+            {t("health.providers.addDoctor")}
           </Button>
         </div>
       )}
@@ -374,13 +378,13 @@ function DoctorsSection() {
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
             <Stethoscope className="h-6 w-6" aria-hidden />
           </div>
-          <p className="font-medium">No doctors yet</p>
+          <p className="font-medium">{t("health.providers.noDoctors")}</p>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            Add a doctor to your saved list. Search the catalog by name.
+            {t("health.providers.noDoctorsDescription")}
           </p>
           <Button type="button" className="mt-4" onClick={openCreate}>
             <Plus className="mr-1.5 h-4 w-4" />
-            Add doctor
+            {t("health.providers.addDoctor")}
           </Button>
         </div>
       )}
@@ -399,7 +403,7 @@ function DoctorsSection() {
       )}
 
       {isError && !listErrorMessage && (
-        <p className="mt-4 text-sm text-destructive">Failed to load doctors</p>
+        <p className="mt-4 text-sm text-destructive">{t("health.providers.failedDoctors")}</p>
       )}
 
       {isSuccess && pagination && (
@@ -435,16 +439,16 @@ function DoctorsSection() {
         onOpenChange={(open) => {
           if (!open && !isRemoving) setPendingDelete(null);
         }}
-        title={pendingDelete ? `Delete ${pendingDelete.doctor.name}?` : "Delete doctor?"}
+        title={pendingDelete ? t("health.doctors.deleteTitle", { name: pendingDelete.doctor.name }) : t("health.doctors.deleteFallback")}
         description={
           <>
-            This removes the doctor from your saved providers. This cannot be undone.
+            {t("health.doctors.deleteDescription")}
             {listErrorMessage ? (
               <span className="mt-2 block text-destructive">{listErrorMessage}</span>
             ) : null}
           </>
         }
-        confirmLabel="Delete"
+        confirmLabel={t("health.doctors.delete")}
         loading={isRemoving}
         onConfirm={confirmDelete}
       />
@@ -459,6 +463,7 @@ function ProvidersView({
   closeClinics: () => void;
   closeDoctors: () => void;
 }) {
+  const { t } = useTranslation();
   const [tab, setTab] = useState<ProviderTab>("clinics");
   const contentRef = useRef<HTMLDivElement>(null);
   const skipEntrance = useRef(true);
@@ -505,9 +510,9 @@ function ProvidersView({
   return (
     <div className="page-shell">
       <PageHeader
-        eyebrow="Care network"
-        title="Providers"
-        description="Switch between the clinics and doctors you keep on file."
+        eyebrow={t("health.providers.eyebrow")}
+        title={t("health.providers.title")}
+        description={t("health.providers.description")}
         icon={Stethoscope}
       />
 

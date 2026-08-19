@@ -2,12 +2,14 @@ import { useRef } from "react";
 import { Moon, Palette, Sun } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "../../providers/ThemeProvider";
 import { cn } from "../../lib/utils";
 import { prefersReducedMotion } from "../../lib/motion";
 import { SectionPanel } from "../shared/SectionPanel";
 
 export function AppearancePanel() {
+  const { t } = useTranslation();
   const { theme, setTheme } = useTheme();
   const rootRef = useRef<HTMLDivElement>(null);
   const pillRef = useRef<HTMLSpanElement>(null);
@@ -54,14 +56,14 @@ export function AppearancePanel() {
 
   return (
     <SectionPanel
-      title="Preferences"
-      description="Choose light or dark mode for this device."
+      title={t("settings.appearance.title")}
+      description={t("settings.appearance.description")}
       icon={Palette}
     >
       <div
         ref={rootRef}
         role="group"
-        aria-label="Theme"
+        aria-label={t("settings.appearance.theme")}
         className="relative grid grid-cols-2 rounded-2xl border border-border/70 bg-muted/70 p-1.5 shadow-soft"
       >
         <span
@@ -82,7 +84,7 @@ export function AppearancePanel() {
           onClick={() => setTheme("light")}
         >
           <Sun className="h-4 w-4" aria-hidden />
-          Light
+          {t("settings.appearance.light")}
         </button>
         <button
           ref={darkRef}
@@ -97,7 +99,7 @@ export function AppearancePanel() {
           onClick={() => setTheme("dark")}
         >
           <Moon className="h-4 w-4" aria-hidden />
-          Dark
+          {t("settings.appearance.dark")}
         </button>
       </div>
     </SectionPanel>

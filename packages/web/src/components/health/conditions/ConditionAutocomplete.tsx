@@ -5,6 +5,7 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
+import { useTranslation } from "react-i18next";
 import type { ConditionCatalog } from "../../../lib/health/health-export";
 import { cn } from "../../../lib/utils";
 import { useConditionsContext } from "../../../providers/ConditionsProvider";
@@ -23,8 +24,9 @@ interface ConditionAutocompleteProps {
 
 export function ConditionAutocomplete({
   id,
-  placeholder = "Search conditions…",
+  placeholder,
 }: ConditionAutocompleteProps) {
+  const { t } = useTranslation();
   const {
     nameQuery,
     onNameQueryChange,
@@ -120,7 +122,7 @@ export function ConditionAutocomplete({
         }
         autoComplete="off"
         disabled={isFormBusy}
-        placeholder={placeholder}
+        placeholder={placeholder ?? t("health.conditions.searchPlaceholder")}
         value={nameQuery}
         onChange={(e) => {
           onNameQueryChange(e.target.value);
@@ -137,18 +139,18 @@ export function ConditionAutocomplete({
         >
           {isAutocompleteLoading && flatOptions.length === 0 && (
             <p className="px-3 py-2 text-sm text-muted-foreground">
-              Searching…
+              {t("health.conditions.searching")}
             </p>
           )}
           {!isAutocompleteLoading && flatOptions.length === 0 && (
             <p className="px-3 py-2 text-sm text-muted-foreground">
-              No conditions found
+              {t("health.conditions.noneFound")}
             </p>
           )}
           {catalogResults.length > 0 && (
             <div>
               <p className="sticky top-0 bg-muted/80 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur">
-                In catalog
+                {t("health.conditions.inCatalog")}
               </p>
               {catalogResults.map((condition, index) => (
                 <button
@@ -174,7 +176,7 @@ export function ConditionAutocomplete({
           {onlineResults.length > 0 && (
             <div>
               <p className="sticky top-0 bg-muted/80 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur">
-                NLM Clinical Tables
+                {t("health.conditions.nlm")}
               </p>
               {onlineResults.map((name, index) => {
                 const flatIndex = catalogResults.length + index;
@@ -200,7 +202,7 @@ export function ConditionAutocomplete({
           )}
           {isAutocompleteLoading && flatOptions.length > 0 && (
             <p className="border-t px-3 py-1.5 text-xs text-muted-foreground">
-              Searching NLM…
+              {t("health.conditions.searchingNlm")}
             </p>
           )}
         </div>

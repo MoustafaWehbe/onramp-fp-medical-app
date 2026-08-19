@@ -87,6 +87,7 @@ export const reminderSettingsSchema = z
     timezone: z.enum(timezoneOptions, {
       errorMap: () => ({ message: "Timezone is required" }),
     }),
+    language: z.enum(["en", "ar"]),
   })
   .superRefine((data, ctx) => {
     if (data.enabled && !data.reminderTime) {

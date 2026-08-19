@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,18 +16,19 @@ import { FormField } from "./FormField";
 import { PasswordField } from "./PasswordField";
 
 const registerSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email"),
+  name: z.string().min(2, "auth.nameLength"),
+  email: z.string().email("auth.invalidEmail"),
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Must contain an uppercase letter")
-    .regex(/[0-9]/, "Must contain a number"),
+    .min(8, "auth.passwordLength")
+    .regex(/[A-Z]/, "auth.uppercaseRequired")
+    .regex(/[0-9]/, "auth.numberRequired"),
 });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export function Register() {
+  const { t } = useTranslation();
   const { user, isLoading, register: registerUser, login } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
@@ -47,9 +49,9 @@ export function Register() {
       await registerUser(data.email, data.password, data.name);
     } catch (err) {
       if (isAxiosError(err) && err.response?.status === 409) {
-        setError("Registration failed. That email may already be in use.");
+        setError(t("auth.registerConflict"));
       } else {
-        setError("Registration failed. Please try again.");
+        setError(t("auth.registerFailed"));
       }
       return;
     }
@@ -62,7 +64,7 @@ export function Register() {
       const state: LoginLocationState = {
         registered: true,
         email: data.email,
-        loginError: "Your account was created but we couldn't sign you in automatically. Please sign in.",
+        loginError: t("auth.autoLoginFailed"),
       };
       navigate("/login", { state, replace: true });
     }
@@ -81,9 +83,9 @@ export function Register() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto w-full max-w-sm space-y-5">
       <header className="space-y-1.5 text-center">
-        <h1 className="font-display text-2xl font-bold tracking-tight">Create your account</h1>
+        <h1 className="font-display text-2xl font-bold tracking-tight">{t("auth.createAccount")}</h1>
         <p className="text-sm leading-6 text-muted-foreground">
-          A few details now, then you can log today in minutes.
+          {t("auth.registerBody")}
         </p>
       </header>
 
@@ -96,25 +98,25 @@ export function Register() {
         </p>
       )}
 
-      <FormField id="name" label="Name" error={errors.name?.message}>
-        <Input autoComplete="name" placeholder="Alice Smith" {...register("name")} />
+      <FormField id="name" label={t("auth.name")} error={errors.name?.message ? t(errors.name.message) : undefined}>
+        <Input autoComplete="name" placeholder={t("auth.namePlaceholder")} {...register("name")} />
       </FormField>
 
-      <FormField id="email" label="Email" error={errors.email?.message}>
-        <Input type="email" autoComplete="email" placeholder="you@example.com" {...register("email")} />
+      <FormField id="email" label={t("auth.email")} error={errors.email?.message ? t(errors.email.message) : undefined}>
+        <Input type="email" autoComplete="email" placeholder={t("auth.emailPlaceholder")} {...register("email")} />
       </FormField>
 
       <FormField
         id="password"
-        label="Password"
-        error={errors.password?.message}
-        description="At least 8 characters, with one uppercase letter and one number."
+        label={t("auth.password")}
+        error={errors.password?.message ? t(errors.password.message) : undefined}
+        description={t("auth.passwordHint")}
       >
         <PasswordField autoComplete="new-password" placeholder="••••••••" {...register("password")} />
       </FormField>
 
       <Button type="submit" className="w-full rounded-full shadow-glow" disabled={isSubmitting}>
-        {isSubmitting ? "Creating account…" : "Create account"}
+        {isSubmitting ? t("auth.registering") : t("auth.createAccount")}
         {!isSubmitting && <ArrowRight className="ml-2 h-4 w-4" aria-hidden />}
       </Button>
     </form>
