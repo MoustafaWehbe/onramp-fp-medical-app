@@ -3,11 +3,13 @@ import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { App } from "./App";
 import "./styles/globals.css";
 import { ThemeProvider } from "./providers/ThemeProvider";
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 
 const queryClient = new QueryClient({
   defaultOptions: {

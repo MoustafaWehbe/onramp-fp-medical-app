@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { RoleRoute } from "./RoleRoute";
@@ -31,6 +32,10 @@ import { DailyEntriesProvider } from "@/providers/DailyEntriesProvider";
 import { DoctorVisitsProvider } from "@/providers/DoctorVisitsProvider";
 import { DashboardProvider } from "@/providers/DashboardProvider";
 
+const Landing = lazy(() =>
+  import("../pages/landing/Landing").then((module) => ({ default: module.Landing })),
+);
+
 function HomeRedirect() {
   const { user, isLoading } = useAuth();
 
@@ -42,7 +47,19 @@ function HomeRedirect() {
     );
   }
 
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) {
+    return (
+      <Suspense
+        fallback={
+          <div className="flex h-screen items-center justify-center">
+            <LoadingSpinner />
+          </div>
+        }
+      >
+        <Landing />
+      </Suspense>
+    );
+  }
   return <Navigate to={homePathForRole(user.role)} replace />;
 }
 

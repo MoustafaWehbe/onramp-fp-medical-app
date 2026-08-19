@@ -1,20 +1,18 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { isAxiosError } from "axios";
+import { ArrowRight } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import { homePathForRole } from "../../lib/auth/roles";
+import { type LoginLocationState } from "../../lib/auth/location-state";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
+import { LoadingSpinner } from "../../components/shared/LoadingSpinner";
+import { FormField } from "./FormField";
+import { PasswordField } from "./PasswordField";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -29,7 +27,7 @@ const registerSchema = z.object({
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export function Register() {
-  const { register: registerUser } = useAuth();
+  const { user, isLoading, register: registerUser } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
@@ -45,93 +43,66 @@ export function Register() {
     try {
       setError(null);
       await registerUser(data.email, data.password, data.name);
-      navigate("/login");
-    } catch {
-      setError("Registration failed. That email may already be in use.");
+      const state: LoginLocationState = { registered: true };
+      navigate("/login", { state });
+    } catch (err) {
+      if (isAxiosError(err) && err.response?.status === 409) {
+        setError("Registration failed. That email may already be in use.");
+        return;
+      }
+      setError("Registration failed. Please try again.");
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex min-h-40 items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (user) return <Navigate to={homePathForRole(user.role)} replace />;
+
   return (
-    <Card className="rounded-[1.75rem] border-white/60 bg-card/90 shadow-lift backdrop-blur-xl dark:border-border/80">
-      <CardHeader className="space-y-2 pb-5 text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
-          Get started
+    <form onSubmit={handleSubmit(onSubmit)} className="mx-auto w-full max-w-sm space-y-5">
+      <header className="space-y-1.5 text-center">
+        <h1 className="font-display text-2xl font-bold tracking-tight">Create your account</h1>
+        <p className="text-sm leading-6 text-muted-foreground">
+          A few details now, then you can log today in minutes.
         </p>
-        <CardTitle className="text-2xl tracking-tight">Create your account</CardTitle>
-        <CardDescription>
-          Fill in the details below to get started
-        </CardDescription>
-      </CardHeader>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <CardContent className="space-y-4">
-          {error && (
-            <p role="alert" className="rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive">
-              {error}
-            </p>
-          )}
-          <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              autoComplete="name"
-              placeholder="Alice Smith"
-              aria-invalid={Boolean(errors.name)}
-              aria-describedby={errors.name ? "register-name-error" : undefined}
-              {...register("name")}
-            />
-            {errors.name && (
-              <p id="register-name-error" className="text-xs text-destructive">
-                {errors.name.message}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              placeholder="you@example.com"
-              aria-invalid={Boolean(errors.email)}
-              aria-describedby={errors.email ? "register-email-error" : undefined}
-              {...register("email")}
-            />
-            {errors.email && (
-              <p id="register-email-error" className="text-xs text-destructive">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="new-password"
-              placeholder="••••••••"
-              aria-invalid={Boolean(errors.password)}
-              aria-describedby={errors.password ? "register-password-error" : undefined}
-              {...register("password")}
-            />
-            {errors.password && (
-              <p id="register-password-error" className="text-xs text-destructive">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-        </CardContent>
-        <CardFooter className="flex-col gap-4">
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Creating account…" : "Create account"}
-          </Button>
-          <p className="text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link to="/login" className="font-semibold text-primary underline-offset-4 hover:underline">
-              Sign in
-            </Link>
-          </p>
-        </CardFooter>
-      </form>
-    </Card>
+      </header>
+
+      {error && (
+        <p
+          role="alert"
+          className="rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive"
+        >
+          {error}
+        </p>
+      )}
+
+      <FormField id="name" label="Name" error={errors.name?.message}>
+        <Input autoComplete="name" placeholder="Alice Smith" {...register("name")} />
+      </FormField>
+
+      <FormField id="email" label="Email" error={errors.email?.message}>
+        <Input type="email" autoComplete="email" placeholder="you@example.com" {...register("email")} />
+      </FormField>
+
+      <FormField
+        id="password"
+        label="Password"
+        error={errors.password?.message}
+        description="At least 8 characters, with one uppercase letter and one number."
+      >
+        <PasswordField autoComplete="new-password" placeholder="••••••••" {...register("password")} />
+      </FormField>
+
+      <Button type="submit" className="w-full rounded-full shadow-glow" disabled={isSubmitting}>
+        {isSubmitting ? "Creating account…" : "Create account"}
+        {!isSubmitting && <ArrowRight className="ml-2 h-4 w-4" aria-hidden />}
+      </Button>
+    </form>
   );
 }

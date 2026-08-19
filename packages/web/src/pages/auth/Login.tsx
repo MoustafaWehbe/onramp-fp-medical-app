@@ -1,21 +1,17 @@
 import { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { ArrowRight } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { homePathForRole } from "../../lib/auth/roles";
+import { type LoginLocationState } from "../../lib/auth/location-state";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
+import { LoadingSpinner } from "../../components/shared/LoadingSpinner";
+import { FormField } from "./FormField";
+import { PasswordField } from "./PasswordField";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email"),
@@ -27,8 +23,9 @@ type LoginFormData = z.infer<typeof loginSchema>;
 export function Login() {
   const { user, isLoading, login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [error, setError] = useState<string | null>(null);
-
+  const justRegistered = Boolean((location.state as LoginLocationState | null)?.registered);
 
   const {
     register,
@@ -48,68 +45,55 @@ export function Login() {
     }
   };
 
-  if (isLoading) return null;
+  if (isLoading) {
+    return (
+      <div className="flex min-h-40 items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   if (user) return <Navigate to={homePathForRole(user.role)} replace />;
 
   return (
-    <Card className="rounded-[1.75rem] border-white/60 bg-card/90 shadow-lift backdrop-blur-xl dark:border-border/80">
-      <CardHeader className="space-y-2 pb-5 text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
-          Welcome back
+    <form onSubmit={handleSubmit(onSubmit)} className="mx-auto w-full max-w-sm space-y-5">
+      <header className="space-y-1.5 text-center">
+        <h1 className="font-display text-2xl font-bold tracking-tight">Sign in</h1>
+        <p className="text-sm leading-6 text-muted-foreground">
+          Enter your credentials to open your HealthTrack record.
         </p>
-        <CardTitle className="text-2xl tracking-tight">Sign in</CardTitle>
-        <CardDescription>
-          Enter your credentials to access your account
-        </CardDescription>
-      </CardHeader>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <CardContent className="space-y-4">
-          {error && (
-            <p role="alert" className="rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive">
-              {error}
-            </p>
-          )}
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              placeholder="you@example.com"
-              {...register("email")}
-            />
-            {errors.email && (
-              <p className="text-xs text-destructive">{errors.email.message}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              placeholder="••••••••"
-              {...register("password")}
-            />
-            {errors.password && (
-              <p className="text-xs text-destructive">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-        </CardContent>
-        <CardFooter className="flex-col gap-4">
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Signing in…" : "Sign in"}
-          </Button>
-          <p className="text-sm text-muted-foreground">
-            Don't have an account?{" "}
-            <Link to="/register" className="font-semibold text-primary underline-offset-4 hover:underline">
-              Register
-            </Link>
-          </p>
-        </CardFooter>
-      </form>
-    </Card>
+      </header>
+
+      {justRegistered && (
+        <p
+          role="status"
+          className="rounded-xl border border-primary/20 bg-primary/10 px-3.5 py-3 text-sm text-foreground"
+        >
+          Account created. Sign in to start your first log.
+        </p>
+      )}
+
+      {error && (
+        <p
+          role="alert"
+          className="rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive"
+        >
+          {error}
+        </p>
+      )}
+
+      <FormField id="email" label="Email" error={errors.email?.message}>
+        <Input type="email" autoComplete="email" placeholder="you@example.com" {...register("email")} />
+      </FormField>
+
+      <FormField id="password" label="Password" error={errors.password?.message}>
+        <PasswordField autoComplete="current-password" placeholder="••••••••" {...register("password")} />
+      </FormField>
+
+      <Button type="submit" className="w-full rounded-full shadow-glow" disabled={isSubmitting}>
+        {isSubmitting ? "Signing in…" : "Sign in"}
+        {!isSubmitting && <ArrowRight className="ml-2 h-4 w-4" aria-hidden />}
+      </Button>
+    </form>
   );
 }
