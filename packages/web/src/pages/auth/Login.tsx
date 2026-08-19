@@ -24,8 +24,10 @@ export function Login() {
   const { user, isLoading, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [error, setError] = useState<string | null>(null);
-  const justRegistered = Boolean((location.state as LoginLocationState | null)?.registered);
+  const locationState = (location.state as LoginLocationState | null) ?? null;
+  const justRegistered = Boolean(locationState?.registered);
+  const prefillEmail = locationState?.email ?? "";
+  const [error, setError] = useState<string | null>(locationState?.loginError ?? null);
 
   const {
     register,
@@ -33,6 +35,7 @@ export function Login() {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
+    defaultValues: { email: prefillEmail },
   });
 
   const onSubmit = async (data: LoginFormData) => {

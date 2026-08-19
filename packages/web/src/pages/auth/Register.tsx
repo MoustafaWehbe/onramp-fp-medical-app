@@ -27,7 +27,7 @@ const registerSchema = z.object({
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export function Register() {
-  const { user, isLoading, register: registerUser } = useAuth();
+  const { user, isLoading, register: registerUser, login } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
@@ -40,17 +40,31 @@ export function Register() {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
+    setError(null);
+
+    // ── 1. Create the account ────────────────────────────────────────────────
     try {
-      setError(null);
       await registerUser(data.email, data.password, data.name);
-      const state: LoginLocationState = { registered: true };
-      navigate("/login", { state });
     } catch (err) {
       if (isAxiosError(err) && err.response?.status === 409) {
         setError("Registration failed. That email may already be in use.");
-        return;
+      } else {
+        setError("Registration failed. Please try again.");
       }
-      setError("Registration failed. Please try again.");
+      return;
+    }
+
+    // ── 2. Auto-login (registration already succeeded — do not retry it) ─────
+    try {
+      await login(data.email, data.password);
+      navigate("/onboarding", { replace: true });
+    } catch {
+      const state: LoginLocationState = {
+        registered: true,
+        email: data.email,
+        loginError: "Your account was created but we couldn't sign you in automatically. Please sign in.",
+      };
+      navigate("/login", { state, replace: true });
     }
   };
 

@@ -7,6 +7,7 @@ import { AdminLayout } from "../layouts/AdminLayout";
 import { AuthLayout } from "../layouts/AuthLayout";
 import { Login } from "../pages/auth/Login";
 import { Register } from "../pages/auth/Register";
+import { Onboarding } from "../pages/onboarding/Onboarding";
 import { Dashboard } from "../pages/dashboard/Dashboard";
 import { Settings } from "../pages/dashboard/Settings";
 import { LogView } from "../pages/log/LogView";
@@ -72,6 +73,10 @@ export function AppRoutes() {
       </Route>
 
       <Route path="/" element={<HomeRedirect />} />
+
+      <Route element={<ProtectedRoute />}>
+        <Route path="/onboarding" element={<Onboarding />} />
+      </Route>
 
       <Route element={<ProtectedRoute />}>
         <Route element={<RoleRoute roles={["user"]} />}>
