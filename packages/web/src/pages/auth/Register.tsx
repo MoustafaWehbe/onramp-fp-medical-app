@@ -7,6 +7,7 @@ import { isAxiosError } from "axios";
 import { ArrowRight } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { homePathForRole } from "../../lib/auth/roles";
+import { type LoginLocationState } from "../../lib/auth/location-state";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { LoadingSpinner } from "../../components/shared/LoadingSpinner";
@@ -39,17 +40,31 @@ export function Register() {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
+    setError(null);
+
+    // ── 1. Create the account ────────────────────────────────────────────────
     try {
-      setError(null);
       await registerUser(data.email, data.password, data.name);
-      await login(data.email, data.password);
-      navigate("/onboarding", { replace: true });
     } catch (err) {
       if (isAxiosError(err) && err.response?.status === 409) {
         setError("Registration failed. That email may already be in use.");
-        return;
+      } else {
+        setError("Registration failed. Please try again.");
       }
-      setError("Registration failed. Please try again.");
+      return;
+    }
+
+    // ── 2. Auto-login (registration already succeeded — do not retry it) ─────
+    try {
+      await login(data.email, data.password);
+      navigate("/onboarding", { replace: true });
+    } catch {
+      const state: LoginLocationState = {
+        registered: true,
+        email: data.email,
+        loginError: "Your account was created but we couldn't sign you in automatically. Please sign in.",
+      };
+      navigate("/login", { state, replace: true });
     }
   };
 

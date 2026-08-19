@@ -1,5 +1,9 @@
 export interface LoginLocationState {
   registered?: boolean;
+  /** Pre-fill the email field when redirecting from registration. */
+  email?: string;
+  /** Surface a sign-in error that occurred right after a successful registration. */
+  loginError?: string;
 }
 
 export const ONBOARDING_DONE_KEY = "ht_onboarding_done";
