@@ -7,7 +7,6 @@ import { isAxiosError } from "axios";
 import { ArrowRight } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { homePathForRole } from "../../lib/auth/roles";
-import { type LoginLocationState } from "../../lib/auth/location-state";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { LoadingSpinner } from "../../components/shared/LoadingSpinner";
@@ -27,7 +26,7 @@ const registerSchema = z.object({
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export function Register() {
-  const { user, isLoading, register: registerUser } = useAuth();
+  const { user, isLoading, register: registerUser, login } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
@@ -43,8 +42,8 @@ export function Register() {
     try {
       setError(null);
       await registerUser(data.email, data.password, data.name);
-      const state: LoginLocationState = { registered: true };
-      navigate("/login", { state });
+      await login(data.email, data.password);
+      navigate("/onboarding", { replace: true });
     } catch (err) {
       if (isAxiosError(err) && err.response?.status === 409) {
         setError("Registration failed. That email may already be in use.");
