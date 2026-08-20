@@ -52,7 +52,7 @@ export function Hero() {
               to="/login"
               className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full")}
             >
-              Sign in
+              {t("landing.signIn")}
             </Link>
           </div>
           <dl data-hero-item className="mt-10 grid grid-cols-3 gap-3 sm:max-w-lg">

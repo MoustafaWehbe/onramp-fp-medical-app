@@ -46,6 +46,11 @@ async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 
 const SYSTEM_PROMPT = `You are a clinical health assistant generating a physician-ready patient report.
 Given the patient's daily log entries and active profile data for a date range, respond with a JSON object that has exactly these keys:
+- summary: string — concise clinical overview of the period
+- conditions: string[] — conditions relevant to the period
+- medications: string[] — medications relevant to the period
+- symptoms: string[] — symptoms observed during the period
+- recommendations: string[] — actionable recommendations for the clinician or patient
 Use only information present in the provided data. If a category has no data, return an empty array. Do not invent medical facts.`;
 
 function languageInstruction(language: "en" | "ar" = "en"): string {
