@@ -1,4 +1,5 @@
 import { Activity, Eye, Tag, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { UserSymptom } from "../../../lib/health/health-export";
 import { cn } from "../../../lib/utils";
 import { useSymptomsContext } from "../../../providers/SymptomsProvider";
@@ -10,6 +11,7 @@ interface SymptomCardProps {
 }
 
 export function SymptomCard({ symptom, onDelete }: SymptomCardProps) {
+  const { t } = useTranslation();
   const { selectedId, openDetail } = useSymptomsContext();
   const selected = selectedId === symptom.id;
   const { name, category } = symptom.catalog;
@@ -25,7 +27,7 @@ export function SymptomCard({ symptom, onDelete }: SymptomCardProps) {
       <button
         type="button"
         onClick={() => openDetail(symptom)}
-        aria-label={`View ${name}`}
+        aria-label={t("health.symptoms.viewItem", { name })}
         className="flex min-w-0 flex-1 cursor-pointer gap-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
@@ -48,17 +50,17 @@ export function SymptomCard({ symptom, onDelete }: SymptomCardProps) {
       </button>
 
       <RowActionsMenu
-        label={`Actions for ${name}`}
+        label={t("health.symptoms.actionsFor", { name })}
         actions={[
           {
             id: "view",
-            label: "View",
+            label: t("health.symptoms.viewItem", { name }),
             icon: Eye,
             onSelect: () => openDetail(symptom),
           },
           {
             id: "delete",
-            label: "Delete",
+            label: t("health.symptoms.delete"),
             icon: Trash2,
             variant: "destructive",
             onSelect: onDelete,
@@ -70,6 +72,7 @@ export function SymptomCard({ symptom, onDelete }: SymptomCardProps) {
 }
 
 export function SymptomDetail() {
+  const { t } = useTranslation();
   const { panel } = useSymptomsContext();
   if (panel.kind !== "detail") return null;
 
@@ -78,7 +81,7 @@ export function SymptomDetail() {
 
   const rows = [
     category
-      ? { icon: Tag, label: "Category", value: category }
+      ? { icon: Tag, label: t("health.symptoms.category"), value: category }
       : null,
   ].filter(Boolean) as Array<{
     icon: typeof Activity;
@@ -94,13 +97,13 @@ export function SymptomDetail() {
         </div>
         <div className="min-w-0">
           <p className="truncate text-lg font-semibold leading-tight">{name}</p>
-          <p className="text-sm text-muted-foreground">Tracked symptom</p>
+          <p className="text-sm text-muted-foreground">{t("health.symptoms.tracked")}</p>
         </div>
       </div>
 
       {rows.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          No additional details recorded.
+          {t("health.symptoms.noDetails")}
         </p>
       ) : (
         <dl className="space-y-3">

@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import {
   CatalogManager,
   getCatalogErrorMessage,
@@ -13,6 +14,7 @@ import {
 import type { Medication } from "../../lib/health/health-export";
 
 export function AdminMedications() {
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search, 300);
@@ -43,7 +45,7 @@ export function AdminMedications() {
     event.preventDefault();
     const trimmedName = name.trim();
     if (!trimmedName) {
-      setFormError("Name is required");
+      setFormError(t("admin.validation.nameRequired"));
       return;
     }
 
@@ -56,25 +58,25 @@ export function AdminMedications() {
       setCurrentPage(1);
       closeCreate();
     } catch (error) {
-      setFormError(getCatalogErrorMessage(error, "Failed to add medication"));
+      setFormError(getCatalogErrorMessage(error, t("admin.errors.addMedication")));
     }
   }
 
   return (
     <CatalogManager<Medication>
-      title="Medications"
-      description="Shared medication catalog used by patient autocomplete."
+      title={t("admin.catalogs.medications.title")}
+      description={t("admin.catalogs.medications.description")}
       columns={[
         {
-          header: "Name",
+          header: t("admin.fields.name"),
           cell: (item) => <span className="font-medium">{item.name}</span>,
         },
         {
-          header: "Strength",
+          header: t("admin.fields.strength"),
           cell: (item) => item.strength || "—",
         },
         {
-          header: "Category",
+          header: t("admin.fields.category"),
           cell: (item) => item.category || "—",
         },
       ]}
@@ -83,14 +85,14 @@ export function AdminMedications() {
       isError={listQuery.isError}
       errorMessage={
         listQuery.isError
-          ? getCatalogErrorMessage(listQuery.error, "Failed to load medications")
+          ? getCatalogErrorMessage(listQuery.error, t("admin.errors.loadMedications"))
           : null
       }
       pagination={listQuery.data?.pagination ?? null}
       search={search}
       onSearchChange={setSearch}
       onPageChange={setCurrentPage}
-      createTitle="Add medication"
+      createTitle={t("admin.catalogs.medications.title")}
       createOpen={createOpen}
       onCreateOpen={() => {
         resetForm();
@@ -100,12 +102,12 @@ export function AdminMedications() {
       formError={formError}
       isCreating={createMutation.isPending}
       onCreateSubmit={onCreateSubmit}
-      emptyLabel="No medications in the catalog yet."
+      emptyLabel={t("admin.catalogs.medications.empty")}
       getRowKey={(item) => item.id}
       createForm={
         <>
           <div className="space-y-2">
-            <Label htmlFor="med-name">Name</Label>
+            <Label htmlFor="med-name">{t("admin.fields.name")}</Label>
             <Input
               id="med-name"
               value={name}
@@ -113,16 +115,16 @@ export function AdminMedications() {
               required
             />
             <p className="text-xs text-muted-foreground">
-              Category is looked up automatically from OpenFDA when saved.
+              {t("admin.fields.openFdaCategory")}
             </p>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="med-strength">Strength</Label>
+            <Label htmlFor="med-strength">{t("admin.fields.strength")}</Label>
             <Input
               id="med-strength"
               value={strength}
               onChange={(e) => setStrength(e.target.value)}
-              placeholder="Optional"
+              placeholder={t("admin.fields.optional")}
             />
           </div>
         </>

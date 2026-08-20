@@ -1,4 +1,5 @@
 import { Check } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { cn } from "../../../lib/utils";
 import { JOURNEY_STEPS } from "./steps";
 
@@ -7,6 +8,8 @@ interface CheckInTrailProps {
 }
 
 export function CheckInTrail({ currentStep }: CheckInTrailProps) {
+  const { t } = useTranslation();
+
   return (
     <ol className="flex w-full items-center" aria-label="Check-in progress">
       {JOURNEY_STEPS.map((step, index) => {
@@ -30,12 +33,16 @@ export function CheckInTrail({ currentStep }: CheckInTrailProps) {
                 {isComplete ? (
                   <>
                     <Check className="h-4 w-4" aria-hidden />
-                    <span className="sr-only">Completed</span>
+                    <span className="sr-only">{t("dailyEntries.journey.progress.completed")}</span>
                   </>
                 ) : (
                   <>
                     {index + 1}
-                    <span className="sr-only">{isCurrent ? "Current" : "Pending"}</span>
+                    <span className="sr-only">
+                      {isCurrent
+                        ? t("dailyEntries.journey.progress.current")
+                        : t("dailyEntries.journey.progress.pending")}
+                    </span>
                   </>
                 )}
               </span>
@@ -45,7 +52,7 @@ export function CheckInTrail({ currentStep }: CheckInTrailProps) {
                   isCurrent ? "text-primary" : "text-muted-foreground",
                 )}
               >
-                {step.shortLabel}
+                {t(`dailyEntries.journey.steps.${step.id}.shortLabel`)}
               </span>
             </div>
             {!isLast && (

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TriangleAlert } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../hooks/useAuth";
 import { useSettingsContext } from "../../providers/SettingsProvider";
 import {
@@ -16,6 +17,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
 export function DangerZonePanel() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { logout } = useAuth();
   const {
@@ -60,8 +62,8 @@ export function DangerZonePanel() {
 
   return (
     <SectionPanel
-      title="Danger zone"
-      description="Permanently remove your account and all health data."
+      title={t("settings.danger.title")}
+      description={t("settings.danger.description")}
       icon={TriangleAlert}
       className="border-destructive/30"
     >
@@ -73,7 +75,7 @@ export function DangerZonePanel() {
         })}
       >
         <div className="space-y-2">
-          <Label htmlFor="delete-current-password">Current password</Label>
+          <Label htmlFor="delete-current-password">{t("settings.danger.currentPassword")}</Label>
           <Input
             id="delete-current-password"
             type="password"
@@ -95,7 +97,7 @@ export function DangerZonePanel() {
         )}
 
         <Button type="submit" variant="destructive" disabled={isDeleteBusy}>
-          Delete account
+          {t("settings.danger.deleteAccount")}
         </Button>
       </form>
 
@@ -107,17 +109,16 @@ export function DangerZonePanel() {
             reset({ currentPassword: getValues("currentPassword") });
           }
         }}
-        title="Delete your account?"
+        title={t("settings.danger.confirmTitle")}
         description={
           <>
-            This permanently removes your account and all saved health data. This
-            cannot be undone.
+            {t("settings.danger.confirmDescription")}
             {deleteError ? (
               <span className="mt-2 block text-destructive">{deleteError}</span>
             ) : null}
           </>
         }
-        confirmLabel="Delete account"
+        confirmLabel={t("settings.danger.confirmDelete")}
         loading={isDeleteBusy}
         onConfirm={confirmDelete}
       />

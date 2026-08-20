@@ -7,6 +7,7 @@ interface UpdateReminderSettingsInput {
   enabled: boolean;
   reminderTime?: string | null;
   timezone?: string;
+  language?: "en" | "ar";
 }
 
 async function findOrCreateByUserId(
@@ -16,6 +17,7 @@ async function findOrCreateByUserId(
     enabled: boolean;
     reminderTime: string | null;
     timezone: string;
+    language: "en" | "ar";
   },
 ) {
   try {
@@ -42,12 +44,14 @@ export class ReminderSettingsService {
       enabled: false,
       reminderTime: null,
       timezone: "UTC",
+      language: "en",
     });
 
     return {
       enabled: settings.enabled,
       reminderTime: toHhMm(settings.reminderTime),
       timezone: settings.timezone,
+      language: settings.language,
     };
   }
 
@@ -61,6 +65,7 @@ export class ReminderSettingsService {
       reminderTime:
         input.reminderTime !== undefined ? input.reminderTime : null,
       timezone: input.timezone ?? "UTC",
+      language: input.language ?? "en",
     });
 
     if (!created) {
@@ -70,6 +75,7 @@ export class ReminderSettingsService {
           ? { reminderTime: input.reminderTime }
           : {}),
         ...(input.timezone !== undefined ? { timezone: input.timezone } : {}),
+        ...(input.language !== undefined ? { language: input.language } : {}),
       });
     }
 
@@ -77,6 +83,7 @@ export class ReminderSettingsService {
       enabled: settings.enabled,
       reminderTime: toHhMm(settings.reminderTime),
       timezone: settings.timezone,
+      language: settings.language,
     };
   }
 }

@@ -5,6 +5,7 @@ import {
   Pill,
   Tag,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   formatMedicationDosage,
   type UserMedication,
@@ -17,6 +18,7 @@ interface MedicationCardProps {
 }
 
 export function MedicationCard({ medication }: MedicationCardProps) {
+  const { t } = useTranslation();
   const { selectedId, openDetail } = useMedicationsContext();
   const selected = selectedId === medication.id;
   const dosageLabel = formatMedicationDosage(medication);
@@ -88,6 +90,7 @@ export function MedicationCard({ medication }: MedicationCardProps) {
 }
 
 export function MedicationDetail() {
+  const { t } = useTranslation();
   const { panel } = useMedicationsContext();
   if (panel.kind !== "detail") return null;
 
@@ -97,9 +100,9 @@ export function MedicationDetail() {
 
   const rows = [
     strength
-      ? { icon: FlaskConical, label: "Strength", value: strength }
+      ? { icon: FlaskConical, label: t("health.medications.strength"), value: strength }
       : null,
-    category ? { icon: Tag, label: "Category", value: category } : null,
+    category ? { icon: Tag, label: t("health.medications.category"), value: category } : null,
     dosageLabel
       ? { icon: Pill, label: "Dosage", value: dosageLabel }
       : null,
@@ -123,13 +126,13 @@ export function MedicationDetail() {
         </div>
         <div className="min-w-0">
           <p className="truncate text-lg font-semibold leading-tight">{name}</p>
-          <p className="text-sm text-muted-foreground">Active medication</p>
+          <p className="text-sm text-muted-foreground">{t("health.medications.active")}</p>
         </div>
       </div>
 
       {rows.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          No dosage or schedule details yet.
+          {t("health.medications.noDetails")}
         </p>
       ) : (
         <dl className="space-y-3">

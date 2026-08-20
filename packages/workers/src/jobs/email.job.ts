@@ -25,9 +25,24 @@ let transporter: Transporter | null = null;
 function renderEmail(
   template: string,
   variables?: Record<string, string>,
+  language: "en" | "ar" = "en",
 ): { html: string; text: string } {
   if (template === "daily-entry-reminder") {
-    const name = variables?.name ?? "there";
+    const name = variables?.name ?? (language === "ar" ? "هناك" : "there");
+
+    if (language === "ar") {
+      return {
+        text: [
+          `مرحبًا ${name}،`,
+          "",
+          "لا تنسَ إكمال إدخالك الصحي اليومي اليوم.",
+          "خذ بضع دقائق لتسجيل شعورك اليوم.",
+          "",
+          "— HealthTracker",
+        ].join("\n"),
+        html: `<!DOCTYPE html><html dir="rtl" lang="ar"><body><h2>تذكير بالتسجيل اليومي</h2><p>مرحبًا ${name}،</p><p>لا تنسَ إكمال إدخالك الصحي اليومي اليوم.</p><p>خذ بضع دقائق لتسجيل شعورك اليوم.</p><p>— HealthTracker</p></body></html>`,
+      };
+    }
 
     return {
       text: [
@@ -124,7 +139,7 @@ async function getTransporter(): Promise<Transporter> {
 export async function processEmailJob(
   job: Job<EmailJobData, EmailJobResult>,
 ): Promise<EmailJobResult> {
-  const { to, subject, template, variables } = job.data;
+  const { to, subject, template, variables, language = "en" } = job.data;
 
   console.info(`[email] Worker received job ${job.id} template=${template}`);
 
@@ -161,7 +176,7 @@ export async function processEmailJob(
   }
 
   const from = getFromAddress();
-  const { html, text } = renderEmail(template, variables);
+  const { html, text } = renderEmail(template, variables, language);
 
   try {
     const mailer = await getTransporter();

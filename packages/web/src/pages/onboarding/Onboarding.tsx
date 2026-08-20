@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -74,6 +75,7 @@ const STEPS = [
 ] as const;
 
 export function Onboarding() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
@@ -145,6 +147,13 @@ export function Onboarding() {
   };
 
   const current = STEPS[step];
+  const translatedSteps = t("onboarding.steps", { returnObjects: true }) as Array<{
+    eyebrow: string;
+    title: string;
+    body: string;
+    features: string[];
+  }>;
+  const translatedCurrent = translatedSteps[step];
   const Icon = current.icon;
 
   return (
@@ -162,7 +171,7 @@ export function Onboarding() {
                 onClick={handleSkip}
                 className="rounded-full px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                Skip
+                {t("onboarding.skip")}
               </button>
             )}
             <ThemeToggle className="rounded-full" />
@@ -178,7 +187,7 @@ export function Onboarding() {
               <button
                 key={index}
                 type="button"
-                aria-label={`Go to step ${index + 1}`}
+                aria-label={t("onboarding.goToStep", { step: index + 1 })}
                 aria-current={index === step ? "step" : undefined}
                 onClick={() => {
                   if (index < step) animateStep(index);
@@ -215,30 +224,31 @@ export function Onboarding() {
                   </div>
                   <div className="min-w-0 pt-1">
                     <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
-                      {current.eyebrow}
+                      {translatedCurrent.eyebrow}
                     </p>
                     <h1 className="mt-1.5 font-display text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
-                      {current.title}
+                      {translatedCurrent.title}
                     </h1>
                   </div>
                 </div>
 
                 <p className="mt-5 text-base leading-7 text-muted-foreground">
-                  {current.body}
+                  {translatedCurrent.body}
                 </p>
 
                 <ul className="mt-6 space-y-2.5">
-                  {current.features.map((feature) => {
-                    const FeatureIcon = feature.icon;
+                  {translatedCurrent.features.map((feature, featureIndex) => {
+                    const featureIcon = current.features[featureIndex].icon;
+                    const FeatureIcon = featureIcon;
                     return (
                       <li
-                        key={feature.label}
+                        key={feature}
                         className="flex items-center gap-3 rounded-2xl border border-primary/10 bg-secondary/50 px-4 py-3"
                       >
                         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                           <FeatureIcon className="h-4 w-4" aria-hidden />
                         </span>
-                        <span className="text-sm font-semibold">{feature.label}</span>
+                        <span className="text-sm font-semibold">{feature}</span>
                       </li>
                     );
                   })}
@@ -253,7 +263,7 @@ export function Onboarding() {
                   onClick={handleBack}
                   className="rounded-full px-4 py-2.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  Back
+                  {t("onboarding.back")}
                 </button>
               ) : (
                 <div />
@@ -262,14 +272,14 @@ export function Onboarding() {
                 onClick={handleNext}
                 className="rounded-full shadow-glow"
               >
-                {isLast ? "Open my dashboard" : "Next"}
+                {isLast ? t("onboarding.openDashboard") : t("onboarding.next")}
                 <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
               </Button>
             </div>
           </div>
 
           <p className="text-center text-xs leading-5 text-muted-foreground">
-            {step + 1} of {STEPS.length} — your logs stay in your account, always.
+            {t("onboarding.progress", { current: step + 1, total: STEPS.length })}
           </p>
         </div>
       </div>

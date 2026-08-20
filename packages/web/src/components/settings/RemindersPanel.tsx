@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Bell } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   reminderSettingsSchema,
   timezoneLabels,
@@ -19,6 +20,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
 export function RemindersPanel() {
+  const { t, i18n } = useTranslation();
   const reminderSettingsQuery = useReminderSettings();
   const updateReminderSettings = useUpdateReminderSettings();
 
@@ -36,6 +38,7 @@ export function RemindersPanel() {
       enabled: false,
       reminderTime: null,
       timezone: "UTC",
+      language: i18n.language === "ar" ? "ar" : "en",
     },
   });
 
@@ -48,12 +51,16 @@ export function RemindersPanel() {
       enabled: settings.enabled,
       reminderTime: settings.reminderTime?.slice(0, 5) ?? null,
       timezone: settings.timezone,
+      language: settings.language ?? (i18n.language === "ar" ? "ar" : "en"),
     });
-  }, [reminderSettingsQuery.data, reset]);
+  }, [reminderSettingsQuery.data, reset, i18n.language]);
 
   async function onSubmit(values: ReminderSettingsFormValues) {
     try {
-      await updateReminderSettings.mutateAsync(values);
+      await updateReminderSettings.mutateAsync({
+        ...values,
+        language: i18n.language === "ar" ? "ar" : "en",
+      });
     } catch {
       // error shown below
     }
@@ -61,17 +68,16 @@ export function RemindersPanel() {
 
   return (
     <SectionPanel
-      title="Reminders"
-      description="Get an email if you miss a daily entry."
+      title={t("settings.reminders.title")}
+      description={t("settings.reminders.description")}
       icon={Bell}
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="flex flex-col gap-3 rounded-2xl border border-border/70 bg-muted/20 p-4 sm:flex-row sm:items-center">
           <div className="min-w-0 flex-1">
-            <p className="font-semibold">Daily entry reminder</p>
+            <p className="font-semibold">{t("settings.reminders.dailyReminder")}</p>
             <p className="text-sm text-muted-foreground">
-              We’ll email you at the time you pick if today’s check-in is still
-              empty.
+              {t("settings.reminders.dailyReminderDescription")}
             </p>
           </div>
           <Controller
@@ -97,7 +103,7 @@ export function RemindersPanel() {
                   }
                 }}
               >
-                {field.value ? "On" : "Off"}
+                {field.value ? t("common.on") : t("common.off")}
               </button>
             )}
           />
@@ -105,7 +111,7 @@ export function RemindersPanel() {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="reminder-time">Reminder time</Label>
+            <Label htmlFor="reminder-time">{t("settings.reminders.reminderTime")}</Label>
             <Input
               id="reminder-time"
               type="time"
@@ -120,7 +126,7 @@ export function RemindersPanel() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="reminder-timezone">Timezone</Label>
+            <Label htmlFor="reminder-timezone">{t("settings.reminders.timezone")}</Label>
             <select
               id="reminder-timezone"
               disabled={!reminderEnabled || updateReminderSettings.isPending}
@@ -140,21 +146,21 @@ export function RemindersPanel() {
         </div>
 
         {reminderSettingsQuery.isLoading && (
-          <p className="text-sm text-muted-foreground">Loading reminder settings…</p>
+          <p className="text-sm text-muted-foreground">{t("settings.reminders.loading")}</p>
         )}
         {reminderSettingsQuery.isError && (
           <p role="alert" className="text-sm text-destructive">
-            Failed to load reminder settings.
+            {t("settings.reminders.failedLoad")}
           </p>
         )}
         {updateReminderSettings.isError && (
           <p role="alert" className="text-sm text-destructive">
-            Failed to update reminder settings.
+            {t("settings.reminders.failedUpdate")}
           </p>
         )}
         {updateReminderSettings.isSuccess && (
           <p className="text-sm font-medium text-primary">
-            Reminder settings saved.
+            {t("settings.reminders.saved")}
           </p>
         )}
 
@@ -166,7 +172,7 @@ export function RemindersPanel() {
             updateReminderSettings.isPending
           }
         >
-          {updateReminderSettings.isPending ? "Saving…" : "Save reminders"}
+          {updateReminderSettings.isPending ? t("settings.reminders.saving") : t("settings.reminders.save")}
         </Button>
       </form>
     </SectionPanel>

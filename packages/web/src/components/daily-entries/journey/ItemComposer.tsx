@@ -1,4 +1,5 @@
 import type { KeyboardEvent, ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { Check, X } from "lucide-react";
 import { Button } from "../../ui/button";
 
@@ -15,6 +16,7 @@ export function ItemComposer({
   onCancel,
   onConfirm,
 }: ItemComposerProps) {
+  const { t } = useTranslation();
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (event.key !== "Enter") return;
     if (event.target instanceof HTMLTextAreaElement) return;
@@ -39,7 +41,7 @@ export function ItemComposer({
             type="button"
             variant="ghost"
             size="icon"
-            aria-label="Cancel"
+            aria-label={t("dailyEntries.journey.cancel")}
             onClick={onCancel}
           >
             <X className="h-5 w-5" aria-hidden />
@@ -47,7 +49,7 @@ export function ItemComposer({
           <Button
             type="button"
             size="icon"
-            aria-label="Save"
+            aria-label={t("dailyEntries.journey.saveEntry")}
             onClick={onConfirm}
           >
             <Check className="h-5 w-5" aria-hidden />

@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import {
   CatalogManager,
   getCatalogErrorMessage,
@@ -13,6 +14,7 @@ import {
 import type { Doctor } from "../../lib/admin/doctors/types";
 
 export function AdminDoctors() {
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search, 300);
@@ -47,7 +49,7 @@ export function AdminDoctors() {
     const trimmedSpecialty = specialty.trim();
     const trimmedPhone = phone.trim();
     if (!trimmedName || !trimmedSpecialty || !trimmedPhone) {
-      setFormError("Name, specialty, and phone are required");
+      setFormError(t("admin.validation.doctorRequired"));
       return;
     }
 
@@ -61,25 +63,25 @@ export function AdminDoctors() {
       setCurrentPage(1);
       closeCreate();
     } catch (error) {
-      setFormError(getCatalogErrorMessage(error, "Failed to add doctor"));
+      setFormError(getCatalogErrorMessage(error, t("admin.errors.addDoctor")));
     }
   }
 
   return (
     <CatalogManager<Doctor>
-      title="Doctors"
-      description="Doctor directory patients can link from their provider list."
+      title={t("admin.catalogs.doctors.title")}
+      description={t("admin.catalogs.doctors.description")}
       columns={[
         {
-          header: "Name",
+          header: t("admin.fields.name"),
           cell: (item) => <span className="font-medium">{item.name}</span>,
         },
         {
-          header: "Specialty",
+          header: t("admin.fields.specialty"),
           cell: (item) => item.specialty,
         },
         {
-          header: "Phone",
+          header: t("admin.fields.phone"),
           cell: (item) => item.phone,
         },
       ]}
@@ -88,14 +90,14 @@ export function AdminDoctors() {
       isError={listQuery.isError}
       errorMessage={
         listQuery.isError
-          ? getCatalogErrorMessage(listQuery.error, "Failed to load doctors")
+          ? getCatalogErrorMessage(listQuery.error, t("admin.errors.loadDoctors"))
           : null
       }
       pagination={listQuery.data?.pagination ?? null}
       search={search}
       onSearchChange={setSearch}
       onPageChange={setCurrentPage}
-      createTitle="Add doctor"
+      createTitle={t("admin.catalogs.doctors.title")}
       createOpen={createOpen}
       onCreateOpen={() => {
         resetForm();
@@ -105,12 +107,12 @@ export function AdminDoctors() {
       formError={formError}
       isCreating={createMutation.isPending}
       onCreateSubmit={onCreateSubmit}
-      emptyLabel="No doctors in the catalog yet."
+      emptyLabel={t("admin.catalogs.doctors.empty")}
       getRowKey={(item) => item.id}
       createForm={
         <>
           <div className="space-y-2">
-            <Label htmlFor="doctor-name">Name</Label>
+            <Label htmlFor="doctor-name">{t("admin.fields.name")}</Label>
             <Input
               id="doctor-name"
               value={name}
@@ -119,7 +121,7 @@ export function AdminDoctors() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="doctor-specialty">Specialty</Label>
+            <Label htmlFor="doctor-specialty">{t("admin.fields.specialty")}</Label>
             <Input
               id="doctor-specialty"
               value={specialty}
@@ -128,7 +130,7 @@ export function AdminDoctors() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="doctor-phone">Phone</Label>
+            <Label htmlFor="doctor-phone">{t("admin.fields.phone")}</Label>
             <Input
               id="doctor-phone"
               value={phone}

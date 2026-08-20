@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { ArrowRight, HeartPulse, Moon, NotebookPen, Sparkles } from "lucide-react";
 import { buttonVariants } from "../../../components/ui/button";
 import { cn } from "../../../lib/utils";
@@ -6,12 +7,13 @@ import { LANDING_IMAGES } from "../images";
 import { LANDING_SECTION_SCROLL_MARGIN_CLASS } from "../scroll";
 
 const STATS = [
-  { value: "1", label: "guided check-in" },
-  { value: "7–90", label: "day trend views" },
-  { value: "AI", label: "visit-ready reports" },
+  { value: "1", key: "guidedCheckIn" },
+  { value: "7–90", key: "trendViews" },
+  { value: "AI", key: "visitReports" },
 ] as const;
 
 export function Hero() {
+  const { t } = useTranslation();
   return (
     <section
       id="hero"
@@ -27,42 +29,40 @@ export function Hero() {
             className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-primary"
           >
             <Sparkles className="h-3.5 w-3.5" aria-hidden />
-            Daily health, ready for care
+            {t("landing.heroEyebrow")}
           </p>
           <h1
             data-hero-item
             className="mt-5 max-w-xl font-display text-4xl font-bold tracking-[-0.03em] text-foreground sm:text-5xl lg:text-[3.55rem] lg:leading-[1.05]"
           >
-            Track the day. See the pattern. Walk into care prepared.
+            {t("landing.heroTitle")}
           </h1>
           <p
             data-hero-item
             className="mt-5 max-w-lg text-base leading-7 text-muted-foreground sm:text-lg"
           >
-            Record mood, sleep, symptoms, medications, and visits in one calm place.
-            Then turn a date range into a physician-ready summary you can actually bring
-            to a visit.
+            {t("landing.heroBody")}
           </p>
           <div data-hero-item className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link to="/register" className={cn(buttonVariants({ size: "lg" }), "rounded-full shadow-glow")}>
-              Start your log
+              {t("landing.startLog")}
               <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
             </Link>
             <Link
               to="/login"
               className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full")}
             >
-              Sign in
+              {t("landing.signIn")}
             </Link>
           </div>
           <dl data-hero-item className="mt-10 grid grid-cols-3 gap-3 sm:max-w-lg">
             {STATS.map((stat) => (
               <div
-                key={stat.label}
+                key={stat.key}
                 className="rounded-2xl border border-primary/15 bg-card/70 px-3 py-3 shadow-soft backdrop-blur-sm"
               >
                 <dt className="text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground">
-                  {stat.label}
+                  {t(`landing.${stat.key}`)}
                 </dt>
                 <dd className="mt-1 font-display text-lg font-bold tracking-tight text-foreground sm:text-xl">
                   {stat.value}
@@ -96,7 +96,7 @@ export function Hero() {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-primary">
-                  Today’s check-in
+                  {t("landing.todaysCheckIn")}
                 </p>
                 <h2 className="mt-1 font-display text-lg font-bold tracking-tight">18 Aug 2026</h2>
               </div>
@@ -106,20 +106,20 @@ export function Hero() {
             </div>
             <div className="mt-3 grid grid-cols-2 gap-2">
               <div className="rounded-xl bg-secondary/80 px-3 py-2">
-                <p className="text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground">Mood</p>
+                <p className="text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground">{t("landing.mood")}</p>
                 <p className="text-sm font-bold">4 / 5</p>
               </div>
               <div className="rounded-xl bg-secondary/80 px-3 py-2">
                 <p className="flex items-center gap-1 text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground">
                   <Moon className="h-3 w-3" aria-hidden />
-                  Sleep
+                  {t("landing.sleep")}
                 </p>
                 <p className="text-sm font-bold">7.5 hrs</p>
               </div>
             </div>
             <p className="mt-3 flex items-start gap-2 text-xs leading-5 text-muted-foreground">
               <NotebookPen className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
-              Energy came back after a slower morning.
+              {t("landing.heroNote")}
             </p>
           </article>
         </div>

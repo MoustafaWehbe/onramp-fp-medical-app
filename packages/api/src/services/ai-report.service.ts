@@ -51,8 +51,13 @@ Given the patient's daily log entries and active profile data for a date range, 
 - medications: string[] — medications relevant to the period
 - symptoms: string[] — symptoms observed during the period
 - recommendations: string[] — actionable recommendations for the clinician or patient
-
 Use only information present in the provided data. If a category has no data, return an empty array. Do not invent medical facts.`;
+
+function languageInstruction(language: "en" | "ar" = "en"): string {
+  return language === "ar"
+    ? "Write the complete report content in Arabic, including the summary, conditions, medications, symptoms, and recommendations. Keep medication names and clinical terms accurate."
+    : "Write the complete report content in English.";
+}
 
 async function findOwnedReport(userId: string, id: string) {
   const report = await AiReport.findOne({
@@ -160,7 +165,10 @@ export class AiReportService {
       raw = await withTimeout(
         chatCompletion(
           [
-            { role: "system", content: SYSTEM_PROMPT },
+            {
+              role: "system",
+              content: `${SYSTEM_PROMPT}\n\n${languageInstruction(input.language)}`,
+            },
             {
               role: "user",
               content: JSON.stringify({

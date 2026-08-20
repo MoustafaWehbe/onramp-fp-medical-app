@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { FileText, Sparkles } from "lucide-react";
 import { isAxiosError } from "axios";
@@ -33,6 +34,7 @@ function getErrorMessage(error: unknown): string {
 
 export function AIReportsList() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
@@ -63,15 +65,15 @@ export function AIReportsList() {
   return (
     <div className="page-shell">
       <PageHeader
-        eyebrow="Clinical summaries"
-        title="AI Reports"
-        description="Review previous summaries or generate a new physician-ready report."
+        eyebrow={t("aiReports.eyebrow")}
+        title={t("aiReports.title")}
+        description={t("aiReports.description")}
         icon={FileText}
         badge={
           !isLoading && pagination ? (
             <span className="inline-flex items-center rounded-full border bg-secondary/80 px-2.5 py-1 text-xs font-semibold tabular-nums text-secondary-foreground">
               {pagination.totalCount}{" "}
-              {pagination.totalCount === 1 ? "report" : "reports"}
+              {t(pagination.totalCount === 1 ? "aiReports.countOne" : "aiReports.countOther")}
             </span>
           ) : undefined
         }
@@ -82,7 +84,7 @@ export function AIReportsList() {
             onClick={() => navigate("/ai-reports/generate")}
           >
             <Sparkles className="mr-1.5 h-4 w-4" aria-hidden />
-            Generate report
+            {t("aiReports.generate")}
           </Button>
         )}
       />
@@ -96,8 +98,8 @@ export function AIReportsList() {
         </div>
       ) : (
         <SectionPanel
-          title="Report history"
-          description="Select a report to read the full summary."
+          title={t("aiReports.historyTitle")}
+          description={t("aiReports.historyDescription")}
           icon={FileText}
         >
           {isLoading ? (
@@ -109,9 +111,9 @@ export function AIReportsList() {
               <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
                 <FileText className="h-6 w-6" aria-hidden />
               </div>
-              <p className="font-medium">No reports yet</p>
+              <p className="font-medium">{t("aiReports.noReports")}</p>
               <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-                Generate a physician-ready summary from your health log.
+                {t("aiReports.noReportsDescription")}
               </p>
               <Button
                 type="button"
@@ -119,7 +121,7 @@ export function AIReportsList() {
                 onClick={() => navigate("/ai-reports/generate")}
               >
                 <Sparkles className="mr-1.5 h-4 w-4" aria-hidden />
-                Generate report
+                {t("aiReports.generate")}
               </Button>
             </div>
           ) : (
@@ -163,9 +165,9 @@ export function AIReportsList() {
             setPendingDeleteId(null);
           }
         }}
-        title="Delete this report?"
-        description="This permanently removes the report. This cannot be undone."
-        confirmLabel="Delete report"
+        title={t("aiReports.deleteTitle")}
+        description={t("aiReports.deleteDescription")}
+        confirmLabel={t("aiReports.deleteReport")}
         loading={remove.isPending}
         onConfirm={confirmDelete}
       />

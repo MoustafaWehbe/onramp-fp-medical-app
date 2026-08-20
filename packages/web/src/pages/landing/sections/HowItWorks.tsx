@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -10,28 +11,29 @@ import { LANDING_SECTION_SCROLL_MARGIN_CLASS } from "../scroll";
 const STEPS = [
   {
     icon: ClipboardList,
-    title: "Log the day",
-    body: "A short check-in for mood, sleep, symptoms, medications, and visits—skip anything that does not apply.",
+    titleKey: "logDay",
+    bodyKey: "logDayBody",
     image: LANDING_IMAGES.logDay,
     alt: "Person writing notes in a journal",
   },
   {
     icon: LineChart,
-    title: "See the pattern",
-    body: "Charts pull from your own entries so trends in mood, sleep, and symptoms stay easy to scan.",
+    titleKey: "seePattern",
+    bodyKey: "seePatternBody",
     image: LANDING_IMAGES.patterns,
     alt: "Laptop showing a data dashboard with charts",
   },
   {
     icon: Stethoscope,
-    title: "Walk in prepared",
-    body: "Turn a date range into a physician-ready summary you can take to a clinic visit.",
+    titleKey: "walkPrepared",
+    bodyKey: "walkPreparedBody",
     image: LANDING_IMAGES.visit,
     alt: "Clinician speaking with a patient in a clinic",
   },
 ] as const;
 
 export function HowItWorks() {
+  const { t } = useTranslation();
   const rootRef = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -113,15 +115,15 @@ export function HowItWorks() {
         className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between"
       >
         <div className="max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">How it works</p>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">{t("landing.howEyebrow")}</p>
           <h2 className="mt-3 font-display text-3xl font-bold tracking-[-0.03em] sm:text-4xl">
-            Three calm steps from a messy week to a clearer visit.
+            {t("landing.howTitle")}
           </h2>
         </div>
         <div className="flex items-center gap-2" aria-hidden>
           {STEPS.map((step, index) => (
             <span
-              key={step.title}
+              key={step.titleKey}
               data-how-dot
               data-active={index === 0 ? "true" : "false"}
               className="h-2 w-2 rounded-full bg-muted-foreground/35 transition-colors data-[active=true]:bg-primary data-[active=true]:shadow-glow"
@@ -135,7 +137,7 @@ export function HowItWorks() {
           const Icon = step.icon;
           return (
             <li
-              key={step.title}
+              key={step.titleKey}
               data-how-card
               style={{ zIndex: index + 1 }}
               className="sticky top-28 grid origin-top overflow-hidden rounded-[1.75rem] border border-primary/15 bg-card shadow-lift will-change-transform md:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.85fr)]"
@@ -159,10 +161,10 @@ export function HowItWorks() {
                   <Icon className="h-5 w-5" aria-hidden />
                 </span>
                 <h3 className="mt-5 font-display text-2xl font-bold tracking-tight sm:text-3xl">
-                  {step.title}
+                  {t(`landing.${step.titleKey}`)}
                 </h3>
                 <p className="mt-3 max-w-md text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
-                  {step.body}
+                  {t(`landing.${step.bodyKey}`)}
                 </p>
               </div>
             </li>

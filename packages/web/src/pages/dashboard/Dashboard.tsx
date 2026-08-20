@@ -8,6 +8,7 @@ import {
   AlertCircle,
   ArrowRight,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../hooks/useAuth";
 import { useDashboardContext } from "../../providers/DashboardProvider";
 import { Button } from "../../components/ui/button";
@@ -18,17 +19,19 @@ import { DashboardSkeleton } from "../../components/dashboard/DashboardSkeleton"
 import { PageHeader } from "../../components/shared/PageHeader";
 import { formatDate } from "../../lib/utils";
 
-function greetingForNow() {
-  const hour = new Date().getHours();
-  if (hour < 12) return "Good morning";
-  if (hour < 17) return "Good afternoon";
-  return "Good evening";
-}
-
 export function Dashboard() {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "ar" ? "ar-EG" : "en-US";
   const { user } = useAuth();
   const { data, isLoading, isError, errorMessage } = useDashboardContext();
   const firstName = user?.name?.trim().split(/\s+/)[0] ?? "";
+
+  const greetingForNow = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return t("dashboard.greetingMorning");
+    if (hour < 17) return t("dashboard.greetingAfternoon");
+    return t("dashboard.greetingEvening");
+  };
 
   if (isLoading) {
     return <DashboardSkeleton />;
@@ -39,7 +42,7 @@ export function Dashboard() {
       <div className="flex min-h-64 items-center justify-center rounded-2xl border border-destructive/20 bg-destructive/5 p-6 shadow-soft">
         <div className="flex items-center gap-2 text-destructive">
           <AlertCircle className="h-5 w-5" aria-hidden />
-          {errorMessage ?? "Failed to load dashboard"}
+          {errorMessage ?? t("dashboard.errorLoadDashboard")}
         </div>
       </div>
     );
@@ -48,14 +51,14 @@ export function Dashboard() {
   return (
     <div className="page-shell">
       <PageHeader
-        eyebrow="Health overview"
+        eyebrow={t("dashboard.healthOverview")}
         title={`${greetingForNow()}${firstName ? `, ${firstName}` : ""}`}
-        description="Your latest health signals, records, and next actions—all in one place."
+        description={t("settings.description")}
         icon={Heart}
         action={(
           <Link to="/log/view">
             <Button className="w-full sm:w-auto">
-              New Daily Log
+              {t("dashboard.newDailyLog")}
               <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
             </Button>
           </Link>
@@ -65,30 +68,30 @@ export function Dashboard() {
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
         <StatCard
           icon={CalendarDays}
-          label="Monthly Entries"
+          label={t("dashboard.monthlyEntries")}
           value={data?.stats.entryCount ?? 0}
-          subtext="Last 30 days"
+          subtext={t("dashboard.last30Days")}
         />
 
         <StatCard
           icon={Pill}
-          label="Active Meds"
+          label={t("dashboard.activeMeds")}
           value={data?.stats.activeMedicationCount ?? 0}
-          subtext="Current medications"
+          subtext={t("dashboard.currentMeds")}
         />
 
         <StatCard
           icon={Heart}
-          label="Active Conditions"
+          label={t("dashboard.activeConditions")}
           value={data?.stats.activeConditionCount ?? 0}
-          subtext="Tracked conditions"
+          subtext={t("dashboard.trackedConditions")}
         />
 
         <StatCard
           icon={Activity}
-          label="Avg Mood"
+          label={t("dashboard.avgMood")}
           value={data?.stats.avgMood != null ? data.stats.avgMood.toFixed(1) : "--"}
-          subtext="Last 7 days"
+          subtext={t("dashboard.last7Days")}
         />
       </div>
 
@@ -104,14 +107,14 @@ export function Dashboard() {
             </div>
 
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
-              Last Visit
+              {t("dashboard.lastVisit")}
             </p>
 
             {data?.lastVisit ? (
               <>
                 <p className="text-lg font-bold tracking-tight">{data.lastVisit.doctorName}</p>
                 <p className="text-sm text-muted-foreground">
-                  {formatDate(`${data.lastVisit.date}T00:00:00`)}
+                  {formatDate(`${data.lastVisit.date}T00:00:00`, locale)}
                   {data.lastVisit.clinicName && ` — ${data.lastVisit.clinicName}`}
                 </p>
 
@@ -125,17 +128,17 @@ export function Dashboard() {
                   to="/visits"
                   className="mt-auto pt-4 text-sm font-semibold text-primary underline-offset-4 hover:underline"
                 >
-                  Open visits
+                  {t("dashboard.openVisits")}
                 </Link>
               </>
             ) : (
               <>
-                <p className="text-sm text-muted-foreground">No visits recorded yet.</p>
+                <p className="text-sm text-muted-foreground">{t("dashboard.noVisits")}</p>
                 <Link
                   to="/visits"
                   className="mt-auto pt-4 text-sm font-semibold text-primary underline-offset-4 hover:underline"
                 >
-                  Add a visit
+                  {t("dashboard.addVisit")}
                 </Link>
               </>
             )}
@@ -146,8 +149,8 @@ export function Dashboard() {
       <section aria-labelledby="quick-actions-title">
         <div className="mb-3 flex items-center justify-between">
           <div>
-            <h2 id="quick-actions-title" className="text-lg font-bold">Quick actions</h2>
-            <p className="text-sm text-muted-foreground">Keep your health record moving.</p>
+            <h2 id="quick-actions-title" className="text-lg font-bold">{t("dashboard.quickActions")}</h2>
+            <p className="text-sm text-muted-foreground">{t("dashboard.keepHealthRecordMoving")}</p>
           </div>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -158,8 +161,8 @@ export function Dashboard() {
                   <Activity className="h-5 w-5" aria-hidden />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="font-bold">Generate AI Report</p>
-                  <p className="text-sm text-muted-foreground">Create a physician-ready health summary.</p>
+                  <p className="font-bold">{t("dashboard.generateAiReport")}</p>
+                  <p className="text-sm text-muted-foreground">{t("dashboard.generateAiReportDescription")}</p>
                 </div>
                 <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1" aria-hidden />
               </CardContent>
@@ -172,8 +175,8 @@ export function Dashboard() {
                   <Heart className="h-5 w-5" aria-hidden />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="font-bold">Update Health Profile</p>
-                  <p className="text-sm text-muted-foreground">Review conditions and tracked symptoms.</p>
+                  <p className="font-bold">{t("dashboard.updateHealthProfile")}</p>
+                  <p className="text-sm text-muted-foreground">{t("dashboard.updateHealthProfileDescription")}</p>
                 </div>
                 <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1" aria-hidden />
               </CardContent>

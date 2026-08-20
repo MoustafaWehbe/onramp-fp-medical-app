@@ -7,6 +7,7 @@ import {
   NotebookPen,
   Stethoscope,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import type { EntryDoctorVisit } from "../../lib/doctor-visit-entries/doctor-visit-exports";
 import { cn, formatDate } from "../../lib/utils";
@@ -18,8 +19,8 @@ interface DoctorVisitCardProps {
   onView: () => void;
 }
 
-function visitDoctorName(visit: EntryDoctorVisit): string {
-  return visit.userDoctor?.doctor?.name ?? "Unknown doctor";
+function visitDoctorName(visit: EntryDoctorVisit, fallback: string): string {
+  return visit.userDoctor?.doctor?.name ?? fallback;
 }
 
 export function DoctorVisitCard({
@@ -28,7 +29,8 @@ export function DoctorVisitCard({
   onView,
 }: DoctorVisitCardProps) {
   const navigate = useNavigate();
-  const doctorName = visitDoctorName(visit);
+  const { t } = useTranslation();
+  const doctorName = visitDoctorName(visit, t("doctorVisits.unknownDoctor"));
   const specialty = visit.userDoctor?.doctor?.specialty;
   const clinic = visit.userClinic?.clinic;
 
@@ -43,7 +45,7 @@ export function DoctorVisitCard({
       <button
         type="button"
         onClick={onView}
-        aria-label={`View visit with ${doctorName}`}
+        aria-label={t("doctorVisits.viewVisitWith", { doctor: doctorName })}
         className="flex min-w-0 flex-1 cursor-pointer gap-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
@@ -90,17 +92,17 @@ export function DoctorVisitCard({
       </button>
 
       <RowActionsMenu
-        label={`Actions for visit with ${doctorName}`}
+        label={t("doctorVisits.actionsForVisit", { doctor: doctorName })}
         actions={[
           {
             id: "view",
-            label: "View",
+            label: t("doctorVisits.view"),
             icon: Eye,
             onSelect: onView,
           },
           {
             id: "open-log",
-            label: "Open daily log",
+            label: t("doctorVisits.openDailyLog"),
             icon: ClipboardList,
             onSelect: () => navigate("/log/view"),
           },
@@ -112,32 +114,34 @@ export function DoctorVisitCard({
 
 export function DoctorVisitDetail({ visit }: { visit: EntryDoctorVisit }) {
   const navigate = useNavigate();
-  const doctorName = visitDoctorName(visit);
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "ar" ? "ar-EG" : "en-US";
+  const doctorName = visitDoctorName(visit, t("doctorVisits.unknownDoctor"));
   const specialty = visit.userDoctor?.doctor?.specialty;
   const clinic = visit.userClinic?.clinic;
 
   const rows = [
     specialty
-      ? { icon: Stethoscope, label: "Specialty", value: specialty }
+      ? { icon: Stethoscope, label: t("doctorVisits.specialty"), value: specialty }
       : null,
     visit.entry.entryDate
       ? {
           icon: CalendarDays,
-          label: "Visit date",
-          value: formatDate(`${visit.entry.entryDate}T00:00:00`),
+          label: t("doctorVisits.visitDate"),
+          value: formatDate(`${visit.entry.entryDate}T00:00:00`, locale),
         }
       : null,
     clinic
-      ? { icon: Building2, label: "Clinic", value: clinic.name }
+      ? { icon: Building2, label: t("doctorVisits.clinic"), value: clinic.name }
       : null,
     clinic?.address
-      ? { icon: MapPin, label: "Address", value: clinic.address }
+      ? { icon: MapPin, label: t("doctorVisits.address"), value: clinic.address }
       : null,
     visit.summary
-      ? { icon: NotebookPen, label: "Summary", value: visit.summary }
+      ? { icon: NotebookPen, label: t("doctorVisits.summary"), value: visit.summary }
       : null,
     visit.notes
-      ? { icon: NotebookPen, label: "Notes", value: visit.notes }
+      ? { icon: NotebookPen, label: t("doctorVisits.notes"), value: visit.notes }
       : null,
   ].filter(Boolean) as Array<{
     icon: typeof Stethoscope;
@@ -155,13 +159,13 @@ export function DoctorVisitDetail({ visit }: { visit: EntryDoctorVisit }) {
           <p className="truncate text-lg font-semibold leading-tight">
             {doctorName}
           </p>
-          <p className="text-sm text-muted-foreground">Recorded visit</p>
+          <p className="text-sm text-muted-foreground">{t("doctorVisits.recordedVisit")}</p>
         </div>
       </div>
 
       {rows.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          No additional details recorded.
+          {t("doctorVisits.noAdditionalDetails")}
         </p>
       ) : (
         <dl className="space-y-3">
@@ -191,7 +195,7 @@ export function DoctorVisitDetail({ visit }: { visit: EntryDoctorVisit }) {
         onClick={() => navigate("/log/view")}
       >
         <ClipboardList className="h-4 w-4" aria-hidden />
-        Open daily log
+        {t("doctorVisits.openDailyLog")}
       </button>
     </div>
   );

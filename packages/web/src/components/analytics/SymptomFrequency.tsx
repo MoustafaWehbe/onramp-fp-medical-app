@@ -7,6 +7,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useTranslation } from "react-i18next";
 import type { SymptomFrequency as SymptomFrequencyType } from "../../lib/analytics/types";
 
 interface SymptomFrequencyProps {
@@ -16,6 +17,7 @@ interface SymptomFrequencyProps {
 export function SymptomFrequency({
   data,
 }: SymptomFrequencyProps) {
+  const { t } = useTranslation();
   const chartData = data.map((item) => ({
     symptom: item.symptom,
     count: item.count,
@@ -25,20 +27,20 @@ export function SymptomFrequency({
     <section className="rounded-2xl border border-border/80 bg-card p-4 shadow-soft transition-[border-color,box-shadow] duration-200 hover:border-primary/30 hover:shadow-lift sm:p-5">
       <div className="mb-4">
         <h3 className="font-semibold">
-          Symptom Frequency
+          {t("analytics.symptomFrequency")}
         </h3>
 
         <p className="text-sm text-muted-foreground">
-          Most common symptoms recorded
+          {t("analytics.symptomFrequencyDescription")}
         </p>
       </div>
 
       {chartData.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          No symptom data available.
+          {t("analytics.noSymptomData")}
         </p>
       ) : (
-        <div className="h-[280px] w-full sm:h-[320px]" role="img" aria-label="Bar chart showing the frequency of recorded symptoms">
+        <div className="h-[280px] w-full sm:h-[320px]" role="img" aria-label={t("analytics.symptomFrequency")}>
           <p className="sr-only">
             {chartData
               .map((item) => `${item.symptom}: ${item.count} ${item.count === 1 ? "record" : "records"}.`)

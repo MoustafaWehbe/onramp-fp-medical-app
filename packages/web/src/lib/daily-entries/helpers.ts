@@ -13,12 +13,10 @@ import type {
   UserClinic,
 } from "../health/health-export";
 
-const APP_DATE_LOCALE = "en-US";
-
-export function formatEntryDate(value: string): string {
+export function formatEntryDate(value: string, locale = "en-US"): string {
   const date = new Date(value.includes("T") ? value : `${value}T00:00:00`);
   if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat(APP_DATE_LOCALE, {
+  return new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",

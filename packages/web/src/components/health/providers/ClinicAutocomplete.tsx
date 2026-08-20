@@ -5,6 +5,7 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
+import { useTranslation } from "react-i18next";
 import type { Clinic } from "../../../lib/health/health-export";
 import { cn } from "../../../lib/utils";
 import { useClinicsContext } from "../../../providers/ClinicsProvider";
@@ -19,8 +20,9 @@ interface ClinicAutocompleteProps {
 
 export function ClinicAutocomplete({
   id,
-  placeholder = "Search clinics\u2026",
+  placeholder,
 }: ClinicAutocompleteProps) {
+  const { t } = useTranslation();
   const {
     nameQuery,
     onNameQueryChange,
@@ -101,7 +103,7 @@ export function ClinicAutocomplete({
         }
         autoComplete="off"
         disabled={isFormBusy}
-        placeholder={placeholder}
+        placeholder={placeholder ?? t("health.clinics.searchPlaceholder")}
         value={nameQuery}
         onChange={(e) => {
           onNameQueryChange(e.target.value);
@@ -118,13 +120,13 @@ export function ClinicAutocomplete({
         >
           {isAutocompleteLoading && catalogResults.length === 0 && (
             <p className="px-3 py-2 text-sm text-muted-foreground">
-              Searching…
+              {t("health.clinics.searching")}
             </p>
           )}
           {catalogResults.length > 0 && (
             <div>
               <p className="sticky top-0 bg-muted/80 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur">
-                In catalog
+                {t("health.clinics.inCatalog")}
               </p>
               <ul>
                 {catalogResults.map((clinic, index) => (
@@ -142,7 +144,7 @@ export function ClinicAutocomplete({
                       <span className="text-xs text-muted-foreground">
                         {[clinic.address, clinic.phone]
                           .filter(Boolean)
-                          .join(" \u00b7 ") || "No details"}
+                          .join(" \u00b7 ") || t("health.clinics.noDetails")}
                       </span>
                     </button>
                   </li>

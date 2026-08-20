@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { FieldArrayWithId } from "react-hook-form";
 import {
   dailyEntryFormSchema,
@@ -40,6 +41,7 @@ export function ConditionsStep({
   onRemove,
   onComposerOpenChange,
 }: ConditionsStepProps) {
+  const { t } = useTranslation();
   const [composerOpen, setComposerOpen] = useState(false);
   const [draft, setDraft] = useState(emptyDraft);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -94,11 +96,11 @@ export function ConditionsStep({
             availableConditions.length === 0
           }
         >
-          Add condition
+          {t("dailyEntries.journey.composer.addCondition")}
         </Button>
       </div>
 
-      {isLoading && <p className="text-sm text-muted-foreground">Loading conditions...</p>}
+      {isLoading && <p className="text-sm text-muted-foreground">{t("dailyEntries.journey.composer.loadingConditions")}</p>}
       {errorMessage && (
         <p role="alert" className="text-sm text-destructive">
           {errorMessage}
@@ -107,13 +109,13 @@ export function ConditionsStep({
 
       {composerOpen && (
         <ItemComposer
-          title="New condition"
+          title={t("dailyEntries.journey.composer.newCondition")}
           onCancel={closeComposer}
           onConfirm={confirmComposer}
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <Label htmlFor="composer-condition">Condition</Label>
+              <Label htmlFor="composer-condition">{t("dailyEntries.journey.composer.condition")}</Label>
               <select
                 id="composer-condition"
                 autoFocus
@@ -127,7 +129,7 @@ export function ConditionsStep({
                 }
                 {...composerControlProps("composer-condition-error", fieldErrors.userConditionId)}
               >
-                <option value="">Select a condition</option>
+                <option value="">{t("dailyEntries.journey.composer.selectCondition")}</option>
                 {availableConditions.map((condition) => (
                   <option key={condition.id} value={condition.id}>
                     {condition.condition.name}
@@ -138,11 +140,11 @@ export function ConditionsStep({
             </div>
           </div>
           <div className="mt-4">
-            <Label htmlFor="composer-condition-notes">Notes</Label>
+            <Label htmlFor="composer-condition-notes">{t("dailyEntries.journey.composer.notes")}</Label>
             <textarea
               id="composer-condition-notes"
               rows={3}
-              placeholder="Optional notes..."
+              placeholder={t("dailyEntries.journey.composer.optionalNotes")}
               className={textareaFieldClass}
               value={draft.notes ?? ""}
               onChange={(event) =>
@@ -159,12 +161,12 @@ export function ConditionsStep({
       )}
 
       {!isLoading && !errorMessage && conditions.length === 0 && (
-        <EmptyCatalogHint to="/health-profile" actionLabel="Add a condition in Health Profile" />
+        <EmptyCatalogHint to="/health-profile" actionLabel={t("dailyEntries.journey.composer.addConditionProfile")} />
       )}
 
       {!isLoading && !errorMessage && fields.length === 0 && !composerOpen && conditions.length > 0 && (
         <div className="rounded-2xl border border-dashed bg-muted/30 px-4 py-10 text-center text-sm text-muted-foreground">
-          No conditions added. You can skip this stop.
+          {t("dailyEntries.journey.composer.noConditionsAdded")}
         </div>
       )}
 
@@ -180,7 +182,7 @@ export function ConditionsStep({
             key={field.id}
             title={conditionName}
             details={details}
-            removeLabel={`Remove ${conditionName}`}
+            removeLabel={t("dailyEntries.journey.composer.remove", { name: conditionName })}
             onRemove={() => onRemove(index)}
           />
         );

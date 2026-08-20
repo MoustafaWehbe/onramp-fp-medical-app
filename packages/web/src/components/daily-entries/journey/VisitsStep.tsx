@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { FieldArrayWithId } from "react-hook-form";
 import {
   dailyEntryFormSchema,
@@ -48,6 +49,7 @@ export function VisitsStep({
   onRemove,
   onComposerOpenChange,
 }: VisitsStepProps) {
+  const { t } = useTranslation();
   const [composerOpen, setComposerOpen] = useState(false);
   const [draft, setDraft] = useState(emptyDraft);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -95,12 +97,12 @@ export function VisitsStep({
             clinics.length === 0
           }
         >
-          Add doctor visit
+          {t("dailyEntries.journey.composer.addVisit")}
         </Button>
       </div>
 
       {isLoading && (
-        <p className="text-sm text-muted-foreground">Loading doctors and clinics...</p>
+        <p className="text-sm text-muted-foreground">{t("dailyEntries.journey.composer.loadingProviders")}</p>
       )}
       {doctorsErrorMessage && (
         <p role="alert" className="text-sm text-destructive">
@@ -115,13 +117,13 @@ export function VisitsStep({
 
       {composerOpen && (
         <ItemComposer
-          title="New doctor visit"
+          title={t("dailyEntries.journey.composer.newVisit")}
           onCancel={closeComposer}
           onConfirm={confirmComposer}
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <Label htmlFor="composer-doctor">Doctor</Label>
+              <Label htmlFor="composer-doctor">{t("dailyEntries.journey.composer.doctor")}</Label>
               <select
                 id="composer-doctor"
                 autoFocus
@@ -135,7 +137,7 @@ export function VisitsStep({
                 }
                 {...composerControlProps("composer-doctor-error", fieldErrors.userDoctorId)}
               >
-                <option value="">Select a doctor</option>
+                <option value="">{t("dailyEntries.journey.composer.selectDoctor")}</option>
                 {doctors.map((doctor) => (
                   <option key={doctor.id} value={doctor.id}>
                     {doctor.doctor.name}
@@ -145,7 +147,7 @@ export function VisitsStep({
               <ComposerFieldError id="composer-doctor-error" error={fieldErrors.userDoctorId} />
             </div>
             <div>
-              <Label htmlFor="composer-clinic">Clinic</Label>
+              <Label htmlFor="composer-clinic">{t("dailyEntries.journey.composer.clinic")}</Label>
               <select
                 id="composer-clinic"
                 className={selectFieldClass}
@@ -158,7 +160,7 @@ export function VisitsStep({
                 }
                 {...composerControlProps("composer-clinic-error", fieldErrors.userClinicId)}
               >
-                <option value="">Select a clinic</option>
+                <option value="">{t("dailyEntries.journey.composer.selectClinic")}</option>
                 {clinics.map((clinic) => (
                   <option key={clinic.id} value={clinic.id}>
                     {clinic.clinic.name}
@@ -169,11 +171,11 @@ export function VisitsStep({
             </div>
           </div>
           <div className="mt-4">
-            <Label htmlFor="composer-visit-summary">Summary</Label>
+            <Label htmlFor="composer-visit-summary">{t("dailyEntries.journey.composer.summary")}</Label>
             <textarea
               id="composer-visit-summary"
               rows={4}
-              placeholder="Describe the reason for or result of the visit..."
+              placeholder={t("dailyEntries.journey.composer.visitSummaryPlaceholder")}
               className={textareaFieldClass}
               value={draft.summary}
               onChange={(event) =>
@@ -188,11 +190,11 @@ export function VisitsStep({
             )}
           </div>
           <div className="mt-4">
-            <Label htmlFor="composer-visit-notes">Notes</Label>
+            <Label htmlFor="composer-visit-notes">{t("dailyEntries.journey.composer.notes")}</Label>
             <textarea
               id="composer-visit-notes"
               rows={3}
-              placeholder="Optional notes..."
+              placeholder={t("dailyEntries.journey.composer.optionalNotes")}
               className={textareaFieldClass}
               value={draft.notes ?? ""}
               onChange={(event) =>
@@ -210,7 +212,7 @@ export function VisitsStep({
       )}
 
       {!isLoading && !errorMessage && (doctors.length === 0 || clinics.length === 0) && (
-        <EmptyCatalogHint to="/providers" actionLabel="Add a doctor or clinic in Providers" />
+        <EmptyCatalogHint to="/providers" actionLabel={t("dailyEntries.journey.composer.addProviderProfile")} />
       )}
 
       {!isLoading &&
@@ -220,7 +222,7 @@ export function VisitsStep({
         doctors.length > 0 &&
         clinics.length > 0 && (
         <div className="rounded-2xl border border-dashed bg-muted/30 px-4 py-10 text-center text-sm text-muted-foreground">
-          No doctor visits added. Save whenever you are ready.
+          {t("dailyEntries.journey.composer.noVisitsAdded")}
         </div>
       )}
 
@@ -241,7 +243,7 @@ export function VisitsStep({
             key={field.id}
             title={doctorName}
             details={details}
-            removeLabel={`Remove visit with ${doctorName}`}
+            removeLabel={t("dailyEntries.journey.composer.removeVisit", { name: doctorName })}
             onRemove={() => onRemove(index)}
           />
         );

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Activity,
   CalendarDays,
@@ -32,6 +33,8 @@ const statusColors: Record<string, string> = {
 };
 
 export function ConditionCard({ condition, onDelete }: ConditionCardProps) {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "ar" ? "ar-EG" : "en-US";
   const {
     selectedId,
     openDetail,
@@ -41,6 +44,7 @@ export function ConditionCard({ condition, onDelete }: ConditionCardProps) {
   const selected = selectedId === condition.id;
   const { name } = condition.condition;
   const linkedSymptoms = linkedSymptomsByConditionId[condition.id] ?? [];
+  const statusLabel = t(`health.conditions.status${condition.status.charAt(0).toUpperCase()}${condition.status.slice(1)}`);
 
   return (
     <article
@@ -53,7 +57,7 @@ export function ConditionCard({ condition, onDelete }: ConditionCardProps) {
       <button
         type="button"
         onClick={() => openDetail(condition)}
-        aria-label={`View ${name}`}
+        aria-label={t("health.profile.viewItem", { name })}
         className="flex min-w-0 flex-1 cursor-pointer gap-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
@@ -71,7 +75,7 @@ export function ConditionCard({ condition, onDelete }: ConditionCardProps) {
                 statusColors[condition.status] ?? statusColors.active,
               )}
             >
-              {formatConditionStatus(condition.status)}
+              {statusLabel || formatConditionStatus(condition.status)}
             </span>
           </div>
 
@@ -80,7 +84,7 @@ export function ConditionCard({ condition, onDelete }: ConditionCardProps) {
               <span className="inline-flex items-center gap-1.5">
                 <CalendarDays className="h-3.5 w-3.5 shrink-0" aria-hidden />
                 <time dateTime={condition.diagnosedDate}>
-                  {formatDate(condition.diagnosedDate)}
+                  {formatDate(condition.diagnosedDate, locale)}
                 </time>
               </span>
             )}
@@ -120,23 +124,23 @@ export function ConditionCard({ condition, onDelete }: ConditionCardProps) {
       </button>
 
       <RowActionsMenu
-        label={`Actions for ${name}`}
+        label={t("health.profile.actionsFor", { name })}
         actions={[
           {
             id: "view",
-            label: "View",
+            label: t("health.profile.view"),
             icon: Eye,
             onSelect: () => openDetail(condition),
           },
           {
             id: "edit",
-            label: "Edit",
+            label: t("health.profile.edit"),
             icon: Pencil,
             onSelect: () => openEdit(condition),
           },
           {
             id: "delete",
-            label: "Delete",
+            label: t("health.profile.delete"),
             icon: Trash2,
             variant: "destructive",
             onSelect: onDelete,
@@ -148,6 +152,8 @@ export function ConditionCard({ condition, onDelete }: ConditionCardProps) {
 }
 
 export function ConditionDetail() {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "ar" ? "ar-EG" : "en-US";
   const {
     panel,
     linkedSymptomsByConditionId,
@@ -174,21 +180,21 @@ export function ConditionDetail() {
   const rows = [
     {
       icon: Activity,
-      label: "Status",
-      value: formatConditionStatus(condition.status),
+      label: t("health.conditions.status"),
+      value: t(`health.conditions.status${condition.status.charAt(0).toUpperCase()}${condition.status.slice(1)}`) || formatConditionStatus(condition.status),
     },
     condition.diagnosedDate
       ? {
           icon: CalendarDays,
-          label: "Diagnosed",
-          value: formatDate(condition.diagnosedDate),
+          label: t("health.conditions.diagnosed"),
+          value: formatDate(condition.diagnosedDate, locale),
         }
       : null,
     condition.description
-      ? { icon: FileText, label: "Description", value: condition.description }
+      ? { icon: FileText, label: t("health.conditions.description"), value: condition.description }
       : null,
     condition.notes
-      ? { icon: NotebookPen, label: "Notes", value: condition.notes }
+      ? { icon: NotebookPen, label: t("health.conditions.notes"), value: condition.notes }
       : null,
   ].filter(Boolean) as Array<{
     icon: typeof Activity;
@@ -214,13 +220,13 @@ export function ConditionDetail() {
         </div>
         <div className="min-w-0">
           <p className="truncate text-lg font-semibold leading-tight">{name}</p>
-          <p className="text-sm text-muted-foreground">Tracked condition</p>
+          <p className="text-sm text-muted-foreground">{t("health.conditions.tracked")}</p>
         </div>
       </div>
 
       {rows.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          No additional details recorded.
+          {t("health.conditions.noDetails")}
         </p>
       ) : (
         <dl className="space-y-3">
@@ -247,12 +253,12 @@ export function ConditionDetail() {
       <div className="space-y-3 border-t pt-4">
         <div className="flex items-center gap-2">
           <Stethoscope className="h-4 w-4 text-muted-foreground" aria-hidden />
-          <h4 className="text-sm font-semibold">Linked symptoms</h4>
+          <h4 className="text-sm font-semibold">{t("health.conditions.linkedSymptoms")}</h4>
         </div>
 
         {linkedSymptoms.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            No symptoms linked to this condition yet.
+            {t("health.conditions.noLinkedSymptoms")}
           </p>
         ) : (
           <ul className="space-y-2">
@@ -277,7 +283,7 @@ export function ConditionDetail() {
                   size="icon"
                   className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive"
                   disabled={isUnlinkingSymptom}
-                  aria-label={`Unlink ${link.userSymptom.catalog.name}`}
+                  aria-label={t("health.conditions.unlink", { name: link.userSymptom.catalog.name })}
                   onClick={() =>
                     void unlinkSymptom(condition.id, link.userSymptomId)
                   }
@@ -291,11 +297,11 @@ export function ConditionDetail() {
 
         {profileSymptoms.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            Add symptoms in your profile first, then link them here.
+            {t("health.conditions.addSymptomsFirst")}
           </p>
         ) : availableSymptoms.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            All profile symptoms are already linked.
+            {t("health.conditions.allSymptomsLinked")}
           </p>
         ) : (
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -304,9 +310,9 @@ export function ConditionDetail() {
               value={selectedSymptomId}
               onChange={(event) => setSelectedSymptomId(event.target.value)}
               disabled={isLinkingSymptom}
-              aria-label="Select symptom to link"
+              aria-label={t("health.conditions.selectSymptom")}
             >
-              <option value="">Select a symptom</option>
+              <option value="">{t("health.conditions.selectSymptomOption")}</option>
               {availableSymptoms.map((symptom) => (
                 <option key={symptom.id} value={symptom.id}>
                   {symptom.catalog.name}
@@ -323,7 +329,7 @@ export function ConditionDetail() {
               onClick={() => void handleLink()}
             >
               <Plus className="mr-1.5 h-4 w-4" aria-hidden />
-              Link
+              {t("health.conditions.link")}
             </Button>
           </div>
         )}

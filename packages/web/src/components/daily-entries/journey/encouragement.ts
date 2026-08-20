@@ -1,25 +1,25 @@
 import type { JourneyStepId } from "./steps";
 
 const CONTINUE_MESSAGES: Partial<Record<JourneyStepId, string>> = {
-  feelings: "Nice check-in",
-  symptoms: "You're doing great",
-  medications: "Good job",
-  conditions: "Almost there",
+  feelings: "dailyEntries.journey.messages.feelings",
+  symptoms: "dailyEntries.journey.messages.symptoms",
+  medications: "dailyEntries.journey.messages.medications",
+  conditions: "dailyEntries.journey.messages.conditions",
 };
 
 const SKIP_MESSAGES: Partial<Record<JourneyStepId, string>> = {
-  symptoms: "All good — onward",
-  medications: "No problem, keep going",
-  conditions: "Skipped. You're still doing great",
-  visits: "On to the next stop",
+  symptoms: "dailyEntries.journey.messages.skipSymptoms",
+  medications: "dailyEntries.journey.messages.skipMedications",
+  conditions: "dailyEntries.journey.messages.skipConditions",
+  visits: "dailyEntries.journey.messages.skipVisits",
 };
 
-export const FINISH_MESSAGE = "Well done today";
+export const FINISH_MESSAGE = "dailyEntries.journey.messages.finish";
 
-export function continueMessageFor(stepId: JourneyStepId): string {
-  return CONTINUE_MESSAGES[stepId] ?? "Great work";
+export function continueMessageFor(stepId: JourneyStepId, t: (key: string) => string): string {
+  return t(CONTINUE_MESSAGES[stepId] ?? "dailyEntries.journey.messages.defaultContinue");
 }
 
-export function skipMessageFor(stepId: JourneyStepId): string {
-  return SKIP_MESSAGES[stepId] ?? "Onward";
+export function skipMessageFor(stepId: JourneyStepId, t: (key: string) => string): string {
+  return t(SKIP_MESSAGES[stepId] ?? "dailyEntries.journey.messages.defaultSkip");
 }

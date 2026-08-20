@@ -39,6 +39,7 @@ export const updateReminderSettingsSchema = z
 
     reminderTime: reminderTimeSchema.nullable().optional(),
     timezone:timezoneSchema,
+    language: z.enum(["en", "ar"]).default("en"),
   })
   .superRefine((data, ctx) => {
     if (data.enabled && !data.reminderTime) {

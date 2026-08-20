@@ -6,6 +6,7 @@ import {
 } from "react";
 import { Database, Plus, Search } from "lucide-react";
 import { isAxiosError } from "axios";
+import { useTranslation } from "react-i18next";
 import type { Pagination as ApiPagination } from "../../lib/api/types";
 import { AsidePanel } from "../shared/AsidePanel";
 import { LoadingSpinner } from "../shared/LoadingSpinner";
@@ -93,18 +94,19 @@ export function CatalogManager<T>({
   getRowKey,
 }: CatalogManagerProps<T>) {
   const totalCount = pagination?.totalCount ?? 0;
+  const { t } = useTranslation();
 
   return (
     <div className="page-shell">
       <PageHeader
-        eyebrow="Reference catalog"
+        eyebrow={t("admin.referenceCatalog")}
         title={title}
         description={description}
         icon={Database}
         action={(
           <Button type="button" className="w-full sm:w-auto" onClick={onCreateOpen}>
             <Plus className="mr-1.5 h-4 w-4" aria-hidden />
-            Add record
+            {t("admin.addRecord")}
           </Button>
         )}
       />
@@ -114,14 +116,14 @@ export function CatalogManager<T>({
         <Input
           value={search}
           onChange={(event) => onSearchChange(event.target.value)}
-          placeholder="Search catalog…"
+          placeholder={t("admin.searchCatalog")}
           className="pl-9"
         />
       </div>
 
       {(isError || errorMessage) && (
         <p role="alert" className="rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive">
-          {errorMessage ?? "Failed to load catalog"}
+          {errorMessage ?? t("admin.failedLoadCatalog")}
         </p>
       )}
 
@@ -184,7 +186,7 @@ export function CatalogManager<T>({
           {createForm}
           <div className="flex gap-2 pt-2">
             <Button type="submit" disabled={isCreating}>
-              {isCreating ? "Saving…" : "Save"}
+              {isCreating ? t("admin.saving") : t("admin.save")}
             </Button>
             <Button
               type="button"
@@ -192,7 +194,7 @@ export function CatalogManager<T>({
               onClick={onCreateClose}
               disabled={isCreating}
             >
-              Cancel
+              {t("admin.cancel")}
             </Button>
           </div>
         </form>

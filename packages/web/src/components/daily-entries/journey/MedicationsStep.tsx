@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { FieldArrayWithId } from "react-hook-form";
 import {
   dailyEntryFormSchema,
@@ -45,6 +46,7 @@ export function MedicationsStep({
   onRemove,
   onComposerOpenChange,
 }: MedicationsStepProps) {
+  const { t } = useTranslation();
   const [composerOpen, setComposerOpen] = useState(false);
   const [draft, setDraft] = useState(emptyDraft);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -84,11 +86,11 @@ export function MedicationsStep({
           onClick={openComposer}
           disabled={isLoading || Boolean(errorMessage) || composerOpen || medications.length === 0}
         >
-          Add medication
+          {t("dailyEntries.journey.composer.addMedication")}
         </Button>
       </div>
 
-      {isLoading && <p className="text-sm text-muted-foreground">Loading medications...</p>}
+      {isLoading && <p className="text-sm text-muted-foreground">{t("dailyEntries.journey.composer.loadingMedications")}</p>}
       {errorMessage && (
         <p role="alert" className="text-sm text-destructive">
           {errorMessage}
@@ -97,13 +99,13 @@ export function MedicationsStep({
 
       {composerOpen && (
         <ItemComposer
-          title="New medication"
+          title={t("dailyEntries.journey.composer.newMedication")}
           onCancel={closeComposer}
           onConfirm={confirmComposer}
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <Label htmlFor="composer-medication">Medication</Label>
+              <Label htmlFor="composer-medication">{t("dailyEntries.journey.composer.medication")}</Label>
               <select
                 id="composer-medication"
                 autoFocus
@@ -120,7 +122,7 @@ export function MedicationsStep({
                   fieldErrors.userMedicationId,
                 )}
               >
-                <option value="">Select a medication</option>
+                <option value="">{t("dailyEntries.journey.composer.selectMedication")}</option>
                 {medications.map((medication) => (
                   <option key={medication.id} value={medication.id}>
                     {medication.medication.name}
@@ -133,13 +135,13 @@ export function MedicationsStep({
               />
             </div>
             <div>
-              <Label htmlFor="composer-quantity">Quantity</Label>
+              <Label htmlFor="composer-quantity">{t("dailyEntries.journey.composer.quantity")}</Label>
               <Input
                 id="composer-quantity"
                 type="number"
                 min="0"
                 step="any"
-                placeholder="e.g. 2"
+                placeholder={t("dailyEntries.journey.composer.quantityPlaceholder")}
                 className="mt-1.5"
                 value={draft.quantity}
                 onChange={(event) =>
@@ -153,7 +155,7 @@ export function MedicationsStep({
               <ComposerFieldError id="composer-quantity-error" error={fieldErrors.quantity} />
             </div>
             <div>
-              <Label htmlFor="composer-unit">Unit</Label>
+              <Label htmlFor="composer-unit">{t("dailyEntries.journey.composer.unit")}</Label>
               <select
                 id="composer-unit"
                 className={selectFieldClass}
@@ -187,11 +189,11 @@ export function MedicationsStep({
                   }))
                 }
               />
-              <Label htmlFor="composer-taken">Medication was taken</Label>
+              <Label htmlFor="composer-taken">{t("dailyEntries.journey.composer.taken")}</Label>
             </div>
           </div>
           <div className="mt-4">
-            <Label htmlFor="composer-taken-at">Taken at</Label>
+            <Label htmlFor="composer-taken-at">{t("dailyEntries.journey.composer.takenAt")}</Label>
             <Input
               id="composer-taken-at"
               type="time"
@@ -206,11 +208,11 @@ export function MedicationsStep({
             />
           </div>
           <div className="mt-4">
-            <Label htmlFor="composer-medication-notes">Notes</Label>
+            <Label htmlFor="composer-medication-notes">{t("dailyEntries.journey.composer.notes")}</Label>
             <textarea
               id="composer-medication-notes"
               rows={3}
-              placeholder="Optional notes..."
+              placeholder={t("dailyEntries.journey.composer.optionalNotes")}
               className={textareaFieldClass}
               value={draft.notes ?? ""}
               onChange={(event) =>
@@ -228,12 +230,12 @@ export function MedicationsStep({
       )}
 
       {!isLoading && !errorMessage && medications.length === 0 && (
-        <EmptyCatalogHint to="/medications" actionLabel="Add a medication" />
+        <EmptyCatalogHint to="/medications" actionLabel={t("dailyEntries.journey.composer.addMedicationProfile")} />
       )}
 
       {!isLoading && !errorMessage && fields.length === 0 && !composerOpen && medications.length > 0 && (
         <div className="rounded-2xl border border-dashed bg-muted/30 px-4 py-10 text-center text-sm text-muted-foreground">
-          No medications added. You can skip this stop.
+          {t("dailyEntries.journey.composer.noMedicationsAdded")}
         </div>
       )}
 
@@ -243,9 +245,9 @@ export function MedicationsStep({
             .name ?? "Medication";
         const details = [
           `${field.quantity} ${field.unit}`.trim(),
-          field.taken ? "Taken" : "Not taken",
+          field.taken ? t("dailyEntries.journey.composer.takenValue") : t("dailyEntries.journey.composer.notTakenValue"),
         ];
-        if (field.takenAt) details.push(`At ${field.takenAt}`);
+        if (field.takenAt) details.push(t("dailyEntries.journey.composer.atValue", { value: field.takenAt }));
         if (field.notes?.trim()) details.push(field.notes.trim());
 
         return (
@@ -253,7 +255,7 @@ export function MedicationsStep({
             key={field.id}
             title={medicationName}
             details={details}
-            removeLabel={`Remove ${medicationName}`}
+            removeLabel={t("dailyEntries.journey.composer.remove", { name: medicationName })}
             onRemove={() => onRemove(index)}
           />
         );

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useDoctorsContext } from "../../../providers/DoctorsProvider";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
@@ -5,6 +6,7 @@ import { Label } from "../../ui/label";
 import { DoctorAutocomplete } from "./DoctorAutocomplete";
 
 export function DoctorForm() {
+  const { t } = useTranslation();
   const {
     formMode,
     isFormBusy,
@@ -36,7 +38,7 @@ export function DoctorForm() {
       className="space-y-4"
     >
       <div className="space-y-2">
-        <Label htmlFor="doctor-name">Doctor</Label>
+        <Label htmlFor="doctor-name">{t("health.doctors.doctor")}</Label>
         {formMode === "edit" ? (
           <Input
             id="doctor-name"
@@ -54,8 +56,7 @@ export function DoctorForm() {
         )}
         {formMode === "create" && (
           <p className="text-xs text-muted-foreground">
-            Search the doctor catalog. Fill in the details below if not
-            found.
+            {t("health.doctors.searchHelp")}
           </p>
         )}
       </div>
@@ -63,10 +64,10 @@ export function DoctorForm() {
       {isNewDoctor && formMode === "create" && (
         <>
           <div className="space-y-2">
-            <Label htmlFor="doctor-specialty">Specialty</Label>
+            <Label htmlFor="doctor-specialty">{t("health.doctors.specialty")}</Label>
             <Input
               id="doctor-specialty"
-              placeholder="e.g. Cardiology"
+              placeholder={t("health.doctors.exampleSpecialty")}
               disabled={isFormBusy}
               {...register("specialty")}
             />
@@ -78,10 +79,10 @@ export function DoctorForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="doctor-phone">Phone</Label>
+            <Label htmlFor="doctor-phone">{t("health.doctors.phone")}</Label>
             <Input
               id="doctor-phone"
-              placeholder="e.g. +1-555-0200"
+              placeholder={t("health.doctors.examplePhone")}
               disabled={isFormBusy}
               {...register("phone")}
             />
@@ -95,21 +96,21 @@ export function DoctorForm() {
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="doctor-clinic">Clinic</Label>
+        <Label htmlFor="doctor-clinic">{t("doctorVisits.clinic")}</Label>
         <select
           id="doctor-clinic"
           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={isFormBusy}
           {...register("userClinicId")}
         >
-          <option value="">None</option>
+          <option value="">{t("health.doctors.none")}</option>
           {savedClinics.map((c) => (
             <option key={c.id} value={c.id}>
               {c.clinic.name}
             </option>
           ))}
           {editingClinicMissing && (
-            <option value={editingClinicId!}>Linked clinic</option>
+            <option value={editingClinicId!}>{t("health.doctors.linkedClinic")}</option>
           )}
         </select>
         {formErrors.userClinicId && (
@@ -120,10 +121,10 @@ export function DoctorForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="doctor-notes">Notes</Label>
+        <Label htmlFor="doctor-notes">{t("health.doctors.notes")}</Label>
         <Input
           id="doctor-notes"
-          placeholder="Optional notes"
+          placeholder={t("health.doctors.optionalNotes")}
           disabled={isFormBusy}
           {...register("notes")}
         />
@@ -138,11 +139,11 @@ export function DoctorForm() {
         <Button type="submit" disabled={isFormBusy}>
           {isFormBusy
             ? formMode === "edit"
-              ? "Saving\u2026"
-              : "Adding\u2026"
+              ? t("health.doctors.saving")
+              : t("health.doctors.adding")
             : formMode === "edit"
-              ? "Save changes"
-              : "Add doctor"}
+              ? t("health.doctors.saveChanges")
+              : t("health.doctors.addDoctor")}
         </Button>
         <Button
           type="button"
@@ -150,7 +151,7 @@ export function DoctorForm() {
           disabled={isFormBusy}
           onClick={cancelForm}
         >
-          Cancel
+          {t("health.doctors.cancel")}
         </Button>
       </div>
     </form>

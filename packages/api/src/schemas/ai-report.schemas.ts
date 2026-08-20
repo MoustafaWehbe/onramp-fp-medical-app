@@ -30,6 +30,7 @@ export const generateAiReportSchema = z
         message: "End date cannot be in the future",
       }),
     reportType: z.string().trim().max(50).default("physician_ready"),
+    language: z.enum(["en", "ar"]).default("en"),
   })
   .refine((data) => new Date(data.startDate) <= new Date(data.endDate), {
     message: "startDate must be before or equal to endDate",

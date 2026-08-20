@@ -2,6 +2,8 @@ import { LogOut, Menu } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { BrandMark } from "./BrandMark";
 import { ThemeToggle } from "./ThemeToggle";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -9,7 +11,9 @@ interface HeaderProps {
 
 export function Header({ onMenuClick }: HeaderProps) {
   const { user, logout } = useAuth();
-  const today = new Intl.DateTimeFormat("en-US", {
+  const { t , i18n} = useTranslation();
+  const today = new Intl.DateTimeFormat(
+    i18n.language === "ar" ? "ar-LB" : "en-US", {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -20,13 +24,13 @@ export function Header({ onMenuClick }: HeaderProps) {
       <button
         onClick={onMenuClick}
         className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
-        aria-label="Open navigation"
+        aria-label={t("common.openNavigation")}
       >
         <Menu className="h-5 w-5" aria-hidden />
       </button>
       <BrandMark className="md:hidden" />
       <p className="hidden text-sm font-medium text-muted-foreground lg:block">{today}</p>
-      <div className="ml-auto hidden min-w-0 items-center gap-3 sm:flex">
+      <div className="ms-auto hidden min-w-0 items-center gap-3 sm:flex">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-sm font-bold text-primary-foreground shadow-sm">
           {user?.name?.charAt(0).toUpperCase()}
         </div>
@@ -43,7 +47,7 @@ export function Header({ onMenuClick }: HeaderProps) {
         className="flex h-11 cursor-pointer items-center gap-2 rounded-xl px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <LogOut className="h-4 w-4" aria-hidden />
-        <span className="hidden sm:inline">Logout</span>
+        <span className="hidden sm:inline">{t("common.logout")}</span>
       </button>
     </header>
   );

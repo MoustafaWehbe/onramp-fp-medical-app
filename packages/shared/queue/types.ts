@@ -15,6 +15,7 @@ export interface EmailJobData {
   variables?: Record<string, string>;
   userId?: string;
   localDate?: string;
+  language?: "en" | "ar";
 }
 
 export interface EmbeddingsJobData {

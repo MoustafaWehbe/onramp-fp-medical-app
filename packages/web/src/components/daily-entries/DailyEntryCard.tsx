@@ -7,6 +7,7 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { DailyEntry } from "../../lib/daily-entries/daily-entries-exports";
 import { formatEntryDate, getTodayDate } from "../../lib/daily-entries/daily-entries-exports";
 import { cn } from "../../lib/utils";
@@ -20,23 +21,25 @@ interface DailyEntryCardProps {
 
 export function DailyEntryCard({ entry, onDelete }: DailyEntryCardProps) {
   const { selectedId, openDetail, openEdit } = useDailyEntriesContext();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "ar" ? "ar-EG" : "en-US";
   const selected = selectedId === entry.id;
   const canEdit = entry.entryDate === getTodayDate();
   const journal = entry.journalNotes?.trim() || null;
-  const dateLabel = formatEntryDate(entry.entryDate);
+  const dateLabel = formatEntryDate(entry.entryDate, locale);
 
   const summaryParts = [
     entry.symptoms.length > 0
-      ? `${entry.symptoms.length} ${entry.symptoms.length === 1 ? "symptom" : "symptoms"}`
+      ? `${entry.symptoms.length} ${entry.symptoms.length === 1 ? t("dailyEntries.symptomSingular") : t("dailyEntries.symptomPlural")}`
       : null,
     entry.medications.length > 0
-      ? `${entry.medications.length} ${entry.medications.length === 1 ? "medication" : "medications"}`
+      ? `${entry.medications.length} ${entry.medications.length === 1 ? t("dailyEntries.medicationSingular") : t("dailyEntries.medicationPlural")}`
       : null,
     entry.conditions.length > 0
-      ? `${entry.conditions.length} ${entry.conditions.length === 1 ? "condition" : "conditions"}`
+      ? `${entry.conditions.length} ${entry.conditions.length === 1 ? t("dailyEntries.conditionSingular") : t("dailyEntries.conditionPlural")}`
       : null,
     entry.doctorVisits.length > 0
-      ? `${entry.doctorVisits.length} ${entry.doctorVisits.length === 1 ? "visit" : "visits"}`
+      ? `${entry.doctorVisits.length} ${entry.doctorVisits.length === 1 ? t("dailyEntries.visitSingular") : t("dailyEntries.visitPlural")}`
       : null,
   ].filter(Boolean) as string[];
 
@@ -55,7 +58,7 @@ export function DailyEntryCard({ entry, onDelete }: DailyEntryCardProps) {
       <button
         type="button"
         onClick={viewEntry}
-        aria-label={`View daily entry for ${dateLabel}`}
+        aria-label={t("dailyEntries.viewEntryFor", { date: dateLabel })}
         className="flex min-w-0 flex-1 cursor-pointer gap-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
@@ -71,13 +74,13 @@ export function DailyEntryCard({ entry, onDelete }: DailyEntryCardProps) {
               {entry.moodRating != null && (
                 <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
                   <HeartPulse className="h-3 w-3" aria-hidden />
-                  Mood {entry.moodRating}/5
+                  {t("dailyEntries.moodSummary", { value: entry.moodRating })}
                 </span>
               )}
               {entry.sleepHours != null && (
                 <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
                   <Moon className="h-3 w-3" aria-hidden />
-                  {entry.sleepHours}h sleep
+                  {t("dailyEntries.sleepSummary", { hours: entry.sleepHours })}
                 </span>
               )}
             </div>
@@ -99,11 +102,11 @@ export function DailyEntryCard({ entry, onDelete }: DailyEntryCardProps) {
       </button>
 
       <RowActionsMenu
-        label={`Actions for ${dateLabel}`}
+        label={t("dailyEntries.viewEntryFor", { date: dateLabel })}
         actions={[
           {
             id: "view",
-            label: "View",
+            label: t("dailyEntries.view"),
             icon: Eye,
             onSelect: viewEntry,
           },
@@ -111,7 +114,7 @@ export function DailyEntryCard({ entry, onDelete }: DailyEntryCardProps) {
             ? [
                 {
                   id: "edit",
-                  label: "Edit",
+                  label: t("dailyEntries.edit"),
                   icon: Pencil,
                   onSelect: () => openEdit(entry),
                 },
@@ -119,7 +122,7 @@ export function DailyEntryCard({ entry, onDelete }: DailyEntryCardProps) {
             : []),
           {
             id: "delete",
-            label: "Delete",
+            label: t("dailyEntries.delete"),
             icon: Trash2,
             variant: "destructive" as const,
             onSelect: onDelete,

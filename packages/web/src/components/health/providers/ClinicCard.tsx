@@ -7,6 +7,7 @@ import {
   Phone,
   Trash2,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { UserClinic } from "../../../lib/health/health-export";
 import { cn } from "../../../lib/utils";
 import { useClinicsContext } from "../../../providers/ClinicsProvider";
@@ -18,6 +19,7 @@ interface ClinicCardProps {
 }
 
 export function ClinicCard({ clinic, onDelete }: ClinicCardProps) {
+  const { t } = useTranslation();
   const { selectedId, openDetail, openEdit } = useClinicsContext();
   const selected = selectedId === clinic.id;
   const { name, address, phone } = clinic.clinic;
@@ -33,7 +35,7 @@ export function ClinicCard({ clinic, onDelete }: ClinicCardProps) {
       <button
         type="button"
         onClick={() => openDetail(clinic)}
-        aria-label={`View ${name}`}
+        aria-label={t("health.clinics.actionsFor", { name })}
         className="flex min-w-0 flex-1 cursor-pointer gap-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
@@ -75,23 +77,23 @@ export function ClinicCard({ clinic, onDelete }: ClinicCardProps) {
       </button>
 
       <RowActionsMenu
-        label={`Actions for ${name}`}
+        label={t("health.clinics.actionsFor", { name })}
         actions={[
           {
             id: "view",
-            label: "View",
+            label: t("health.clinics.view"),
             icon: Eye,
             onSelect: () => openDetail(clinic),
           },
           {
             id: "edit",
-            label: "Edit",
+            label: t("health.clinics.edit"),
             icon: Pencil,
             onSelect: () => openEdit(clinic),
           },
           {
             id: "delete",
-            label: "Delete",
+            label: t("health.clinics.delete"),
             icon: Trash2,
             variant: "destructive",
             onSelect: onDelete,
@@ -103,6 +105,7 @@ export function ClinicCard({ clinic, onDelete }: ClinicCardProps) {
 }
 
 export function ClinicDetail() {
+  const { t } = useTranslation();
   const { panel } = useClinicsContext();
   if (panel.kind !== "detail") return null;
 
@@ -111,13 +114,13 @@ export function ClinicDetail() {
 
   const rows = [
     address
-      ? { icon: MapPin, label: "Address", value: address }
+      ? { icon: MapPin, label: t("health.clinics.address"), value: address }
       : null,
     phone
-      ? { icon: Phone, label: "Phone", value: phone }
+      ? { icon: Phone, label: t("health.clinics.phone"), value: phone }
       : null,
     clinic.notes
-      ? { icon: NotebookPen, label: "Notes", value: clinic.notes }
+      ? { icon: NotebookPen, label: t("health.clinics.notes"), value: clinic.notes }
       : null,
   ].filter(Boolean) as Array<{
     icon: typeof Building2;
@@ -133,13 +136,13 @@ export function ClinicDetail() {
         </div>
         <div className="min-w-0">
           <p className="truncate text-lg font-semibold leading-tight">{name}</p>
-          <p className="text-sm text-muted-foreground">Saved clinic</p>
+          <p className="text-sm text-muted-foreground">{t("health.clinics.saved")}</p>
         </div>
       </div>
 
       {rows.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          No additional details recorded.
+          {t("health.clinics.noDetailsRecorded")}
         </p>
       ) : (
         <dl className="space-y-3">

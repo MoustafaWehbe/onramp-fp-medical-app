@@ -1,8 +1,10 @@
 import { UserRound } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../hooks/useAuth";
 import { SectionPanel } from "../shared/SectionPanel";
 
 export function AccountPanel() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const initials = user?.name
     ? user.name
@@ -15,8 +17,8 @@ export function AccountPanel() {
 
   return (
     <SectionPanel
-      title="Account"
-      description="Your profile as it appears in HealthTrack."
+      title={t("settings.account.title")}
+      description={t("settings.account.description")}
       icon={UserRound}
     >
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
@@ -26,13 +28,13 @@ export function AccountPanel() {
         <dl className="grid min-w-0 flex-1 gap-3 sm:grid-cols-2">
           <div>
             <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Name
+              {t("settings.account.name")}
             </dt>
             <dd className="mt-0.5 truncate text-sm font-semibold">{user?.name}</dd>
           </div>
           <div>
             <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Email
+              {t("settings.account.email")}
             </dt>
             <dd className="mt-0.5 truncate text-sm font-semibold">{user?.email}</dd>
           </div>

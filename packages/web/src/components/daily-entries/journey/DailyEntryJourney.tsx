@@ -1,4 +1,5 @@
 import { useRef, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Button } from "../../ui/button";
@@ -38,6 +39,7 @@ export function DailyEntryJourney({
   onSkip,
   onCancel,
 }: DailyEntryJourneyProps) {
+  const { t } = useTranslation();
   const rootRef = useRef<HTMLDivElement>(null);
   const stepRef = useRef<HTMLDivElement>(null);
   const isLast = currentStep === LAST_JOURNEY_STEP;
@@ -67,21 +69,21 @@ export function DailyEntryJourney({
 
   const submitLabel = isBusy
     ? isCreateMode
-      ? "Submitting..."
+      ? t("dailyEntries.journey.submitting")
       : isEditMode
-        ? "Updating..."
-        : "Saving..."
+        ? t("dailyEntries.journey.updating")
+        : t("dailyEntries.journey.submitting")
     : isCreateMode
-      ? "Save entry"
+      ? t("dailyEntries.journey.saveEntry")
       : isEditMode
-        ? "Update entry"
-        : "Save entry";
+        ? t("dailyEntries.journey.updateEntry")
+        : t("dailyEntries.journey.saveEntry");
 
   return (
     <div ref={rootRef} className="relative flex min-h-0 flex-1 flex-col">
       <div className="shrink-0 border-b border-border/70 px-4 pb-4 pt-1 sm:px-6">
         <p className="mb-3 text-center text-[0.65rem] font-bold uppercase tracking-[0.16em] text-primary">
-          Stop {currentStep + 1} of {JOURNEY_STEPS.length}
+          {t("dailyEntries.journey.stepLabel", { current: currentStep + 1, total: JOURNEY_STEPS.length })}
         </p>
         <CheckInTrail currentStep={currentStep} />
       </div>
@@ -98,9 +100,9 @@ export function DailyEntryJourney({
 
         <div ref={stepRef}>
           <div className="mb-5">
-            <h3 className="text-lg font-bold tracking-tight">{stepMeta.title}</h3>
+            <h3 className="text-lg font-bold tracking-tight">{t(`dailyEntries.journey.steps.${stepMeta.id}.title`)}</h3>
             <p className="mt-1 text-sm leading-6 text-muted-foreground">
-              {stepMeta.description}
+              {t(`dailyEntries.journey.steps.${stepMeta.id}.description`)}
             </p>
           </div>
           {children}
@@ -116,7 +118,7 @@ export function DailyEntryJourney({
             onClick={currentStep === 0 ? onCancel : onBack}
             disabled={isBusy || finishing || navLocked || burstLocked}
           >
-            {currentStep === 0 ? "Cancel" : "Back"}
+            {currentStep === 0 ? t("dailyEntries.journey.cancel") : t("dailyEntries.journey.back")}
           </Button>
 
           <div className="flex flex-1 flex-col gap-2 sm:flex-row sm:justify-end">
@@ -128,7 +130,7 @@ export function DailyEntryJourney({
                 onClick={onSkip}
                 disabled={isBusy || finishing || navLocked || burstLocked}
               >
-                Skip
+                {t("dailyEntries.journey.skip")}
               </Button>
             )}
             {isLast ? (
@@ -142,15 +144,15 @@ export function DailyEntryJourney({
                 onClick={onContinue}
                 disabled={isBusy || finishing || navLocked || burstLocked}
               >
-                Continue
+                {t("dailyEntries.journey.continue")}
               </Button>
             )}
           </div>
         </div>
       </div>
 
-      {burstMessage && !finishing && <StepCompleteBurst message={burstMessage} />}
-      {finishing && <StepCompleteBurst message={FINISH_MESSAGE} finish />}
+      {burstMessage && !finishing && <StepCompleteBurst message={t(burstMessage)} />}
+      {finishing && <StepCompleteBurst message={t(FINISH_MESSAGE)} finish />}
     </div>
   );
 }

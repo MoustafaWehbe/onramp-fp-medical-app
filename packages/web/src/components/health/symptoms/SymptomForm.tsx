@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { useSymptomsContext } from "../../../providers/SymptomsProvider";
 import { Button } from "../../ui/button";
 import { Label } from "../../ui/label";
 import { SymptomAutocomplete } from "./SymptomAutocomplete";
 
 export function SymptomForm() {
+  const { t } = useTranslation();
   const {
     formMode,
     isFormBusy,
@@ -21,7 +23,7 @@ export function SymptomForm() {
       className="space-y-4"
     >
       <div className="space-y-2">
-        <Label htmlFor="symptom-name">Symptom</Label>
+        <Label htmlFor="symptom-name">{t("health.symptoms.symptom")}</Label>
         <SymptomAutocomplete id="symptom-name" />
         {formErrors.nameQuery && (
           <p className="text-xs text-destructive">
@@ -29,13 +31,13 @@ export function SymptomForm() {
           </p>
         )}
         <p className="text-sm leading-5 text-muted-foreground">
-          Choose a suggested symptom, or select “Use your wording” to save exactly what you typed.
+          {t("health.symptoms.help")}
         </p>
       </div>
 
       <div className="flex flex-wrap gap-2">
         <Button type="submit" disabled={isFormBusy}>
-          {isFormBusy ? "Adding…" : "Add symptom"}
+          {isFormBusy ? t("health.symptoms.adding") : t("health.symptoms.addSymptom")}
         </Button>
         <Button
           type="button"
@@ -43,7 +45,7 @@ export function SymptomForm() {
           disabled={isFormBusy}
           onClick={cancelForm}
         >
-          Cancel
+          {t("health.symptoms.cancel")}
         </Button>
       </div>
     </form>

@@ -16,10 +16,12 @@ export interface ReminderSettings {
   enabled: boolean;
   reminderTime: string | null;
   timezone: string;
+  language: "en" | "ar";
 }
 
 export interface ReminderSettingsFormValues {
   enabled: boolean;
   reminderTime : string | null;
   timezone: string;
+  language: "en" | "ar";
 }

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, Mail } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../hooks/useAuth";
 import { useSettingsContext } from "../../providers/SettingsProvider";
 import {
@@ -17,6 +18,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
 export function SecurityPanel() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { logout, updateUser } = useAuth();
   const {
@@ -87,8 +89,8 @@ export function SecurityPanel() {
 
   return (
     <SectionPanel
-      title="Security"
-      description="Update the email and password used to sign in."
+      title={t("settings.security.title")}
+      description={t("settings.security.description")}
       icon={Lock}
     >
       <div className="space-y-3">
@@ -98,9 +100,9 @@ export function SecurityPanel() {
               <Mail className="h-5 w-5" aria-hidden />
             </span>
             <div className="min-w-0">
-              <p className="font-semibold">Email address</p>
+              <p className="font-semibold">{t("settings.security.emailAddress")}</p>
               <p className="text-sm text-muted-foreground">
-                {emailSuccess ?? "Change the email you use to log in."}
+                {emailSuccess ?? t("settings.security.emailStatusChange")}
               </p>
             </div>
           </div>
@@ -114,7 +116,7 @@ export function SecurityPanel() {
               setEmailOpen((open) => !open);
             }}
           >
-            {emailOpen ? "Cancel" : "Change"}
+            {emailOpen ? t("common.cancel") : t("common.change")}
           </Button>
         </div>
 
@@ -124,7 +126,7 @@ export function SecurityPanel() {
             className="space-y-4 rounded-2xl border border-border/70 p-4"
           >
             <div className="space-y-2">
-              <Label htmlFor="email-current-password">Current password</Label>
+              <Label htmlFor="email-current-password">{t("settings.security.currentPassword")}</Label>
               <Input
                 id="email-current-password"
                 type="password"
@@ -139,7 +141,7 @@ export function SecurityPanel() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="new-email">New email</Label>
+              <Label htmlFor="new-email">{t("settings.security.newEmail")}</Label>
               <Input
                 id="new-email"
                 type="email"
@@ -159,7 +161,7 @@ export function SecurityPanel() {
               </p>
             )}
             <Button type="submit" disabled={isEmailBusy}>
-              {isEmailBusy ? "Updating…" : "Update email"}
+              {isEmailBusy ? t("settings.security.updatingEmail") : t("settings.security.updateEmail")}
             </Button>
           </form>
         )}
@@ -170,11 +172,11 @@ export function SecurityPanel() {
               <Lock className="h-5 w-5" aria-hidden />
             </span>
             <div className="min-w-0">
-              <p className="font-semibold">Password</p>
+              <p className="font-semibold">{t("settings.security.password")}</p>
               <p className="text-sm text-muted-foreground">
                 {passwordSuccess
-                  ? "Redirecting to login…"
-                  : "Use a strong password with a letter and a number."}
+                  ? t("settings.security.passwordRedirect")
+                  : t("settings.security.passwordHint")}
               </p>
             </div>
           </div>
@@ -195,7 +197,7 @@ export function SecurityPanel() {
                 setPasswordOpen((open) => !open);
               }}
             >
-              {passwordOpen ? "Cancel" : "Change"}
+              {passwordOpen ? t("common.cancel") : t("common.change")}
             </Button>
           )}
         </div>
@@ -206,7 +208,7 @@ export function SecurityPanel() {
             className="space-y-4 rounded-2xl border border-border/70 p-4"
           >
             <div className="space-y-2">
-              <Label htmlFor="password-current-password">Current password</Label>
+              <Label htmlFor="password-current-password">{t("settings.security.currentPassword")}</Label>
               <Input
                 id="password-current-password"
                 type="password"
@@ -221,7 +223,7 @@ export function SecurityPanel() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="new-password">New password</Label>
+              <Label htmlFor="new-password">{t("settings.security.newPassword")}</Label>
               <Input
                 id="new-password"
                 type="password"
@@ -236,7 +238,7 @@ export function SecurityPanel() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirm-new-password">Confirm new password</Label>
+              <Label htmlFor="confirm-new-password">{t("settings.security.confirmNewPassword")}</Label>
               <Input
                 id="confirm-new-password"
                 type="password"

@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import {
   CatalogManager,
   getCatalogErrorMessage,
@@ -13,6 +14,7 @@ import {
 import type { ConditionCatalog } from "../../lib/health/conditions/types";
 
 export function AdminConditions() {
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search, 300);
@@ -41,7 +43,7 @@ export function AdminConditions() {
     event.preventDefault();
     const trimmedName = name.trim();
     if (!trimmedName) {
-      setFormError("Name is required");
+      setFormError(t("admin.validation.nameRequired"));
       return;
     }
 
@@ -51,17 +53,17 @@ export function AdminConditions() {
       setCurrentPage(1);
       closeCreate();
     } catch (error) {
-      setFormError(getCatalogErrorMessage(error, "Failed to add condition"));
+      setFormError(getCatalogErrorMessage(error, t("admin.errors.addCondition")));
     }
   }
 
   return (
     <CatalogManager<ConditionCatalog>
-      title="Conditions"
-      description="Shared condition catalog used by patient health profiles."
+      title={t("admin.catalogs.conditions.title")}
+      description={t("admin.catalogs.conditions.description")}
       columns={[
         {
-          header: "Name",
+          header: t("admin.fields.name"),
           cell: (item) => <span className="font-medium">{item.name}</span>,
         },
       ]}
@@ -70,14 +72,14 @@ export function AdminConditions() {
       isError={listQuery.isError}
       errorMessage={
         listQuery.isError
-          ? getCatalogErrorMessage(listQuery.error, "Failed to load conditions")
+          ? getCatalogErrorMessage(listQuery.error, t("admin.errors.loadConditions"))
           : null
       }
       pagination={listQuery.data?.pagination ?? null}
       search={search}
       onSearchChange={setSearch}
       onPageChange={setCurrentPage}
-      createTitle="Add condition"
+      createTitle={t("admin.catalogs.conditions.title")}
       createOpen={createOpen}
       onCreateOpen={() => {
         resetForm();
@@ -87,11 +89,11 @@ export function AdminConditions() {
       formError={formError}
       isCreating={createMutation.isPending}
       onCreateSubmit={onCreateSubmit}
-      emptyLabel="No conditions in the catalog yet."
+      emptyLabel={t("admin.catalogs.conditions.empty")}
       getRowKey={(item) => item.id}
       createForm={
         <div className="space-y-2">
-          <Label htmlFor="condition-name">Name</Label>
+          <Label htmlFor="condition-name">{t("admin.fields.name")}</Label>
           <Input
             id="condition-name"
             value={name}

@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -15,38 +16,83 @@ import {
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { BrandMark } from "./BrandMark";
+import i18n from "@/i18n";
 
 const navSections = [
   {
-    label: "Main",
-    items: [{ to: "/dashboard", label: "Dashboard", icon: LayoutDashboard }],
-  },
-  {
-    label: "Daily Log",
-    items: [{ to: "/log/view", label: "View Log", icon: ClipboardPlus }],
-  },
-  {
-    label: "Health",
+    label: "navigation.main",
     items: [
-      { to: "/health-profile", label: "Health Profile", icon: HeartPulse },
-      { to: "/medications", label: "Medications", icon: Pill },
-      { to: "/providers", label: "Providers", icon: Stethoscope },
+      {
+        to: "/dashboard",
+        label: "navigation.dashboard",
+        icon: LayoutDashboard,
+      },
     ],
   },
   {
-    label: "History",
-    items: [{ to: "/visits", label: "Doctor Visits", icon: CalendarDays }],
-  },
-  {
-    label: "Insights",
+    label: "navigation.dailyLog",
     items: [
-      { to: "/analytics", label: "Analytics", icon: BarChart3 },
-      { to: "/ai-reports", label: "AI Reports", icon: FileText },
+      {
+        to: "/log/view",
+        label: "navigation.viewLog",
+        icon: ClipboardPlus,
+      },
     ],
   },
   {
-    label: "Account",
-    items: [{ to: "/settings", label: "Settings", icon: Settings }],
+    label: "navigation.health",
+    items: [
+      {
+        to: "/health-profile",
+        label: "navigation.healthProfile",
+        icon: HeartPulse,
+      },
+      {
+        to: "/medications",
+        label: "navigation.medications",
+        icon: Pill,
+      },
+      {
+        to: "/providers",
+        label: "navigation.providers",
+        icon: Stethoscope,
+      },
+    ],
+  },
+  {
+    label: "navigation.history",
+    items: [
+      {
+        to: "/visits",
+        label: "navigation.doctorVisits",
+        icon: CalendarDays,
+      },
+    ],
+  },
+  {
+    label: "navigation.insights",
+    items: [
+      {
+        to: "/analytics",
+        label: "navigation.analytics",
+        icon: BarChart3,
+      },
+      {
+        to: "/ai-reports",
+        label: "navigation.aiReports",
+        icon: FileText,
+      },
+    ],
+  },
+  {
+    label: "navigation.account",
+    items: [
+      {
+        to: "/settings",
+        label: "navigation.settings",
+        icon: Settings,
+      },
+    ],
   },
 ];
 
@@ -55,6 +101,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ onNavigate }: SidebarProps) {
+  const { t } = useTranslation();
   const rootRef = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -67,9 +114,10 @@ export function Sidebar({ onNavigate }: SidebarProps) {
         gsap.set(items, { opacity: 1, x: 0 });
       });
       mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const isArabic = i18n.language === "ar";
         gsap.fromTo(
           items,
-          { opacity: 0, x: -10 },
+          { opacity: 0, x: isArabic ? 10 : -10 },
           { opacity: 1, x: 0, duration: 0.32, stagger: 0.035, ease: "power2.out" },
         );
       });
@@ -82,7 +130,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   return (
     <aside
       ref={rootRef}
-      className="flex h-full w-64 shrink-0 flex-col border-r border-border/60 bg-card"
+      className="flex h-full w-64 shrink-0 flex-col border-s border-border/60 bg-card"
     >
       <div className="flex h-16 items-center border-b border-border/60 px-5">
         <BrandMark />
@@ -91,7 +139,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
         {navSections.map((section) => (
           <div key={section.label}>
             <p className="mb-1.5 px-3 text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-muted-foreground/80">
-              {section.label}
+              {t(section.label)}
             </p>
             <div className="space-y-1">
               {section.items.map(({ to, label, icon: Icon }) => (
@@ -110,7 +158,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
                   }
                 >
                   <Icon className="h-[1.125rem] w-[1.125rem] shrink-0" aria-hidden />
-                  {label}
+                  {t(label)}
                 </NavLink>
               ))}
             </div>
@@ -118,7 +166,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
         ))}
       </nav>
       <p className="border-t border-border/60 px-5 py-4 text-xs text-muted-foreground">
-        Care, recorded with clarity.
+        {t("navigation.careRecorded")}
       </p>
     </aside>
   );

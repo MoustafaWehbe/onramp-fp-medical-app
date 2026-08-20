@@ -8,6 +8,7 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { App } from "./App";
 import "./styles/globals.css";
 import { ThemeProvider } from "./providers/ThemeProvider";
+import "./i18n";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 

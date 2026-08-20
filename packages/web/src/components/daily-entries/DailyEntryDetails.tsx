@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { DailyEntry } from "../../lib/daily-entries/daily-entries-exports";
 import { formatEntryDate } from "../../lib/daily-entries/daily-entries-exports";
 
@@ -25,13 +26,14 @@ interface DailyEntryDetailsProps {
 
 function displayValue(
   value: string | number | null | undefined,
+  notRecordedText: string,
 ): string {
   if (
     value === null ||
     value === undefined ||
     value === ""
   ) {
-    return "Not recorded";
+    return notRecordedText;
   }
 
   return String(value);
@@ -49,46 +51,34 @@ export function DailyEntryDetails({
   onClose,
   isRemoving = false,
 }: DailyEntryDetailsProps) {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "ar" ? "ar-EG" : "en-US";
+  const notRecordedText = t("dailyEntries.notRecorded");
 
-    function getSymptomName(userSymptomId: string) {
-        const symptom = symptoms.find(
-            (item) => item.id === userSymptomId,
-        );
+  function getSymptomName(userSymptomId: string) {
+    const symptom = symptoms.find((item) => item.id === userSymptomId);
+    return symptom?.catalog.name ?? t("dailyEntries.unknownSymptom");
+  }
 
-        return symptom?.catalog.name ?? "Unknown symptom";
-    }
-    function getConditionName(userConditionId: string) {
-        const condition = conditions.find(
-            (item) => item.id === userConditionId,
-        );
+  function getConditionName(userConditionId: string) {
+    const condition = conditions.find((item) => item.id === userConditionId);
+    return condition?.condition.name ?? t("dailyEntries.unknownCondition");
+  }
 
-        return condition?.condition.name ?? "Unknown condition";
-    }
+  function getMedicationName(userMedicationId: string) {
+    const medication = medications.find((item) => item.id === userMedicationId);
+    return medication?.medication.name ?? t("dailyEntries.unknownMedication");
+  }
 
-    function getMedicationName(userMedicationId: string) {
-        const medication = medications.find(
-            (item) => item.id === userMedicationId,
-        );
+  function getDoctorName(userDoctorId: string) {
+    const doctor = doctors.find((item) => item.id === userDoctorId);
+    return doctor?.doctor.name ?? t("dailyEntries.unknownDoctor");
+  }
 
-        return medication?.medication.name ?? "Unknown medication";
-    }
-
-    function getDoctorName(userDoctorId: string) {
-        const doctor = doctors.find(
-            (item) => item.id === userDoctorId,
-        );
-
-        return doctor?.doctor.name ?? "Unknown doctor";
-    }
-
-    function getClinicName(userClinicId: string) {
-        const clinic = clinics.find(
-            (item) => item.id === userClinicId,
-        );
-
-        return clinic?.clinic.name ?? "Unknown clinic";
-    }
-
+  function getClinicName(userClinicId: string) {
+    const clinic = clinics.find((item) => item.id === userClinicId);
+    return clinic?.clinic.name ?? t("dailyEntries.unknownClinic");
+  }
 
   return (
     <div className="space-y-8">
@@ -116,7 +106,7 @@ export function DailyEntryDetails({
               text-muted-foreground
             "
           >
-            Daily health entry
+            {t("dailyEntries.dailyHealthEntry")}
           </p>
 
           <h2
@@ -129,6 +119,7 @@ export function DailyEntryDetails({
           >
             {formatEntryDate(
               entry.entryDate,
+              locale,
             )}
           </h2>
         </div>
@@ -158,7 +149,7 @@ export function DailyEntryDetails({
               disabled:opacity-50
             "
           >
-            Edit
+            {t("dailyEntries.edit")}
           </button>
 
           <button
@@ -180,9 +171,7 @@ export function DailyEntryDetails({
               disabled:opacity-50
             "
           >
-            {isRemoving
-              ? "Deleting..."
-              : "Delete"}
+            {isRemoving ? t("dailyEntries.deleting") : t("dailyEntries.delete")}
           </button>
         </div>
       </header>
@@ -200,7 +189,7 @@ export function DailyEntryDetails({
               text-foreground
             "
           >
-            Daily information
+            {t("dailyEntries.dailyInformation")}
           </h3>
 
           <p
@@ -210,8 +199,7 @@ export function DailyEntryDetails({
               text-muted-foreground
             "
           >
-            Your recorded mood, sleep, and journal
-            for this day.
+            {t("dailyEntries.dailyInformationDescription")}
           </p>
         </div>
 
@@ -242,7 +230,7 @@ export function DailyEntryDetails({
                 text-muted-foreground
               "
             >
-              Mood rating
+              {t("dailyEntries.moodRating")}
             </p>
 
             <p
@@ -255,7 +243,7 @@ export function DailyEntryDetails({
             >
               {entry.moodRating !== null
                 ? `${entry.moodRating} / 5`
-                : "Not recorded"}
+                : notRecordedText}
             </p>
           </div>
 
@@ -278,7 +266,7 @@ export function DailyEntryDetails({
                 text-muted-foreground
               "
             >
-              Sleep hours
+              {t("dailyEntries.sleepHours")}
             </p>
 
             <p
@@ -291,7 +279,7 @@ export function DailyEntryDetails({
             >
               {entry.sleepHours !== null
                 ? `${entry.sleepHours} hours`
-                : "Not recorded"}
+                : notRecordedText}
             </p>
           </div>
         </div>
@@ -315,7 +303,7 @@ export function DailyEntryDetails({
               text-muted-foreground
             "
           >
-            Journal notes
+            {t("dailyEntries.journalNote")}
           </p>
 
           <p
@@ -329,7 +317,7 @@ export function DailyEntryDetails({
           >
             {entry.journalNotes?.trim()
               ? entry.journalNotes
-              : "No journal notes recorded."}
+              : t("dailyEntries.noAdditionalDetails")}
           </p>
         </div>
       </section>
@@ -353,7 +341,7 @@ export function DailyEntryDetails({
               text-foreground
             "
           >
-            Symptoms
+            {t("dailyEntries.symptomPlural")}
           </h3>
 
           <p
@@ -363,7 +351,7 @@ export function DailyEntryDetails({
               text-muted-foreground
             "
           >
-            Symptoms recorded for this daily entry.
+            {t("dailyEntries.dailyInformationDescription")}
           </p>
         </div>
 
@@ -420,9 +408,10 @@ export function DailyEntryDetails({
                         text-muted-foreground
                       "
                     >
-                      Severity:{" "}
+                      {t("dailyEntries.moodRating")}: {" "}
                       {displayValue(
                         symptom.severity,
+                        notRecordedText,
                       )}
                     </span>
                   </div>
@@ -480,7 +469,7 @@ export function DailyEntryDetails({
               text-foreground
             "
           >
-            Medications
+            {t("navigation.medications")}
           </h3>
 
           <p
@@ -540,12 +529,14 @@ export function DailyEntryDetails({
                           text-muted-foreground
                         "
                       >
-                        Quantity:{" "}
+                        {t("health.medications.dosage")}: {" "}
                         {displayValue(
                           medication.quantity,
+                          notRecordedText,
                         )}{" "}
                         {displayValue(
                           medication.unit,
+                          notRecordedText,
                         )}
                       </p>
                     </div>
@@ -566,9 +557,7 @@ export function DailyEntryDetails({
                         }
                       `}
                     >
-                      {medication.taken
-                        ? "Taken"
-                        : "Not taken"}
+                      {medication.taken ? t("common.on") : t("common.off")}
                     </span>
                   </div>
 
@@ -583,7 +572,7 @@ export function DailyEntryDetails({
                           text-muted-foreground
                         "
                       >
-                        Taken at
+                        {t("dailyEntries.view")}
                       </p>
 
                       <p
@@ -653,7 +642,7 @@ export function DailyEntryDetails({
               text-foreground
             "
           >
-            Conditions
+            {t("navigation.health")}
           </h3>
 
           <p
@@ -722,6 +711,7 @@ export function DailyEntryDetails({
                     >
                       {displayValue(
                         condition.status,
+                        notRecordedText,
                       )}
                     </span>
                   </div>
@@ -779,7 +769,7 @@ export function DailyEntryDetails({
               text-foreground
             "
           >
-            Doctor visits
+            {t("navigation.doctorVisits")}
           </h3>
 
           <p
@@ -896,7 +886,7 @@ export function DailyEntryDetails({
             disabled:opacity-50
           "
         >
-          Close
+          {t("common.close")}
         </button>
 
         <div
@@ -926,9 +916,7 @@ export function DailyEntryDetails({
               disabled:opacity-50
             "
           >
-            {isRemoving
-              ? "Deleting..."
-              : "Delete entry"}
+            {isRemoving ? t("dailyEntries.deleting") : t("dailyEntries.delete")}
           </button>
 
           <button
@@ -949,7 +937,7 @@ export function DailyEntryDetails({
               disabled:opacity-50
             "
           >
-            Edit entry
+            {t("dailyEntries.edit")}
           </button>
         </div>
       </footer>
