@@ -19,7 +19,5 @@ module.exports = {
     );
   },
 
-  async down() {
-    // Irreversible wipe — nothing to restore
-  },
+  async down() {},
 };

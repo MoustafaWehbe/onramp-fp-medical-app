@@ -11,6 +11,7 @@ import {
 } from "../lib/pagination";
 import { createError } from "../middleware/error-handler";
 import { getDatabase } from "../lib/db";
+import { localizeDeep, type AppLanguage } from "../lib/app-language";
 import { entryIncludes } from "./daily-entry/includes";
 import { assertOwnedReferences } from "./daily-entry/ownership";
 import {
@@ -34,7 +35,11 @@ export type {
   ListDailyEntriesInput,
 } from "./daily-entry/types";
 
-async function findOwnedEntry(userId: string, id: string) {
+async function findOwnedEntry(
+  userId: string,
+  id: string,
+  language: AppLanguage = "en",
+) {
   const entry = await DailyEntry.findOne({
     where: { id, userId },
     include: entryIncludes(),
@@ -44,11 +49,12 @@ async function findOwnedEntry(userId: string, id: string) {
     throw createError("Daily entry not found", 404);
   }
 
-  return entry;
+  return localizeDeep(entry, language);
 }
 
 export class DailyEntryService {
   async list(input: ListDailyEntriesInput) {
+    const language = input.language ?? "en";
     const { currentPage, pageSize, offset, limit } = getPaginationParams(input);
 
     const where: Record<string, unknown> = { userId: input.userId };
@@ -107,14 +113,20 @@ export class DailyEntryService {
       ["id", "ASC"],
     ],
   });
-    return buildPaginatedResponse(rows, count, currentPage, pageSize);
+    return buildPaginatedResponse(
+      localizeDeep(rows, language),
+      count,
+      currentPage,
+      pageSize,
+    );
   }
 
-  async getById(userId: string, id: string) {
-    return findOwnedEntry(userId, id);
+  async getById(userId: string, id: string, language: AppLanguage = "en") {
+    return findOwnedEntry(userId, id, language);
   }
 
   async create(input: CreateDailyEntryInput) {
+    const language = input.language ?? "en";
     const sequelize = getDatabase();
 
     const entryId = await sequelize.transaction(async (transaction) => {
@@ -142,10 +154,11 @@ export class DailyEntryService {
       return entry.id;
     });
 
-    return findOwnedEntry(input.userId, entryId);
+    return findOwnedEntry(input.userId, entryId, language);
   }
 
   async update(input: UpdateDailyEntryInput) {
+    const language = input.language ?? "en";
     const sequelize = getDatabase();
 
     await sequelize.transaction(async (transaction) => {
@@ -204,7 +217,7 @@ export class DailyEntryService {
       await insertChildren(entry.id, input, transaction);
     });
 
-    return findOwnedEntry(input.userId, input.id);
+    return findOwnedEntry(input.userId, input.id, language);
   }
 
   async remove(userId: string, id: string) {

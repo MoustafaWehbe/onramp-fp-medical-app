@@ -14,6 +14,7 @@ export const medicationController = {
         currentPage,
         pageSize,
         search,
+        language: req.language,
       });
       res.json(result);
     } catch (err) {
@@ -69,7 +70,7 @@ export const medicationController = {
       };
 
       const medication =
-        await medicationService.getById(id);
+        await medicationService.getById(id, req.language);
 
       res.json({
         data: medication,
@@ -97,6 +98,7 @@ export const medicationController = {
       currentPage,
       pageSize,
       search,
+      language: req.language,
     });
 
     res.json(result);
@@ -119,6 +121,7 @@ async getProfileById(
       await userMedicationService.getById(
         req.user!.userId,
         id,
+        req.language,
       );
 
     res.json({
@@ -138,6 +141,7 @@ async createProfile(
     const userMedication =
       await userMedicationService.create({
         userId: req.user!.userId,
+        language: req.language,
         ...req.body,
       });
 
@@ -163,6 +167,7 @@ async updateProfile(
       await userMedicationService.update({
         userId: req.user!.userId,
         id,
+        language: req.language,
         ...req.body,
       });
 

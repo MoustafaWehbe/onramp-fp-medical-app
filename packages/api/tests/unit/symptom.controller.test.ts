@@ -65,6 +65,8 @@ describe("GET /api/catalog/symptoms", () => {
       currentPage: 1,
       pageSize: 10,
       search: undefined,
+    
+      language: "en",
     });
   });
 
@@ -88,6 +90,8 @@ describe("GET /api/catalog/symptoms", () => {
       currentPage: 2,
       pageSize: 5,
       search: "Headache",
+    
+      language: "en",
     });
   });
 

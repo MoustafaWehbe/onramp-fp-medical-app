@@ -30,7 +30,7 @@ export function entryIncludes() {
             {
               model: SymptomCatalog,
               as: "catalog" as const,
-              attributes: ["id", "name", "category"],
+              attributes: ["id", "name", "nameAr", "category", "categoryAr"],
             },
           ],
         },
@@ -50,7 +50,7 @@ export function entryIncludes() {
             {
               model: ConditionCatalog,
               as: "condition" as const,
-              attributes: ["id", "name"],
+              attributes: ["id", "name", "nameAr"],
             },
           ],
         },
@@ -68,7 +68,7 @@ export function entryIncludes() {
             {
               model: Medication,
               as: "medication" as const,
-              attributes: ["id", "name", "strength"],
+              attributes: ["id", "name", "nameAr", "strength", "category", "categoryAr"],
             },
           ],
         },

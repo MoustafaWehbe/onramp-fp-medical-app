@@ -72,6 +72,8 @@ describe("GET /api/medications", () => {
       currentPage: 1,
       pageSize: 10,
       search: undefined,
+    
+      language: "en",
     });
   });
 
@@ -95,6 +97,8 @@ describe("GET /api/medications", () => {
       currentPage: 2,
       pageSize: 5,
       search: "panadol",
+    
+      language: "en",
     });
   });
 
@@ -228,6 +232,7 @@ describe("GET /api/medications/:id", () => {
     expect(res.body.data.id).toBe("30000000-0000-0000-0000-000000000001");
     expect(mockMedicationService.getById).toHaveBeenCalledWith(
       "30000000-0000-0000-0000-000000000001",
+      "en",
     );
   });
 

@@ -1,9 +1,16 @@
 import axios, { type AxiosError } from "axios";
+import i18n from "../i18n";
 
 export const apiClient = axios.create({
   baseURL: "/api",
   withCredentials: true,
   headers: { "Content-Type": "application/json" },
+});
+
+apiClient.interceptors.request.use((config) => {
+  const language = i18n.language === "ar" ? "ar" : "en";
+  config.headers.set("X-App-Language", language);
+  return config;
 });
 
 apiClient.interceptors.response.use(

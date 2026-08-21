@@ -1,11 +1,15 @@
 import { buildPaginatedResponse, getPaginationParams, PaginationInput } from "src/lib/pagination";
 import { searchConditionsFromApi } from "../lib/catalog-condition-api";
-import { Op, Sequelize, UniqueConstraintError} from "sequelize";
+import { Sequelize, UniqueConstraintError} from "sequelize";
 import { ConditionCatalog } from "src/models/catalogs/ConditionCatalog";
 import { createError } from "src/middleware/error-handler";
+import type { AppLanguage } from "../lib/app-language";
+import { localizeDeep } from "../lib/app-language";
+import { buildLocalizedNameSearch } from "../lib/localized-search";
 
 export interface ListConditionsInput extends PaginationInput {
   search?: string;
+  language?: AppLanguage;
 }
 
 export interface CreateConditionInput {
@@ -13,30 +17,15 @@ export interface CreateConditionInput {
 
 }
 
-function escapeLike(value: string): string {
-  return value.replace(/[%_\\]/g, "\\$&");
-}
-
-function buildSearchWhere(search?: string) {
-  const trimmed = search?.trim();
-  if (!trimmed) return undefined;
-
-  const pattern = `%${escapeLike(trimmed)}%`;
-
- return {
-    name: {
-      [Op.iLike]: pattern,
-    },
-  };
-}
 export class ConditionService {
 
   async list(input: ListConditionsInput) {
+      const language = input.language ?? "en";
       const { currentPage, pageSize, offset, limit } = getPaginationParams(input);
   
       const { count, rows } = await ConditionCatalog.findAndCountAll({
-        attributes: ["id", "name", "createdAt"],
-        where: buildSearchWhere(input.search),
+        attributes: ["id", "name", "nameAr", "createdAt"],
+        where: buildLocalizedNameSearch(language, input.search),
         order: [
           ["name", "ASC"],
         ],
@@ -44,7 +33,12 @@ export class ConditionService {
         offset,
       });
   
-      return buildPaginatedResponse(rows, count, currentPage, pageSize);
+      return buildPaginatedResponse(
+        localizeDeep(rows, language),
+        count,
+        currentPage,
+        pageSize,
+      );
     }
     async searchConditions(term?: string) {
     if (!term) return [];
@@ -52,14 +46,16 @@ export class ConditionService {
     return await searchConditionsFromApi(term);
   }
     
-  async getById(id: string) {
-    const condition = await ConditionCatalog.findByPk(id);
+  async getById(id: string, language: AppLanguage = "en") {
+    const condition = await ConditionCatalog.findByPk(id, {
+      attributes: ["id", "name", "nameAr", "createdAt", "updatedAt"],
+    });
 
     if (!condition) {
       throw createError("Condition not found", 404);
     }
 
-    return condition;
+    return localizeDeep(condition, language);
   }
 
   async create(input: CreateConditionInput) {

@@ -18,6 +18,7 @@ export const symptomCatalogController = {
         currentPage,
         pageSize,
         search,
+        language: req.language,
       });
       res.json(result);
     } catch (err) {
@@ -68,6 +69,7 @@ export const symptomCatalogController = {
         currentPage,
         pageSize,
         search,
+        language: req.language,
       });
       res.json(result);
     } catch (err) {
@@ -85,6 +87,7 @@ export const symptomCatalogController = {
       const userSymptom = await userSymptomService.getById(
         req.user!.userId,
         id,
+        req.language,
       );
       res.json({ data: userSymptom });
     } catch (err) {
@@ -100,6 +103,7 @@ export const symptomCatalogController = {
     try {
       const userSymptom = await userSymptomService.create({
         userId: req.user!.userId,
+        language: req.language,
         ...req.body,
       });
       res.status(201).json({ data: userSymptom });

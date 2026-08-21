@@ -1,4 +1,4 @@
-import { Op, UniqueConstraintError } from "sequelize";
+import { UniqueConstraintError } from "sequelize";
 import { Medication, UserMedication } from "../models";
 import {
   buildPaginatedResponse,
@@ -7,10 +7,14 @@ import {
 } from "../lib/pagination";
 import { createError } from "../middleware/error-handler";
 import type { DosageMeasurement } from "@starter-kit/shared/db/types/enums";
+import type { AppLanguage } from "../lib/app-language";
+import { localizeDeep } from "../lib/app-language";
+import { buildLocalizedNameSearch } from "../lib/localized-search";
 
 export interface ListUserMedicationsInput extends PaginationInput {
   userId: string;
   search?: string;
+  language?: AppLanguage;
 }
 
 export interface CreateUserMedicationInput {
@@ -20,6 +24,7 @@ export interface CreateUserMedicationInput {
   dosageMeasurement?: DosageMeasurement | null;
   frequency?: string | null;
   notes?: string | null;
+  language?: AppLanguage;
 }
 
 export interface UpdateUserMedicationInput {
@@ -29,28 +34,21 @@ export interface UpdateUserMedicationInput {
   dosageMeasurement?: DosageMeasurement | null;
   frequency?: string | null;
   notes?: string | null;
+  language?: AppLanguage;
 }
 
-function escapeLike(value: string): string {
-  return value.replace(/[%_\\]/g, "\\$&");
-}
-
-function medicationInclude(search?: string) {
-  const trimmed = search?.trim();
-  const pattern = trimmed ? `%${escapeLike(trimmed)}%` : undefined;
-
+function medicationInclude(search?: string, language: AppLanguage = "en") {
   return {
     model: Medication,
     as: "medication" as const,
-    attributes: ["id", "name", "strength", "category"],
-    required: Boolean(pattern),
-    ...(pattern
+    attributes: ["id", "name", "nameAr", "strength", "category", "categoryAr"],
+    required: Boolean(search?.trim()),
+    ...(search?.trim()
       ? {
-          where: {
-            name: {
-              [Op.iLike]: pattern,
-            },
-          },
+          where: buildLocalizedNameSearch(language, search, [
+            "strength",
+            "category",
+          ]),
         }
       : {}),
   };
@@ -66,24 +64,29 @@ async function assertMedicationExists(medicationId: string) {
   }
 }
 
-async function findOwnedUserMedication(userId: string, id: string) {
+async function findOwnedUserMedication(
+  userId: string,
+  id: string,
+  language: AppLanguage = "en",
+) {
   const userMedication = await UserMedication.findOne({
     where: {
       id,
       userId,
     },
-    include: [medicationInclude()],
+    include: [medicationInclude(undefined, language)],
   });
 
   if (!userMedication) {
     throw createError("User medication not found", 404);
   }
 
-  return userMedication;
+  return localizeDeep(userMedication, language);
 }
 
 export class UserMedicationService {
   async list(input: ListUserMedicationsInput) {
+    const language = input.language ?? "en";
     const { currentPage, pageSize, offset, limit } =
       getPaginationParams(input);
 
@@ -91,7 +94,7 @@ export class UserMedicationService {
       where: {
         userId: input.userId,
       },
-      include: [medicationInclude(input.search)],
+      include: [medicationInclude(input.search, language)],
       order: [
         ["createdAt", "DESC"],
         ["id", "ASC"],
@@ -102,18 +105,19 @@ export class UserMedicationService {
     });
 
     return buildPaginatedResponse(
-      rows,
+      localizeDeep(rows, language),
       count,
       currentPage,
       pageSize,
     );
   }
 
-  async getById(userId: string, id: string) {
-    return findOwnedUserMedication(userId, id);
+  async getById(userId: string, id: string, language: AppLanguage = "en") {
+    return findOwnedUserMedication(userId, id, language);
   }
 
   async create(input: CreateUserMedicationInput) {
+    const language = input.language ?? "en";
     await assertMedicationExists(input.medicationId);
 
     const existing = await UserMedication.findOne({
@@ -145,6 +149,7 @@ export class UserMedicationService {
       return findOwnedUserMedication(
         input.userId,
         created.id,
+        language,
       );
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
@@ -159,6 +164,7 @@ export class UserMedicationService {
   }
 
   async update(input: UpdateUserMedicationInput) {
+    const language = input.language ?? "en";
     const userMedication = await UserMedication.findOne({
       where: {
         id: input.id,
@@ -206,6 +212,7 @@ export class UserMedicationService {
     return findOwnedUserMedication(
       input.userId,
       userMedication.id,
+      language,
     );
   }
 

@@ -65,6 +65,8 @@ describe("GET /api/profile/daily-entries", () => {
       pageSize: 10,
       fromDate: undefined,
       toDate: undefined,
+    
+      language: "en",
     });
   });
 
@@ -90,6 +92,8 @@ describe("GET /api/profile/daily-entries", () => {
       pageSize: 5,
       fromDate: "2026-06-01",
       toDate: "2026-06-30",
+    
+      language: "en",
     });
   });
 
@@ -127,6 +131,7 @@ describe("GET /api/profile/daily-entries/:id", () => {
     expect(mockDailyEntryService.getById).toHaveBeenCalledWith(
       USER_ID,
       ENTRY_ID,
+      "en",
     );
   });
 
@@ -161,6 +166,8 @@ describe("POST /api/profile/daily-entries", () => {
       entryDate: "2026-06-24",
       moodRating: 3,
       symptoms: [{ userSymptomId: USER_SYMPTOM_ID, severity: 5 }],
+    
+      language: "en",
     });
   });
 
@@ -201,6 +208,8 @@ describe("PATCH /api/profile/daily-entries/:id", () => {
       userId: USER_ID,
       id: ENTRY_ID,
       journalNotes: "Updated note",
+    
+      language: "en",
     });
   });
 

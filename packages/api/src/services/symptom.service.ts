@@ -1,4 +1,4 @@
-import { Op, UniqueConstraintError } from "sequelize";
+import { UniqueConstraintError } from "sequelize";
 import { SymptomCatalog } from "../models";
 import { searchSymptomsFromApi } from "../lib/symptoms";
 import {
@@ -7,9 +7,13 @@ import {
   type PaginationInput,
 } from "../lib/pagination";
 import { createError } from "../middleware/error-handler";
+import type { AppLanguage } from "../lib/app-language";
+import { localizeDeep } from "../lib/app-language";
+import { buildLocalizedNameSearch } from "../lib/localized-search";
 
 export interface ListSymptomsInput extends PaginationInput {
   search?: string;
+  language?: AppLanguage;
 }
 
 export interface CreateSymptomInput {
@@ -17,37 +21,25 @@ export interface CreateSymptomInput {
   category?: string;
 }
 
-function escapeLike(value: string): string {
-  return value.replace(/[%_\\]/g, "\\$&");
-}
-
-function buildSearchWhere(search?: string) {
-  const trimmed = search?.trim();
-  if (!trimmed) return undefined;
-
-  const pattern = `%${escapeLike(trimmed)}%`;
-
-  return {
-    [Op.or]: [
-      { name: { [Op.iLike]: pattern } },
-      { category: { [Op.iLike]: pattern } },
-    ],
-  };
-}
-
 export class SymptomCatalogService {
   async list(input: ListSymptomsInput) {
+    const language = input.language ?? "en";
     const { currentPage, pageSize, offset, limit } = getPaginationParams(input);
 
     const { count, rows } = await SymptomCatalog.findAndCountAll({
-      attributes: ["id", "name", "category", "createdAt"],
-      where: buildSearchWhere(input.search),
+      attributes: ["id", "name", "nameAr", "category", "categoryAr", "createdAt"],
+      where: buildLocalizedNameSearch(language, input.search, ["category"]),
       order: [["name", "ASC"]],
       limit,
       offset,
     });
 
-    return buildPaginatedResponse(rows, count, currentPage, pageSize);
+    return buildPaginatedResponse(
+      localizeDeep(rows, language),
+      count,
+      currentPage,
+      pageSize,
+    );
   }
 
   async create(input: CreateSymptomInput) {
