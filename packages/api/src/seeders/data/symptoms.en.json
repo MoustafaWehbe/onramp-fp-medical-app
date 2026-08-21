@@ -1,0 +1,3022 @@
+[
+  {
+    "id": "10000000-0000-4000-8000-000000000001",
+    "name": "Abdominal Bloating",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000002",
+    "name": "Abdominal Cramps",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000003",
+    "name": "Abdominal Distension",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000004",
+    "name": "Abdominal pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000005",
+    "name": "Abnormal basal metabolic rate",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000006",
+    "name": "Abnormal Gait",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000007",
+    "name": "Abnormal posturing",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000008",
+    "name": "Abrasion (medical)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000009",
+    "name": "Acalculia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000010",
+    "name": "Accessibility",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000011",
+    "name": "Add images or other media for use on Wikipedia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000012",
+    "name": "Agitation",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000013",
+    "name": "Agnosia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000014",
+    "name": "Akathisia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000015",
+    "name": "Akinesia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000016",
+    "name": "Alcohol intolerance",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000017",
+    "name": "Alexia (acquired dyslexia)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000018",
+    "name": "Allergic response",
+    "category": "Allergy"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000019",
+    "name": "Altered state of consciousness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000020",
+    "name": "Amaurosis fugax",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000021",
+    "name": "Amenorrhea",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000022",
+    "name": "Amnesia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000023",
+    "name": "Amnesia, see Memory loss (amnesia)",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000024",
+    "name": "Amusia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000025",
+    "name": "Anal pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000026",
+    "name": "Anasarca",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000027",
+    "name": "Anhedonia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000028",
+    "name": "Ankle pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000029",
+    "name": "Anomic aphasia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000030",
+    "name": "Anorexia (symptom)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000031",
+    "name": "Anosmia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000032",
+    "name": "Anosmia, see Lost or changed sense of smell",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000033",
+    "name": "Anosognosia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000034",
+    "name": "Antepartum haemorrhage",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000035",
+    "name": "Anus (itchy), see Itchy bottom",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000036",
+    "name": "Anxiety",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000037",
+    "name": "Apathy",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000038",
+    "name": "Aphasia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000039",
+    "name": "Apnea",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000040",
+    "name": "Appetite Loss",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000041",
+    "name": "Apraxia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000042",
+    "name": "Arm pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000043",
+    "name": "Arm pain, see Elbow and arm pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000044",
+    "name": "Arm Weakness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000045",
+    "name": "Arthralgia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000046",
+    "name": "Articles related to current events",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000047",
+    "name": "Asterixis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000048",
+    "name": "Ataxia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000049",
+    "name": "Athetosis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000050",
+    "name": "Back Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000051",
+    "name": "Back Stiffness",
+    "category": "Musculoskeletal"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000052",
+    "name": "Bad breath",
+    "category": "Respiratory"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000053",
+    "name": "Balance Problems",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000054",
+    "name": "Bedwetting in children",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000055",
+    "name": "Being sick, see Diarrhoea and vomiting",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000056",
+    "name": "Belching",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000057",
+    "name": "Black Stools",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000058",
+    "name": "Bladder Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000059",
+    "name": "Bleeding after the menopause, see Postmenopausal bleeding",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000060",
+    "name": "Bleeding between periods or after sex, see Vaginal bleeding between periods or after sex",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000061",
+    "name": "Bleeding from the bottom (rectal bleeding)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000062",
+    "name": "Bleeding Gums",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000063",
+    "name": "Blepharospasm",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000064",
+    "name": "Blindness",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000065",
+    "name": "Blister",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000066",
+    "name": "Bloating",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000067",
+    "name": "Blood in phlegm, see Coughing up blood (blood in phlegm)",
+    "category": "Respiratory"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000068",
+    "name": "Blood in semen",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000069",
+    "name": "Blood in stool",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000070",
+    "name": "Blood in urine",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000071",
+    "name": "Blue or grey skin or lips (cyanosis)",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000072",
+    "name": "Blurred Vision",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000073",
+    "name": "Blushing",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000074",
+    "name": "Body load",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000075",
+    "name": "Body odour (BO)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000076",
+    "name": "Bone Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000077",
+    "name": "Bradycardia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000078",
+    "name": "Bradykinesia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000079",
+    "name": "Bradypnea",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000080",
+    "name": "Breast lumps",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000081",
+    "name": "Breast pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000082",
+    "name": "Breast Tenderness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000083",
+    "name": "Brittle Nails",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000084",
+    "name": "Bruising Easily",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000085",
+    "name": "Bruxism, see Teeth grinding (bruxism)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000086",
+    "name": "Bulging eyes (exophthalmos)",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000087",
+    "name": "Burning Sensation",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000088",
+    "name": "Burning Urination",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000089",
+    "name": "Burping",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000090",
+    "name": "Cachexia",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000091",
+    "name": "Calcinosis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000092",
+    "name": "Calculus (medicine)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000093",
+    "name": "Cataplexy",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000094",
+    "name": "Chattering teeth",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000095",
+    "name": "Chest Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000096",
+    "name": "Chest Tightness",
+    "category": "Cardiovascular"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000097",
+    "name": "Chills",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000098",
+    "name": "Chorea",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000099",
+    "name": "Chronic pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000100",
+    "name": "Chronic pelvic pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000101",
+    "name": "Clammy Skin",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000102",
+    "name": "Claudication",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000103",
+    "name": "Cold Hands",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000104",
+    "name": "Cold Intolerance",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000105",
+    "name": "Cold sensitivity",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000106",
+    "name": "Compression arthralgia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000107",
+    "name": "Concentration Difficulty",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000108",
+    "name": "Confabulation",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000109",
+    "name": "Confusion",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000110",
+    "name": "Confusion (sudden), see Sudden confusion (delirium)",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000111",
+    "name": "Connect with NLM",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000112",
+    "name": "Constipation",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000113",
+    "name": "Convulsion",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000114",
+    "name": "Copyright",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000115",
+    "name": "Cough",
+    "category": "Respiratory"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000116",
+    "name": "Coughing Up Blood",
+    "category": "Respiratory"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000117",
+    "name": "Coughing up blood (blood in phlegm)",
+    "category": "Respiratory"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000118",
+    "name": "Cracked Lips",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000119",
+    "name": "Cramp",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000120",
+    "name": "Cyanosis, see Blue or grey skin or lips (cyanosis)",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000121",
+    "name": "Dalrymple's sign",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000122",
+    "name": "Dark Urine",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000123",
+    "name": "Decreased Appetite",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000124",
+    "name": "Decreased Libido",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000125",
+    "name": "Deformity",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000126",
+    "name": "Dehydration",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000127",
+    "name": "Delayed milestone",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000128",
+    "name": "Delirium, see Sudden confusion (delirium)",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000129",
+    "name": "Delusion",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000130",
+    "name": "Delusions",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000131",
+    "name": "Dental pain, see Toothache",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000132",
+    "name": "Depressed Mood",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000133",
+    "name": "Depression (mood)",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000134",
+    "name": "Dermatome (anatomy)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000135",
+    "name": "Diaphoresis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000136",
+    "name": "Diarrhea",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000137",
+    "name": "Diarrhoea and vomiting",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000138",
+    "name": "Difficulty Climbing Stairs",
+    "category": "Musculoskeletal"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000139",
+    "name": "Difficulty Concentrating",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000140",
+    "name": "Difficulty Sleeping",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000141",
+    "name": "Difficulty Speaking",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000142",
+    "name": "Difficulty Swallowing",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000143",
+    "name": "Difficulty Walking",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000144",
+    "name": "Diplopia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000145",
+    "name": "Discharge from Eye",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000146",
+    "name": "Dizziness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000147",
+    "name": "Double vision",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000148",
+    "name": "Download this page as a PDF file",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000149",
+    "name": "Drugs & Supplements",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000150",
+    "name": "Dry eyes",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000151",
+    "name": "Dry lips, see Sore or dry lips",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000152",
+    "name": "Dry Mouth",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000153",
+    "name": "Dry Skin",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000154",
+    "name": "Dryness (medical)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000155",
+    "name": "Dysarthria",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000156",
+    "name": "Dysdiadochokinesia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000157",
+    "name": "Dysgeusia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000158",
+    "name": "Dysgraphia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000159",
+    "name": "Dyspareunia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000160",
+    "name": "Dysphagia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000161",
+    "name": "Dysphagia (swallowing problems)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000162",
+    "name": "Dyspnea",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000163",
+    "name": "Dyssynergia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000164",
+    "name": "Dystonia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000165",
+    "name": "Dysuria",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000166",
+    "name": "Ear Discharge",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000167",
+    "name": "Ear Fullness",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000168",
+    "name": "Ear Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000169",
+    "name": "Earache",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000170",
+    "name": "Easy Bruising",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000171",
+    "name": "Ecchymosis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000172",
+    "name": "Ecstatic seizures",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000173",
+    "name": "Ectopic beats, see Heart palpitations",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000174",
+    "name": "Edema",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000175",
+    "name": "Elbow and arm pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000176",
+    "name": "Elevated Blood Pressure",
+    "category": "Cardiovascular"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000177",
+    "name": "Emotional Lability",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000178",
+    "name": "Epistaxis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000179",
+    "name": "Essential tremor, see Tremor or shaking hands",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000180",
+    "name": "Esthiomene",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000181",
+    "name": "Euphoria (emotion)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000182",
+    "name": "Excessive Daytime Sleepiness",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000183",
+    "name": "Excessive hair growth (hirsutism)",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000184",
+    "name": "Excessive Hunger",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000185",
+    "name": "Excessive Salivation",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000186",
+    "name": "Excessive Thirst",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000187",
+    "name": "Exophthalmos",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000188",
+    "name": "Eye floaters and flashes, see Floaters and flashes in the eyes",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000189",
+    "name": "Eye Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000190",
+    "name": "Eye Redness",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000191",
+    "name": "Eye Watering",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000192",
+    "name": "Eyelid problems",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000193",
+    "name": "Facial Flushing",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000194",
+    "name": "Facial Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000195",
+    "name": "Facial Swelling",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000196",
+    "name": "Failure to thrive",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000197",
+    "name": "Fainting",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000198",
+    "name": "Falling",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000199",
+    "name": "Farting (flatulence)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000200",
+    "name": "Fasciculation",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000201",
+    "name": "Fatigue",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000202",
+    "name": "Fatigue (medical)",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000203",
+    "name": "Fecal incontinence",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000204",
+    "name": "Feeling of Incomplete Emptying",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000205",
+    "name": "Feeling sick (nausea)",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000206",
+    "name": "Fever",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000207",
+    "name": "Fever in adults, see High temperature (fever) in adults",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000208",
+    "name": "Fever in children, see High temperature (fever) in children",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000209",
+    "name": "Fibrosis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000210",
+    "name": "Fistula",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000211",
+    "name": "Fits (seizures), see What to do if someone has a seizure (fit)",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000212",
+    "name": "Flank Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000213",
+    "name": "Flatulence",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000214",
+    "name": "Flatulence, see Farting (flatulence)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000215",
+    "name": "Floaters and flashes in the eyes",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000216",
+    "name": "Flokkur:Einkenni",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000217",
+    "name": "Foot pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000218",
+    "name": "For Developers",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000219",
+    "name": "Forgetfulness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000220",
+    "name": "Frequent Headaches",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000221",
+    "name": "Frequent Infections",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000222",
+    "name": "Frequent Urination",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000223",
+    "name": "Gas",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000224",
+    "name": "Gastrointestinal bleeding",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000225",
+    "name": "Generalized Weakness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000226",
+    "name": "Genetics",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000227",
+    "name": "Genital Itching",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000228",
+    "name": "Guidance on how to use and edit Wikipedia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000229",
+    "name": "Guidelines for Links",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000230",
+    "name": "Guides to browsing Wikipedia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000231",
+    "name": "Hair loss",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000232",
+    "name": "Hallucination",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000233",
+    "name": "Hallucinations",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000234",
+    "name": "Hand pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000235",
+    "name": "Hand Tremor",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000236",
+    "name": "Headache",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000237",
+    "name": "Headaches",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000238",
+    "name": "Health Topics",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000239",
+    "name": "Hearing impairment",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000240",
+    "name": "Hearing loss",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000241",
+    "name": "Heart arrhythmia",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000242",
+    "name": "Heart pain, see Chest pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000243",
+    "name": "Heart Palpitations",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000244",
+    "name": "Heartburn",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000245",
+    "name": "Heat intolerance",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000246",
+    "name": "Heel Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000247",
+    "name": "Hematemesis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000248",
+    "name": "Hematospermia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000249",
+    "name": "Hematuria",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000250",
+    "name": "Hemiballismus",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000251",
+    "name": "Hemiplegia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000252",
+    "name": "Hemoptysis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000253",
+    "name": "HHS Vulnerability Disclosure",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000254",
+    "name": "Hiccups",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000255",
+    "name": "High temperature (fever) in adults",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000256",
+    "name": "High temperature (fever) in children",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000257",
+    "name": "Hip Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000258",
+    "name": "Hip pain in adults",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000259",
+    "name": "Hip pain in children (irritable hip)",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000260",
+    "name": "Hirsutism",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000261",
+    "name": "Hirsutism, see Excessive hair growth (hirsutism)",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000262",
+    "name": "Hives",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000263",
+    "name": "Hoarseness",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000264",
+    "name": "Homicidal ideation",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000265",
+    "name": "Hookworm, see Worms in humans",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000266",
+    "name": "How to contact Wikipedia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000267",
+    "name": "Hyperactivity",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000268",
+    "name": "Hyperacusis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000269",
+    "name": "Hyperhidrosis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000270",
+    "name": "Hypersomnia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000271",
+    "name": "Hypertension Symptoms",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000272",
+    "name": "Hypertrichosis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000273",
+    "name": "Hyperventilation",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000274",
+    "name": "Hypokinesia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000275",
+    "name": "Hypothermia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000276",
+    "name": "Idiopathic short stature",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000277",
+    "name": "Impaired Coordination",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000278",
+    "name": "Impotence",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000279",
+    "name": "Increased Appetite",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000280",
+    "name": "Indigestion",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000281",
+    "name": "Infertility",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000282",
+    "name": "Information on how to cite this page",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000283",
+    "name": "Insomnia",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000284",
+    "name": "Irregular Heartbeat",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000285",
+    "name": "Irregular periods",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000286",
+    "name": "Irritability",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000287",
+    "name": "Irritable hip, see Hip pain in children (irritable hip)",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000288",
+    "name": "Itch",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000289",
+    "name": "Itching",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000290",
+    "name": "Itchy bottom",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000291",
+    "name": "Itchy Eyes",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000292",
+    "name": "Itchy Scalp",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000293",
+    "name": "Itchy skin",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000294",
+    "name": "Janeway lesions",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000295",
+    "name": "Jaundice",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000296",
+    "name": "Jaw Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000297",
+    "name": "Joint Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000298",
+    "name": "Joint Stiffness",
+    "category": "Musculoskeletal"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000299",
+    "name": "Joint Swelling",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000300",
+    "name": "Kategorya:Mga sintomas",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000301",
+    "name": "Knee Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000302",
+    "name": "Labored Breathing",
+    "category": "Respiratory"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000303",
+    "name": "Learn about Wikipedia and how it works",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000304",
+    "name": "Learn how to edit Wikipedia",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000305",
+    "name": "Leg Cramps",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000306",
+    "name": "Leg Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000307",
+    "name": "Leg Swelling",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000308",
+    "name": "Leg Weakness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000309",
+    "name": "Lhermitte's sign",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000310",
+    "name": "Light Sensitivity",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000311",
+    "name": "Light-headed",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000312",
+    "name": "Lightheadedness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000313",
+    "name": "Limping in children",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000314",
+    "name": "Lipoatrophy",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000315",
+    "name": "Lips (sore or dry), see Sore or dry lips",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000316",
+    "name": "Lista simptomelor medicale",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000317",
+    "name": "Liste medizinischer Symptome",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000318",
+    "name": "Liste over medisinske symptom",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000319",
+    "name": "Loss of Appetite",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000320",
+    "name": "Loss of Balance",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000321",
+    "name": "Loss of Consciousness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000322",
+    "name": "Loss of Smell",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000323",
+    "name": "Loss of Taste",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000324",
+    "name": "Lost or changed sense of smell",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000325",
+    "name": "Low Back Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000326",
+    "name": "Low Mood",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000327",
+    "name": "Low sex drive (loss of libido)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000328",
+    "name": "Lower Abdominal Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000329",
+    "name": "Lump in Throat",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000330",
+    "name": "Lumps",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000331",
+    "name": "Lymph Node Swelling",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000332",
+    "name": "Lymphadenopathy",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000333",
+    "name": "Malaise",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000334",
+    "name": "Mania",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000335",
+    "name": "Mazzotti reaction",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000336",
+    "name": "Medical Encyclopedia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000337",
+    "name": "Medical Tests",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000338",
+    "name": "MedlinePlus Connect for EHRs",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000339",
+    "name": "Memory loss (amnesia)",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000340",
+    "name": "Memory Problems",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000341",
+    "name": "Menstrual Cramps",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000342",
+    "name": "Menstrual Irregularity",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000343",
+    "name": "Menstrual pain, see Period pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000344",
+    "name": "Metallic taste",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000345",
+    "name": "Miscarriage",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000346",
+    "name": "Missed or late periods",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000347",
+    "name": "Monoplegia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000348",
+    "name": "Mood Swings",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000349",
+    "name": "More information about this page",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000350",
+    "name": "Morning Stiffness",
+    "category": "Musculoskeletal"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000351",
+    "name": "Mouth Sores",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000352",
+    "name": "Mouth Ulcers",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000353",
+    "name": "Mucopurulent discharge",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000354",
+    "name": "Muscle Aches",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000355",
+    "name": "Muscle Cramps",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000356",
+    "name": "Muscle Spasms",
+    "category": "Musculoskeletal"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000357",
+    "name": "Muscle Tightness",
+    "category": "Musculoskeletal"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000358",
+    "name": "Muscle Weakness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000359",
+    "name": "Mydriasis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000360",
+    "name": "Myoclonus",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000361",
+    "name": "Nail problems",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000362",
+    "name": "Nasal Congestion",
+    "category": "Respiratory"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000363",
+    "name": "Nasal Discharge",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000364",
+    "name": "Nasal Drainage",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000365",
+    "name": "Nausea",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000366",
+    "name": "Nausea, see Feeling sick (nausea)",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000367",
+    "name": "Neck Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000368",
+    "name": "Neck stiffness",
+    "category": "Musculoskeletal"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000369",
+    "name": "Neonatal seizure",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000370",
+    "name": "Nerve Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000371",
+    "name": "Nervousness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000372",
+    "name": "Night Sweats",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000373",
+    "name": "Nightmares",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000374",
+    "name": "Nipple discharge",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000375",
+    "name": "NLM Web Policies",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000376",
+    "name": "Nocturia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000377",
+    "name": "Nosebleed",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000378",
+    "name": "Numbness",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000379",
+    "name": "Numbness in Feet",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000380",
+    "name": "Numbness in Hands",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000381",
+    "name": "Odynophagia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000382",
+    "name": "Oily Skin",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000383",
+    "name": "Opisthotonus",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000384",
+    "name": "Opsoclonus",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000385",
+    "name": "Orgasmic epilepsy",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000386",
+    "name": "Orthopnea",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000387",
+    "name": "Otalgia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000388",
+    "name": "Otitis media",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000389",
+    "name": "Ovulation pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000390",
+    "name": "Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000391",
+    "name": "Pain in testicles, see Testicle pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000392",
+    "name": "Painful Intercourse",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000393",
+    "name": "Painful periods, see Period pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000394",
+    "name": "Painful Swallowing",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000395",
+    "name": "Pale Skin",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000396",
+    "name": "Palpitations",
+    "category": "Cardiovascular"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000397",
+    "name": "Palpitations, see Heart palpitations",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000398",
+    "name": "Panic Attacks",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000399",
+    "name": "Paralysis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000400",
+    "name": "Paranoia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000401",
+    "name": "Paresis",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000402",
+    "name": "Paresthesia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000403",
+    "name": "Past revisions of this page [h]",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000404",
+    "name": "Patellofemoral pain syndrome",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000405",
+    "name": "Pathologic nystagmus",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000406",
+    "name": "Pelvic Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000407",
+    "name": "Pelvic Pressure",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000408",
+    "name": "Penile discharge",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000409",
+    "name": "Penis lumps and spots",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000410",
+    "name": "Period pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000411",
+    "name": "Periods (irregular), see Irregular periods",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000412",
+    "name": "Periods (missed or late), see Missed or late periods",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000413",
+    "name": "Permanent link to this revision of this page",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000414",
+    "name": "Perspiration",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000415",
+    "name": "Petechia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000416",
+    "name": "Phobia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000417",
+    "name": "Photophobia",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000418",
+    "name": "Pins and needles",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000419",
+    "name": "Pleuritic chest pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000420",
+    "name": "Polyuria",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000421",
+    "name": "Postmenopausal bleeding",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000422",
+    "name": "Postnasal Drip",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000423",
+    "name": "Pressure in Chest",
+    "category": "Cardiovascular"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000424",
+    "name": "Priapism (painful erections)",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000425",
+    "name": "Printable version of this page [p]",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000426",
+    "name": "Proarrhythmia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000427",
+    "name": "Proctalgia fugax",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000428",
+    "name": "Productive Cough",
+    "category": "Respiratory"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000429",
+    "name": "Prosopagnosia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000430",
+    "name": "Protein toxicity",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000431",
+    "name": "Puffy Eyes",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000432",
+    "name": "Purpura",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000433",
+    "name": "Rapid Breathing",
+    "category": "Respiratory"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000434",
+    "name": "Rapid Heartbeat",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000435",
+    "name": "Rash",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000436",
+    "name": "Rashes in babies and children",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000437",
+    "name": "Recent changes in pages linked from this page [k]",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000438",
+    "name": "Rectal Bleeding",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000439",
+    "name": "Rectal pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000440",
+    "name": "Rectal tenesmus",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000441",
+    "name": "Red eye",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000442",
+    "name": "Red Eyes",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000443",
+    "name": "Reduced Urine Output",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000444",
+    "name": "Restlessness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000445",
+    "name": "Retrograde ejaculation",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000446",
+    "name": "Rhinorrhea",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000447",
+    "name": "Ringing in Ears",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000448",
+    "name": "Ronney:Cowraghyn asslaynt as lheeys",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000449",
+    "name": "Rosette (schizont appearance)",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000450",
+    "name": "Roundworm, see Worms in humans",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000451",
+    "name": "Runny Nose",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000452",
+    "name": "Scaly Skin",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000453",
+    "name": "Sciatica",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000454",
+    "name": "Seizure",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000455",
+    "name": "Seizures",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000456",
+    "name": "Seizures (fits), see What to do if someone has a seizure (fit)",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000457",
+    "name": "Sense of smell (lost/changed), see Lost or changed sense of smell",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000458",
+    "name": "Sensitivity to Cold",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000459",
+    "name": "Sensitivity to Light",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000460",
+    "name": "Sensitivity to Noise",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000461",
+    "name": "Sexual Dysfunction",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000462",
+    "name": "Shakiness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000463",
+    "name": "Shaking, see Tremor or shaking hands",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000464",
+    "name": "Sham rage",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000465",
+    "name": "Shivering",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000466",
+    "name": "Short stature",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000467",
+    "name": "Shortness of Breath",
+    "category": "Respiratory"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000468",
+    "name": "Shoulder Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000469",
+    "name": "Signs and symptoms of cancer",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000470",
+    "name": "Silk-glove sign",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000471",
+    "name": "Site Map",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000472",
+    "name": "Skin Discoloration",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000473",
+    "name": "Skin Dryness",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000474",
+    "name": "Skin Lesions",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000475",
+    "name": "Skin turgor",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000476",
+    "name": "Sleep Disturbance",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000477",
+    "name": "Sleep inversion",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000478",
+    "name": "Slurred Speech",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000479",
+    "name": "Smelly feet",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000480",
+    "name": "Smelly urine",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000481",
+    "name": "Sneezing",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000482",
+    "name": "Snoring",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000483",
+    "name": "Soiling (child pooing their pants)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000484",
+    "name": "Somnolence",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000485",
+    "name": "Sore Muscles",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000486",
+    "name": "Sore or dry lips",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000487",
+    "name": "Sore or white tongue",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000488",
+    "name": "Sore Throat",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000489",
+    "name": "Speech Difficulty",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000490",
+    "name": "Sputum",
+    "category": "Respiratory"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000491",
+    "name": "Steatorrhea",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000492",
+    "name": "Stomach ache",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000493",
+    "name": "Stomach Cramps",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000494",
+    "name": "Stomach Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000495",
+    "name": "Strangury",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000496",
+    "name": "Structured data on this page hosted by Wikidata [g]",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000497",
+    "name": "Stuffy Nose",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000498",
+    "name": "Subscribe to RSS",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000499",
+    "name": "Sudden confusion (delirium)",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000500",
+    "name": "Suicidal ideation",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000501",
+    "name": "Suicidal Thoughts",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000502",
+    "name": "Swallowing Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000503",
+    "name": "Swallowing problems, see Dysphagia (swallowing problems)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000504",
+    "name": "Sweating",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000505",
+    "name": "Sweating at night, see Night sweats",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000506",
+    "name": "Sweaty Palms",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000507",
+    "name": "Swelling",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000508",
+    "name": "Swelling (medical)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000509",
+    "name": "Swollen Ankles",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000510",
+    "name": "Swollen Feet",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000511",
+    "name": "Swollen glands",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000512",
+    "name": "Swollen Joints",
+    "category": "Musculoskeletal"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000513",
+    "name": "Swollen Legs",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000514",
+    "name": "Symptoms",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000515",
+    "name": "Syncope (medicine)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000516",
+    "name": "Tachycardia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000517",
+    "name": "Tapeworm, see Worms in humans",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000518",
+    "name": "Taste Changes",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000519",
+    "name": "Tearfulness",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000520",
+    "name": "Teeth grinding (bruxism)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000521",
+    "name": "Tenderness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000522",
+    "name": "Testicle lumps and swellings",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000523",
+    "name": "Testicle pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000524",
+    "name": "Testicular Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000525",
+    "name": "The hub for editors",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000526",
+    "name": "Thirst",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000527",
+    "name": "Thirst (excessive), see Excessive thirst",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000528",
+    "name": "Throat (sore), see Sore throat",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000529",
+    "name": "Throat Clearing",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000530",
+    "name": "Throat Tightness",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000531",
+    "name": "Tic",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000532",
+    "name": "Tingling",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000533",
+    "name": "Tingling in Feet",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000534",
+    "name": "Tingling in Hands",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000535",
+    "name": "Tinnitus",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000536",
+    "name": "Tiredness and fatigue",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000537",
+    "name": "Tongue (sore or white), see Sore or white tongue",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000538",
+    "name": "Tooth Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000539",
+    "name": "Toothache",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000540",
+    "name": "Trembling",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000541",
+    "name": "Tremor",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000542",
+    "name": "Tremor or shaking hands",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000543",
+    "name": "Trepopnea",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000544",
+    "name": "Trismus",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000545",
+    "name": "Trouble Breathing",
+    "category": "Respiratory"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000546",
+    "name": "Trouble Concentrating",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000547",
+    "name": "Trouble Sleeping",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000548",
+    "name": "Tummy ache, see Stomach ache",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000549",
+    "name": "Twitching eyes and muscles",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000550",
+    "name": "Unconsciousness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000551",
+    "name": "Unexplained Bruising",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000552",
+    "name": "Unexplained Weight Loss",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000553",
+    "name": "Unintentional weight loss",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000554",
+    "name": "Upload files [u]",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000555",
+    "name": "Upper Abdominal Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000556",
+    "name": "Ureterovaginal fistula",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000557",
+    "name": "Urethra",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000558",
+    "name": "Urinary frequency",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000559",
+    "name": "Urinary Hesitancy",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000560",
+    "name": "Urinary incontinence",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000561",
+    "name": "Urinary retention",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000562",
+    "name": "Urinary Urgency",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000563",
+    "name": "Urine (smelly), see Smelly urine",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000564",
+    "name": "Urticaria",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000565",
+    "name": "Vaginal bleeding",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000566",
+    "name": "Vaginal bleeding between periods or after sex",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000567",
+    "name": "Vaginal discharge",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000568",
+    "name": "Vaginal dryness",
+    "category": "Genitourinary"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000569",
+    "name": "Vaginal Itching",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000570",
+    "name": "Vertigo",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000571",
+    "name": "Vertigo (medical)",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000572",
+    "name": "View the category page [c]",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000573",
+    "name": "View the content page [c]",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000574",
+    "name": "Viewers & Players",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000575",
+    "name": "Vision Changes",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000576",
+    "name": "Vision Loss",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000577",
+    "name": "Visit a randomly selected article [x]",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000578",
+    "name": "Visit the main page [z]",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000579",
+    "name": "Voice Changes",
+    "category": "ENT"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000580",
+    "name": "Vomiting",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000581",
+    "name": "Vomiting blood",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000582",
+    "name": "Vomiting, see Diarrhoea and vomiting",
+    "category": "Digestive"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000583",
+    "name": "Walking Difficulty",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000584",
+    "name": "Wasting",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000585",
+    "name": "Water Retention",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000586",
+    "name": "Watering eyes",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000587",
+    "name": "Watery Eyes",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000588",
+    "name": "Weak Pulse",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000589",
+    "name": "Weakness",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000590",
+    "name": "Weight Gain",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000591",
+    "name": "Weight Loss",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000592",
+    "name": "Weight loss (unintentional), see Unintentional weight loss",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000593",
+    "name": "What to do if someone has a seizure (fit)",
+    "category": "Neurological / Mental"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000594",
+    "name": "What's New",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000595",
+    "name": "Wheezing",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000596",
+    "name": "Wind, see Farting (flatulence)",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000597",
+    "name": "Worms in humans",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000598",
+    "name": "Wound",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000599",
+    "name": "Wrist Pain",
+    "category": "Pain"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000600",
+    "name": "Xerostomia",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000601",
+    "name": "Yellow Eyes",
+    "category": "Eye"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000602",
+    "name": "Yellow Skin",
+    "category": "Skin"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000603",
+    "name": "You are encouraged to create an account and log in; however, it is not mandatory",
+    "category": "General"
+  },
+  {
+    "id": "10000000-0000-4000-8000-000000000604",
+    "name": "You&#039;re encouraged to log in; however, it&#039;s not mandatory. [o]",
+    "category": "General"
+  }
+]
