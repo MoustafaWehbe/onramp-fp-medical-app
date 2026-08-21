@@ -1,3 +1,5 @@
+import { isUsableArabicTranslation } from "./translation-quality";
+
 export type AppLanguage = "en" | "ar";
 
 export function parseAppLanguage(value: unknown): AppLanguage {
@@ -12,7 +14,7 @@ export function localizedText(
   en: string | null | undefined,
   ar: string | null | undefined,
 ): string | null | undefined {
-  if (language === "ar" && ar) return ar;
+  if (language === "ar" && isUsableArabicTranslation(en, ar)) return ar;
   return en;
 }
 
@@ -41,19 +43,22 @@ export function localizeDeep<T>(value: T, language: AppLanguage): T {
     result[key] = localizeDeep(nested, language);
   }
 
-  if ("name" in source) {
-    result.name = localizedText(
-      language,
-      source.name as string | null | undefined,
-      source.nameAr as string | null | undefined,
-    );
-  }
-  if ("category" in source) {
-    result.category = localizedText(
-      language,
-      source.category as string | null | undefined,
-      source.categoryAr as string | null | undefined,
-    );
+  const isMedication = "strength" in source;
+  if (!isMedication) {
+    if ("name" in source) {
+      result.name = localizedText(
+        language,
+        source.name as string | null | undefined,
+        source.nameAr as string | null | undefined,
+      );
+    }
+    if ("category" in source) {
+      result.category = localizedText(
+        language,
+        source.category as string | null | undefined,
+        source.categoryAr as string | null | undefined,
+      );
+    }
   }
 
   return result as T;

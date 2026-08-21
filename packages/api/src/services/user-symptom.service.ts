@@ -7,7 +7,7 @@ import {
 } from "../lib/pagination";
 import { createError } from "../middleware/error-handler";
 import type { AppLanguage } from "../lib/app-language";
-import { localizeDeep } from "../lib/app-language";
+import { localizeResponse } from "../lib/localize-response";
 import { buildLocalizedNameSearch } from "../lib/localized-search";
 
 export interface ListUserSymptomsInput extends PaginationInput {
@@ -22,17 +22,17 @@ export interface CreateUserSymptomInput {
   language?: AppLanguage;
 }
 
-function catalogInclude(search?: string, language: AppLanguage = "en") {
+async function catalogInclude(search?: string, language: AppLanguage = "en") {
+  const where = search?.trim()
+    ? await buildLocalizedNameSearch(language, search, ["category"])
+    : undefined;
+
   return {
     model: SymptomCatalog,
     as: "catalog" as const,
     attributes: ["id", "name", "nameAr", "category", "categoryAr"],
     required: Boolean(search?.trim()),
-    ...(search?.trim()
-      ? {
-          where: buildLocalizedNameSearch(language, search, ["category"]),
-        }
-      : {}),
+    ...(where ? { where } : {}),
   };
 }
 
@@ -52,14 +52,14 @@ async function findOwnedUserSymptom(
 ) {
   const userSymptom = await UserSymptom.findOne({
     where: { id, userId },
-    include: [catalogInclude(undefined, language)],
+    include: [await catalogInclude(undefined, language)],
   });
 
   if (!userSymptom) {
     throw createError("User symptom not found", 404);
   }
 
-  return localizeDeep(userSymptom, language);
+  return localizeResponse(userSymptom, language);
 }
 
 export class UserSymptomService {
@@ -69,7 +69,7 @@ export class UserSymptomService {
 
     const { count, rows } = await UserSymptom.findAndCountAll({
       where: { userId: input.userId },
-      include: [catalogInclude(input.search, language)],
+      include: [await catalogInclude(input.search, language)],
       order: [
         ["createdAt", "DESC"],
         ["id", "ASC"],
@@ -80,7 +80,7 @@ export class UserSymptomService {
     });
 
     return buildPaginatedResponse(
-      localizeDeep(rows, language),
+      await localizeResponse(rows, language),
       count,
       currentPage,
       pageSize,

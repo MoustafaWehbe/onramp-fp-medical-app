@@ -8,13 +8,9 @@ import {
 import { lookupMedicationCategory } from "../lib/medication-category";
 import { searchMedicationNames } from "../lib/medication-search";
 import { createError } from "../middleware/error-handler";
-import type { AppLanguage } from "../lib/app-language";
-import { localizeDeep } from "../lib/app-language";
-import { buildLocalizedNameSearch } from "../lib/localized-search";
 
 export interface ListMedicationsInput extends PaginationInput {
   search?: string;
-  language?: AppLanguage;
 }
 
 export interface CreateMedicationInput {
@@ -23,25 +19,31 @@ export interface CreateMedicationInput {
   category?: string;
 }
 
+function escapeLike(value: string): string {
+  return value.replace(/[%_\\]/g, "\\$&");
+}
+
+function buildSearchWhere(search?: string) {
+  const trimmed = search?.trim();
+  if (!trimmed) return undefined;
+
+  const pattern = `%${escapeLike(trimmed)}%`;
+  return {
+    [Op.or]: [
+      { name: { [Op.iLike]: pattern } },
+      { strength: { [Op.iLike]: pattern } },
+      { category: { [Op.iLike]: pattern } },
+    ],
+  };
+}
+
 export class MedicationService {
   async list(input: ListMedicationsInput) {
-    const language = input.language ?? "en";
     const { currentPage, pageSize, offset, limit } = getPaginationParams(input);
 
     const { count, rows } = await Medication.findAndCountAll({
-      attributes: [
-        "id",
-        "name",
-        "nameAr",
-        "strength",
-        "category",
-        "categoryAr",
-        "createdAt",
-      ],
-      where: buildLocalizedNameSearch(language, input.search, [
-        "strength",
-        "category",
-      ]),
+      attributes: ["id", "name", "strength", "category", "createdAt"],
+      where: buildSearchWhere(input.search),
       order: [
         ["name", "ASC"],
         ["strength", "ASC"],
@@ -50,12 +52,7 @@ export class MedicationService {
       offset,
     });
 
-    return buildPaginatedResponse(
-      localizeDeep(rows, language),
-      count,
-      currentPage,
-      pageSize,
-    );
+    return buildPaginatedResponse(rows, count, currentPage, pageSize);
   }
 
   async create(input: CreateMedicationInput) {
@@ -98,15 +95,13 @@ export class MedicationService {
     }
   }
 
-  async getById(id: string, language: AppLanguage = "en") {
+  async getById(id: string) {
     const medication = await Medication.findByPk(id, {
       attributes: [
         "id",
         "name",
-        "nameAr",
         "strength",
         "category",
-        "categoryAr",
         "createdAt",
         "updatedAt",
       ],
@@ -116,7 +111,7 @@ export class MedicationService {
       throw createError("Medication not found", 404);
     }
 
-    return localizeDeep(medication, language);
+    return medication;
   }
 }
 

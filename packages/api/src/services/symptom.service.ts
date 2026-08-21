@@ -8,7 +8,7 @@ import {
 } from "../lib/pagination";
 import { createError } from "../middleware/error-handler";
 import type { AppLanguage } from "../lib/app-language";
-import { localizeDeep } from "../lib/app-language";
+import { localizeResponse } from "../lib/localize-response";
 import { buildLocalizedNameSearch } from "../lib/localized-search";
 
 export interface ListSymptomsInput extends PaginationInput {
@@ -28,14 +28,14 @@ export class SymptomCatalogService {
 
     const { count, rows } = await SymptomCatalog.findAndCountAll({
       attributes: ["id", "name", "nameAr", "category", "categoryAr", "createdAt"],
-      where: buildLocalizedNameSearch(language, input.search, ["category"]),
+      where: await buildLocalizedNameSearch(language, input.search, ["category"]),
       order: [["name", "ASC"]],
       limit,
       offset,
     });
 
     return buildPaginatedResponse(
-      localizeDeep(rows, language),
+      await localizeResponse(rows, language),
       count,
       currentPage,
       pageSize,

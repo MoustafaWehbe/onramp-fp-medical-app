@@ -12,7 +12,8 @@ import {
   type PaginationInput,
 } from "../lib/pagination";
 import { createError } from "../middleware/error-handler";
-import { localizeDeep, type AppLanguage } from "../lib/app-language";
+import { localizeResponse } from "../lib/localize-response";
+import type { AppLanguage } from "../lib/app-language";
 
 export interface ListConditionSymptomsInput extends PaginationInput {
   userId: string;
@@ -116,7 +117,7 @@ export class ConditionSymptomService {
     });
 
     return buildPaginatedResponse(
-      localizeDeep(rows, language),
+      await localizeResponse(rows, language),
       count,
       currentPage,
       pageSize,
@@ -142,7 +143,7 @@ export class ConditionSymptomService {
     });
 
     return buildPaginatedResponse(
-      localizeDeep(rows, language),
+      await localizeResponse(rows, language),
       count,
       currentPage,
       pageSize,
@@ -175,7 +176,7 @@ export class ConditionSymptomService {
       const row = await ConditionSymptom.findByPk(created.id, {
         include: [linkedConditionInclude(), linkedSymptomInclude()],
       });
-      return localizeDeep(row, language);
+      return localizeResponse(row, language);
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
         throw createError("Symptom already linked to condition", 409);

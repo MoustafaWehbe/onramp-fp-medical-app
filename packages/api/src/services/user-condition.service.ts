@@ -8,7 +8,7 @@ import {
 import { createError } from "../middleware/error-handler";
 import type { ConditionStatus } from "@starter-kit/shared/db/types/enums";
 import type { AppLanguage } from "../lib/app-language";
-import { localizeDeep } from "../lib/app-language";
+import { localizeResponse } from "../lib/localize-response";
 import { buildLocalizedNameSearch } from "../lib/localized-search";
 
 export interface ListUserConditionsInput extends PaginationInput {
@@ -37,17 +37,17 @@ export interface UpdateUserConditionInput {
   language?: AppLanguage;
 }
 
-function conditionInclude(search?: string, language: AppLanguage = "en") {
+async function conditionInclude(search?: string, language: AppLanguage = "en") {
+  const where = search?.trim()
+    ? await buildLocalizedNameSearch(language, search)
+    : undefined;
+
   return {
     model: ConditionCatalog,
     as: "condition" as const,
     attributes: ["id", "name", "nameAr"],
     required: Boolean(search?.trim()),
-    ...(search?.trim()
-      ? {
-          where: buildLocalizedNameSearch(language, search),
-        }
-      : {}),
+    ...(where ? { where } : {}),
   };
 }
 
@@ -71,13 +71,13 @@ async function findOwnedUserCondition(
       id,
       userId,
     },
-    include: [conditionInclude(undefined, language)],
+    include: [await conditionInclude(undefined, language)],
   });
   if (!userCondition) {
     throw createError("User condition not found", 404);
   }
 
-  return localizeDeep(userCondition, language);
+  return localizeResponse(userCondition, language);
 }
 
 export class UserConditionService {
@@ -89,7 +89,7 @@ export class UserConditionService {
       where: {
         userId: input.userId,
       },
-      include: [conditionInclude(input.search, language)],
+      include: [await conditionInclude(input.search, language)],
       order: [
         ["createdAt", "DESC"],
         ["id", "ASC"],
@@ -100,7 +100,7 @@ export class UserConditionService {
     });
 
     return buildPaginatedResponse(
-      localizeDeep(rows, language),
+      await localizeResponse(rows, language),
       count,
       currentPage,
       pageSize,

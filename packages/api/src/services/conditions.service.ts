@@ -4,7 +4,7 @@ import { Sequelize, UniqueConstraintError} from "sequelize";
 import { ConditionCatalog } from "src/models/catalogs/ConditionCatalog";
 import { createError } from "src/middleware/error-handler";
 import type { AppLanguage } from "../lib/app-language";
-import { localizeDeep } from "../lib/app-language";
+import { localizeResponse } from "../lib/localize-response";
 import { buildLocalizedNameSearch } from "../lib/localized-search";
 
 export interface ListConditionsInput extends PaginationInput {
@@ -25,7 +25,7 @@ export class ConditionService {
   
       const { count, rows } = await ConditionCatalog.findAndCountAll({
         attributes: ["id", "name", "nameAr", "createdAt"],
-        where: buildLocalizedNameSearch(language, input.search),
+        where: await buildLocalizedNameSearch(language, input.search),
         order: [
           ["name", "ASC"],
         ],
@@ -34,7 +34,7 @@ export class ConditionService {
       });
   
       return buildPaginatedResponse(
-        localizeDeep(rows, language),
+        await localizeResponse(rows, language),
         count,
         currentPage,
         pageSize,
@@ -55,7 +55,7 @@ export class ConditionService {
       throw createError("Condition not found", 404);
     }
 
-    return localizeDeep(condition, language);
+    return localizeResponse(condition, language);
   }
 
   async create(input: CreateConditionInput) {

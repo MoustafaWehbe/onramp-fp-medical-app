@@ -68,7 +68,7 @@ export function entryIncludes() {
             {
               model: Medication,
               as: "medication" as const,
-              attributes: ["id", "name", "nameAr", "strength", "category", "categoryAr"],
+              attributes: ["id", "name", "strength", "category"],
             },
           ],
         },

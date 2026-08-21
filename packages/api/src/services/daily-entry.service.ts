@@ -11,7 +11,8 @@ import {
 } from "../lib/pagination";
 import { createError } from "../middleware/error-handler";
 import { getDatabase } from "../lib/db";
-import { localizeDeep, type AppLanguage } from "../lib/app-language";
+import { localizeResponse } from "../lib/localize-response";
+import type { AppLanguage } from "../lib/app-language";
 import { entryIncludes } from "./daily-entry/includes";
 import { assertOwnedReferences } from "./daily-entry/ownership";
 import {
@@ -49,7 +50,7 @@ async function findOwnedEntry(
     throw createError("Daily entry not found", 404);
   }
 
-  return localizeDeep(entry, language);
+  return localizeResponse(entry, language);
 }
 
 export class DailyEntryService {
@@ -114,7 +115,7 @@ export class DailyEntryService {
     ],
   });
     return buildPaginatedResponse(
-      localizeDeep(rows, language),
+      await localizeResponse(rows, language),
       count,
       currentPage,
       pageSize,

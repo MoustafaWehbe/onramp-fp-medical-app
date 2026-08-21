@@ -74,8 +74,6 @@ describe("GET /api/profile/medications", () => {
       currentPage: 1,
       pageSize: 10,
       search: undefined,
-    
-      language: "en",
     });
   });
 
@@ -100,8 +98,6 @@ describe("GET /api/profile/medications", () => {
       currentPage: 2,
       pageSize: 5,
       search: "panadol",
-    
-      language: "en",
     });
   });
 
@@ -130,7 +126,6 @@ describe("GET /api/profile/medications/:id", () => {
     expect(mockUserMedicationService.getById).toHaveBeenCalledWith(
       USER_ID,
       USER_MEDICATION_ID,
-      "en",
     );
   });
 
@@ -177,8 +172,6 @@ describe("POST /api/profile/medications", () => {
       medicationId: MEDICATION_ID,
       dosage: 500,
       dosageMeasurement: "mg",
-    
-      language: "en",
     });
   });
 
@@ -230,8 +223,6 @@ describe("PATCH /api/profile/medications/:id", () => {
       userId: USER_ID,
       id: USER_MEDICATION_ID,
       frequency: "Twice daily",
-    
-      language: "en",
     });
   });
 
