@@ -30,7 +30,15 @@ async function catalogInclude(search?: string, language: AppLanguage = "en") {
   return {
     model: SymptomCatalog,
     as: "catalog" as const,
-    attributes: ["id", "name", "nameAr", "category", "categoryAr"],
+    attributes: [
+      "id",
+      "name",
+      "nameAr",
+      "category",
+      "categoryAr",
+      "isCustom",
+      "language",
+    ],
     required: Boolean(search?.trim()),
     ...(where ? { where } : {}),
   };

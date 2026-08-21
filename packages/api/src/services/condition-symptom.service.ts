@@ -74,7 +74,15 @@ function linkedSymptomInclude() {
       {
         model: SymptomCatalog,
         as: "catalog" as const,
-        attributes: ["id", "name", "nameAr", "category", "categoryAr"],
+        attributes: [
+          "id",
+          "name",
+          "nameAr",
+          "category",
+          "categoryAr",
+          "isCustom",
+          "language",
+        ],
       },
     ],
   };

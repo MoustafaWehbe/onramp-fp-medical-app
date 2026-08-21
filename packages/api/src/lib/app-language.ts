@@ -43,8 +43,9 @@ export function localizeDeep<T>(value: T, language: AppLanguage): T {
     result[key] = localizeDeep(nested, language);
   }
 
-  const isMedication = "strength" in source;
-  if (!isMedication) {
+  const skipLocalization =
+    "strength" in source || source.isCustom === true;
+  if (!skipLocalization) {
     if ("name" in source) {
       result.name = localizedText(
         language,

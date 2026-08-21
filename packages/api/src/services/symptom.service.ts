@@ -1,4 +1,4 @@
-import { UniqueConstraintError } from "sequelize";
+import { Op, UniqueConstraintError, type WhereOptions } from "sequelize";
 import { SymptomCatalog } from "../models";
 import { searchSymptomsFromApi } from "../lib/symptoms";
 import {
@@ -19,16 +19,45 @@ export interface ListSymptomsInput extends PaginationInput {
 export interface CreateSymptomInput {
   name: string;
   category?: string;
+  isCustom?: boolean;
+  language?: AppLanguage;
+}
+
+function visibilityWhere(language: AppLanguage): WhereOptions {
+  return {
+    [Op.or]: [
+      { isCustom: false },
+      { isCustom: true, language },
+    ],
+  };
 }
 
 export class SymptomCatalogService {
   async list(input: ListSymptomsInput) {
     const language = input.language ?? "en";
     const { currentPage, pageSize, offset, limit } = getPaginationParams(input);
+    const searchWhere = await buildLocalizedNameSearch(
+      language,
+      input.search,
+      ["category"],
+    );
+
+    const where: WhereOptions = searchWhere
+      ? { [Op.and]: [visibilityWhere(language), searchWhere] }
+      : visibilityWhere(language);
 
     const { count, rows } = await SymptomCatalog.findAndCountAll({
-      attributes: ["id", "name", "nameAr", "category", "categoryAr", "createdAt"],
-      where: await buildLocalizedNameSearch(language, input.search, ["category"]),
+      attributes: [
+        "id",
+        "name",
+        "nameAr",
+        "category",
+        "categoryAr",
+        "isCustom",
+        "language",
+        "createdAt",
+      ],
+      where,
       order: [["name", "ASC"]],
       limit,
       offset,
@@ -43,8 +72,13 @@ export class SymptomCatalogService {
   }
 
   async create(input: CreateSymptomInput) {
+    const isCustom = input.isCustom ?? false;
+    const language = isCustom ? (input.language ?? "en") : "en";
+
     const existing = await SymptomCatalog.findOne({
-      where: { name: input.name },
+      where: isCustom
+        ? { name: input.name, isCustom: true, language }
+        : { name: input.name },
     });
 
     if (existing) {
@@ -52,7 +86,12 @@ export class SymptomCatalogService {
     }
 
     try {
-      return await SymptomCatalog.create(input);
+      return await SymptomCatalog.create({
+        name: input.name,
+        category: input.category,
+        isCustom,
+        language,
+      });
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
         throw createError("Symptom already exists", 409);

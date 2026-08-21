@@ -15,6 +15,7 @@ const symptomCategorySchema = z
 export const createSymptomSchema = z.object({
   name: symptomNameSchema,
   category: symptomCategorySchema,
+  isCustom: z.boolean().optional().default(false),
 });
 
 export const listSymptomsQuerySchema = paginationQuerySchema.extend({

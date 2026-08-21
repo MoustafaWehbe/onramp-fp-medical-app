@@ -11,18 +11,29 @@ type CatalogNode = {
   nameAr?: string | null;
   category?: string | null;
   categoryAr?: string | null;
+  isCustom?: boolean;
   setDataValue?: (key: string, value: unknown) => void;
 };
 
+function isCustomSymptom(value: unknown): boolean {
+  if (value instanceof SymptomCatalog) return Boolean(value.isCustom);
+  if (value === null || typeof value !== "object") return false;
+  return Boolean((value as { isCustom?: boolean }).isCustom);
+}
+
 function kindOf(value: unknown): CatalogKind | null {
   if (value instanceof ConditionCatalog) return "condition";
-  if (value instanceof SymptomCatalog) return "symptom";
+  if (value instanceof SymptomCatalog) {
+    return value.isCustom ? null : "symptom";
+  }
 
   if (value === null || typeof value !== "object") return null;
   const row = value as Record<string, unknown>;
   if (!("name" in row) || !("nameAr" in row)) return null;
   if ("strength" in row) return null;
-  if ("category" in row || "categoryAr" in row) return "symptom";
+  if ("category" in row || "categoryAr" in row) {
+    return isCustomSymptom(value) ? null : "symptom";
+  }
   return "condition";
 }
 

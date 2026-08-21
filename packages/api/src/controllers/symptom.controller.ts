@@ -32,7 +32,10 @@ export const symptomCatalogController = {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const symptom = await symptomCatalogService.create(req.body);
+      const symptom = await symptomCatalogService.create({
+        ...req.body,
+        language: req.body.isCustom ? req.language : "en",
+      });
       res.status(201).json({ data: symptom });
     } catch (err) {
       next(err);
