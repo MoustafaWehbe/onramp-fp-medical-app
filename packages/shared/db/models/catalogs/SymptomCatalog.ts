@@ -7,7 +7,7 @@ export interface SymptomCatalogAttributes {
   id: string;
   name: string;
   nameAr?: string | null;
-  category?: string;
+  category?: string | null;
   categoryAr?: string | null;
   isCustom: boolean;
   language: SymptomCatalogLanguage;
@@ -28,7 +28,7 @@ export class SymptomCatalog
   declare id: string;
   declare name: string;
   declare nameAr: string | null | undefined;
-  declare category: string | undefined;
+  declare category: string | null | undefined;
   declare categoryAr: string | null | undefined;
   declare isCustom: boolean;
   declare language: SymptomCatalogLanguage;

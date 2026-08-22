@@ -20,14 +20,9 @@ module.exports = {
     });
   },
 
-  async down(queryInterface) {
-    await queryInterface.removeIndex(
-      "symptom_catalog",
-      "symptom_catalog_name_language_unique",
+  async down() {
+    throw new Error(
+      "Irreversible: symptom_catalog may contain the same name in multiple languages; restoring a name-only unique index is unsafe.",
     );
-    await queryInterface.addIndex("symptom_catalog", ["name"], {
-      unique: true,
-      name: "symptom_catalog_name_unique",
-    });
   },
 };
