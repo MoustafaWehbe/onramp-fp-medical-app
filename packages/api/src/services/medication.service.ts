@@ -28,7 +28,6 @@ function buildSearchWhere(search?: string) {
   if (!trimmed) return undefined;
 
   const pattern = `%${escapeLike(trimmed)}%`;
-
   return {
     [Op.or]: [
       { name: { [Op.iLike]: pattern } },
@@ -97,7 +96,16 @@ export class MedicationService {
   }
 
   async getById(id: string) {
-    const medication = await Medication.findByPk(id);
+    const medication = await Medication.findByPk(id, {
+      attributes: [
+        "id",
+        "name",
+        "strength",
+        "category",
+        "createdAt",
+        "updatedAt",
+      ],
+    });
 
     if (!medication) {
       throw createError("Medication not found", 404);

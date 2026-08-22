@@ -1,4 +1,4 @@
-import { Op, UniqueConstraintError } from "sequelize";
+import { UniqueConstraintError } from "sequelize";
 import { ConditionCatalog, UserCondition } from "../models";
 import {
   buildPaginatedResponse,
@@ -7,10 +7,14 @@ import {
 } from "../lib/pagination";
 import { createError } from "../middleware/error-handler";
 import type { ConditionStatus } from "@starter-kit/shared/db/types/enums";
+import type { AppLanguage } from "../lib/app-language";
+import { localizeResponse } from "../lib/localize-response";
+import { buildLocalizedNameSearch } from "../lib/localized-search";
 
 export interface ListUserConditionsInput extends PaginationInput {
   userId: string;
   search?: string;
+  language?: AppLanguage;
 }
 
 export interface CreateUserConditionInput {
@@ -20,6 +24,7 @@ export interface CreateUserConditionInput {
   diagnosedDate?: string | null;
   status?: ConditionStatus;
   notes?: string | null;
+  language?: AppLanguage;
 }
 
 export interface UpdateUserConditionInput {
@@ -29,30 +34,20 @@ export interface UpdateUserConditionInput {
   diagnosedDate?: string | null;
   status?: ConditionStatus;
   notes?: string | null;
+  language?: AppLanguage;
 }
 
-function escapeLike(value: string): string {
-  return value.replace(/[%_\\]/g, "\\$&");
-}
-
-function conditionInclude(search?: string) {
-  const trimmed = search?.trim();
-  const pattern = trimmed ? `%${escapeLike(trimmed)}%` : undefined;
+async function conditionInclude(search?: string, language: AppLanguage = "en") {
+  const where = search?.trim()
+    ? await buildLocalizedNameSearch(language, search)
+    : undefined;
 
   return {
     model: ConditionCatalog,
     as: "condition" as const,
-    attributes: ["id", "name"],
-    required: Boolean(pattern),
-    ...(pattern
-      ? {
-          where: {
-            name: {
-              [Op.iLike]: pattern,
-            },
-          },
-        }
-      : {}),
+    attributes: ["id", "name", "nameAr"],
+    required: Boolean(search?.trim()),
+    ...(where ? { where } : {}),
   };
 }
 
@@ -69,197 +64,136 @@ async function assertConditionExists(conditionId: string) {
 async function findOwnedUserCondition(
   userId: string,
   id: string,
+  language: AppLanguage = "en",
 ) {
   const userCondition = await UserCondition.findOne({
     where: {
       id,
       userId,
     },
-    include: [
-      conditionInclude(),
-    ],
+    include: [await conditionInclude(undefined, language)],
   });
   if (!userCondition) {
     throw createError("User condition not found", 404);
   }
 
-  return userCondition;
+  return localizeResponse(userCondition, language);
 }
 
 export class UserConditionService {
-
   async list(input: ListUserConditionsInput) {
-    const {
-      currentPage,
-      pageSize,
-      offset,
-      limit,
-    } = getPaginationParams(input);
+    const language = input.language ?? "en";
+    const { currentPage, pageSize, offset, limit } = getPaginationParams(input);
 
-    const {
-      count,
-      rows,
-    } = await UserCondition.findAndCountAll({
-      where:{
+    const { count, rows } = await UserCondition.findAndCountAll({
+      where: {
         userId: input.userId,
       },
-      include:[
-        conditionInclude(input.search),
-      ],
-      order:[
-        ["createdAt","DESC"],
-        ["id","ASC"],
+      include: [await conditionInclude(input.search, language)],
+      order: [
+        ["createdAt", "DESC"],
+        ["id", "ASC"],
       ],
       limit,
       offset,
-      distinct:true,
+      distinct: true,
     });
 
     return buildPaginatedResponse(
-      rows,
+      await localizeResponse(rows, language),
       count,
       currentPage,
       pageSize,
     );
   }
 
-  async getById(
-    userId:string,
-    id:string,
-  ){
-    return findOwnedUserCondition(
-      userId,
-      id,
-    );
+  async getById(userId: string, id: string, language: AppLanguage = "en") {
+    return findOwnedUserCondition(userId, id, language);
   }
 
-  async create(
-    input:CreateUserConditionInput,
-  ){
-    await assertConditionExists(
-      input.conditionId,
-    );
-    const existing =
-      await UserCondition.findOne({
-        where:{
-          userId:input.userId,
-          conditionId:input.conditionId,
-        },
-        attributes:["id"],
-      });
-    if(existing){
-      throw createError(
-        "Condition already linked to profile",
-        409,
-      );
+  async create(input: CreateUserConditionInput) {
+    const language = input.language ?? "en";
+    await assertConditionExists(input.conditionId);
+    const existing = await UserCondition.findOne({
+      where: {
+        userId: input.userId,
+        conditionId: input.conditionId,
+      },
+      attributes: ["id"],
+    });
+    if (existing) {
+      throw createError("Condition already linked to profile", 409);
     }
-    try{
-      const created =
-        await UserCondition.create({
-          userId:input.userId,
-          conditionId:input.conditionId,
-          description:
-            input.description ?? undefined,
-          diagnosedDate:
-            input.diagnosedDate ?? undefined,
-          status:
-            input.status,
-          notes:
-            input.notes ?? undefined,
-        });
+    try {
+      const created = await UserCondition.create({
+        userId: input.userId,
+        conditionId: input.conditionId,
+        description: input.description ?? undefined,
+        diagnosedDate: input.diagnosedDate ?? undefined,
+        status: input.status,
+        notes: input.notes ?? undefined,
+      });
 
-      return findOwnedUserCondition(
-        input.userId,
-        created.id,
-      );
-    }catch(error){
-      if(error instanceof UniqueConstraintError){
-        throw createError(
-          "Condition already linked to profile",
-          409,
-        );
+      return findOwnedUserCondition(input.userId, created.id, language);
+    } catch (error) {
+      if (error instanceof UniqueConstraintError) {
+        throw createError("Condition already linked to profile", 409);
       }
       throw error;
     }
   }
 
-  async update(
-    input:UpdateUserConditionInput,
-  ){
-    const userCondition =
-      await UserCondition.findOne({
-        where:{
-          id:input.id,
-          userId:input.userId,
-        },
-      });
-    if(!userCondition){
-      throw createError(
-        "User condition not found",
-        404,
-      );
+  async update(input: UpdateUserConditionInput) {
+    const language = input.language ?? "en";
+    const userCondition = await UserCondition.findOne({
+      where: {
+        id: input.id,
+        userId: input.userId,
+      },
+    });
+    if (!userCondition) {
+      throw createError("User condition not found", 404);
     }
-    if(input.description !== undefined){
+    if (input.description !== undefined) {
       userCondition.setDataValue(
         "description",
         input.description as string | undefined,
       );
     }
-    if(input.diagnosedDate !== undefined){
+    if (input.diagnosedDate !== undefined) {
       userCondition.setDataValue(
         "diagnosedDate",
         input.diagnosedDate as string | undefined,
       );
     }
-    if(input.status !== undefined){
-
-      userCondition.setDataValue(
-        "status",
-        input.status,
-      );
+    if (input.status !== undefined) {
+      userCondition.setDataValue("status", input.status);
     }
-    if(input.notes !== undefined){
-
-      userCondition.setDataValue(
-        "notes",
-        input.notes as string | undefined,
-      );
-
+    if (input.notes !== undefined) {
+      userCondition.setDataValue("notes", input.notes as string | undefined);
     }
     await userCondition.save();
-    return findOwnedUserCondition(
-      input.userId,
-      userCondition.id,
-    );
+    return findOwnedUserCondition(input.userId, userCondition.id, language);
   }
 
-  async remove(
-    userId:string,
-    id:string,
-  ){
-    const userCondition =
-      await UserCondition.findOne({
-        where:{
-          id,
-          userId,
-        },
-      });
+  async remove(userId: string, id: string) {
+    const userCondition = await UserCondition.findOne({
+      where: {
+        id,
+        userId,
+      },
+    });
 
-    if(!userCondition){
-      throw createError(
-        "User condition not found",
-        404,
-      );
-
+    if (!userCondition) {
+      throw createError("User condition not found", 404);
     }
-    userCondition.active=false;
+    userCondition.active = false;
     await userCondition.save();
     return {
-      id:userCondition.id,
-      active:false,
+      id: userCondition.id,
+      active: false,
     };
   }
 }
 
-export const userConditionService =
-  new UserConditionService();
+export const userConditionService = new UserConditionService();

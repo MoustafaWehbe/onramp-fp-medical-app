@@ -3,8 +3,6 @@ import { doctorService } from "../services/doctor.service";
 import { userDoctorService } from "../services/user-doctor.service";
 
 export const doctorController = {
-  // Catalog 
-
   async list(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { currentPage, pageSize, search } = req.query as unknown as {
@@ -31,8 +29,6 @@ export const doctorController = {
       next(err);
     }
   },
-
-  // Profile
 
   async listProfile(
     req: Request,

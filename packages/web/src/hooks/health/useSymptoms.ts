@@ -87,7 +87,7 @@ export function useEnsureSymptomCatalog() {
       if (existing) return existing;
 
       try {
-        return await createSymptomCatalog({ name });
+        return await createSymptomCatalog({ name, isCustom: true });
       } catch (error) {
         if (isAxiosError(error) && error.response?.status === 409) {
           const raced = await findSymptomCatalogByName(name);

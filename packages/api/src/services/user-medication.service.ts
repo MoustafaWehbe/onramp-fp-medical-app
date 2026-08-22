@@ -35,24 +35,29 @@ function escapeLike(value: string): string {
   return value.replace(/[%_\\]/g, "\\$&");
 }
 
-function medicationInclude(search?: string) {
+function buildMedicationSearchWhere(search?: string) {
   const trimmed = search?.trim();
-  const pattern = trimmed ? `%${escapeLike(trimmed)}%` : undefined;
+  if (!trimmed) return undefined;
+
+  const pattern = `%${escapeLike(trimmed)}%`;
+  return {
+    [Op.or]: [
+      { name: { [Op.iLike]: pattern } },
+      { strength: { [Op.iLike]: pattern } },
+      { category: { [Op.iLike]: pattern } },
+    ],
+  };
+}
+
+function medicationInclude(search?: string) {
+  const where = buildMedicationSearchWhere(search);
 
   return {
     model: Medication,
     as: "medication" as const,
     attributes: ["id", "name", "strength", "category"],
-    required: Boolean(pattern),
-    ...(pattern
-      ? {
-          where: {
-            name: {
-              [Op.iLike]: pattern,
-            },
-          },
-        }
-      : {}),
+    required: Boolean(search?.trim()),
+    ...(where ? { where } : {}),
   };
 }
 
@@ -101,12 +106,7 @@ export class UserMedicationService {
       distinct: true,
     });
 
-    return buildPaginatedResponse(
-      rows,
-      count,
-      currentPage,
-      pageSize,
-    );
+    return buildPaginatedResponse(rows, count, currentPage, pageSize);
   }
 
   async getById(userId: string, id: string) {
@@ -125,10 +125,7 @@ export class UserMedicationService {
     });
 
     if (existing) {
-      throw createError(
-        "Medication already linked to profile",
-        409,
-      );
+      throw createError("Medication already linked to profile", 409);
     }
 
     try {
@@ -136,22 +133,15 @@ export class UserMedicationService {
         userId: input.userId,
         medicationId: input.medicationId,
         dosage: input.dosage ?? undefined,
-        dosageMeasurement:
-          input.dosageMeasurement ?? undefined,
+        dosageMeasurement: input.dosageMeasurement ?? undefined,
         frequency: input.frequency ?? undefined,
         notes: input.notes ?? undefined,
       });
 
-      return findOwnedUserMedication(
-        input.userId,
-        created.id,
-      );
+      return findOwnedUserMedication(input.userId, created.id);
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
-        throw createError(
-          "Medication already linked to profile",
-          409,
-        );
+        throw createError("Medication already linked to profile", 409);
       }
 
       throw error;
@@ -167,10 +157,7 @@ export class UserMedicationService {
     });
 
     if (!userMedication) {
-      throw createError(
-        "User medication not found",
-        404,
-      );
+      throw createError("User medication not found", 404);
     }
 
     if (input.dosage !== undefined) {
@@ -203,10 +190,7 @@ export class UserMedicationService {
 
     await userMedication.save();
 
-    return findOwnedUserMedication(
-      input.userId,
-      userMedication.id,
-    );
+    return findOwnedUserMedication(input.userId, userMedication.id);
   }
 
   async remove(userId: string, id: string) {
@@ -218,10 +202,7 @@ export class UserMedicationService {
     });
 
     if (!userMedication) {
-      throw createError(
-        "User medication not found",
-        404,
-      );
+      throw createError("User medication not found", 404);
     }
 
     userMedication.active = false;
@@ -234,5 +215,4 @@ export class UserMedicationService {
   }
 }
 
-export const userMedicationService =
-  new UserMedicationService();
+export const userMedicationService = new UserMedicationService();

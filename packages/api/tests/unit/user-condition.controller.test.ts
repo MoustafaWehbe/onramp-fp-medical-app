@@ -72,6 +72,8 @@ describe("GET /api/profile/conditions", () => {
       currentPage: 1,
       pageSize: 10,
       search: undefined,
+    
+      language: "en",
     });
   });
 
@@ -96,6 +98,8 @@ describe("GET /api/profile/conditions", () => {
       currentPage: 2,
       pageSize: 5,
       search: "hyper",
+    
+      language: "en",
     });
   });
 
@@ -124,6 +128,7 @@ describe("GET /api/profile/conditions/:id", () => {
     expect(mockUserConditionService.getById).toHaveBeenCalledWith(
       USER_ID,
       USER_CONDITION_ID,
+      "en",
     );
   });
 
@@ -170,6 +175,8 @@ describe("POST /api/profile/conditions", () => {
       conditionId: CONDITION_ID,
       diagnosedDate: "2024-01-01",
       status: "active",
+    
+      language: "en",
     });
   });
 
@@ -221,6 +228,8 @@ describe("PATCH /api/profile/conditions/:id", () => {
       userId: USER_ID,
       id: USER_CONDITION_ID,
       notes: "Updated notes",
+    
+      language: "en",
     });
   });
 

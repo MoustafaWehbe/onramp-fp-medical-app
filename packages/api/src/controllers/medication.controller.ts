@@ -68,8 +68,7 @@ export const medicationController = {
         id: string;
       };
 
-      const medication =
-        await medicationService.getById(id);
+      const medication = await medicationService.getById(id);
 
       res.json({
         data: medication,
@@ -80,121 +79,113 @@ export const medicationController = {
   },
 
   async listProfile(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
-  try {
-    const { currentPage, pageSize, search } =
-      req.query as unknown as {
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { currentPage, pageSize, search } = req.query as unknown as {
         currentPage: number;
         pageSize: number;
         search?: string;
       };
 
-    const result = await userMedicationService.list({
-      userId: req.user!.userId,
-      currentPage,
-      pageSize,
-      search,
-    });
+      const result = await userMedicationService.list({
+        userId: req.user!.userId,
+        currentPage,
+        pageSize,
+        search,
+      });
 
-    res.json(result);
-  } catch (err) {
-    next(err);
-  }
-},
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  },
 
-async getProfileById(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
-  try {
-    const { id } = req.params as {
-      id: string;
-    };
+  async getProfileById(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params as {
+        id: string;
+      };
 
-    const userMedication =
-      await userMedicationService.getById(
+      const userMedication = await userMedicationService.getById(
         req.user!.userId,
         id,
       );
 
-    res.json({
-      data: userMedication,
-    });
-  } catch (err) {
-    next(err);
-  }
-},
+      res.json({
+        data: userMedication,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 
-async createProfile(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
-  try {
-    const userMedication =
-      await userMedicationService.create({
+  async createProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const userMedication = await userMedicationService.create({
         userId: req.user!.userId,
         ...req.body,
       });
 
-    res.status(201).json({
-      data: userMedication,
-    });
-  } catch (err) {
-    next(err);
-  }
-},
+      res.status(201).json({
+        data: userMedication,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 
-async updateProfile(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
-  try {
-    const { id } = req.params as {
-      id: string;
-    };
+  async updateProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params as {
+        id: string;
+      };
 
-    const userMedication =
-      await userMedicationService.update({
+      const userMedication = await userMedicationService.update({
         userId: req.user!.userId,
         id,
         ...req.body,
       });
 
-    res.json({
-      data: userMedication,
-    });
-  } catch (err) {
-    next(err);
-  }
-},
+      res.json({
+        data: userMedication,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 
-async removeProfile(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
-  try {
-    const { id } = req.params as {
-      id: string;
-    };
+  async removeProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params as {
+        id: string;
+      };
 
-    const result =
-      await userMedicationService.remove(
-        req.user!.userId,
-        id,
-      );
+      const result = await userMedicationService.remove(req.user!.userId, id);
 
-    res.json({
-      data: result,
-    });
-  } catch (err) {
-    next(err);
-  }
-},
+      res.json({
+        data: result,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 };

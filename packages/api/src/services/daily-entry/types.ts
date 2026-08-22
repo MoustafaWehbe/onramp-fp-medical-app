@@ -1,5 +1,6 @@
 import type { PaginationInput } from "../../lib/pagination";
 import type { ConditionStatus } from "@starter-kit/shared/db/types/enums";
+import type { AppLanguage } from "../../lib/app-language";
 
 export interface EntrySymptomInput {
   userSymptomId: string;
@@ -39,6 +40,7 @@ export interface CreateDailyEntryInput {
   conditions?: EntryConditionInput[];
   medications?: EntryMedicationInput[];
   doctorVisits?: EntryDoctorVisitInput[];
+  language?: AppLanguage;
 }
 
 export interface UpdateDailyEntryInput
@@ -51,4 +53,5 @@ export interface ListDailyEntriesInput extends PaginationInput {
   userId: string;
   fromDate?: string;
   toDate?: string;
+  language?: AppLanguage;
 }

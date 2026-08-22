@@ -74,6 +74,8 @@ describe("GET /api/conditions", () => {
       currentPage: 1,
       pageSize: 10,
       search: undefined,
+    
+      language: "en",
     });
   });
 
@@ -97,6 +99,8 @@ describe("GET /api/conditions", () => {
       currentPage: 2,
       pageSize: 5,
       search: "hyper",
+    
+      language: "en",
     });
   });
 
@@ -157,7 +161,7 @@ describe("GET /api/conditions/:id", () => {
 
     expect(res.status).toBe(200);
     expect(res.body.data.id).toBe(CONDITION_ID);
-    expect(mockConditionService.getById).toHaveBeenCalledWith(CONDITION_ID);
+    expect(mockConditionService.getById).toHaveBeenCalledWith(CONDITION_ID, "en");
   });
 
   it("returns 422 when id is not a uuid", async () => {
