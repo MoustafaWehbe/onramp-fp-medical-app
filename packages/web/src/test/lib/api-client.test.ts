@@ -4,6 +4,7 @@ const { mockInstance, mockPost, handlers } = vi.hoisted(() => ({
   mockInstance: vi.fn(),
   mockPost: vi.fn(),
   handlers: {
+    fulfilled: null as null | ((config: unknown) => unknown),
     rejected: null as null | ((error: unknown) => Promise<unknown>),
   },
 }));
@@ -13,10 +14,23 @@ vi.mock("axios", () => ({
     create: () => {
       const instance = mockInstance as typeof mockInstance & {
         interceptors: {
-          response: { use: (onFulfilled: unknown, onRejected: (error: unknown) => Promise<unknown>) => void };
+          request: {
+            use: (onFulfilled: (config: unknown) => unknown) => void;
+          };
+          response: {
+            use: (
+              onFulfilled: unknown,
+              onRejected: (error: unknown) => Promise<unknown>,
+            ) => void;
+          };
         };
       };
       instance.interceptors = {
+        request: {
+          use: (onFulfilled) => {
+            handlers.fulfilled = onFulfilled;
+          },
+        },
         response: {
           use: (_onFulfilled, onRejected) => {
             handlers.rejected = onRejected;
@@ -27,6 +41,10 @@ vi.mock("axios", () => ({
     },
     post: mockPost,
   },
+}));
+
+vi.mock("../../i18n", () => ({
+  default: { language: "en" },
 }));
 
 import { apiClient } from "../../lib/api-client";
@@ -40,6 +58,14 @@ describe("apiClient 401 interceptor", () => {
     vi.clearAllMocks();
     mockInstance.mockReset();
     mockPost.mockReset();
+  });
+
+  it("attaches X-App-Language from i18n on requests", () => {
+    const headers = { set: vi.fn() };
+    const config = { headers };
+    const result = handlers.fulfilled?.(config);
+    expect(result).toBe(config);
+    expect(headers.set).toHaveBeenCalledWith("X-App-Language", "en");
   });
 
   // ─── single 401 -> refresh -> retry -> success ────────────────────────────

@@ -12,20 +12,25 @@ import {
   type PaginationInput,
 } from "../lib/pagination";
 import { createError } from "../middleware/error-handler";
+import { localizeResponse } from "../lib/localize-response";
+import type { AppLanguage } from "../lib/app-language";
 
 export interface ListConditionSymptomsInput extends PaginationInput {
   userId: string;
   userConditionId: string;
+  language?: AppLanguage;
 }
 
 export interface ListAllConditionSymptomsInput extends PaginationInput {
   userId: string;
+  language?: AppLanguage;
 }
 
 export interface LinkConditionSymptomInput {
   userId: string;
   userConditionId: string;
   userSymptomId: string;
+  language?: AppLanguage;
 }
 
 async function assertOwnedActiveCondition(
@@ -69,7 +74,15 @@ function linkedSymptomInclude() {
       {
         model: SymptomCatalog,
         as: "catalog" as const,
-        attributes: ["id", "name", "category"],
+        attributes: [
+          "id",
+          "name",
+          "nameAr",
+          "category",
+          "categoryAr",
+          "isCustom",
+          "language",
+        ],
       },
     ],
   };
@@ -86,7 +99,7 @@ function linkedConditionInclude(userId?: string) {
       {
         model: ConditionCatalog,
         as: "condition" as const,
-        attributes: ["id", "name"],
+        attributes: ["id", "name", "nameAr"],
       },
     ],
   };
@@ -94,6 +107,7 @@ function linkedConditionInclude(userId?: string) {
 
 export class ConditionSymptomService {
   async listAll(input: ListAllConditionSymptomsInput) {
+    const language = input.language ?? "en";
     const { currentPage, pageSize, offset, limit } = getPaginationParams(input);
 
     const { count, rows } = await ConditionSymptom.findAndCountAll({
@@ -110,10 +124,16 @@ export class ConditionSymptomService {
       distinct: true,
     });
 
-    return buildPaginatedResponse(rows, count, currentPage, pageSize);
+    return buildPaginatedResponse(
+      await localizeResponse(rows, language),
+      count,
+      currentPage,
+      pageSize,
+    );
   }
 
   async list(input: ListConditionSymptomsInput) {
+    const language = input.language ?? "en";
     await assertOwnedActiveCondition(input.userId, input.userConditionId);
 
     const { currentPage, pageSize, offset, limit } = getPaginationParams(input);
@@ -130,10 +150,16 @@ export class ConditionSymptomService {
       distinct: true,
     });
 
-    return buildPaginatedResponse(rows, count, currentPage, pageSize);
+    return buildPaginatedResponse(
+      await localizeResponse(rows, language),
+      count,
+      currentPage,
+      pageSize,
+    );
   }
 
   async link(input: LinkConditionSymptomInput) {
+    const language = input.language ?? "en";
     await assertOwnedActiveCondition(input.userId, input.userConditionId);
     await assertOwnedActiveSymptom(input.userId, input.userSymptomId);
 
@@ -155,9 +181,10 @@ export class ConditionSymptomService {
         userSymptomId: input.userSymptomId,
       });
 
-      return ConditionSymptom.findByPk(created.id, {
+      const row = await ConditionSymptom.findByPk(created.id, {
         include: [linkedConditionInclude(), linkedSymptomInclude()],
       });
+      return localizeResponse(row, language);
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
         throw createError("Symptom already linked to condition", 409);

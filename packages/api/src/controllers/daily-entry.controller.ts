@@ -18,6 +18,7 @@ export const DailyEntryController = {
         pageSize,
         fromDate,
         toDate,
+        language: req.language,
       });
       res.json(result);
     } catch (err) {
@@ -28,7 +29,11 @@ export const DailyEntryController = {
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params as { id: string };
-      const entry = await dailyEntryService.getById(req.user!.userId, id);
+      const entry = await dailyEntryService.getById(
+        req.user!.userId,
+        id,
+        req.language,
+      );
       res.json({ data: entry });
     } catch (err) {
       next(err);
@@ -39,6 +44,7 @@ export const DailyEntryController = {
     try {
       const entry = await dailyEntryService.create({
         userId: req.user!.userId,
+        language: req.language,
         ...req.body,
       });
       res.status(201).json({ data: entry });
@@ -53,6 +59,7 @@ export const DailyEntryController = {
       const entry = await dailyEntryService.update({
         userId: req.user!.userId,
         id,
+        language: req.language,
         ...req.body,
       });
       res.json({ data: entry });

@@ -6,7 +6,6 @@ import axios from "axios";
 
 export const ConditionsController = {
 
-  // catalog 
   async list(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
         const { currentPage, pageSize, search } = req.query as unknown as {
@@ -18,6 +17,7 @@ export const ConditionsController = {
           currentPage,
           pageSize,
           search,
+          language: req.language,
         });
         res.json(result);
       } catch (err) {
@@ -39,7 +39,6 @@ export const ConditionsController = {
       const conditions = await conditionService.searchConditions(search);
       res.status(200).json(conditions);
     } catch (error) {
-      // external API failed 
       if (axios.isAxiosError(error)) {
         res.status(502).json({ error: "External conditions API unavailable" });
         return;
@@ -54,7 +53,7 @@ export const ConditionsController = {
         id: string;
       };
       const condition =
-        await conditionService.getById(id);
+        await conditionService.getById(id, req.language);
       res.json({
         data: condition,
       });
@@ -63,7 +62,6 @@ export const ConditionsController = {
     }
   },
 
-  // profile
   async listProfile(
   req: Request,
   res: Response,
@@ -81,6 +79,7 @@ export const ConditionsController = {
       currentPage,
       pageSize,
       search,
+      language: req.language,
     });
     res.json(result);
   } catch (err) {
@@ -99,6 +98,7 @@ async getProfileById(
       await userConditionService.getById(
         req.user!.userId,
         id,
+        req.language,
       );
     res.json({ data: userCondition });
   } catch (err) {
@@ -115,6 +115,7 @@ async createProfile(
     const userCondition =
       await userConditionService.create({
         userId: req.user!.userId,
+        language: req.language,
         ...req.body,
       });
     res.status(201).json({
@@ -137,6 +138,7 @@ async updateProfile(
       await userConditionService.update({
         userId: req.user!.userId,
         id,
+        language: req.language,
         ...req.body,
       });
     res.json({
@@ -183,6 +185,7 @@ async listAllProfileSymptoms(
       userId: req.user!.userId,
       currentPage,
       pageSize,
+      language: req.language,
     });
     res.json(result);
   } catch (err) {
@@ -206,6 +209,7 @@ async listProfileSymptoms(
       userConditionId: id,
       currentPage,
       pageSize,
+      language: req.language,
     });
     res.json(result);
   } catch (err) {
@@ -225,6 +229,7 @@ async linkProfileSymptom(
       userId: req.user!.userId,
       userConditionId: id,
       userSymptomId,
+      language: req.language,
     });
     res.status(201).json({ data: link });
   } catch (err) {

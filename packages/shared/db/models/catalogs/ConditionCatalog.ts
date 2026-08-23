@@ -4,12 +4,13 @@ import { timestampColumns } from "../timestamps";
 export interface ConditionCatalogAttributes {
   id: string;
   name: string;
+  nameAr?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export interface ConditionCatalogCreationAttributes
-  extends Optional<ConditionCatalogAttributes, "id"> {}
+  extends Optional<ConditionCatalogAttributes, "id" | "nameAr"> {}
 
 export class ConditionCatalog
   extends Model<ConditionCatalogAttributes, ConditionCatalogCreationAttributes>
@@ -17,6 +18,7 @@ export class ConditionCatalog
 {
   declare id: string;
   declare name: string;
+  declare nameAr: string | null | undefined;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
 
@@ -31,6 +33,10 @@ export class ConditionCatalog
         name: {
           type: DataTypes.STRING(255),
           allowNull: false,
+        },
+        nameAr: {
+          type: DataTypes.STRING(255),
+          allowNull: true,
         },
         ...timestampColumns,
       },

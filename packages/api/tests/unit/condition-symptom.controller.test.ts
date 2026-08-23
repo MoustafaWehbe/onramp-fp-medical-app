@@ -84,6 +84,8 @@ describe("GET /api/profile/conditions/symptoms", () => {
       userId: "00000000-0000-0000-0000-000000000001",
       currentPage: 1,
       pageSize: 10,
+    
+      language: "en",
     });
   });
 });
@@ -117,6 +119,8 @@ describe("GET /api/profile/conditions/:id/symptoms", () => {
       userConditionId: CONDITION_ID,
       currentPage: 1,
       pageSize: 10,
+    
+      language: "en",
     });
   });
 
@@ -147,6 +151,8 @@ describe("POST /api/profile/conditions/:id/symptoms", () => {
       userId: "00000000-0000-0000-0000-000000000001",
       userConditionId: CONDITION_ID,
       userSymptomId: SYMPTOM_ID,
+    
+      language: "en",
     });
   });
 

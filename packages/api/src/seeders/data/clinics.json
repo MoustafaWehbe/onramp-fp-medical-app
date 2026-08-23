@@ -1,0 +1,2366 @@
+[
+  {
+    "id": "40000000-0000-4000-8000-000000000001",
+    "name": "Abbas - yater",
+    "address": "ياطر",
+    "phone": "07-425187"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000002",
+    "name": "Abed El Rahman Al Nakib Hospital",
+    "address": "الهلالية - صيدا،",
+    "phone": "07-721721"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000003",
+    "name": "Abrar Medical center - Aazeh",
+    "address": "عزة",
+    "phone": "08-563207"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000004",
+    "name": "Advanced Medical Center - Mashta Hassan",
+    "address": "مشتى حسن",
+    "phone": "06-800561-2/3"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000005",
+    "name": "Ain ebel medico social center",
+    "address": "عين إبل",
+    "phone": "07-470097"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000006",
+    "name": "Ain Jerfa health Center",
+    "address": "عين جرفا",
+    "phone": "07-550445"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000007",
+    "name": "Ain Wzen Hospital",
+    "address": "عين وزين",
+    "phone": "05-509001-2/3/4"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000008",
+    "name": "Akkar Rahal Hospital",
+    "address": "الشيخ-محمد - عكار",
+    "phone": "06-690000 -691103"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000009",
+    "name": "Al Assi Hospital",
+    "address": "الهرمل. شارع التل",
+    "phone": "08-200234-8-08-200795"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000010",
+    "name": "Al Batoul Hospital",
+    "address": "الهرمل محلة العالي",
+    "phone": "08-200118"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000011",
+    "name": "Al Ekhlas Health Center",
+    "address": "باب التبانة",
+    "phone": "06-394610"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000012",
+    "name": "Al Fared charity Center",
+    "address": "وادي خالد",
+    "phone": "06-870017"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000013",
+    "name": "Al Hajj Mehdi Aydi Amel health center - Machghara",
+    "address": "مشغرة",
+    "phone": "08-651704"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000014",
+    "name": "Al Hamshari Hospital",
+    "address": "saida - el mye w mye",
+    "phone": "07-724881"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000015",
+    "name": "Al Hayat Hospital",
+    "address": "chiah",
+    "phone": "01-277805"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000016",
+    "name": "Al Hikme Hospital",
+    "address": "nabatiye-khalet alhawa",
+    "phone": "07-765362"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000017",
+    "name": "Al Iklim PHC Center - Chhim",
+    "address": "شحيم",
+    "phone": "07-242797"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000018",
+    "name": "Al iman health center - mina",
+    "address": "المينا",
+    "phone": "06-211770"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000019",
+    "name": "Al Iman Hospital",
+    "address": "aley",
+    "phone": "05-554264 - 555692"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000020",
+    "name": "Al Jabal Hospital",
+    "address": "Falougha",
+    "phone": "05-360555"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000021",
+    "name": "Al Kheir Hospital- Miniyeh",
+    "address": "اوتوستراد المنية الطريق العام",
+    "phone": "06-461444-555-666"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000022",
+    "name": "Al Manara Doctors Hospital",
+    "address": "المنارة البقاع الغربي",
+    "phone": "08-563101-2"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000023",
+    "name": "Al Mayyas Hospital",
+    "address": "ساحة شتورا",
+    "phone": "08-542 300-1- 08 542 347"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000024",
+    "name": "Al Mounla Hospital",
+    "address": "شارع المنلا",
+    "phone": "06-207000"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000025",
+    "name": "Al Mustapha Ocio Medical",
+    "address": "قبريخا",
+    "phone": "07-365633"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000026",
+    "name": "Al Nahda association center Al-Bedawi",
+    "address": "البداوي - طرابلس",
+    "phone": "06-387755"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000027",
+    "name": "Al Nahda Social Center Menyeh",
+    "address": "المنية - حي البلاط",
+    "phone": "06-463481"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000028",
+    "name": "Al Rahban Hospital",
+    "address": "mejdalaih rue principale",
+    "phone": "6662871"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000029",
+    "name": "Al Rahma Hospital",
+    "address": "زيتون أبي سمراء - السكة البيضا",
+    "phone": "06-448324"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000030",
+    "name": "Al Rayan Hospital",
+    "address": "بعلبك",
+    "phone": "08-372182 -08-373682"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000031",
+    "name": "Al Sahhel Health Center",
+    "address": "Address not listed",
+    "phone": "06-875052"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000032",
+    "name": "AL Salam Hospital",
+    "address": "طرابلس دوار السلام شارع جمال عبد الناصر",
+    "phone": "06-411700-1/2/3/4/5"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000033",
+    "name": "Al Tanmiya Health Center",
+    "address": "خريبة الجندي",
+    "phone": "06-696966"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000034",
+    "name": "Al Tatari Hospital",
+    "address": "بعلبك",
+    "phone": "08-370799 -08-371903"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000035",
+    "name": "Al Watani Hospital",
+    "address": "aley - sarayya street",
+    "phone": "05-557880-1/2/5"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000036",
+    "name": "Al Zahriyeh Specialist Center",
+    "address": "طرابلس",
+    "phone": "06-423893"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000037",
+    "name": "Al-Hanan Hospital",
+    "address": "طرابلس - شارع التوجيه",
+    "phone": "06-200526-7"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000038",
+    "name": "Al-Rasoul Al-Aazam Hospital",
+    "address": "طريق المطار",
+    "phone": "01-456456 - 452700"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000039",
+    "name": "Al-Zahraa Hospital University Medical Center",
+    "address": "Beirut- Jnah",
+    "phone": "01-851040"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000040",
+    "name": "Alaa-El-Dine Hospital",
+    "address": "sarafand main road",
+    "phone": "07-443200-1/2"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000041",
+    "name": "Alaaransa charity center",
+    "address": "وادي خالد",
+    "phone": "06-870110"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000042",
+    "name": "Alazm wassadeh center - Al Haddadin",
+    "address": "الحدادين",
+    "phone": "06-432100"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000043",
+    "name": "AlCheick Harb Hospital",
+    "address": "toul-pres de l ecole bilal fahes",
+    "phone": "07-766799"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000044",
+    "name": "Alerfan Hospital",
+    "address": "السمقانية",
+    "phone": "05-500877 05-501660"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000045",
+    "name": "Aley Medical Services Center",
+    "address": "عاليه قرب السنترال",
+    "phone": "N/A"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000046",
+    "name": "Alhamid Medical Center-Ghandour Hospital",
+    "address": "nabatiye alfawaka-street marjeioun",
+    "phone": "07-760455 - 07-762542"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000047",
+    "name": "Ali Al-Nahri Health Center",
+    "address": "علي النهري",
+    "phone": "08-920944"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000048",
+    "name": "Aljanoub Hospital",
+    "address": "sidon,maarouf saad",
+    "phone": "07-722555"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000049",
+    "name": "Alkaram charity center - Massoudieh",
+    "address": "المسعودية",
+    "phone": "06-810130"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000050",
+    "name": "Alkarameh charity center",
+    "address": "ساحة النور - طرابلس",
+    "phone": "06-430089"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000051",
+    "name": "Alraai Hospital",
+    "address": "saida-saynik street",
+    "phone": "07-222023-4/5/6"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000052",
+    "name": "Alzzahraa charity center - marjayoun",
+    "address": "كفركلا- الساحة",
+    "phone": "07-855377"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000053",
+    "name": "Alzzahraa Health Center - El Nabatiyeh",
+    "address": "النبطية",
+    "phone": "07-760151-07-760152"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000054",
+    "name": "Alzzahraa medical center - Tripoli",
+    "address": "جبل محسن - طرابلس",
+    "phone": "06-380344"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000055",
+    "name": "Amel association - Khyam",
+    "address": "الخيام",
+    "phone": "07-840052"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000056",
+    "name": "Amel association - Tyre",
+    "address": "صور",
+    "phone": "07-343108"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000057",
+    "name": "Amel association Elein - Baalbak",
+    "address": "العين",
+    "phone": "08-233188"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000058",
+    "name": "Amel health center - Bazourieh",
+    "address": "البازورية",
+    "phone": "07-375135"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000059",
+    "name": "American University of Beirut Medical Center",
+    "address": "Hamra - Cairo Street - PO Box: 11-0236",
+    "phone": "01-350000-01-340460"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000060",
+    "name": "Ansar Munmicipality center",
+    "address": "أنصار",
+    "phone": "07-501447"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000061",
+    "name": "Aramoun Health Center",
+    "address": "عرمون - عاليه",
+    "phone": "76836248"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000062",
+    "name": "Arz Hospital",
+    "address": "ZALKA",
+    "phone": "01-876770-4"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000063",
+    "name": "AUB Family Medicine Center",
+    "address": "الجامعة الأميركية",
+    "phone": "01-350000"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000064",
+    "name": "Ayta alchaab SDC center",
+    "address": "عيتا الشعب",
+    "phone": "07-465356"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000065",
+    "name": "Ayteet family medicine center",
+    "address": "عيتيت",
+    "phone": "07-431156"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000066",
+    "name": "Azounieh Hospital",
+    "address": "azounieh main road",
+    "phone": "05-220160"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000067",
+    "name": "Baabda governmental hospital",
+    "address": "BAABDA",
+    "phone": "05-920041"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000068",
+    "name": "BaakleenHospital",
+    "address": "بعقلين",
+    "phone": "05-300882-3"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000069",
+    "name": "Baalbak SDC center",
+    "address": "بعلبك- طريق راس العين",
+    "phone": "08-370622"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000070",
+    "name": "Baalbeck governmental hospital",
+    "address": "BAALBECK",
+    "phone": "08-370880"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000071",
+    "name": "Baarouk Governmental Health Center",
+    "address": "الباروك",
+    "phone": "05-241018"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000072",
+    "name": "Bachoura Helath Center",
+    "address": "الباشورة",
+    "phone": "01-664368"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000073",
+    "name": "Bahmad & el-fakih Hospital",
+    "address": "daher al-ahmar rachaya",
+    "phone": "08-591108"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000074",
+    "name": "Bahman Hospital",
+    "address": "حارة حريك - قرب مسجد الحسنين - بيروت",
+    "phone": "01-545000 01-544000"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000075",
+    "name": "Bakhoun SDC center",
+    "address": "بخعون - الضنية",
+    "phone": "06-242012"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000076",
+    "name": "Bar Elias Governmental Health Center",
+    "address": "برالياس",
+    "phone": "08-510018"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000077",
+    "name": "Batoul Helath Center",
+    "address": "المعالي - الهرمل",
+    "phone": "08-201151"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000078",
+    "name": "Batroun Governmental Hospital",
+    "address": "البترون الطريق العام شارع الغلابنة",
+    "phone": "06-741970-1-2"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000079",
+    "name": "Bchamoun Speciality Hospital",
+    "address": "bchamoun main road",
+    "phone": "05-270970"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000080",
+    "name": "Bcharreh governmental hospital",
+    "address": "bsharry",
+    "phone": "06-671357"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000081",
+    "name": "Beirut Development Association Center",
+    "address": "الكرنتينا",
+    "phone": "01-574157"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000082",
+    "name": "Beirut Eye Specialist Hospital",
+    "address": "Address not listed",
+    "phone": "N/A"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000083",
+    "name": "Beirut General Hospital",
+    "address": "Beirut - Jnah - facing Spinneys",
+    "phone": "01-850236-01-850213-01-823663"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000084",
+    "name": "beirut governmental hospital",
+    "address": "bir hassan",
+    "phone": "01-830000"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000085",
+    "name": "Beit Baakleen Medical Center",
+    "address": "بعقلين",
+    "phone": "05-304081"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000086",
+    "name": "Beit Eddine Governmental Health Center",
+    "address": "بيت الدين",
+    "phone": "05-500048"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000087",
+    "name": "Bekaa Hospital",
+    "address": "تعلبايا",
+    "phone": "08-543150-2"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000088",
+    "name": "Bekhaazi Hospital",
+    "address": "Hamra -wardieh street",
+    "phone": "N/A"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000089",
+    "name": "Belle Vue Hopital",
+    "address": "Mansourieh",
+    "phone": "01-682666"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000090",
+    "name": "Bent jbeil governmental hospital",
+    "address": "BENT JBEIL",
+    "phone": "07-452000"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000091",
+    "name": "Bhabbouch medico social center",
+    "address": "بحبوش",
+    "phone": "06-950344"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000092",
+    "name": "Bint El-Hoda Sabra Center",
+    "address": "حي فرحات - صبرا",
+    "phone": "01-838284"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000093",
+    "name": "Bint Jbeil SDC center",
+    "address": "حي الدورة - بنت جبيل",
+    "phone": "07-450571"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000094",
+    "name": "Bireh Social Health Center - Akkar",
+    "address": "البيرة - عكار - الطريق العام",
+    "phone": "06-830664"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000095",
+    "name": "Borej Qalaway Health Center",
+    "address": "برج قلاويه - بنت جبيل",
+    "phone": "07-385454"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000096",
+    "name": "Borj El-Barjneh Municipality Health Center",
+    "address": "برج البراجنة",
+    "phone": "01-472933"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000097",
+    "name": "Borj Hospital",
+    "address": "Borj Barajneh Osman Street",
+    "phone": "01-474719"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000098",
+    "name": "Boudai Health Center",
+    "address": "مبنى بلدية بوداي",
+    "phone": "08-300885"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000099",
+    "name": "Brital Medical Center",
+    "address": "بلدة بريتال - الطريق العام",
+    "phone": "08-340966"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000100",
+    "name": "Caritas Health Center - Saida",
+    "address": "شارع مار نقولا - صيدا",
+    "phone": "07-732268"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000101",
+    "name": "Cedars Medical Center - Lebaa",
+    "address": "لبعا",
+    "phone": "07-230592"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000102",
+    "name": "Cedars Medical Center - Qnat",
+    "address": "قنات",
+    "phone": "06-977230"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000103",
+    "name": "Cedars Medical Center - Zouk Mkeyel",
+    "address": "ذوق مكايل",
+    "phone": "09-218343"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000104",
+    "name": "Center of Health and Social Services of Akkar al Atikas municipality",
+    "address": "عكا ر العتيقة",
+    "phone": "06-886053"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000105",
+    "name": "Center of Sareen Municipality",
+    "address": "سرعين الفوقا - بعلبك",
+    "phone": "08-335472"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000106",
+    "name": "Center of the Lebanese Association - Qsarnabah",
+    "address": "قصربنا",
+    "phone": "08-912983"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000107",
+    "name": "Centre Hopital de Behannss",
+    "address": "Dahr El savvan- Mathen",
+    "phone": "04-984009"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000108",
+    "name": "Centre Hospitalier du Nord",
+    "address": "Jdeidet, Zgharta , Main Street",
+    "phone": "06-555230-1/2/3"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000109",
+    "name": "Chhim Governmental Health Center",
+    "address": "حي الشريفة - شحيم",
+    "phone": "07-241784"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000110",
+    "name": "Child & Mother Welfare Society",
+    "address": "Hassana Fathallah Daouk Str. West",
+    "phone": "01-788770"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000111",
+    "name": "Chiyah Municipality Health Center",
+    "address": "الشياح",
+    "phone": "01-390051"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000112",
+    "name": "Chiyah SDC center",
+    "address": "الشياح",
+    "phone": "01-274614"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000113",
+    "name": "Chmestar Helath Center",
+    "address": "شمسطار",
+    "phone": "08-330024"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000114",
+    "name": "Chtoura Hospital",
+    "address": "شتورة خلف مخفر الدرك 200 متر",
+    "phone": "08-544022-3/4/5/6"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000115",
+    "name": "CHU Notre Dame de Secours Hospital",
+    "address": "Jbeil-route saint charbel",
+    "phone": "09-541700 - 1279 - 944255"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000116",
+    "name": "Chweifat Governmental Center",
+    "address": "الشويفات",
+    "phone": "05-431551"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000117",
+    "name": "Clemenceau Medical Center",
+    "address": "Roma Street - Clemenceau",
+    "phone": "01-372888"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000118",
+    "name": "Clinique DE Chirugie Estetque Dr Nader Saab",
+    "address": "Beirut Rabieh",
+    "phone": "04-411111"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000119",
+    "name": "Clinique Dr. Georges Moarbes",
+    "address": "Furn al chebek",
+    "phone": "01-389292-3/4/5"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000120",
+    "name": "Clinique du Levant SM",
+    "address": "Sin El fil",
+    "phone": "01-501500"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000121",
+    "name": "Daher elbachek governmental hospital",
+    "address": "ROUMIEH",
+    "phone": "04-872148, 04-872150"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000122",
+    "name": "Dalaa Hospital",
+    "address": "saida.derkman",
+    "phone": "03-900404 07-724088-07723400"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000123",
+    "name": "Dar Al Amal Hospital",
+    "address": "دوريس - بعلبك",
+    "phone": "08-340620-3"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000124",
+    "name": "Dar Al Hikma Hospital",
+    "address": "بعلبك - التل الابيض",
+    "phone": "08-379136-7/8"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000125",
+    "name": "Dar Al shifa hospital",
+    "address": "طرابلس المنار",
+    "phone": "06-429595"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000126",
+    "name": "Dar Al Waffaa Health Center",
+    "address": "Address not listed",
+    "phone": "N/A"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000127",
+    "name": "Dar Al Zahraa Hospital",
+    "address": "طرابلس ابي سمراءالزيتون تجاه الزيتو ن",
+    "phone": "06-444529"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000128",
+    "name": "Dar Al-Ajaza Al-Islamia Hospital",
+    "address": "Beirut, Tarik Al Jadida, Abdel Rahman Labban St., East of Sports City",
+    "phone": "01-856658-03-692005"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000129",
+    "name": "Dar El hawraa Center - Beer El- Abd",
+    "address": "بئر العبد",
+    "phone": "01-544889"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000130",
+    "name": "Dar El-Fatwa health center",
+    "address": "ش. ابن رشد",
+    "phone": "01-797400"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000131",
+    "name": "Deir amar municipality center",
+    "address": "ديرعمار- الضنية",
+    "phone": "06-461411"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000132",
+    "name": "Deir azzahrani health center",
+    "address": "دير الزهراني النبطية",
+    "phone": "07-532319"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000133",
+    "name": "Deir El-Ahmar Center",
+    "address": "دير الاحمر",
+    "phone": "08-320373"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000134",
+    "name": "Directorate of health - Tarik EL-Jadidah - Hariri Foundation",
+    "address": "الطريق الجديدة",
+    "phone": "01-855595"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000135",
+    "name": "Dr Abdullah Al Rassi Governmental Hospital",
+    "address": "halba-edbel cross",
+    "phone": "06-694455 - 06-693944"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000136",
+    "name": "Dr Hamed Farhat Hospital",
+    "address": "كامد اللوز",
+    "phone": "08-660101-2-08-660233"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000137",
+    "name": "Dr. Wadih Al Haj Health Center",
+    "address": "بسكنتا - حي الميدان",
+    "phone": "04-288660"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000138",
+    "name": "Ehden governmental hospital",
+    "address": "EHDEN",
+    "phone": "06-561701"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000139",
+    "name": "Ehden Hospital",
+    "address": "ehden al midan",
+    "phone": "6561702"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000140",
+    "name": "Ein Kfar Zabad Socio-Medical Center",
+    "address": "عين كفرزبد",
+    "phone": "08-925790"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000141",
+    "name": "El Bissar Hospital",
+    "address": "الزهرية مستشفى البيسار",
+    "phone": "06-432267 430365-430355"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000142",
+    "name": "El Jdeideh Club center Akkar",
+    "address": "الجديدة عكار",
+    "phone": "06-695551"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000143",
+    "name": "El Kayan Medical Center - Chiah",
+    "address": "الشياح",
+    "phone": "01-454006"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000144",
+    "name": "El Youssef Hospital Center",
+    "address": "حلبا الساحة",
+    "phone": "26-690455- 26-690537-26-692055- 26-200440"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000145",
+    "name": "El Zarif Medical center",
+    "address": "الظريف والزيدانية",
+    "phone": "01-736088"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000146",
+    "name": "El-Farouk Health Center - Saadneyel",
+    "address": "سعدنايل مبنى الجامع",
+    "phone": "08-505322"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000147",
+    "name": "El-Huda association center",
+    "address": "العبادية",
+    "phone": "05-553357"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000148",
+    "name": "El-Imam El-Hussein - Jlala",
+    "address": "جلالا",
+    "phone": "08-508484"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000149",
+    "name": "Eye & Ear Hospital International",
+    "address": "Naccache- Dbayeh",
+    "phone": "04-521130"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000150",
+    "name": "Fakih Hospital",
+    "address": "Main Street Khaizaran , As Saksakiyah, Lebanon",
+    "phone": "07-443470"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000151",
+    "name": "Fneidek Governmental center",
+    "address": "فنيدق - عكار",
+    "phone": "06-895440"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000152",
+    "name": "Fouad Khoury Hospital & Associates S.A.L.",
+    "address": "Hamra -Abdel Aziz street - Moktahi Bldg",
+    "phone": "01-742140"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000153",
+    "name": "Ftouh keserwan governmental hospital",
+    "address": "bouar,near bouar municipality",
+    "phone": "09-440440"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000154",
+    "name": "Ghassanieh Health center",
+    "address": "الغسانية",
+    "phone": "07-420639"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000155",
+    "name": "Ghaza Helath Center",
+    "address": "غزة",
+    "phone": "08-640638"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000156",
+    "name": "Ghazieh health center - elbirr walihsan association",
+    "address": "الغازية",
+    "phone": "07-223600"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000157",
+    "name": "Ghbeiri Municipality Center",
+    "address": "الشياح - شارع اسعد الاسعد",
+    "phone": "01-270034"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000158",
+    "name": "Ghossein Hospital",
+    "address": "nab-rue soeurs antonines",
+    "phone": "03-224402"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000159",
+    "name": "Governmental central dispensary Triploli",
+    "address": "الزاهرية - طرابلس",
+    "phone": "06-423893"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000160",
+    "name": "Governmental Hospital of Beirut Quarantine",
+    "address": "بيروت - الكرنتينا - المدور",
+    "phone": "01-442110"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000161",
+    "name": "Habtoor Health Center - Hrar Akkar",
+    "address": "حرار - عكار",
+    "phone": "06-865065"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000162",
+    "name": "Halba Governmental center",
+    "address": "حلبا",
+    "phone": "06-695589"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000163",
+    "name": "Hamana Health Center",
+    "address": "حمانا - حي المجّر",
+    "phone": "05-530960"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000164",
+    "name": "Hammoud Hospital University Medical Center",
+    "address": "saida-street skandarani",
+    "phone": "07-723111 - 723888"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000165",
+    "name": "Hanan Medical Center - Minié",
+    "address": "المنيه - طرابلس",
+    "phone": "06-462875"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000166",
+    "name": "Haret Saida SDC center",
+    "address": "حارة صيدا",
+    "phone": "07-751398"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000167",
+    "name": "Haroun Hospital",
+    "address": "Amaret Chalhoub- Rue Hopital haroun",
+    "phone": "01-897300-1-2-3-4"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000168",
+    "name": "Hasbaya governmental hospital",
+    "address": "Hasbaya - Zaghla street",
+    "phone": "07-550420-30-40"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000169",
+    "name": "Hassbaya PHC center",
+    "address": "حاصبيا",
+    "phone": "07-550519"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000170",
+    "name": "Hassroun charity center",
+    "address": "حصرون",
+    "phone": "06-590032"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000171",
+    "name": "Hay Seloum SDC center",
+    "address": "حي السلم",
+    "phone": "05-480334"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000172",
+    "name": "Haydar khalil health center",
+    "address": "معركة",
+    "phone": "07-315989"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000173",
+    "name": "Health Medical Center- Osseiran Hospital",
+    "address": "saida-blv maarouf saad",
+    "phone": "07726078-79"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000174",
+    "name": "Herj Health Center",
+    "address": "الحرج",
+    "phone": "01-633762"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000175",
+    "name": "Hermel Governmental Health Center",
+    "address": "الهرمل",
+    "phone": "08-201599"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000176",
+    "name": "Hermel governmental hospital",
+    "address": "HERMEL",
+    "phone": "08-225310-12-13"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000177",
+    "name": "Hiram Hospital",
+    "address": "sour-jal el baher",
+    "phone": "07-343700-10/11"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000178",
+    "name": "Hopital Abou Jaouke",
+    "address": "Jal El Dib",
+    "phone": "04-718000 - 716000"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000179",
+    "name": "Hopital Al Borgi",
+    "address": "amion-koura-main road-",
+    "phone": "651025-6 - 06-950030"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000180",
+    "name": "Hopital Al Koura",
+    "address": "koura-btouratige",
+    "phone": "06-930981-005"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000181",
+    "name": "Hopital Albert Haykel sal",
+    "address": "ras maska-haykalieh",
+    "phone": "06-411411"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000182",
+    "name": "Hopital Beit Chabab",
+    "address": "BEIT CHABAB",
+    "phone": "04-983393-4 04-981577"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000183",
+    "name": "Hopital DAR AL Raheme?",
+    "address": "AIN Saade?-Mathen",
+    "phone": "04-872211"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000184",
+    "name": "Hopital Dr Toni Nassar Sal",
+    "address": "SIN EL fil",
+    "phone": "03-233821"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000185",
+    "name": "Hopital Francais - St Lourdes",
+    "address": "Rue St Lourdes, Ain El Remmaneh",
+    "phone": "05-451100 - 953444"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000186",
+    "name": "Hopital Hayek",
+    "address": "Sin El fil",
+    "phone": "01-499142"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000187",
+    "name": "Hopital Maritime Jbeil",
+    "address": "Jbeil voie 13",
+    "phone": "09-540017"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000188",
+    "name": "Hopital Notre Dame de la Paix",
+    "address": "القبيات شويتا",
+    "phone": "06-351670"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000189",
+    "name": "Hopital Notre dame pour les Malade Cronique",
+    "address": "Antlias- Leban",
+    "phone": "04-713100"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000190",
+    "name": "Hopital Saint Charles",
+    "address": "Fayadie",
+    "phone": "05-451100 - 953444"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000191",
+    "name": "Hopital Saint- Michel Amchit",
+    "address": "Amchit -saint Michel",
+    "phone": "09-621033-34"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000192",
+    "name": "Hospital al Hajj",
+    "address": "achkout",
+    "phone": "09-951755"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000193",
+    "name": "Hospital Almarkazi",
+    "address": "مزبود",
+    "phone": "07-970777"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000194",
+    "name": "Hospital MGR Cortbawi",
+    "address": "adma,zone orange ,rue 3",
+    "phone": "09-855410-1/2/3/4/5/6"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000195",
+    "name": "Hospital Saydet Zgharta",
+    "address": "zghorta al ma7ada",
+    "phone": "06-660575 06-669300"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000196",
+    "name": "Hotel Dieu Hospital",
+    "address": "Achrafieh - after AUST",
+    "phone": "01-615300"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000197",
+    "name": "Hrajel Governmental Health Center",
+    "address": "الصومعة - مدخل حراجل",
+    "phone": "09-322460"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000198",
+    "name": "Iben Sinna Hospital",
+    "address": "بعلبك",
+    "phone": "08-377811-08-376811"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000199",
+    "name": "Ibn sina medico-social center",
+    "address": "التل - طرابلس",
+    "phone": "06-431120"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000200",
+    "name": "Imam Al Reda Health Center",
+    "address": "حي السلم",
+    "phone": "N/A"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000201",
+    "name": "Imam Al Sadek Health Center",
+    "address": "الشويفات - العمروسية",
+    "phone": "N/A"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000202",
+    "name": "Imam Al Sader Foundation - Chhabieh PHC center",
+    "address": "الشهابية",
+    "phone": "07-410407"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000203",
+    "name": "Imam Al Sader Foundation - Deir Serian PHC center",
+    "address": "دير سريان",
+    "phone": "07-850900"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000204",
+    "name": "Imam Al Sader Foundation - Kafarhatta PHC center",
+    "address": "كفرحتى",
+    "phone": "07-215660"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000205",
+    "name": "Imam Al Sader Foundation - Siddikin PHC center",
+    "address": "صديقين",
+    "phone": "07-430436"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000206",
+    "name": "Imam alsadr center - Chakra",
+    "address": "شقرا",
+    "phone": "07-370277"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000207",
+    "name": "Imam Khomeini medical center - maachouk",
+    "address": "المعشوق - صور",
+    "phone": "07-345901"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000208",
+    "name": "Imam Mahdi - Ghazieh",
+    "address": "الغازية",
+    "phone": "07-220140"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000209",
+    "name": "Iman medical center Bebnin",
+    "address": "ببنين - عكار",
+    "phone": "06-471303"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000210",
+    "name": "Iman medical center btormaz",
+    "address": "بطرماز - الضنية",
+    "phone": "06-494149"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000211",
+    "name": "Iman medical center Sir Danniye",
+    "address": "سير الضنية - المنيه",
+    "phone": "06-490149"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000212",
+    "name": "Irchad medical center - Berkayel",
+    "address": "برقايل - عكار",
+    "phone": "06-370047"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000213",
+    "name": "Islamic Hospital",
+    "address": "طرابلس - شارع عزمي",
+    "phone": "06-210179"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000214",
+    "name": "Jabal Amel Hospital",
+    "address": "صور - عباسية - جل البحر",
+    "phone": "07-740343"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000215",
+    "name": "Jbaa Governmental center",
+    "address": "جباع",
+    "phone": "07-210361"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000216",
+    "name": "Jbeil Qadaa Governmental Dispensary",
+    "address": "جبيل",
+    "phone": "09-540218"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000217",
+    "name": "Jdeydeh Municipality Health Center",
+    "address": "الجديدة - مبنى البلدية",
+    "phone": "01-873369"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000218",
+    "name": "Jeatawi Hospital",
+    "address": "Achrafieh - Jeatawi",
+    "phone": "01-590000"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000219",
+    "name": "Jezzine governmental hospital",
+    "address": "جزين حي البيادر",
+    "phone": "07-780106"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000220",
+    "name": "Jihan Franjieh social development center- zgharta",
+    "address": "زغرتا",
+    "phone": "06-660454"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000221",
+    "name": "kaakaiet aljisr Governmental center",
+    "address": "قاقعية الجسر",
+    "phone": "07-542481"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000222",
+    "name": "Kafar hamam governmental center",
+    "address": "كفرحمام - حاصبيا",
+    "phone": "07-560116"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000223",
+    "name": "Kalout Hospital",
+    "address": "Address not listed",
+    "phone": "N/A"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000224",
+    "name": "Kana governmental hospital",
+    "address": "Address not listed",
+    "phone": "N/A"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000225",
+    "name": "Kana PHC center",
+    "address": "قانا - صور",
+    "phone": "07-430537"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000226",
+    "name": "Karagheusian for Children Care in Lebanon",
+    "address": "برج حمود - شارع مرعش- بناية قراكوزيان",
+    "phone": "01-263030"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000227",
+    "name": "Kartaba Governmental Hospital",
+    "address": "قرطبا الساحة العامة",
+    "phone": "09-405985-6"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000228",
+    "name": "Kassab Hospital",
+    "address": "saida el hlalye",
+    "phone": "07-723900 - 07-723700"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000229",
+    "name": "Kayan medical center - Tyre",
+    "address": "صور",
+    "phone": "07-347546"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000230",
+    "name": "Kayan medical center/Marwanieh",
+    "address": "المروانية",
+    "phone": "07-506777"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000231",
+    "name": "Kefraya - Bekaa medico social center",
+    "address": "كفريا",
+    "phone": "08-645198"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000232",
+    "name": "Kennarit municipality health center",
+    "address": "قناريت",
+    "phone": "07-220658"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000233",
+    "name": "Kesserwan Medical Center",
+    "address": "Ghazir",
+    "phone": "N/A"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000234",
+    "name": "Ketermaya Health Center",
+    "address": "كترمايا - اقليم الخروب",
+    "phone": "07-971984"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000235",
+    "name": "Kfarheem Primary Health Care Center",
+    "address": "كفرحيم",
+    "phone": "05-720561"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000236",
+    "name": "Kfartoun health center",
+    "address": "كفرتون",
+    "phone": "06-850208"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000237",
+    "name": "Kharroubi Hospital",
+    "address": "sarafand",
+    "phone": "07-443344 - 442224"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000238",
+    "name": "Khatam EL-Anbia health center",
+    "address": "النويري",
+    "phone": "01-663631"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000239",
+    "name": "Kherbet Kanafar Governmental Hospital",
+    "address": "kherbet kanafar, West Bekaa,",
+    "phone": "08-645917"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000240",
+    "name": "Khoury General Hospital",
+    "address": "zahle- brazilia street",
+    "phone": "08-811181 -08-807000"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000241",
+    "name": "Khreibet El-Chouf center",
+    "address": "الخريبة",
+    "phone": "05-310394"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000242",
+    "name": "Khreybeh Follow Up Committees Association - Akkar",
+    "address": "الخريبة - عكار",
+    "phone": "06-696032"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000243",
+    "name": "Khyam health center",
+    "address": "الخيام",
+    "phone": "07-840536"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000244",
+    "name": "Kosba government center",
+    "address": "كوسبا - الكوره",
+    "phone": "06-511900"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000245",
+    "name": "Labib Medical center",
+    "address": "saida -el dekrman",
+    "phone": "07-723444"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000246",
+    "name": "Laboueh health Center",
+    "address": "اللبوة - بعلبك",
+    "phone": "08-233655"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000247",
+    "name": "Lebanese child care association - Niha",
+    "address": "كركول الدروز",
+    "phone": "05-330253"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000248",
+    "name": "Lebanese Ophthalmic Hospital",
+    "address": "aley- piscien st. edico",
+    "phone": "05-557355"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000249",
+    "name": "Lebanese Red Cross - Chiyah",
+    "address": "الشياح",
+    "phone": "01-558803"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000250",
+    "name": "Lebanese Red Cross - Hermel",
+    "address": "الهرمل",
+    "phone": "08-200089"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000251",
+    "name": "Lebanese Red Cross - Rachaya",
+    "address": "راشيا",
+    "phone": "08-591101"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000252",
+    "name": "Lebanese Red Cross - Zrariyeh",
+    "address": "الزرارية",
+    "phone": "07-305610"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000253",
+    "name": "Lebanese University Health Center - Hadath",
+    "address": "الجامعة اللبنانية - الحدث",
+    "phone": "05-470983"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000254",
+    "name": "Lebanise--Canadian Hospital",
+    "address": "Sin-EL Fil Horch Tabet",
+    "phone": "01-511487-9"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000255",
+    "name": "Libano-Francais Hospital",
+    "address": "Zahle- haouch el Omara",
+    "phone": "08-810212"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000256",
+    "name": "Maarouf Saad Center",
+    "address": "مدينة العمال",
+    "phone": "07-722393"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000257",
+    "name": "Machghara Governmental Hospital",
+    "address": "مشغرة الطريق العام",
+    "phone": "08-651738"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000258",
+    "name": "Machghara PHC Center",
+    "address": "مشغرة - الطريق العام",
+    "phone": "08-651738-9"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000259",
+    "name": "Makarem Health Center",
+    "address": "النجمه - طرابلس",
+    "phone": "06-426322"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000260",
+    "name": "Makarem health center- Mina",
+    "address": "طرابلس الميناء",
+    "phone": "06-219001"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000261",
+    "name": "Makasid Hospital",
+    "address": "Tarik Jadidah",
+    "phone": "01-636000"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000262",
+    "name": "Makhzoumi Medical center in Mazraa",
+    "address": "بيروت - المزرعة",
+    "phone": "01-660890"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000263",
+    "name": "Marjaayoun governmental hospital",
+    "address": "مرجعيون حي المدارس",
+    "phone": "07-830066"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000264",
+    "name": "Mashghara Primary Health Care Center",
+    "address": "مشغرة",
+    "phone": "08-651125"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000265",
+    "name": "Mashha charity health center",
+    "address": "مشحا",
+    "phone": "06-690676"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000266",
+    "name": "Maternal &Child care Municipality center/Meshmesh",
+    "address": "مشمش عكار",
+    "phone": "06-896155"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000267",
+    "name": "Mays el jabal governmental hospital",
+    "address": "ميس الجبل",
+    "phone": "07-866102-4"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000268",
+    "name": "Medical 2000 Hospital",
+    "address": "chwaifat - kroom st.",
+    "phone": "05-432525"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000269",
+    "name": "Mejdlaya Governmental Health Center",
+    "address": "مجدليا عاليه",
+    "phone": "05-571720"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000270",
+    "name": "Menyeh governmental center",
+    "address": "المنية",
+    "phone": "06-461981"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000271",
+    "name": "Menyeh Governmental Hospital",
+    "address": "المنيه الاوتوستراد قرب ثكنه الجيش عرمان",
+    "phone": "06-463933"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000272",
+    "name": "Meriata - Kadrieh Municipality Health Center",
+    "address": "مرياطة - الطريق العام",
+    "phone": "06-255544"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000273",
+    "name": "Mesmesh charity center",
+    "address": "مشمش",
+    "phone": "09-760930"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000274",
+    "name": "Meziara charity center",
+    "address": "مزيارة",
+    "phone": "06-570541"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000275",
+    "name": "Middle East Institutd Of Health",
+    "address": "Meth Bsalim Road -Mezher Street",
+    "phone": "04-712111"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000276",
+    "name": "Miniyeh Hospital",
+    "address": "المنية الاوتوستراد-مفرق المخاضة",
+    "phone": "N/A"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000277",
+    "name": "Mortada Hospital",
+    "address": "بعلبك",
+    "phone": "08-377880"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000278",
+    "name": "Mother and Child Care Association Health Center",
+    "address": "تلة الخياط",
+    "phone": "01-795589"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000279",
+    "name": "Mount Lebanon Hospital",
+    "address": "Hazmieh- Boulevard Camille Chamoun",
+    "phone": "05-957000"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000280",
+    "name": "Msaytbeh Medical and Social Center- Makassed",
+    "address": "المصيطبة مقابل منزل صائب سلام",
+    "phone": "01-316920"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000281",
+    "name": "Nabatieh governmental hospital",
+    "address": "nabatiye -kafar jouz-rue gendarmerie",
+    "phone": "07-766777- 07-766888"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000282",
+    "name": "Nabatieh PHC center",
+    "address": "تل العسكر - النبطية",
+    "phone": "07-769092"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000283",
+    "name": "Nabi Cheet health Center",
+    "address": "النبي شيت",
+    "phone": "08-335720"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000284",
+    "name": "Nabih Berri rehabilitation center for handicaps",
+    "address": "الصرفند",
+    "phone": "07-441020"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000285",
+    "name": "Najdeh chaabieh - kfarsaroun",
+    "address": "كفرصارون - الكورة",
+    "phone": "06-651088"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000286",
+    "name": "Najdeh chaabieh halba",
+    "address": "حلبا - عكار",
+    "phone": "06-691600"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000287",
+    "name": "Najem Hospital",
+    "address": "sour",
+    "phone": "07-741595"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000288",
+    "name": "Najjar Hospital",
+    "address": "Hamra - Wardieh, Abdel-Baki Str. Beirut-Lebanon",
+    "phone": "01-340626-01-346914"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000289",
+    "name": "Nazih elbizri medical center",
+    "address": "القياعة - صيدا",
+    "phone": "07-727512"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000290",
+    "name": "New Mazloum Hospital",
+    "address": "طرابلس - الضم و الفرز",
+    "phone": "06-410025"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000291",
+    "name": "Nine Hospital",
+    "address": "المعرض",
+    "phone": "06-431400-1/2"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000292",
+    "name": "Nmeirieh charity center",
+    "address": "النميرية",
+    "phone": "07-505849"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000293",
+    "name": "Notre Dame de Liban Hospital",
+    "address": "jounieh,rue gl.fouad chehab",
+    "phone": "09-644644"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000294",
+    "name": "Nour association health center",
+    "address": "جديدة مرجعيون - البلدية",
+    "phone": "07-831330"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000295",
+    "name": "Nour medical center - baraachit",
+    "address": "شقرا",
+    "phone": "07-370989"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000296",
+    "name": "Orange Nassau governmental hospital",
+    "address": "TRIPOLI",
+    "phone": "06-435997 - 06-428200"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000297",
+    "name": "Osman Hospital",
+    "address": "كترمابا",
+    "phone": "07-970000"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000298",
+    "name": "Palestinian Red Crescent Society Nazareth Hospital",
+    "address": "بر الياس المكاوي",
+    "phone": "08-510793"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000299",
+    "name": "President elias harawi governmental HOSPITAL",
+    "address": "zahle- maalaka",
+    "phone": "08-825600"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000300",
+    "name": "President Rene Mouawad Center",
+    "address": "زغرتا",
+    "phone": "06-660911"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000301",
+    "name": "Primary Health care center - baajour",
+    "address": "حي بعجور",
+    "phone": "01-273426"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000302",
+    "name": "Primary Health care Center Haret Hreik",
+    "address": "المبنى البلدي - قرب الكنيسة",
+    "phone": "01-276181"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000303",
+    "name": "Psychiatric Hospital of the Cross",
+    "address": "Jall- Eddib- Bkennaya- lebanon",
+    "phone": "04-710224"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000304",
+    "name": "Qalamoun Health Center",
+    "address": "القلمون",
+    "phone": "06-401500"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000305",
+    "name": "Qarantina PHC Center",
+    "address": "الكرنتينا",
+    "phone": "01-442105"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000306",
+    "name": "Qiama Health Center - Hawch Hala",
+    "address": "عنجر",
+    "phone": "08-900750"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000307",
+    "name": "Qob Elias Health Center",
+    "address": "قب الياس",
+    "phone": "08-500688"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000308",
+    "name": "Rachaya alwadi Center",
+    "address": "ضهر الاحمر",
+    "phone": "08-591177"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000309",
+    "name": "Rachaya governmental hospital",
+    "address": "Rachaya al akaba",
+    "phone": "08-591503"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000310",
+    "name": "Rachaya PHC center",
+    "address": "راشيا",
+    "phone": "08-591505"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000311",
+    "name": "Rafic Al Hariri Health Center - Taaneyel",
+    "address": "تعنايل",
+    "phone": "08513320"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000312",
+    "name": "Rafik Hariri University PHC Center",
+    "address": "بئرحسن",
+    "phone": "01-832909"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000313",
+    "name": "Rahmah health center",
+    "address": "التبانة",
+    "phone": "06-380283"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000314",
+    "name": "Rajeh Taher institution charity center",
+    "address": "حولا",
+    "phone": "07-860220"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000315",
+    "name": "Ras El-Matn Medical Center",
+    "address": "رأس المتن",
+    "phone": "05-380352"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000316",
+    "name": "Rayak Hospital",
+    "address": "rayak bekaa",
+    "phone": "08-901300-5"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000317",
+    "name": "Rida Mroue Hospital",
+    "address": "sour-jal el baher al aabasieh",
+    "phone": "07-740343 -07-740198"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000318",
+    "name": "Rosaire Hospital",
+    "address": "GEMMAYZEH",
+    "phone": "01-447980 - 01-581140"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000319",
+    "name": "SACH Medical Co.Bitar Hospital",
+    "address": "Sabtieh Rue Ferdavvs",
+    "phone": "03-774737 01-682300"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000320",
+    "name": "Sacre Coeur Hospital",
+    "address": "Brazilia - Baabda, BP 116 - Hazmieh",
+    "phone": "05-456293-4-457112-3"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000321",
+    "name": "Sahel General Hospital",
+    "address": "Dergham St.Blg #7, Airport Ave. haret Hreik. P.O. Box 99/25 Ghobeiry",
+    "phone": "01-858333-40"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000322",
+    "name": "saida governmental hospital",
+    "address": "saida",
+    "phone": "07-721606 - 07-751329"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000323",
+    "name": "Saida PHC center",
+    "address": "عين الحلوة",
+    "phone": "07-739610"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000324",
+    "name": "Saint Antoine Health Center",
+    "address": "الاشرفية",
+    "phone": "01-442937"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000325",
+    "name": "Saint Antoine Health Center - Beit Meri",
+    "address": "شارع كنيسة مار ساسين - المبنى البلدي",
+    "phone": "04-872063"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000326",
+    "name": "Saint Antonios Center - Jdaideh",
+    "address": "الجديدة",
+    "phone": "01-900996"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000327",
+    "name": "Saint George Hospital University Medical Center",
+    "address": "Ashrafieh-Beirut 11002807 Lebanon",
+    "phone": "0 1-44 1000 -1287"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000328",
+    "name": "Saint Joseph Hospital",
+    "address": "Dora- Lebanon",
+    "phone": "01-240111"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000329",
+    "name": "Saint Louis Hospital S.A.L",
+    "address": "jounieh,haret sakher",
+    "phone": "09-933334"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000330",
+    "name": "Saint paul comprehensive services",
+    "address": "الشيخ طابا",
+    "phone": "06-691507"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000331",
+    "name": "Saint Sassine Center - Baskinta",
+    "address": "بسكنتا",
+    "phone": "04-288655"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000332",
+    "name": "Sainte Therese Hospital",
+    "address": "Hadath-Ste Therese Street",
+    "phone": "05-466780-2 - 463100"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000333",
+    "name": "Salman Zainndine",
+    "address": "Sour",
+    "phone": "07-740293 07-343640"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000334",
+    "name": "Sayed Abdel mohsen fadlallah health center",
+    "address": "خربة سلم",
+    "phone": "07-405149"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000335",
+    "name": "Secours Populaire Hospital",
+    "address": "nabatiye-street regie",
+    "phone": "07-530970-1/2/3"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000336",
+    "name": "Serhal Hospital",
+    "address": "Rabieh",
+    "phone": "03-410100 04-405050"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000337",
+    "name": "Shahar gharbi govermental hospital",
+    "address": "remhala kabreshmol",
+    "phone": "05-410712"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000338",
+    "name": "Shahin Hospital",
+    "address": "الزهرية شارع محمد كرامي",
+    "phone": "06-625796 06-430250"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000339",
+    "name": "Siblin governmental hospital",
+    "address": "سبلين",
+    "phone": "07-971723-25"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000340",
+    "name": "Sibnay Medical Center",
+    "address": "سبنيه",
+    "phone": "05-921516"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000341",
+    "name": "Sir Denniye governmental hospital",
+    "address": "بلدة عاصون",
+    "phone": "06-491911-12"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000342",
+    "name": "Social Services Association - Dar Al Ajaza Hospice",
+    "address": "طرابلس ابي سمراء العجزة",
+    "phone": "06-446330"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000343",
+    "name": "Socio-Medical Center - Barqa",
+    "address": "برقا",
+    "phone": "08-320490"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000344",
+    "name": "Socio-Medical Center - Ein Romanneh",
+    "address": "الشياح - شارع مار جرجس",
+    "phone": "01-559986"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000345",
+    "name": "Socio-Medical Center - El Fanar",
+    "address": "الزعيترية",
+    "phone": "01-684362"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000346",
+    "name": "Socio-Medical Center - Ghadeer",
+    "address": "غدير",
+    "phone": "09-901700"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000347",
+    "name": "Socio-Medical Center - Khaldiyeh",
+    "address": "الخالدية",
+    "phone": "06-662040"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000348",
+    "name": "Socio-Medical Center - Kobayet",
+    "address": "القبيات",
+    "phone": "06-350214"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000349",
+    "name": "Socio-Medical Center - Roum",
+    "address": "روم",
+    "phone": "07-810130"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000350",
+    "name": "Socio-Medical Center - Yaroun",
+    "address": "يارون",
+    "phone": "07-451540"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000351",
+    "name": "Socio-Medical Center - Zouk Mikael",
+    "address": "زوق مكايل",
+    "phone": "09-211655"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000352",
+    "name": "sour governmental hospital",
+    "address": "SOUR",
+    "phone": "07-740293"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000353",
+    "name": "Specialized Hospital Haidar and Hajjar",
+    "address": "Nouairy street - Opposite Bank Lebanon Gulf",
+    "phone": "01-632091-01-650547"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000354",
+    "name": "Specialized Medical Rehabilitation Hospital",
+    "address": "Ouzai Area, Facing Imam Ouzai Mosque",
+    "phone": "01-851934-5 01-852933"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000355",
+    "name": "Srebta health center",
+    "address": "سربتا - الصرفند",
+    "phone": "07-443123"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000356",
+    "name": "Srifa municipality center",
+    "address": "صريفا - صور",
+    "phone": "07-385092"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000357",
+    "name": "St Georges Hadath Hospital",
+    "address": "Saida Street Hadath",
+    "phone": "05-463922"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000358",
+    "name": "St Georges Hospital",
+    "address": "ajaltoun,george matta st",
+    "phone": "09-234201 09-234212"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000359",
+    "name": "Taanayel General Hospital",
+    "address": "تعنايل الطريق العام",
+    "phone": "08-545199 - 08-545100"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000360",
+    "name": "Tal Chiha Hospital",
+    "address": "zahle mar elias",
+    "phone": "08-807782-3 - 08-802172"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000361",
+    "name": "Tamnin Health Center",
+    "address": "تمنين التحتا",
+    "phone": "08-911243"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000362",
+    "name": "Tanbourit Municipality Center",
+    "address": "طنبوريت",
+    "phone": "07-205952"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000363",
+    "name": "Tannourine governmental hospital",
+    "address": "تنورين التحتا - مفرق دوما",
+    "phone": "06-520555"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000364",
+    "name": "Tannourine PHC center",
+    "address": "تنورين",
+    "phone": "06-520555"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000365",
+    "name": "Tebnin governmental hospital",
+    "address": "TEBNIN",
+    "phone": "07-325528"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000366",
+    "name": "Tebnin PHC center",
+    "address": "تبنين",
+    "phone": "07-325399"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000367",
+    "name": "Tekrit charity center",
+    "address": "داخل القرية قرب المسجد الكبير",
+    "phone": "06361319"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000368",
+    "name": "Telmeayan Governmental center",
+    "address": "تلمعيان - عكار",
+    "phone": "06-810499"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000369",
+    "name": "Temnine General Hospital",
+    "address": "temnine, Temnîne et Tehta, Lebanon",
+    "phone": "08-912444-70-961333"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000370",
+    "name": "Terbol Governmental Health Center",
+    "address": "تربل",
+    "phone": "08-955688"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000371",
+    "name": "The Boulghourjian Socio-Medical Center",
+    "address": "برج حمود - كامب سيس",
+    "phone": "01-253796"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000372",
+    "name": "The Drouz Charity Aassociation center",
+    "address": "وطى المصيطبه",
+    "phone": "01-306266"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000373",
+    "name": "The Lebanese Association for Health and Social Care - Sohmor",
+    "address": "سحمر",
+    "phone": "08-635656"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000374",
+    "name": "The Martyr Faraj Balouk Center",
+    "address": "ساحة ناصر- بعلبك",
+    "phone": "08-373513"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000375",
+    "name": "The Martyr Francois Al Hajj center - Rmeich",
+    "address": "رميش - بنت جبيل",
+    "phone": "N/A"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000376",
+    "name": "The Roman Catholic Diocese - Qaa Center",
+    "address": "القاع",
+    "phone": "08-225210"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000377",
+    "name": "The Socio Developmental Center - Qsarnabah",
+    "address": "قصرنبا",
+    "phone": "08-912117"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000378",
+    "name": "The Socio medical Center - Abey",
+    "address": "عبيه",
+    "phone": "05-210485"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000379",
+    "name": "The Socio medical Center - Balooneh",
+    "address": "بلونة - البلدية",
+    "phone": "09-230377"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000380",
+    "name": "The Socio medical Center - Barja",
+    "address": "برجا",
+    "phone": "07-623129"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000381",
+    "name": "The Socio medical Center - Borj El-Barjneh",
+    "address": "برج البراجنة",
+    "phone": "01-469115"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000382",
+    "name": "The Socio medical Center - Kfarmatta",
+    "address": "كفر متى - عاليه",
+    "phone": "05-210750"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000383",
+    "name": "The Socio medical Center - Sawfar",
+    "address": "صوفر - الملاحة",
+    "phone": "05-292330"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000384",
+    "name": "Trad Hospital",
+    "address": "Hamra",
+    "phone": "01-366130"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000385",
+    "name": "Tripoli governmental hospital",
+    "address": "القبة - الثكنة",
+    "phone": "06-385300"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000386",
+    "name": "Tripoli PHC center",
+    "address": "القبة - طرابلس",
+    "phone": "06-385371"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000387",
+    "name": "Universal Hospital",
+    "address": "رأس بعلبك",
+    "phone": "08-210560 - 210570"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000388",
+    "name": "University Medical Center - Rizk Hospital",
+    "address": "Zahhar St. Ashrafieh - Beirut",
+    "phone": "01-200800-01-328800"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000389",
+    "name": "Wadi Khaled health center",
+    "address": "الهيشة - وادى خالد",
+    "phone": "06-870197"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000390",
+    "name": "Wadi Khaled SDC center",
+    "address": "وادي خالد",
+    "phone": "06-870180"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000391",
+    "name": "West Bekaa Hospital",
+    "address": "سحمر",
+    "phone": "08-635740-1-2-3"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000392",
+    "name": "Yadouna Association center - Baabda",
+    "address": "بعبدا",
+    "phone": "05-923209"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000393",
+    "name": "Zahle SDC center",
+    "address": "حوش الامراء",
+    "phone": "08-815100"
+  },
+  {
+    "id": "40000000-0000-4000-8000-000000000394",
+    "name": "zahraa medical center",
+    "address": "زقاق البلاط - شارع بطرس",
+    "phone": "01-366856"
+  }
+]

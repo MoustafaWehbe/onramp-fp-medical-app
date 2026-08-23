@@ -71,6 +71,8 @@ describe("GET /api/profile/symptoms", () => {
       currentPage: 1,
       pageSize: 10,
       search: undefined,
+    
+      language: "en",
     });
   });
 
@@ -95,6 +97,8 @@ describe("GET /api/profile/symptoms", () => {
       currentPage: 2,
       pageSize: 5,
       search: "headache",
+    
+      language: "en",
     });
   });
 
@@ -123,6 +127,8 @@ describe("POST /api/profile/symptoms", () => {
     expect(mockUserSymptomService.create).toHaveBeenCalledWith({
       userId: USER_ID,
       catalogId: CATALOG_ID,
+    
+      language: "en",
     });
   });
 
@@ -161,6 +167,7 @@ describe("GET /api/profile/symptoms/:id", () => {
     expect(mockUserSymptomService.getById).toHaveBeenCalledWith(
       USER_ID,
       USER_SYMPTOM_ID,
+      "en",
     );
   });
 

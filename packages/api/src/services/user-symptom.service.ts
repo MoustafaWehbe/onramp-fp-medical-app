@@ -1,4 +1,4 @@
-import { Op, UniqueConstraintError } from "sequelize";
+import { UniqueConstraintError } from "sequelize";
 import { SymptomCatalog, UserSymptom } from "../models";
 import {
   buildPaginatedResponse,
@@ -6,40 +6,41 @@ import {
   type PaginationInput,
 } from "../lib/pagination";
 import { createError } from "../middleware/error-handler";
+import type { AppLanguage } from "../lib/app-language";
+import { localizeResponse } from "../lib/localize-response";
+import { buildLocalizedNameSearch } from "../lib/localized-search";
 
 export interface ListUserSymptomsInput extends PaginationInput {
   userId: string;
   search?: string;
+  language?: AppLanguage;
 }
 
 export interface CreateUserSymptomInput {
   userId: string;
   catalogId: string;
+  language?: AppLanguage;
 }
 
-function escapeLike(value: string): string {
-  return value.replace(/[%_\\]/g, "\\$&");
-}
-
-function catalogInclude(search?: string) {
-  const trimmed = search?.trim();
-  const pattern = trimmed ? `%${escapeLike(trimmed)}%` : undefined;
+async function catalogInclude(search?: string, language: AppLanguage = "en") {
+  const where = search?.trim()
+    ? await buildLocalizedNameSearch(language, search, ["category"])
+    : undefined;
 
   return {
     model: SymptomCatalog,
     as: "catalog" as const,
-    attributes: ["id", "name", "category"],
-    required: Boolean(pattern),
-    ...(pattern
-      ? {
-          where: {
-            [Op.or]: [
-              { name: { [Op.iLike]: pattern } },
-              { category: { [Op.iLike]: pattern } },
-            ],
-          },
-        }
-      : {}),
+    attributes: [
+      "id",
+      "name",
+      "nameAr",
+      "category",
+      "categoryAr",
+      "isCustom",
+      "language",
+    ],
+    required: Boolean(search?.trim()),
+    ...(where ? { where } : {}),
   };
 }
 
@@ -52,26 +53,31 @@ async function assertSymptomCatalogExists(catalogId: string) {
   }
 }
 
-async function findOwnedUserSymptom(userId: string, id: string) {
+async function findOwnedUserSymptom(
+  userId: string,
+  id: string,
+  language: AppLanguage = "en",
+) {
   const userSymptom = await UserSymptom.findOne({
     where: { id, userId },
-    include: [catalogInclude()],
+    include: [await catalogInclude(undefined, language)],
   });
 
   if (!userSymptom) {
     throw createError("User symptom not found", 404);
   }
 
-  return userSymptom;
+  return localizeResponse(userSymptom, language);
 }
 
 export class UserSymptomService {
   async list(input: ListUserSymptomsInput) {
+    const language = input.language ?? "en";
     const { currentPage, pageSize, offset, limit } = getPaginationParams(input);
 
     const { count, rows } = await UserSymptom.findAndCountAll({
       where: { userId: input.userId },
-      include: [catalogInclude(input.search)],
+      include: [await catalogInclude(input.search, language)],
       order: [
         ["createdAt", "DESC"],
         ["id", "ASC"],
@@ -81,14 +87,20 @@ export class UserSymptomService {
       distinct: true,
     });
 
-    return buildPaginatedResponse(rows, count, currentPage, pageSize);
+    return buildPaginatedResponse(
+      await localizeResponse(rows, language),
+      count,
+      currentPage,
+      pageSize,
+    );
   }
 
-  async getById(userId: string, id: string) {
-    return findOwnedUserSymptom(userId, id);
+  async getById(userId: string, id: string, language: AppLanguage = "en") {
+    return findOwnedUserSymptom(userId, id, language);
   }
 
   async create(input: CreateUserSymptomInput) {
+    const language = input.language ?? "en";
     await assertSymptomCatalogExists(input.catalogId);
 
     const existing = await UserSymptom.findOne({
@@ -109,7 +121,7 @@ export class UserSymptomService {
         catalogId: input.catalogId,
       });
 
-      return findOwnedUserSymptom(input.userId, created.id);
+      return findOwnedUserSymptom(input.userId, created.id, language);
     } catch (error) {
       if (error instanceof UniqueConstraintError) {
         throw createError("Symptom already linked to profile", 409);
