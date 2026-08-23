@@ -121,12 +121,15 @@ export function ConditionsStep({
                 autoFocus
                 className={selectFieldClass}
                 value={draft.userConditionId}
-                onChange={(event) =>
+                onChange={(event) => {
                   setDraft((current) => ({
                     ...current,
                     userConditionId: event.target.value,
-                  }))
-                }
+                  }));
+                  if (fieldErrors.userConditionId) {
+                    setFieldErrors(({ userConditionId: _, ...rest }) => rest);
+                  }
+                }}
                 {...composerControlProps("composer-condition-error", fieldErrors.userConditionId)}
               >
                 <option value="">{t("dailyEntries.journey.composer.selectCondition")}</option>

@@ -3,7 +3,6 @@ import { useAuth } from "../../hooks/useAuth";
 import { BrandMark } from "./BrandMark";
 import { ThemeToggle } from "./ThemeToggle";
 import { useTranslation } from "react-i18next";
-import i18n from "@/i18n";
 
 interface HeaderProps {
   onMenuClick?: () => void;
