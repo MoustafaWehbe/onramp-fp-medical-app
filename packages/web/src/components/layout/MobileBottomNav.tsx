@@ -35,7 +35,7 @@ export function MobileBottomNav({ onMoreClick }: MobileBottomNavProps) {
   return (
     <nav
       aria-label={t("navigation.mobile.navigation")}
-      className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-[1.4rem] border border-white/50 bg-card p-1.5 shadow-lift dark:border-border/60 md:hidden"
+      className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-[1.4rem] border border-white/50 bg-card p-1.5 shadow-lift dark:border-border/60 md:hidden print:hidden"
     >
       {items.map(({ to, label, icon: Icon }) => (
         <NavLink
