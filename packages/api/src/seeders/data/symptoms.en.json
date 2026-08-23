@@ -50,11 +50,6 @@
     "category": "General"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000011",
-    "name": "Add images or other media for use on Wikipedia",
-    "category": "General"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000012",
     "name": "Agitation",
     "category": "General"
@@ -155,11 +150,6 @@
     "category": "General"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000032",
-    "name": "Anosmia, see Lost or changed sense of smell",
-    "category": "ENT"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000033",
     "name": "Anosognosia",
     "category": "General"
@@ -171,7 +161,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000035",
-    "name": "Anus (itchy), see Itchy bottom",
+    "name": "Itchy bottom",
     "category": "Skin"
   },
   {
@@ -210,11 +200,6 @@
     "category": "Pain"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000043",
-    "name": "Arm pain, see Elbow and arm pain",
-    "category": "Pain"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000044",
     "name": "Arm Weakness",
     "category": "General"
@@ -222,11 +207,6 @@
   {
     "id": "10000000-0000-4000-8000-000000000045",
     "name": "Arthralgia",
-    "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000046",
-    "name": "Articles related to current events",
     "category": "General"
   },
   {
@@ -271,7 +251,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000055",
-    "name": "Being sick, see Diarrhoea and vomiting",
+    "name": "Being sick",
     "category": "Digestive"
   },
   {
@@ -291,17 +271,17 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000059",
-    "name": "Bleeding after the menopause, see Postmenopausal bleeding",
+    "name": "Bleeding after the menopause",
     "category": "General"
   },
   {
     "id": "10000000-0000-4000-8000-000000000060",
-    "name": "Bleeding between periods or after sex, see Vaginal bleeding between periods or after sex",
+    "name": "Bleeding between periods or after sex",
     "category": "Genitourinary"
   },
   {
     "id": "10000000-0000-4000-8000-000000000061",
-    "name": "Bleeding from the bottom (rectal bleeding)",
+    "name": "Bleeding from the bottom",
     "category": "General"
   },
   {
@@ -331,7 +311,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000067",
-    "name": "Blood in phlegm, see Coughing up blood (blood in phlegm)",
+    "name": "Blood in phlegm",
     "category": "Respiratory"
   },
   {
@@ -545,16 +525,6 @@
     "category": "Neurological / Mental"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000110",
-    "name": "Confusion (sudden), see Sudden confusion (delirium)",
-    "category": "Neurological / Mental"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000111",
-    "name": "Connect with NLM",
-    "category": "General"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000112",
     "name": "Constipation",
     "category": "Digestive"
@@ -562,11 +532,6 @@
   {
     "id": "10000000-0000-4000-8000-000000000113",
     "name": "Convulsion",
-    "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000114",
-    "name": "Copyright",
     "category": "General"
   },
   {
@@ -596,7 +561,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000120",
-    "name": "Cyanosis, see Blue or grey skin or lips (cyanosis)",
+    "name": "Cyanosis",
     "category": "Skin"
   },
   {
@@ -636,7 +601,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000128",
-    "name": "Delirium, see Sudden confusion (delirium)",
+    "name": "Delirium",
     "category": "Neurological / Mental"
   },
   {
@@ -651,7 +616,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000131",
-    "name": "Dental pain, see Toothache",
+    "name": "Dental pain",
     "category": "Pain"
   },
   {
@@ -751,7 +716,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000151",
-    "name": "Dry lips, see Sore or dry lips",
+    "name": "Dry lips",
     "category": "Pain"
   },
   {
@@ -1031,12 +996,12 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000207",
-    "name": "Fever in adults, see High temperature (fever) in adults",
+    "name": "Fever in adults",
     "category": "General"
   },
   {
     "id": "10000000-0000-4000-8000-000000000208",
-    "name": "Fever in children, see High temperature (fever) in children",
+    "name": "Fever in children",
     "category": "General"
   },
   {
@@ -1051,7 +1016,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000211",
-    "name": "Fits (seizures), see What to do if someone has a seizure (fit)",
+    "name": "Fits (seizures)",
     "category": "Neurological / Mental"
   },
   {
@@ -1066,7 +1031,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000214",
-    "name": "Flatulence, see Farting (flatulence)",
+    "name": "Flatulence",
     "category": "General"
   },
   {
@@ -1135,18 +1100,8 @@
     "category": "Skin"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000228",
-    "name": "Guidance on how to use and edit Wikipedia",
-    "category": "General"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000229",
     "name": "Guidelines for Links",
-    "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000230",
-    "name": "Guides to browsing Wikipedia",
     "category": "General"
   },
   {
@@ -1271,12 +1226,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000255",
-    "name": "High temperature (fever) in adults",
-    "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000256",
-    "name": "High temperature (fever) in children",
+    "name": "High temperature",
     "category": "General"
   },
   {
@@ -1285,24 +1235,9 @@
     "category": "Pain"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000258",
-    "name": "Hip pain in adults",
-    "category": "Pain"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000259",
-    "name": "Hip pain in children (irritable hip)",
-    "category": "Pain"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000260",
     "name": "Hirsutism",
     "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000261",
-    "name": "Hirsutism, see Excessive hair growth (hirsutism)",
-    "category": "Skin"
   },
   {
     "id": "10000000-0000-4000-8000-000000000262",
@@ -1322,11 +1257,6 @@
   {
     "id": "10000000-0000-4000-8000-000000000265",
     "name": "Hookworm, see Worms in humans",
-    "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000266",
-    "name": "How to contact Wikipedia",
     "category": "General"
   },
   {
@@ -1431,7 +1361,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000287",
-    "name": "Irritable hip, see Hip pain in children (irritable hip)",
+    "name": "Irritable hip",
     "category": "Pain"
   },
   {
@@ -1510,16 +1440,6 @@
     "category": "Respiratory"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000303",
-    "name": "Learn about Wikipedia and how it works",
-    "category": "ENT"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000304",
-    "name": "Learn how to edit Wikipedia",
-    "category": "ENT"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000305",
     "name": "Leg Cramps",
     "category": "Pain"
@@ -1571,7 +1491,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000315",
-    "name": "Lips (sore or dry), see Sore or dry lips",
+    "name": "Lips (sore or dry)",
     "category": "Pain"
   },
   {
@@ -1631,7 +1551,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000327",
-    "name": "Low sex drive (loss of libido)",
+    "name": "Low sex drive",
     "category": "General"
   },
   {
@@ -1685,11 +1605,6 @@
     "category": "General"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000338",
-    "name": "MedlinePlus Connect for EHRs",
-    "category": "General"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000339",
     "name": "Memory loss (amnesia)",
     "category": "Neurological / Mental"
@@ -1711,7 +1626,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000343",
-    "name": "Menstrual pain, see Period pain",
+    "name": "Menstrual pain",
     "category": "Pain"
   },
   {
@@ -2010,11 +1925,6 @@
     "category": "General"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000403",
-    "name": "Past revisions of this page [h]",
-    "category": "Eye"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000404",
     "name": "Patellofemoral pain syndrome",
     "category": "Pain"
@@ -2120,11 +2030,6 @@
     "category": "Pain"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000425",
-    "name": "Printable version of this page [p]",
-    "category": "General"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000426",
     "name": "Proarrhythmia",
     "category": "General"
@@ -2178,11 +2083,6 @@
     "id": "10000000-0000-4000-8000-000000000436",
     "name": "Rashes in babies and children",
     "category": "Skin"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000437",
-    "name": "Recent changes in pages linked from this page [k]",
-    "category": "General"
   },
   {
     "id": "10000000-0000-4000-8000-000000000438",
@@ -2246,7 +2146,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000450",
-    "name": "Roundworm, see Worms in humans",
+    "name": "Roundworm",
     "category": "General"
   },
   {
@@ -2270,18 +2170,13 @@
     "category": "Neurological / Mental"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000455",
-    "name": "Seizures",
-    "category": "Neurological / Mental"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000456",
     "name": "Seizures (fits), see What to do if someone has a seizure (fit)",
     "category": "Neurological / Mental"
   },
   {
     "id": "10000000-0000-4000-8000-000000000457",
-    "name": "Sense of smell (lost/changed), see Lost or changed sense of smell",
+    "name": "Lost sense of smell",
     "category": "ENT"
   },
   {
@@ -2308,11 +2203,6 @@
     "id": "10000000-0000-4000-8000-000000000462",
     "name": "Shakiness",
     "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000463",
-    "name": "Shaking, see Tremor or shaking hands",
-    "category": "Neurological / Mental"
   },
   {
     "id": "10000000-0000-4000-8000-000000000464",
@@ -2411,7 +2301,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000483",
-    "name": "Soiling (child pooing their pants)",
+    "name": "Soiling",
     "category": "General"
   },
   {
@@ -2475,19 +2365,9 @@
     "category": "General"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000496",
-    "name": "Structured data on this page hosted by Wikidata [g]",
-    "category": "General"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000497",
     "name": "Stuffy Nose",
     "category": "ENT"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000498",
-    "name": "Subscribe to RSS",
-    "category": "General"
   },
   {
     "id": "10000000-0000-4000-8000-000000000499",
@@ -2511,7 +2391,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000503",
-    "name": "Swallowing problems, see Dysphagia (swallowing problems)",
+    "name": "Swallowing problems",
     "category": "General"
   },
   {
@@ -2521,7 +2401,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000505",
-    "name": "Sweating at night, see Night sweats",
+    "name": "Night sweats",
     "category": "General"
   },
   {
@@ -2565,11 +2445,6 @@
     "category": "General"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000514",
-    "name": "Symptoms",
-    "category": "General"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000515",
     "name": "Syncope (medicine)",
     "category": "General"
@@ -2581,7 +2456,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000517",
-    "name": "Tapeworm, see Worms in humans",
+    "name": "Tapeworm",
     "category": "General"
   },
   {
@@ -2620,23 +2495,18 @@
     "category": "Pain"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000525",
-    "name": "The hub for editors",
-    "category": "General"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000526",
     "name": "Thirst",
     "category": "General"
   },
   {
     "id": "10000000-0000-4000-8000-000000000527",
-    "name": "Thirst (excessive), see Excessive thirst",
+    "name": "Excessive thirst",
     "category": "General"
   },
   {
     "id": "10000000-0000-4000-8000-000000000528",
-    "name": "Throat (sore), see Sore throat",
+    "name": "Throat (sore)",
     "category": "Pain"
   },
   {
@@ -2681,7 +2551,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000537",
-    "name": "Tongue (sore or white), see Sore or white tongue",
+    "name": "Sore tongue",
     "category": "Pain"
   },
   {
@@ -2706,7 +2576,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000542",
-    "name": "Tremor or shaking hands",
+    "name": "Shaking hands",
     "category": "Neurological / Mental"
   },
   {
@@ -2736,7 +2606,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000548",
-    "name": "Tummy ache, see Stomach ache",
+    "name": "Tummy ache",
     "category": "Pain"
   },
   {
@@ -2762,11 +2632,6 @@
   {
     "id": "10000000-0000-4000-8000-000000000553",
     "name": "Unintentional weight loss",
-    "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000554",
-    "name": "Upload files [u]",
     "category": "General"
   },
   {
@@ -2811,7 +2676,7 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000563",
-    "name": "Urine (smelly), see Smelly urine",
+    "name": "Urine",
     "category": "ENT"
   },
   {
@@ -2822,11 +2687,6 @@
   {
     "id": "10000000-0000-4000-8000-000000000565",
     "name": "Vaginal bleeding",
-    "category": "Genitourinary"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000566",
-    "name": "Vaginal bleeding between periods or after sex",
     "category": "Genitourinary"
   },
   {
@@ -2855,21 +2715,6 @@
     "category": "Neurological / Mental"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000572",
-    "name": "View the category page [c]",
-    "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000573",
-    "name": "View the content page [c]",
-    "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000574",
-    "name": "Viewers & Players",
-    "category": "General"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000575",
     "name": "Vision Changes",
     "category": "Eye"
@@ -2878,16 +2723,6 @@
     "id": "10000000-0000-4000-8000-000000000576",
     "name": "Vision Loss",
     "category": "Eye"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000577",
-    "name": "Visit a randomly selected article [x]",
-    "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000578",
-    "name": "Visit the main page [z]",
-    "category": "General"
   },
   {
     "id": "10000000-0000-4000-8000-000000000579",
@@ -2905,11 +2740,6 @@
     "category": "Digestive"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000582",
-    "name": "Vomiting, see Diarrhoea and vomiting",
-    "category": "Digestive"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000583",
     "name": "Walking Difficulty",
     "category": "General"
@@ -2923,11 +2753,6 @@
     "id": "10000000-0000-4000-8000-000000000585",
     "name": "Water Retention",
     "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000586",
-    "name": "Watering eyes",
-    "category": "Eye"
   },
   {
     "id": "10000000-0000-4000-8000-000000000587",
@@ -2952,21 +2777,6 @@
   {
     "id": "10000000-0000-4000-8000-000000000591",
     "name": "Weight Loss",
-    "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000592",
-    "name": "Weight loss (unintentional), see Unintentional weight loss",
-    "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000593",
-    "name": "What to do if someone has a seizure (fit)",
-    "category": "Neurological / Mental"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000594",
-    "name": "What's New",
     "category": "General"
   },
   {
@@ -3008,15 +2818,5 @@
     "id": "10000000-0000-4000-8000-000000000602",
     "name": "Yellow Skin",
     "category": "Skin"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000603",
-    "name": "You are encouraged to create an account and log in; however, it is not mandatory",
-    "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000604",
-    "name": "You&#039;re encouraged to log in; however, it&#039;s not mandatory. [o]",
-    "category": "General"
   }
 ]

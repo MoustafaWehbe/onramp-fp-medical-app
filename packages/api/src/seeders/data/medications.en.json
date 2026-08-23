@@ -103,28 +103,17 @@
   },
   {
     "id": "30000000-0000-4000-8000-000000000037",
-    "name": "1012 Antimicrobial",
+    "name": "Antimicrobial",
     "strength": "3 mg/mL",
     "category": null
   },
   {
     "id": "30000000-0000-4000-8000-000000000038",
-    "name": "111 Medco Benzoyl Peroxide",
+    "name": "Medco Benzoyl Peroxide",
     "strength": "100 mg/g",
     "category": null
   },
-  {
-    "id": "30000000-0000-4000-8000-000000000040",
-    "name": "111medco 2% Salicylic Acid Cleansing Bar",
-    "strength": "20 mg/g",
-    "category": null
-  },
-  {
-    "id": "30000000-0000-4000-8000-000000000042",
-    "name": "111medco Medicated Bar 2 Pyrithione Zinc",
-    "strength": "20 mg/g",
-    "category": null
-  },
+  
   {
     "id": "30000000-0000-4000-8000-000000000046",
     "name": "12 Hour Allergy D",
@@ -172,18 +161,6 @@
     "name": "12hr Allergy Relief",
     "strength": "60 mg/1",
     "category": "Histamine H1 Receptor Antagonists"
-  },
-  {
-    "id": "30000000-0000-4000-8000-000000000055",
-    "name": "13.5oz 2 In 1 Dandruff Hair Cleanse And Conditioner - Eucalyptus And Mint",
-    "strength": ".5 g/100mL",
-    "category": null
-  },
-  {
-    "id": "30000000-0000-4000-8000-000000000056",
-    "name": "13.5oz 2 In 1 Dandruff Hair Cleanse And Conditioner - Shea And Cocoa Butter",
-    "strength": ".5 g/100mL",
-    "category": null
   },
   {
     "id": "30000000-0000-4000-8000-000000000058",
