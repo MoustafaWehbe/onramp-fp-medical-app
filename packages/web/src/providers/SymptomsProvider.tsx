@@ -282,19 +282,17 @@ export function SymptomsProvider({ children, onActivate, panelCloseRef }: Sympto
 
   function selectSymptom(selection: SymptomSelection) {
     if (selection.source === "catalog") {
+      setValue("catalogId", selection.symptom.id);
+      setValue("onlineName", undefined);
       setValue("nameQuery", selection.symptom.name, {
         shouldValidate: true,
       });
-      setValue("catalogId", selection.symptom.id, {
-        shouldValidate: true,
-      });
-      setValue("onlineName", undefined);
       return;
     }
 
-    setValue("nameQuery", selection.name, { shouldValidate: true });
     setValue("catalogId", undefined);
-    setValue("onlineName", selection.name, { shouldValidate: true });
+    setValue("onlineName", selection.name);
+    setValue("nameQuery", selection.name, { shouldValidate: true });
   }
 
   async function resolveCatalogId(
