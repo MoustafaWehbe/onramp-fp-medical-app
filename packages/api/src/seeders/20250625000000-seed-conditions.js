@@ -23,7 +23,7 @@ module.exports = {
     }));
 
     for (const part of chunk(rows, CHUNK)) {
-      await queryInterface.bulkInsert("condition_catalog", part);
+      await queryInterface.bulkInsert("condition_catalog", part, { ignoreDuplicates: true });
     }
   },
 

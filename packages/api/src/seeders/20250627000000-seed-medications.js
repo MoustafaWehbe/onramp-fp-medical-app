@@ -25,7 +25,7 @@ module.exports = {
     }));
 
     for (const part of chunk(rows, CHUNK)) {
-      await queryInterface.bulkInsert("medications", part);
+      await queryInterface.bulkInsert("medications", part, { ignoreDuplicates: true });
     }
   },
 

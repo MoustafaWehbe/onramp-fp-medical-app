@@ -24,7 +24,7 @@ module.exports = {
     }));
 
     for (const part of chunk(rows, CHUNK)) {
-      await queryInterface.bulkInsert("symptom_catalog", part);
+      await queryInterface.bulkInsert("symptom_catalog", part, { ignoreDuplicates: true });
     }
   },
 
