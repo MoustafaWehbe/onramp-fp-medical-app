@@ -44,7 +44,7 @@ describe("ConditionService.list", () => {
     const result = await service.list({ currentPage: 1, pageSize: 10 });
 
     expect(mockConditionCatalog.findAndCountAll).toHaveBeenCalledWith({
-      attributes: ["id", "name", "createdAt"],
+      attributes: ["id", "name", "nameAr", "createdAt"],
       where: undefined,
       order: [["name", "ASC"]],
       limit: 10,
@@ -63,7 +63,7 @@ describe("ConditionService.list", () => {
 
     expect(mockConditionCatalog.findAndCountAll).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { name: { [Op.iLike]: "%flu%" } },
+        where: { [Op.or]: [{ name: { [Op.iLike]: "%flu%" } }] },
         limit: 5,
         offset: 0,
       }),
@@ -79,7 +79,9 @@ describe("ConditionService.getById", () => {
 
     const result = await service.getById("condition-id");
 
-    expect(mockConditionCatalog.findByPk).toHaveBeenCalledWith("condition-id");
+    expect(mockConditionCatalog.findByPk).toHaveBeenCalledWith("condition-id", {
+      attributes: ["id", "name", "nameAr", "createdAt", "updatedAt"],
+    });
     expect(result).toEqual(conditionRow);
   });
 

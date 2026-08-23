@@ -120,6 +120,8 @@ describe("POST /api/catalog/symptoms", () => {
     expect(res.body.data.name).toBe("Dizziness");
     expect(mockCatalogService.create).toHaveBeenCalledWith({
       name: "Dizziness",
+      isCustom: false,
+      language: "en",
     });
   });
 
