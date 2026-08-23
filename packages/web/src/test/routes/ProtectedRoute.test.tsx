@@ -67,4 +67,13 @@ describe("ProtectedRoute", () => {
     expect(screen.getByTestId("location")).toHaveTextContent("/login");
     expect(screen.queryByText("PROTECTED")).not.toBeInTheDocument();
   });
+
+  // ─── admin skips onboarding redirect ─────────────────────────────────────
+
+  it("allows an admin to access protected routes without completing onboarding", () => {
+    useAuthMock.mockReturnValue({ user: user("admin"), isLoading: false });
+    renderProtectedRoute();
+
+    expect(screen.getByText("PROTECTED")).toBeInTheDocument();
+  });
 });
