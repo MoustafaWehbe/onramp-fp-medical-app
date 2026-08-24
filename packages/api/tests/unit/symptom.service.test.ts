@@ -55,6 +55,7 @@ describe("SymptomCatalogService.list", () => {
         "createdAt",
       ],
       where: {
+        retiredAt: null,
         [Op.or]: [{ isCustom: false }, { isCustom: true, language: "en" }],
       },
       order: [["name", "ASC"]],
@@ -77,6 +78,7 @@ describe("SymptomCatalogService.list", () => {
         where: {
           [Op.and]: [
             {
+              retiredAt: null,
               [Op.or]: [
                 { isCustom: false },
                 { isCustom: true, language: "en" },

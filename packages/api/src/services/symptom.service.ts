@@ -25,6 +25,7 @@ export interface CreateSymptomInput {
 
 function visibilityWhere(language: AppLanguage): WhereOptions {
   return {
+    retiredAt: null,
     [Op.or]: [
       { isCustom: false },
       { isCustom: true, language },

@@ -11,6 +11,7 @@ export interface SymptomCatalogAttributes {
   categoryAr?: string | null;
   isCustom: boolean;
   language: SymptomCatalogLanguage;
+  retiredAt?: Date | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -18,7 +19,7 @@ export interface SymptomCatalogAttributes {
 export interface SymptomCatalogCreationAttributes
   extends Optional<
     SymptomCatalogAttributes,
-    "id" | "category" | "nameAr" | "categoryAr" | "isCustom" | "language"
+    "id" | "category" | "nameAr" | "categoryAr" | "isCustom" | "language" | "retiredAt"
   > {}
 
 export class SymptomCatalog
@@ -32,6 +33,7 @@ export class SymptomCatalog
   declare categoryAr: string | null | undefined;
   declare isCustom: boolean;
   declare language: SymptomCatalogLanguage;
+  declare retiredAt: Date | null | undefined;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
 
@@ -68,6 +70,10 @@ export class SymptomCatalog
           type: DataTypes.STRING(5),
           allowNull: false,
           defaultValue: "en",
+        },
+        retiredAt: {
+          type: DataTypes.DATE,
+          allowNull: true,
         },
         ...timestampColumns,
       },
