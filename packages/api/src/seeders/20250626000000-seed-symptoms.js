@@ -29,12 +29,16 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    for (const part of chunk(
-      symptoms.map((s) => s.id),
-      CHUNK,
-    )) {
+    // Delete only rows this seeder inserted (content still matches the seed
+    // payload). Rows that pre-existed before up() or were edited afterwards
+    // survive, preserving user_symptoms ownership links. Legacy junk-row
+    // removal is owned by the 20260824000000 reconcile migration instead.
+    for (const part of chunk(symptoms, CHUNK)) {
       await queryInterface.bulkDelete("symptom_catalog", {
-        id: { [Op.in]: part },
+        [Op.or]: part.map((s) => ({
+          id: s.id,
+          name: s.name,
+        })),
       });
     }
   },

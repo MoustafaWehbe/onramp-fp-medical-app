@@ -160,11 +160,6 @@
     "category": "General"
   },
   {
-    "id": "10000000-0000-4000-8000-000000000035",
-    "name": "Itchy bottom",
-    "category": "Skin"
-  },
-  {
     "id": "10000000-0000-4000-8000-000000000036",
     "name": "Anxiety",
     "category": "Neurological / Mental"
@@ -1026,11 +1021,6 @@
   },
   {
     "id": "10000000-0000-4000-8000-000000000213",
-    "name": "Flatulence",
-    "category": "General"
-  },
-  {
-    "id": "10000000-0000-4000-8000-000000000214",
     "name": "Flatulence",
     "category": "General"
   },

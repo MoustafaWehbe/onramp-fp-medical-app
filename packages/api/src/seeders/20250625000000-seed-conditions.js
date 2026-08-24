@@ -28,12 +28,15 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    for (const part of chunk(
-      conditions.map((c) => c.id),
-      CHUNK,
-    )) {
+    // Delete only rows this seeder inserted (content still matches the seed
+    // payload). Rows that pre-existed before up() or were edited afterwards
+    // survive, preserving user_conditions ownership links.
+    for (const part of chunk(conditions, CHUNK)) {
       await queryInterface.bulkDelete("condition_catalog", {
-        id: { [Op.in]: part },
+        [Op.or]: part.map((c) => ({
+          id: c.id,
+          name: c.name,
+        })),
       });
     }
   },

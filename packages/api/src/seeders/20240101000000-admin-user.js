@@ -25,6 +25,12 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.bulkDelete("users", { email: "admin@example.com" });
+    // Delete only the seeded admin row (fixed id + expected attributes).
+    // A different user occupying the id or email survives.
+    await queryInterface.bulkDelete("users", {
+      id: "00000000-0000-0000-0000-000000000001",
+      email: "admin@example.com",
+      role: "admin",
+    });
   },
 };

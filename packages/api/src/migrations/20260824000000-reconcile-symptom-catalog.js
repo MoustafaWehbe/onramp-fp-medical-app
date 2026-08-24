@@ -5,18 +5,23 @@
 // so these edits never reached databases seeded before the cleanup.
 //
 // Embedded snapshot taken from the main..HEAD diff of
-// packages/api/src/seeders/data/symptoms.en.json (40 entries dropped,
-// 31 entries renamed in place under their stable ids). Kept inline so this
-// migration stays reproducible even if the JSON changes again later.
+// packages/api/src/seeders/data/symptoms.en.json plus the follow-up removal of
+// two exact-duplicate names ("Itchy bottom" id …035 vs canonical …290,
+// "Flatulence" id …214 vs canonical …213) whose loser ids can only exist in
+// databases seeded before the dedupe. 42 entries are removed or retired, 29
+// renamed in place under stable ids. Kept inline so this migration stays
+// reproducible even if the JSON changes again later.
 
 const REMOVED = [
   { id: "10000000-0000-4000-8000-000000000011", name: "Add images or other media for use on Wikipedia", category: "General" },
   { id: "10000000-0000-4000-8000-000000000032", name: "Anosmia, see Lost or changed sense of smell", category: "ENT" },
+  { id: "10000000-0000-4000-8000-000000000035", name: "Anus (itchy), see Itchy bottom", category: "Skin" },
   { id: "10000000-0000-4000-8000-000000000043", name: "Arm pain, see Elbow and arm pain", category: "Pain" },
   { id: "10000000-0000-4000-8000-000000000046", name: "Articles related to current events", category: "General" },
   { id: "10000000-0000-4000-8000-000000000110", name: "Confusion (sudden), see Sudden confusion (delirium)", category: "Neurological / Mental" },
   { id: "10000000-0000-4000-8000-000000000111", name: "Connect with NLM", category: "General" },
   { id: "10000000-0000-4000-8000-000000000114", name: "Copyright", category: "General" },
+  { id: "10000000-0000-4000-8000-000000000214", name: "Flatulence, see Farting (flatulence)", category: "General" },
   { id: "10000000-0000-4000-8000-000000000228", name: "Guidance on how to use and edit Wikipedia", category: "General" },
   { id: "10000000-0000-4000-8000-000000000230", name: "Guides to browsing Wikipedia", category: "General" },
   { id: "10000000-0000-4000-8000-000000000256", name: "High temperature (fever) in children", category: "General" },
@@ -53,7 +58,6 @@ const REMOVED = [
 ];
 
 const RENAMED = [
-  { id: "10000000-0000-4000-8000-000000000035", from: "Anus (itchy), see Itchy bottom", to: "Itchy bottom", category: "Skin" },
   { id: "10000000-0000-4000-8000-000000000055", from: "Being sick, see Diarrhoea and vomiting", to: "Being sick", category: "Digestive" },
   { id: "10000000-0000-4000-8000-000000000059", from: "Bleeding after the menopause, see Postmenopausal bleeding", to: "Bleeding after the menopause", category: "General" },
   { id: "10000000-0000-4000-8000-000000000060", from: "Bleeding between periods or after sex, see Vaginal bleeding between periods or after sex", to: "Bleeding between periods or after sex", category: "Genitourinary" },
@@ -66,7 +70,6 @@ const RENAMED = [
   { id: "10000000-0000-4000-8000-000000000207", from: "Fever in adults, see High temperature (fever) in adults", to: "Fever in adults", category: "General" },
   { id: "10000000-0000-4000-8000-000000000208", from: "Fever in children, see High temperature (fever) in children", to: "Fever in children", category: "General" },
   { id: "10000000-0000-4000-8000-000000000211", from: "Fits (seizures), see What to do if someone has a seizure (fit)", to: "Fits (seizures)", category: "Neurological / Mental" },
-  { id: "10000000-0000-4000-8000-000000000214", from: "Flatulence, see Farting (flatulence)", to: "Flatulence", category: "General" },
   { id: "10000000-0000-4000-8000-000000000255", from: "High temperature (fever) in adults", to: "High temperature", category: "General" },
   { id: "10000000-0000-4000-8000-000000000287", from: "Irritable hip, see Hip pain in children (irritable hip)", to: "Irritable hip", category: "Pain" },
   { id: "10000000-0000-4000-8000-000000000315", from: "Lips (sore or dry), see Sore or dry lips", to: "Lips (sore or dry)", category: "Pain" },

@@ -30,12 +30,17 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    for (const part of chunk(
-      clinics.map((c) => c.id),
-      CHUNK,
-    )) {
+    // Delete only rows this seeder inserted (content still matches the seed
+    // payload). Rows that pre-existed before up() or were edited afterwards
+    // survive, preserving user_clinics ownership links.
+    for (const part of chunk(clinics, CHUNK)) {
       await queryInterface.bulkDelete("clinics", {
-        id: { [Op.in]: part },
+        [Op.or]: part.map((c) => ({
+          id: c.id,
+          name: c.name,
+          address: c.address ?? null,
+          phone: c.phone ?? null,
+        })),
       });
     }
   },
