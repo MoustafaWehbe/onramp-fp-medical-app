@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ProtectedRoute } from "../../routes/ProtectedRoute";
+import { ONBOARDING_DONE_KEY } from "../../lib/auth/location-state";
 import { renderWithProviders } from "../renderWithProviders";
 import type { AuthUser } from "../../providers/AuthProvider";
 
@@ -37,6 +38,7 @@ describe("ProtectedRoute", () => {
   beforeEach(() => {
     useAuthMock.mockReset();
     useAuthMock.mockReturnValue({ user: null, isLoading: false });
+    window.localStorage.clear();
   });
 
   // ─── loading state shows a spinner ────────────────────────────────────────
@@ -49,9 +51,18 @@ describe("ProtectedRoute", () => {
     expect(screen.queryByText("PROTECTED")).not.toBeInTheDocument();
   });
 
-  // ─── authenticated user renders the outlet ────────────────────────────────
+  // ─── onboarding gate (regular users) ─────────────────────────────────────
 
-  it("renders the protected outlet when authenticated", () => {
+  it("redirects a regular user to /onboarding when onboarding is incomplete", () => {
+    useAuthMock.mockReturnValue({ user: user("user"), isLoading: false });
+    renderProtectedRoute();
+
+    expect(screen.getByTestId("location")).toHaveTextContent("/onboarding");
+    expect(screen.queryByText("PROTECTED")).not.toBeInTheDocument();
+  });
+
+  it("renders the protected outlet once the regular user completes onboarding", () => {
+    window.localStorage.setItem(`${ONBOARDING_DONE_KEY}_user-1`, "1");
     useAuthMock.mockReturnValue({ user: user("user"), isLoading: false });
     renderProtectedRoute();
 
@@ -66,5 +77,14 @@ describe("ProtectedRoute", () => {
 
     expect(screen.getByTestId("location")).toHaveTextContent("/login");
     expect(screen.queryByText("PROTECTED")).not.toBeInTheDocument();
+  });
+
+  // ─── admin skips onboarding redirect ─────────────────────────────────────
+
+  it("allows an admin to access protected routes without completing onboarding", () => {
+    useAuthMock.mockReturnValue({ user: user("admin"), isLoading: false });
+    renderProtectedRoute();
+
+    expect(screen.getByText("PROTECTED")).toBeInTheDocument();
   });
 });

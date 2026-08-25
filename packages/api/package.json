@@ -10,6 +10,7 @@
     "test": "jest --config jest.config.js --coverage --passWithNoTests",
     "lint": "eslint .",
     "clean": "rm -rf dist",
+    "catalog:validate": "node scripts/validate-catalog-data.js",
     "db:migrate": "sequelize-cli db:migrate",
     "db:migrate:undo": "sequelize-cli db:migrate:undo",
     "db:seed": "sequelize-cli db:seed:all"

@@ -121,12 +121,15 @@ export function SymptomsStep({
                 autoFocus
                 className={selectFieldClass}
                 value={draft.userSymptomId}
-                onChange={(event) =>
+                onChange={(event) => {
                   setDraft((current) => ({
                     ...current,
                     userSymptomId: event.target.value,
-                  }))
-                }
+                  }));
+                  if (fieldErrors.userSymptomId) {
+                    setFieldErrors(({ userSymptomId: _, ...rest }) => rest);
+                  }
+                }}
                 {...composerControlProps("composer-symptom-error", fieldErrors.userSymptomId)}
               >
                 <option value="">{t("dailyEntries.journey.composer.selectSymptom")}</option>

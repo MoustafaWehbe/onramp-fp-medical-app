@@ -44,8 +44,20 @@ describe("SymptomCatalogService.list", () => {
     const result = await service.list({ currentPage: 1, pageSize: 10 });
 
     expect(mockSymptomCatalog.findAndCountAll).toHaveBeenCalledWith({
-      attributes: ["id", "name", "category", "createdAt"],
-      where: undefined,
+      attributes: [
+        "id",
+        "name",
+        "nameAr",
+        "category",
+        "categoryAr",
+        "isCustom",
+        "language",
+        "createdAt",
+      ],
+      where: {
+        retiredAt: null,
+        [Op.or]: [{ isCustom: false }, { isCustom: true, language: "en" }],
+      },
       order: [["name", "ASC"]],
       limit: 10,
       offset: 0,
@@ -64,9 +76,20 @@ describe("SymptomCatalogService.list", () => {
     expect(mockSymptomCatalog.findAndCountAll).toHaveBeenCalledWith(
       expect.objectContaining({
         where: {
-          [Op.or]: [
-            { name: { [Op.iLike]: "%head%" } },
-            { category: { [Op.iLike]: "%head%" } },
+          [Op.and]: [
+            {
+              retiredAt: null,
+              [Op.or]: [
+                { isCustom: false },
+                { isCustom: true, language: "en" },
+              ],
+            },
+            {
+              [Op.or]: [
+                { name: { [Op.iLike]: "%head%" } },
+                { category: { [Op.iLike]: "%head%" } },
+              ],
+            },
           ],
         },
         limit: 5,
@@ -94,6 +117,8 @@ describe("SymptomCatalogService.create", () => {
     expect(mockSymptomCatalog.create).toHaveBeenCalledWith({
       name: "Headache",
       category: "Neurological",
+      isCustom: false,
+      language: "en",
     });
     expect(result).toEqual(symptomRow);
   });

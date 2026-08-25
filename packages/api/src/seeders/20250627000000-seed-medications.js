@@ -25,17 +25,22 @@ module.exports = {
     }));
 
     for (const part of chunk(rows, CHUNK)) {
-      await queryInterface.bulkInsert("medications", part);
+      await queryInterface.bulkInsert("medications", part, { ignoreDuplicates: true });
     }
   },
 
   async down(queryInterface) {
-    for (const part of chunk(
-      medications.map((m) => m.id),
-      CHUNK,
-    )) {
+    // Delete only rows this seeder inserted (content still matches the seed
+    // payload). Rows that pre-existed before up() or were edited afterwards
+    // survive, preserving user_medications ownership links.
+    for (const part of chunk(medications, CHUNK)) {
       await queryInterface.bulkDelete("medications", {
-        id: { [Op.in]: part },
+        [Op.or]: part.map((m) => ({
+          id: m.id,
+          name: m.name,
+          strength: m.strength ?? null,
+          category: m.category ?? null,
+        })),
       });
     }
   },

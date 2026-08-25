@@ -95,7 +95,16 @@ describe("MedicationService.getById", () => {
 
     const result = await service.getById("medication-id");
 
-    expect(mockMedication.findByPk).toHaveBeenCalledWith("medication-id");
+    expect(mockMedication.findByPk).toHaveBeenCalledWith("medication-id", {
+      attributes: [
+        "id",
+        "name",
+        "strength",
+        "category",
+        "createdAt",
+        "updatedAt",
+      ],
+    });
     expect(result).toEqual(medicationRow);
   });
 

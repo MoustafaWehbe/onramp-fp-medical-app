@@ -18,7 +18,6 @@ interface MedicationCardProps {
 }
 
 export function MedicationCard({ medication }: MedicationCardProps) {
-  const { t } = useTranslation();
   const { selectedId, openDetail } = useMedicationsContext();
   const selected = selectedId === medication.id;
   const dosageLabel = formatMedicationDosage(medication);

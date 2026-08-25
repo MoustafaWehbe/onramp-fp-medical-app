@@ -26,13 +26,13 @@ const SheetContent = React.forwardRef<
   return (
     <SheetPrimitive.Portal>
       <SheetPrimitive.Overlay
-        className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-md data-[state=open]:animate-in data-[state=closed]:animate-out"
+        className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-md data-[state=open]:animate-in data-[state=closed]:animate-out print:hidden"
       />
 
     <SheetPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed z-50 gap-4 bg-background p-6 shadow-lift transition duration-300 ease-out",
+        "fixed z-50 gap-4 bg-background p-6 shadow-lift transition duration-300 ease-out print:hidden",
         side === "left" && "inset-y-0 start-0 h-full w-64 border-s sm:max-w-sm",
         side === "right" && "inset-y-0 end-0 h-full w-64 border-e sm:max-w-sm",
         side === "top" && "inset-x-0 top-0 h-1/2 w-full border-b sm:max-w-lg",

@@ -58,8 +58,8 @@ export function Register() {
 
     // ── 2. Auto-login (registration already succeeded — do not retry it) ─────
     try {
-      await login(data.email, data.password);
-      navigate("/onboarding", { replace: true });
+      const loggedInUser = await login(data.email, data.password);
+      navigate(loggedInUser.role === "admin" ? "/admin" : "/onboarding", { replace: true });
     } catch {
       const state: LoginLocationState = {
         registered: true,

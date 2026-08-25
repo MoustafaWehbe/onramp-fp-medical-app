@@ -2,7 +2,7 @@ import rateLimit from "express-rate-limit";
 
 export const rateLimiter = rateLimit({
   windowMs: 15 * 60 * 1_000, // 15 minutes
-  limit: (req) => (req.method === "GET" ? 1000 : 100),
+  limit: (req) => (req.method === "GET" ? 10000 : 100),
   standardHeaders: "draft-7",
   legacyHeaders: false,
   message: { error: "Too many requests, please try again later." },

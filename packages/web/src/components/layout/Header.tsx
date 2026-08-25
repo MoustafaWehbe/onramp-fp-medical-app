@@ -3,7 +3,6 @@ import { useAuth } from "../../hooks/useAuth";
 import { BrandMark } from "./BrandMark";
 import { ThemeToggle } from "./ThemeToggle";
 import { useTranslation } from "react-i18next";
-import i18n from "@/i18n";
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -20,7 +19,7 @@ export function Header({ onMenuClick }: HeaderProps) {
   }).format(new Date());
 
   return (
-    <header className="z-30 flex h-16 shrink-0 items-center gap-3 border-b border-border/60 bg-card px-3 sm:px-5 md:px-8">
+    <header className="z-30 flex h-16 shrink-0 items-center gap-3 border-b border-border/60 bg-card px-3 sm:px-5 md:px-8 print:hidden">
       <button
         onClick={onMenuClick}
         className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"

@@ -286,19 +286,17 @@ export function MedicationsProvider({ children }: { children: ReactNode }) {
 
   function selectMedication(selection: MedicationSelection) {
     if (selection.source === "catalog") {
+      setValue("medicationId", selection.medication.id);
+      setValue("onlineName", undefined);
       setValue("nameQuery", selection.medication.name, {
         shouldValidate: true,
       });
-      setValue("medicationId", selection.medication.id, {
-        shouldValidate: true,
-      });
-      setValue("onlineName", undefined);
       return;
     }
 
-    setValue("nameQuery", selection.name, { shouldValidate: true });
     setValue("medicationId", undefined);
-    setValue("onlineName", selection.name, { shouldValidate: true });
+    setValue("onlineName", selection.name);
+    setValue("nameQuery", selection.name, { shouldValidate: true });
   }
 
   async function resolveMedicationId(

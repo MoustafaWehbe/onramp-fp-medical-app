@@ -121,6 +121,7 @@ describe("POST /api/ai-reports/generate", () => {
       startDate: "2026-06-01",
       endDate: "2026-06-30",
       reportType: "physician_ready",
+      language: "en",
     });
   });
 
@@ -141,6 +142,7 @@ describe("POST /api/ai-reports/generate", () => {
       startDate: "2026-06-01",
       endDate: "2026-06-30",
       reportType: "clinic_summary",
+      language: "en",
     });
   });
 
