@@ -17,13 +17,30 @@ export const createSymptomSchema = z.object({
   category: symptomCategorySchema,
   isCustom: z.boolean().optional().default(false),
 });
-
+const optionalDate = z
+  .string()
+  .trim()
+  .transform((value) => value || undefined)
+  .optional();
 export const listSymptomsQuerySchema = paginationQuerySchema.extend({
   search: z
     .string()
     .trim()
     .max(255, "Search must be at most 255 characters")
     .optional(),
+    
+    sortBy: z
+    .enum(["name", "createdAt"])
+    .optional()
+    .default("name"),
+
+  sortOrder: z
+    .enum(["asc", "desc"])
+    .optional()
+    .default("asc"),
+
+    dateFrom: optionalDate,
+    dateTo: optionalDate,
 });
 
 export const searchSymptomsOnlineQuerySchema = z.object({

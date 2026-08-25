@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { PaginationQuery } from "../../lib/api/types";
+import type { PaginationQuery,CatalogPaginationQuery } from "../../lib/api/types";
 import {
   createCatalogMedication,
   listCatalogMedications,
@@ -40,16 +40,24 @@ const PAGE_SIZE = 15;
 function listFilters(
   currentPage: number,
   search: string,
-): PaginationQuery {
+  sortBy: "name" | "createdAt",
+  sortOrder: "asc" | "desc",
+  dateFrom: string ,
+  dateTo: string,
+): CatalogPaginationQuery {
   return {
     currentPage,
     pageSize: PAGE_SIZE,
     search: search.trim() || undefined,
+    sortBy,
+    sortOrder,
+    dateFrom:  dateFrom || undefined,
+    dateTo :  dateTo || undefined,
   };
 }
 
-export function useAdminMedications(currentPage: number, search: string) {
-  const filters = listFilters(currentPage, search);
+export function useAdminMedications(currentPage: number, search: string, sortBy: "name" | "createdAt",  sortOrder: "asc" | "desc", dateFrom: string, dateTo: string,) {
+  const filters = listFilters(currentPage, search,sortBy, sortOrder, dateFrom,dateTo,);
   return useQuery({
     queryKey: adminCatalogKeys.medications(filters),
     queryFn: () => listCatalogMedications(filters),
@@ -80,8 +88,8 @@ export function useCreateAdminMedication() {
   });
 }
 
-export function useAdminConditions(currentPage: number, search: string) {
-  const filters = listFilters(currentPage, search);
+export function useAdminConditions(currentPage: number, search: string,  sortBy: "name" | "createdAt",  sortOrder: "asc" | "desc", dateFrom: string, dateTo: string,) {
+  const filters = listFilters(currentPage, search,sortBy, sortOrder, dateFrom,dateTo,);
   return useQuery({
     queryKey: adminCatalogKeys.conditions(filters),
     queryFn: () => listConditionsCatalog(filters),
@@ -101,8 +109,8 @@ export function useCreateAdminCondition() {
   });
 }
 
-export function useAdminSymptoms(currentPage: number, search: string) {
-  const filters = listFilters(currentPage, search);
+export function useAdminSymptoms(currentPage: number, search: string,  sortBy: "name" | "createdAt",  sortOrder: "asc" | "desc", dateFrom: string, dateTo: string,) {
+  const filters = listFilters(currentPage, search,sortBy, sortOrder, dateFrom,dateTo,);
   return useQuery({
     queryKey: adminCatalogKeys.symptoms(filters),
     queryFn: () => listSymptomsCatalog(filters),
@@ -121,8 +129,8 @@ export function useCreateAdminSymptom() {
   });
 }
 
-export function useAdminClinics(currentPage: number, search: string) {
-  const filters = listFilters(currentPage, search);
+export function useAdminClinics(currentPage: number, search: string,  sortBy: "name" | "createdAt",  sortOrder: "asc" | "desc", dateFrom: string, dateTo: string,) {
+  const filters = listFilters(currentPage, search,sortBy, sortOrder, dateFrom,dateTo,);
   return useQuery({
     queryKey: adminCatalogKeys.clinics(filters),
     queryFn: () => listClinics(filters),
@@ -141,8 +149,8 @@ export function useCreateAdminClinic() {
   });
 }
 
-export function useAdminDoctors(currentPage: number, search: string) {
-  const filters = listFilters(currentPage, search);
+export function useAdminDoctors(currentPage: number, search: string,  sortBy: "name" | "createdAt",  sortOrder: "asc" | "desc", dateFrom: string, dateTo: string,) {
+  const filters = listFilters(currentPage, search,sortBy, sortOrder, dateFrom,dateTo,);
   return useQuery({
     queryKey: adminCatalogKeys.doctors(filters),
     queryFn: () => listDoctors(filters),

@@ -9,6 +9,10 @@ import { createError } from "../middleware/error-handler";
 
 export interface ListClinicsInput extends PaginationInput {
   search?: string;
+  sortBy?: "name" | "createdAt";
+  sortOrder?: "asc" | "desc";
+  dateFrom?: string;
+  dateTo?: string;
 }
 
 export interface CreateClinicInput {
@@ -36,6 +40,22 @@ function buildSearchWhere(search?: string) {
   };
 }
 
+function buildDateWhere(dateFrom?: string, dateTo?: string) {
+  if (!dateFrom && !dateTo) return undefined;
+
+  const createdAt: Record<symbol, Date> = {};
+
+  if (dateFrom) {
+    createdAt[Op.gte] = new Date(`${dateFrom}T00:00:00.000Z`);
+  }
+
+  if (dateTo) {
+    createdAt[Op.lte] = new Date(`${dateTo}T23:59:59.999Z`);
+  }
+
+  return { createdAt };
+}
+
 function buildDuplicateWhere(input: CreateClinicInput): WhereOptions {
   return {
     name: input.name,
@@ -47,12 +67,35 @@ export class ClinicService {
   async list(input: ListClinicsInput) {
     const { currentPage, pageSize, offset, limit } = getPaginationParams(input);
 
+     const searchWhere = buildSearchWhere(input.search);
+
+    const dateWhere = buildDateWhere(
+      input.dateFrom,
+      input.dateTo,
+    );
+      const clinics: WhereOptions[] = [];
+     if (searchWhere) {
+    clinics.push(searchWhere);
+  }
+
+  if (dateWhere) {
+    clinics.push(dateWhere);
+  }
+
+  const where: WhereOptions =
+    clinics.length > 0
+      ? { [Op.and]: clinics }
+      : {};
+  const sortBy = input.sortBy ?? "name";
+  const sortOrder = input.sortOrder ?? "asc";
     const { count, rows } = await Clinic.findAndCountAll({
       attributes: ["id", "name", "address", "phone", "createdAt"],
-      where: buildSearchWhere(input.search),
-      order: [
-        ["name", "ASC"],
-        ["address", "ASC"],
+      where,
+     order: [
+        [
+          sortBy,
+          sortOrder === "asc" ? "ASC" : "DESC",
+        ],
         ["id", "ASC"],
       ],
       limit,

@@ -18,17 +18,36 @@ export function AdminSymptoms() {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search, 300);
+  const [sortBy, setSortBy] =
+  useState<"name" | "createdAt">("name");
+  const [sortOrder, setSortOrder] =
+  useState<"asc" | "desc">("asc");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
 
-  const listQuery = useAdminSymptoms(currentPage, debouncedSearch);
+  const listQuery = useAdminSymptoms(
+  currentPage,
+  debouncedSearch,
+  sortBy,
+  sortOrder,
+  dateFrom,
+  dateTo,
+);
   const createMutation = useCreateAdminSymptom();
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [debouncedSearch]);
+  }, [
+    debouncedSearch,
+    sortBy,
+    sortOrder,
+    dateFrom,
+    dateTo,
+  ]);
 
   function resetForm() {
     setName("");
@@ -39,6 +58,15 @@ export function AdminSymptoms() {
   function closeCreate() {
     setCreateOpen(false);
     resetForm();
+  }
+  
+  function clearFilters() {
+    setSearch("");
+    setSortBy("name");
+    setSortOrder("asc");
+    setDateFrom("");
+    setDateTo("");
+    setCurrentPage(1);
   }
 
   async function onCreateSubmit(event: FormEvent<HTMLFormElement>) {
@@ -87,6 +115,15 @@ export function AdminSymptoms() {
       pagination={listQuery.data?.pagination ?? null}
       search={search}
       onSearchChange={setSearch}
+      sortBy={sortBy}
+      sortOrder={sortOrder}
+      onSortByChange={setSortBy}
+      onSortOrderChange={setSortOrder}
+      dateFrom={dateFrom}
+      dateTo={dateTo}
+      onDateFromChange={setDateFrom}
+      onDateToChange={setDateTo}
+      onClearFilters={clearFilters}
       onPageChange={setCurrentPage}
       createTitle={t("admin.catalogs.symptoms.title")}
       createOpen={createOpen}

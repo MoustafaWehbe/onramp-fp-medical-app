@@ -21,6 +21,11 @@ export const createDoctorSchema = z.object({
   specialty: doctorSpecialtySchema,
   phone: doctorPhoneSchema,
 });
+const optionalDate = z
+  .string()
+  .trim()
+  .transform((value) => value || undefined)
+  .optional();
 
 export const doctorIdParamSchema = z.object({
   id: z.string().uuid("Invalid doctor id"),
@@ -32,4 +37,17 @@ export const listDoctorsQuerySchema = paginationQuerySchema.extend({
     .trim()
     .max(255, "Search must be at most 255 characters")
     .optional(),
+
+     sortBy: z
+        .enum(["name", "createdAt"])
+        .optional()
+        .default("name"),
+    
+      sortOrder: z
+        .enum(["asc", "desc"])
+        .optional()
+        .default("asc"),
+    
+        dateFrom: optionalDate,
+        dateTo: optionalDate,
 });

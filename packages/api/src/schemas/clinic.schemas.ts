@@ -22,6 +22,12 @@ export const createClinicSchema = z.object({
   phone: clinicPhoneSchema,
 });
 
+const optionalDate = z
+  .string()
+  .trim()
+  .transform((value) => value || undefined)
+  .optional();
+
 export const clinicIdParamSchema = z.object({
   id: z.string().uuid("Invalid clinic id"),
 });
@@ -32,4 +38,17 @@ export const listClinicsQuerySchema = paginationQuerySchema.extend({
     .trim()
     .max(255, "Search must be at most 255 characters")
     .optional(),
+
+     sortBy: z
+      .enum(["name", "createdAt"])
+      .optional()
+      .default("name"),
+  
+    sortOrder: z
+      .enum(["asc", "desc"])
+      .optional()
+      .default("asc"),
+  
+      dateFrom: optionalDate,
+      dateTo: optionalDate,
 });

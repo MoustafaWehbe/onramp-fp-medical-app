@@ -9,6 +9,12 @@ const conditionNameSchema = z
 export const createConditionSchema = z.object({
   name: conditionNameSchema,
 });
+
+const optionalDate = z
+  .string()
+  .trim()
+  .transform((value) => value || undefined)
+  .optional();
   
 export const listConditionsQuerySchema = paginationQuerySchema.extend({
   search: z
@@ -16,7 +22,20 @@ export const listConditionsQuerySchema = paginationQuerySchema.extend({
     .trim()
     .max(255, "Search must be at most 255 characters")
     .optional(),
-});
+
+     sortBy: z
+      .enum(["name", "createdAt"])
+      .optional()
+      .default("name"),
+
+    sortOrder: z
+      .enum(["asc", "desc"])
+      .optional()
+      .default("asc"),
+
+      dateFrom: optionalDate,
+      dateTo: optionalDate,
+  });
   
   export const searchConditionsOnlineQuerySchema = z.object({
     search: z

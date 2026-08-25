@@ -16,6 +16,12 @@ const medicationCategorySchema = z
   .max(100, "Category must be at most 100 characters")
   .optional();
 
+const optionalDate = z
+  .string()
+  .trim()
+  .transform((value) => value || undefined)
+  .optional();
+
 export const createMedicationSchema = z.object({
   name: medicationNameSchema,
   strength: medicationStrengthSchema,
@@ -38,6 +44,19 @@ export const listMedicationsQuerySchema = paginationQuerySchema.extend({
     .trim()
     .max(255, "Search must be at most 255 characters")
     .optional(),
+
+     sortBy: z
+        .enum(["name", "createdAt"])
+        .optional()
+        .default("name"),
+    
+      sortOrder: z
+        .enum(["asc", "desc"])
+        .optional()
+        .default("asc"),
+    
+        dateFrom: optionalDate,
+        dateTo: optionalDate,
 });
 
 export const searchMedicationsOnlineQuerySchema = z.object({

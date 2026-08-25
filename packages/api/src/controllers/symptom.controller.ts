@@ -9,15 +9,23 @@ export const symptomCatalogController = {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { currentPage, pageSize, search } = req.query as unknown as {
+      const { currentPage, pageSize, search, sortBy,sortOrder, dateFrom, dateTo,} = req.query as unknown as {
         currentPage: number;
         pageSize: number;
         search?: string;
+        sortBy?: "name" | "createdAt";
+        sortOrder?: "asc" | "desc";
+        dateFrom?: string;
+        dateTo?: string;
       };
       const result = await symptomCatalogService.list({
         currentPage,
         pageSize,
         search,
+        sortBy,
+        sortOrder,
+        dateFrom,
+        dateTo,
         language: req.language,
       });
       res.json(result);

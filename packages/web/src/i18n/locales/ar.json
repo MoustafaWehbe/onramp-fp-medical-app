@@ -183,7 +183,11 @@
       "clinics": "العيادات",
       "doctors": "الأطباء",
       "sharedCatalogs": "فهارس مشتركة لجميع المرضى.",
-      "navigation": "التنقل الإداري"
+      "navigation": "التنقل الإداري",
+      "clearFilters": "مسح الفلاتر",
+      "sortBy": "ترتيب حسب",
+      "sortOrder": "ترتيب"
+
     }
   },
   "dashboard": {
@@ -299,6 +303,14 @@
     "cancel": "إلغاء",
     "dashboardEyebrow": "الإدارة",
     "dashboardTitle": "إدارة الفهارس",
+    "clearFilters": "مسح الفلاتر",
+    "sortBy": "ترتيب حسب",
+    "sortOrder": "ترتيب",
+    "createdAt": "تاريخ الإنشاء",
+    "ascending": "تصاعدي",
+    "descending": "تنازلي",
+    "dateFrom": "من تاريخ",
+    "dateTo": "الى تاريخ",
     "dashboardDescription": "إدارة البيانات المرجعية المشتركة المستخدمة في الملفات الصحية والإدخالات اليومية.",
     "catalogs": {
       "medications": { "title": "الأدوية", "description": "أسماء الأدوية وتركيزاتها وفئاتها المشتركة.", "empty": "لا توجد أدوية في الفهرس بعد." },
