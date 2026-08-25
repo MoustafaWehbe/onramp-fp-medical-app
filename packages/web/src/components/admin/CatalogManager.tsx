@@ -144,11 +144,12 @@ export function CatalogManager<T>({
        
   <div className="flex flex-col gap-3 lg:flex-row lg:items-end">
    <div className="space-y-1">
-    <label className="text-sm font-medium">
+    <label  htmlFor="admin-sort-by" className="text-sm font-medium">
       {t("admin.sortBy")}
     </label>
 
     <select
+      id="admin-sort-by"
       value={sortBy}
       onChange={(event) =>
         onSortByChange(
@@ -163,11 +164,12 @@ export function CatalogManager<T>({
   </div>
 
   <div className="space-y-1">
-    <label className="text-sm font-medium">
+    <label htmlFor="admin-sort-order" className="text-sm font-medium">
       {t("admin.sortOrder")}
     </label>
 
     <select
+      id="admin-sort-order"
       value={sortOrder}
       onChange={(event) =>
         onSortOrderChange(
@@ -176,17 +178,18 @@ export function CatalogManager<T>({
       }
       className="h-10 rounded-md border bg-background px-3 text-sm"
     >
-      <option value="asc">A → Z</option>
-      <option value="desc">Z → A</option>
+      <option value="asc">{t("admin.ascending")}</option>
+      <option value="desc">{t("admin.descending")}</option>
     </select>
   </div>
 
   <div className="space-y-1">
-    <label className="text-sm font-medium">
+    <label htmlFor="admin-date-from" className="text-sm font-medium">
       {t("admin.dateFrom")}
     </label>
 
     <Input
+      id="admin-date-from"
       type="date"
       value={dateFrom}
       onChange={(event) => onDateFromChange(event.target.value)}
@@ -194,11 +197,12 @@ export function CatalogManager<T>({
   </div>
 
   <div className="space-y-1">
-    <label className="text-sm font-medium">
+    <label htmlFor="admin-date-to" className="text-sm font-medium">
       {t("admin.dateTo")}
     </label>
 
     <Input
+      id="admin-date-to"
       type="date"
       value={dateTo}
       onChange={(event) => onDateToChange(event.target.value)}
