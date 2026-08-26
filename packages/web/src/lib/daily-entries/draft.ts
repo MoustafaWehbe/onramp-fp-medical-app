@@ -10,8 +10,8 @@ export const DAILY_ENTRY_DRAFT_KEY =
 
 export interface DailyEntryDraft {
   values: DailyEntryFormValues;
-
   step: number;
+  savedOn?: string;
 }
 
 const LAST_STEP = 4;
@@ -48,7 +48,9 @@ export function readDailyEntryDraft(): DailyEntryDraft | null {
     return {
       values: {
         ...result.data,
-        entryDate: getTodayDate(),
+        entryDate:  parsed.savedOn && parsed.savedOn !== getTodayDate()
+        ? getTodayDate()
+        : result.data.entryDate,
       },
       step: Math.min(
         Math.max(Math.trunc(parsed.step), 0),
@@ -70,7 +72,10 @@ export function writeDailyEntryDraft(
   try {
     window.sessionStorage.setItem(
       DAILY_ENTRY_DRAFT_KEY,
-      JSON.stringify(draft),
+       JSON.stringify({
+        ...draft,
+        savedOn: getTodayDate(),
+      }),
     );
   } catch {
     // Storage may be unavailable (private mode/quota); resuming is best-effort.

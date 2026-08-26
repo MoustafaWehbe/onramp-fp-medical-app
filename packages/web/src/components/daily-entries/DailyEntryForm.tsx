@@ -89,27 +89,27 @@ export function DailyEntryForm() {
   const [finishing, setFinishing] = useState(false);
   const [composerOpen, setComposerOpen] = useState(false);
   const burstingRef = useRef(false);
-
   const formSessionKey =
     formMode === "create"
       ? "create"
       : formMode === "edit" && selectedId
         ? `edit:${selectedId}`
         : null;
-
-  const formSessionKeyRef = useRef(formSessionKey);
-
+  const formSessionKeyRef = useRef<string | null>(null);
   useEffect(() => {
-    if (!formSessionKey || formSessionKey === formSessionKeyRef.current) {
+    if (!formSessionKey) {
+      formSessionKeyRef.current = null;
       return;
     }
-
+    if (formSessionKey === formSessionKeyRef.current) {
+      return;
+    }
     formSessionKeyRef.current = formSessionKey;
-    setCurrentStep(0);
+    setCurrentStep(journeyInitialStep);
     setBurstMessage(null);
     setFinishing(false);
     setComposerOpen(false);
-  }, [formSessionKey]);
+  }, [formSessionKey, journeyInitialStep]);
 
   useEffect(() => {
     onJourneyStepChange(currentStep);
