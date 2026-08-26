@@ -684,8 +684,8 @@ export function DailyEntriesProvider({
     });
 
     clearDailyEntryDraft();
+    setJourneyInitialStep(0);
     journeyStepRef.current = 0;
-
     setFormError(null);
   }
 
