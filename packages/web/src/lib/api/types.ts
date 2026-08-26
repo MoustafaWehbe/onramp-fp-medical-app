@@ -21,6 +21,13 @@ export interface PaginationQuery {
   fetchAll?: boolean;
 }
 
+export interface CatalogPaginationQuery extends PaginationQuery {
+  sortBy?: "name" | "createdAt";
+  sortOrder?: "asc" | "desc";
+  dateFrom?: string;
+  dateTo?: string;
+}
+
 export interface SoftDeleteResponse {
   id: string;
   active: false;

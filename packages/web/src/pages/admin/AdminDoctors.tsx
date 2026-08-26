@@ -18,18 +18,36 @@ export function AdminDoctors() {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search, 300);
+   const [sortBy, setSortBy] =
+  useState<"name" | "createdAt">("name");
+  const [sortOrder, setSortOrder] =
+  useState<"asc" | "desc">("asc");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [specialty, setSpecialty] = useState("");
   const [phone, setPhone] = useState("");
 
-  const listQuery = useAdminDoctors(currentPage, debouncedSearch);
+  const listQuery = useAdminDoctors(
+    currentPage,
+    debouncedSearch,
+    sortBy,
+    sortOrder,
+    dateFrom,
+    dateTo,
+  );
   const createMutation = useCreateAdminDoctor();
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [debouncedSearch]);
+  }, [
+    debouncedSearch,
+    sortBy,
+    sortOrder,
+    dateFrom,
+    dateTo,]);
 
   function resetForm() {
     setName("");
@@ -41,6 +59,14 @@ export function AdminDoctors() {
   function closeCreate() {
     setCreateOpen(false);
     resetForm();
+  }
+    function clearFilters() {
+    setSearch("");
+    setSortBy("name");
+    setSortOrder("asc");
+    setDateFrom("");
+    setDateTo("");
+    setCurrentPage(1);
   }
 
   async function onCreateSubmit(event: FormEvent<HTMLFormElement>) {
@@ -96,6 +122,15 @@ export function AdminDoctors() {
       pagination={listQuery.data?.pagination ?? null}
       search={search}
       onSearchChange={setSearch}
+       sortBy={sortBy}
+      sortOrder={sortOrder}
+      onSortByChange={setSortBy}
+      onSortOrderChange={setSortOrder}
+      dateFrom={dateFrom}
+      dateTo={dateTo}
+      onDateFromChange={setDateFrom}
+      onDateToChange={setDateTo}
+      onClearFilters={clearFilters}
       onPageChange={setCurrentPage}
       createTitle={t("admin.catalogs.doctors.title")}
       createOpen={createOpen}

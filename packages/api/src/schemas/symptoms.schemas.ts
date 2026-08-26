@@ -17,6 +17,32 @@ export const createSymptomSchema = z.object({
   category: symptomCategorySchema,
   isCustom: z.boolean().optional().default(false),
 });
+const optionalDate = z
+  .string()
+  .trim()
+  .refine(
+    (value) => {
+      if (!value) return true;
+
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        return false;
+      }
+
+      const [year, month, day] = value.split("-").map(Number);
+      const date = new Date(Date.UTC(year, month - 1, day));
+
+      return (
+        date.getUTCFullYear() === year &&
+        date.getUTCMonth() === month - 1 &&
+        date.getUTCDate() === day
+      );
+    },
+    {
+      message: "Invalid date. Expected a valid YYYY-MM-DD date.",
+    },
+  )
+  .transform((value) => value || undefined)
+  .optional();
 
 export const listSymptomsQuerySchema = paginationQuerySchema.extend({
   search: z
@@ -24,6 +50,19 @@ export const listSymptomsQuerySchema = paginationQuerySchema.extend({
     .trim()
     .max(255, "Search must be at most 255 characters")
     .optional(),
+    
+    sortBy: z
+    .enum(["name", "createdAt"])
+    .optional()
+    .default("name"),
+
+  sortOrder: z
+    .enum(["asc", "desc"])
+    .optional()
+    .default("asc"),
+
+    dateFrom: optionalDate,
+    dateTo: optionalDate,
 });
 
 export const searchSymptomsOnlineQuerySchema = z.object({

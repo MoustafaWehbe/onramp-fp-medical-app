@@ -14,6 +14,10 @@ import { buildLocalizedNameSearch } from "../lib/localized-search";
 export interface ListSymptomsInput extends PaginationInput {
   search?: string;
   language?: AppLanguage;
+  sortBy?: "name" | "createdAt";
+  sortOrder?: "asc" | "desc";
+  dateFrom?: string;
+  dateTo?: string;
 }
 
 export interface CreateSymptomInput {
@@ -33,19 +37,49 @@ function visibilityWhere(language: AppLanguage): WhereOptions {
   };
 }
 
+function buildDateWhere(dateFrom?: string, dateTo?: string) {
+  if (!dateFrom && !dateTo) return undefined;
+
+  const createdAt: Record<symbol, Date> = {};
+
+  if (dateFrom) {
+    createdAt[Op.gte] = new Date(`${dateFrom}T00:00:00.000Z`);
+  }
+
+  if (dateTo) {
+    createdAt[Op.lte] = new Date(`${dateTo}T23:59:59.999Z`);
+  }
+
+  return { createdAt };
+}
+
 export class SymptomCatalogService {
   async list(input: ListSymptomsInput) {
     const language = input.language ?? "en";
     const { currentPage, pageSize, offset, limit } = getPaginationParams(input);
+    
     const searchWhere = await buildLocalizedNameSearch(
       language,
       input.search,
       ["category"],
     );
+    const dateWhere = buildDateWhere(input.dateFrom, input.dateTo);
 
-    const where: WhereOptions = searchWhere
-      ? { [Op.and]: [visibilityWhere(language), searchWhere] }
-      : visibilityWhere(language);
+    const symptoms: WhereOptions[] = [visibilityWhere(language)];
+     if (searchWhere) {
+      symptoms.push(searchWhere);
+    }
+
+    if (dateWhere) {
+      symptoms.push(dateWhere);
+    }
+
+    const where: WhereOptions = {
+      [Op.and]: symptoms,
+    };
+
+    const sortBy = input.sortBy ?? "name";
+    const sortOrder = input.sortOrder ?? "asc";
 
     const { count, rows } = await SymptomCatalog.findAndCountAll({
       attributes: [
@@ -59,7 +93,10 @@ export class SymptomCatalogService {
         "createdAt",
       ],
       where,
-      order: [["name", "ASC"]],
+       order: [
+      [sortBy, sortOrder === "asc" ? "ASC" : "DESC"],
+      ["id", "ASC"],
+    ],
       limit,
       offset,
     });

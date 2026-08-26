@@ -11,6 +11,10 @@ import { createError } from "../middleware/error-handler";
 
 export interface ListMedicationsInput extends PaginationInput {
   search?: string;
+  sortBy?: "name" | "createdAt";
+  sortOrder?: "asc" | "desc";
+  dateFrom?: string;
+  dateTo?: string;
 }
 
 export interface CreateMedicationInput {
@@ -36,17 +40,57 @@ function buildSearchWhere(search?: string) {
     ],
   };
 }
+function buildDateWhere(dateFrom?: string, dateTo?: string) {
+  if (!dateFrom && !dateTo) return undefined;
+
+  const createdAt: Record<symbol, Date> = {};
+
+  if (dateFrom) {
+    createdAt[Op.gte] = new Date(`${dateFrom}T00:00:00.000Z`);
+  }
+
+  if (dateTo) {
+    createdAt[Op.lte] = new Date(`${dateTo}T23:59:59.999Z`);
+  }
+
+  return { createdAt };
+}
 
 export class MedicationService {
   async list(input: ListMedicationsInput) {
     const { currentPage, pageSize, offset, limit } = getPaginationParams(input);
 
+    const searchWhere = buildSearchWhere(input.search);
+    const dateWhere = buildDateWhere(
+      input.dateFrom,
+      input.dateTo,
+    );
+
+    const medications: WhereOptions[] = [];
+     if (searchWhere) {
+    medications.push(searchWhere);
+  }
+
+  if (dateWhere) {
+    medications.push(dateWhere);
+  }
+
+  const where: WhereOptions =
+    medications.length > 0
+      ? { [Op.and]: medications }
+      : {};
+
+  const sortBy = input.sortBy ?? "name";
+  const sortOrder = input.sortOrder ?? "asc";
     const { count, rows } = await Medication.findAndCountAll({
       attributes: ["id", "name", "strength", "category", "createdAt"],
-      where: buildSearchWhere(input.search),
+      where,
       order: [
-        ["name", "ASC"],
-        ["strength", "ASC"],
+        [
+          sortBy,
+          sortOrder === "asc" ? "ASC" : "DESC",
+        ],
+        ["id", "ASC"],
       ],
       limit,
       offset,

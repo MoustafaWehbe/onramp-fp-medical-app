@@ -4,7 +4,7 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
-import { Database, Plus, Search } from "lucide-react";
+import { Database, Plus, Search,X } from "lucide-react";
 import { isAxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 import type { Pagination as ApiPagination } from "../../lib/api/types";
@@ -45,6 +45,17 @@ interface CatalogManagerProps<T> {
   onCreateSubmit: (event: FormEvent<HTMLFormElement>) => void;
   emptyLabel: string;
   getRowKey: (item: T) => string;
+
+  sortBy: "name" | "createdAt";
+  sortOrder: "asc" | "desc";
+  onSortByChange: (value: "name" | "createdAt") => void;
+  onSortOrderChange: (value: "asc" | "desc") => void;
+
+  dateFrom: string;
+  dateTo: string;
+  onDateFromChange: (value: string) => void;
+  onDateToChange: (value: string) => void;
+  onClearFilters: () => void;
 }
 
 export function getCatalogErrorMessage(
@@ -92,6 +103,16 @@ export function CatalogManager<T>({
   onCreateSubmit,
   emptyLabel,
   getRowKey,
+  sortBy,
+  sortOrder,
+  onSortByChange,
+  onSortOrderChange,
+  dateFrom,
+  dateTo,
+  onDateFromChange,
+  onDateToChange,
+  onClearFilters
+
 }: CatalogManagerProps<T>) {
   const totalCount = pagination?.totalCount ?? 0;
   const { t } = useTranslation();
@@ -120,6 +141,83 @@ export function CatalogManager<T>({
           className="pl-9"
         />
       </div>
+       
+  <div className="flex flex-col gap-3 lg:flex-row lg:items-end">
+   <div className="space-y-1">
+    <label  htmlFor="admin-sort-by" className="text-sm font-medium">
+      {t("admin.sortBy")}
+    </label>
+
+    <select
+      id="admin-sort-by"
+      value={sortBy}
+      onChange={(event) =>
+        onSortByChange(
+          event.target.value as "name" | "createdAt",
+        )
+      }
+      className="h-10 rounded-md border bg-background px-3 text-sm"
+    >
+      <option value="name">{t("admin.fields.name")}</option>
+      <option value="createdAt">{t("admin.createdAt")}</option>
+    </select>
+  </div>
+
+  <div className="space-y-1">
+    <label htmlFor="admin-sort-order" className="text-sm font-medium">
+      {t("admin.sortOrder")}
+    </label>
+
+    <select
+      id="admin-sort-order"
+      value={sortOrder}
+      onChange={(event) =>
+        onSortOrderChange(
+          event.target.value as "asc" | "desc",
+        )
+      }
+      className="h-10 rounded-md border bg-background px-3 text-sm"
+    >
+      <option value="asc">{t("admin.ascending")}</option>
+      <option value="desc">{t("admin.descending")}</option>
+    </select>
+  </div>
+
+  <div className="space-y-1">
+    <label htmlFor="admin-date-from" className="text-sm font-medium">
+      {t("admin.dateFrom")}
+    </label>
+
+    <Input
+      id="admin-date-from"
+      type="date"
+      value={dateFrom}
+      onChange={(event) => onDateFromChange(event.target.value)}
+    />
+  </div>
+
+  <div className="space-y-1">
+    <label htmlFor="admin-date-to" className="text-sm font-medium">
+      {t("admin.dateTo")}
+    </label>
+
+    <Input
+      id="admin-date-to"
+      type="date"
+      value={dateTo}
+      onChange={(event) => onDateToChange(event.target.value)}
+    />
+  </div>
+
+  <Button
+    type="button"
+    variant="outline"
+    onClick={onClearFilters}
+  >
+    <X className="mr-1.5 h-4 w-4" />
+    {t("admin.clearFilters")}
+  </Button>
+</div>
 
       {(isError || errorMessage) && (
         <p role="alert" className="rounded-xl border border-destructive/20 bg-destructive/10 px-3.5 py-3 text-sm text-destructive">

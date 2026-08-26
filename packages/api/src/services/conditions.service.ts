@@ -1,6 +1,6 @@
 import { buildPaginatedResponse, getPaginationParams, PaginationInput } from "src/lib/pagination";
 import { searchConditionsFromApi } from "../lib/catalog-condition-api";
-import { Sequelize, UniqueConstraintError} from "sequelize";
+import { Op,Sequelize, UniqueConstraintError,type WhereOptions} from "sequelize";
 import { ConditionCatalog } from "src/models/catalogs/ConditionCatalog";
 import { createError } from "src/middleware/error-handler";
 import type { AppLanguage } from "../lib/app-language";
@@ -10,6 +10,26 @@ import { buildLocalizedNameSearch } from "../lib/localized-search";
 export interface ListConditionsInput extends PaginationInput {
   search?: string;
   language?: AppLanguage;
+  sortBy?: "name" | "createdAt";
+  sortOrder?: "asc" | "desc";
+  dateFrom?: string;
+  dateTo?: string;
+}
+
+function buildDateWhere(dateFrom?: string, dateTo?: string) {
+  if (!dateFrom && !dateTo) return undefined;
+
+  const createdAt: Record<symbol, Date> = {};
+
+  if (dateFrom) {
+    createdAt[Op.gte] = new Date(`${dateFrom}T00:00:00.000Z`);
+  }
+
+  if (dateTo) {
+    createdAt[Op.lte] = new Date(`${dateTo}T23:59:59.999Z`);
+  }
+
+  return { createdAt };
 }
 
 export interface CreateConditionInput {
@@ -22,13 +42,44 @@ export class ConditionService {
   async list(input: ListConditionsInput) {
       const language = input.language ?? "en";
       const { currentPage, pageSize, offset, limit } = getPaginationParams(input);
-  
+    const searchWhere = await buildLocalizedNameSearch(
+        language,
+        input.search,
+      );
+
+      const dateWhere = buildDateWhere(
+        input.dateFrom,
+        input.dateTo,
+      );
+
+      const conditions: WhereOptions[] = [];
+
+      if (searchWhere) {
+        conditions.push(searchWhere);
+      }
+
+      if (dateWhere) {
+        conditions.push(dateWhere);
+      }
+
+      const where: WhereOptions =
+        conditions.length > 0
+          ? { [Op.and]: conditions }
+          : {};
+
+      const sortBy = input.sortBy ?? "name";
+      const sortOrder = input.sortOrder ?? "asc";
+
       const { count, rows } = await ConditionCatalog.findAndCountAll({
         attributes: ["id", "name", "nameAr", "createdAt"],
-        where: await buildLocalizedNameSearch(language, input.search),
+        where,
         order: [
-          ["name", "ASC"],
+        [
+          sortBy,
+          sortOrder === "asc" ? "ASC" : "DESC",
         ],
+        ["id", "ASC"],
+      ],
         limit,
         offset,
       });
