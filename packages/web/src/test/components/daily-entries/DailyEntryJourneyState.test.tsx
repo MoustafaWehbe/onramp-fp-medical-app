@@ -113,9 +113,7 @@ function renderApp() {
 }
 
 async function waitForList() {
-  await waitFor(() => {
-    expect(screen.queryByText("dailyEntries.page.addEntry")).not.toBeInTheDocument();
-  });
+  await screen.findByText("dailyEntries.page.addEntry");
 }
 
 async function fillStepOne(user: ReturnType<typeof userEvent.setup>) {
