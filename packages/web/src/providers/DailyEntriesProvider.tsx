@@ -1,5 +1,6 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -67,6 +68,12 @@ import {
   type DailyEntry,
   type DailyEntryFormValues,
 } from "../lib/daily-entries/daily-entries-exports";
+import {
+  clearDailyEntryDraft,
+  isEmptyDailyEntryValues,
+  readDailyEntryDraft,
+  writeDailyEntryDraft,
+} from "../lib/daily-entries/draft";
 import type { Pagination } from "../lib/api/types";
 
 import { useAuth } from "../hooks/useAuth";
@@ -150,6 +157,9 @@ interface DailyEntriesContextValue {
   closePanel: () => void;
   cancelForm: () => void;
 
+  journeyInitialStep: number;
+  onJourneyStepChange: (step: number) => void;
+
   submitForm: (values: DailyEntryFormValues) => Promise<void>;
   remove: (id: string) => Promise<void>;
 }
@@ -204,6 +214,11 @@ export function DailyEntriesProvider({
 
   const [formError, setFormError] =
     useState<string | null>(null);
+
+  const [journeyInitialStep, setJourneyInitialStep] =
+    useState(0);
+
+  const journeyStepRef = useRef(0);
 
   const [listError, setListError] =
     useState<string | null>(null);
@@ -285,6 +300,7 @@ export function DailyEntriesProvider({
     handleSubmit,
     setValue,
     watch,
+    getValues,
     reset,
     control,
     trigger,
@@ -372,11 +388,74 @@ export function DailyEntriesProvider({
       ? panel.kind
       : null;
 
+  const formSessionKey =
+    panel.kind === "create"
+      ? "create"
+      : panel.kind === "edit"
+        ? `edit:${panel.entry.id}`
+        : null;
+
+  const formSessionKeyRef =
+    useRef<string | null>(null);
+
+  const resumedCreateDraftRef =
+    useRef(false);
+
+  // Resume an interrupted create journey (e.g. the user followed the
+  // "add symptoms to your profile" link and navigated away mid-form).
   useEffect(() => {
+    if (resumedCreateDraftRef.current) {
+      return;
+    }
+
+    const draft = readDailyEntryDraft();
+
+    if (!draft) {
+      return;
+    }
+
+    resumedCreateDraftRef.current = true;
+
+    clearDailyEntryDraft();
+
+    reset(draft.values);
+    setJourneyInitialStep(draft.step);
+    journeyStepRef.current = draft.step;
+
+    setPanel({
+      kind: "create",
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!formSessionKey) {
+      formSessionKeyRef.current = null;
+
+      return;
+    }
+
+    if (
+      formSessionKey ===
+      formSessionKeyRef.current
+    ) {
+      return;
+    }
+
+    formSessionKeyRef.current =
+      formSessionKey;
+
     if (panel.kind === "create") {
-      reset(
-        emptyDailyEntryFormValues(),
-      );
+      if (resumedCreateDraftRef.current) {
+        // Values/step were restored by the resume effect; do not wipe them.
+        resumedCreateDraftRef.current = false;
+      } else {
+        reset(
+          emptyDailyEntryFormValues(),
+        );
+
+        setJourneyInitialStep(0);
+        journeyStepRef.current = 0;
+      }
 
       setFormError(null);
 
@@ -384,27 +463,78 @@ export function DailyEntriesProvider({
     }
 
     if (panel.kind === "edit") {
-      if (detailQuery.data) {
-        reset(
-          toDailyEntryFormValues(
-            detailQuery.data,
-          ),
-        );
-      } else {
-        reset(
-          toDailyEntryFormValues(
-            panel.entry,
-          ),
-        );
-      }
+      const source =
+        detailQuery.data &&
+        detailQuery.data.id ===
+          panel.entry.id
+          ? detailQuery.data
+          : panel.entry;
+
+      reset(
+        toDailyEntryFormValues(
+          source,
+        ),
+      );
 
       setFormError(null);
     }
   }, [
+    formSessionKey,
     panel,
     detailQuery.data,
     reset,
   ]);
+
+  useEffect(() => {
+    if (panel.kind !== "create") {
+      return;
+    }
+
+    const subscription = watch((values) => {
+      const draft: DailyEntryFormValues = {
+        ...emptyDailyEntryFormValues(),
+        ...(values as DailyEntryFormValues),
+      };
+
+      if (
+        isEmptyDailyEntryValues(draft)
+      ) {
+        return;
+      }
+
+      writeDailyEntryDraft({
+        values: draft,
+        step: journeyStepRef.current,
+      });
+    });
+
+    return () => subscription.unsubscribe();
+  }, [
+    panel.kind,
+    watch,
+  ]);
+
+  const handleJourneyStepChange = useCallback(
+    (step: number) => {
+      journeyStepRef.current = step;
+
+      if (panelRef.current.kind !== "create") {
+        return;
+      }
+
+      const values = getValues() as DailyEntryFormValues;
+
+      if (isEmptyDailyEntryValues(values)) {
+        return;
+      }
+
+      writeDailyEntryDraft({
+        values,
+        step,
+      });
+    },
+    [getValues],
+  );
 
   useEffect(() => {
     if (!pagination) {
@@ -552,6 +682,9 @@ export function DailyEntriesProvider({
     setPanel({
       kind: "closed",
     });
+
+    clearDailyEntryDraft();
+    journeyStepRef.current = 0;
 
     setFormError(null);
   }
@@ -811,6 +944,11 @@ async function submitForm(
 
         cancelForm,
 
+        journeyInitialStep,
+
+        onJourneyStepChange:
+          handleJourneyStepChange,
+
         submitForm,
         remove,
       }),
@@ -859,6 +997,10 @@ async function submitForm(
         isFormBusy,
 
         removeEntry.isPending,
+
+        journeyInitialStep,
+
+        handleJourneyStepChange,
 
         symptoms,
         medications,

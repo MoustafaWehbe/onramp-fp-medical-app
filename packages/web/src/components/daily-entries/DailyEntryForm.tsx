@@ -39,7 +39,10 @@ export function DailyEntryForm() {
     formError,
     isFormBusy,
     formMode,
+    selectedId,
     cancelForm,
+    journeyInitialStep,
+    onJourneyStepChange,
     symptoms,
     medications,
     conditions,
@@ -81,18 +84,36 @@ export function DailyEntryForm() {
     remove: removeDoctorVisit,
   } = useFieldArray({ control, name: "doctorVisits" });
 
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(journeyInitialStep);
   const [burstMessage, setBurstMessage] = useState<string | null>(null);
   const [finishing, setFinishing] = useState(false);
   const [composerOpen, setComposerOpen] = useState(false);
   const burstingRef = useRef(false);
 
+  const formSessionKey =
+    formMode === "create"
+      ? "create"
+      : formMode === "edit" && selectedId
+        ? `edit:${selectedId}`
+        : null;
+
+  const formSessionKeyRef = useRef(formSessionKey);
+
   useEffect(() => {
+    if (!formSessionKey || formSessionKey === formSessionKeyRef.current) {
+      return;
+    }
+
+    formSessionKeyRef.current = formSessionKey;
     setCurrentStep(0);
     setBurstMessage(null);
     setFinishing(false);
     setComposerOpen(false);
-  }, [formMode]);
+  }, [formSessionKey]);
+
+  useEffect(() => {
+    onJourneyStepChange(currentStep);
+  }, [currentStep, onJourneyStepChange]);
 
   useEffect(() => {
     setComposerOpen(false);
