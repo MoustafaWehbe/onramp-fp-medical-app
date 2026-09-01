@@ -45,8 +45,11 @@ describe("ConditionService.list", () => {
 
     expect(mockConditionCatalog.findAndCountAll).toHaveBeenCalledWith({
       attributes: ["id", "name", "nameAr", "createdAt"],
-      where: undefined,
-      order: [["name", "ASC"]],
+      where: {},
+      order: [
+        ["name", "ASC"],
+        ["id", "ASC"],
+      ],
       limit: 10,
       offset: 0,
     });
@@ -63,7 +66,15 @@ describe("ConditionService.list", () => {
 
     expect(mockConditionCatalog.findAndCountAll).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { [Op.or]: [{ name: { [Op.iLike]: "%flu%" } }] },
+        where: {
+        [Op.and]: [
+          {
+            [Op.or]: [
+              { name: { [Op.iLike]: "%flu%" } },
+            ],
+          },
+        ],
+      },
         limit: 5,
         offset: 0,
       }),

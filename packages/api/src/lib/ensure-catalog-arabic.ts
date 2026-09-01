@@ -83,8 +83,12 @@ async function persist(
   id: string,
   fields: { nameAr?: string; categoryAr?: string },
 ): Promise<void> {
-  const Model = kind === "condition" ? ConditionCatalog : SymptomCatalog;
-  await Model.update(fields, { where: { id } });
+  if (kind === "condition") {
+    await ConditionCatalog.update(fields, { where: { id } });
+    return;
+  }
+
+  await SymptomCatalog.update(fields, { where: { id } });
 }
 
 export async function ensureCatalogArabic<T>(

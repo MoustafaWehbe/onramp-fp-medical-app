@@ -86,6 +86,8 @@ describe("MedicationsProvider selection validation", () => {
         medication: {
           id: MEDICATION_ID,
           name: "Ibuprofen",
+          strength: "500mg",
+          category: "Pain Relief",
           createdAt: "2024-01-01T00:00:00.000Z",
         },
       });

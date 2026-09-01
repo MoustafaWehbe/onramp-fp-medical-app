@@ -66,6 +66,10 @@ describe("GET /api/clinics", () => {
       currentPage: 1,
       pageSize: 10,
       search: undefined,
+      dateFrom: undefined,
+      dateTo: undefined,
+      sortBy: "name",
+      sortOrder: "asc",
     });
   });
 
@@ -89,6 +93,10 @@ describe("GET /api/clinics", () => {
       currentPage: 2,
       pageSize: 5,
       search: "medical",
+      dateFrom: undefined,
+      dateTo: undefined,
+      sortBy: "name",
+      sortOrder: "asc",
     });
   });
 

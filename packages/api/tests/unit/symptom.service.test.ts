@@ -55,10 +55,20 @@ describe("SymptomCatalogService.list", () => {
         "createdAt",
       ],
       where: {
-        retiredAt: null,
-        [Op.or]: [{ isCustom: false }, { isCustom: true, language: "en" }],
+        [Op.and]: [
+          {
+            retiredAt: null,
+            [Op.or]: [
+              { isCustom: false },
+              {
+                isCustom: true,
+                language: "en",
+              },
+            ],
+          },
+        ],
       },
-      order: [["name", "ASC"]],
+      order: [["name", "ASC"],["id", "ASC"],],
       limit: 10,
       offset: 0,
     });

@@ -38,12 +38,11 @@ describe("ClinicService.list", () => {
 
     expect(mockClinic.findAndCountAll).toHaveBeenCalledWith({
       attributes: ["id", "name", "address", "phone", "createdAt"],
-      where: undefined,
       order: [
-        ["name", "ASC"],
-        ["address", "ASC"],
-        ["id", "ASC"],
-      ],
+  ["name", "ASC"],
+  ["id", "ASC"],
+],
+where: {},
       limit: 10,
       offset: 0,
     });
@@ -60,11 +59,15 @@ describe("ClinicService.list", () => {
     expect(mockClinic.findAndCountAll).toHaveBeenCalledWith(
       expect.objectContaining({
         where: {
+           [Op.and]: [
+            {
           [Op.or]: [
             { name: { [Op.iLike]: "%medical%" } },
             { address: { [Op.iLike]: "%medical%" } },
             { phone: { [Op.iLike]: "%medical%" } },
           ],
+        },
+      ],
         },
         limit: 5,
         offset: 5,

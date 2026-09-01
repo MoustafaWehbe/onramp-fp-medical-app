@@ -119,7 +119,6 @@ describe("GET /api/profile/conditions/:id/symptoms", () => {
       userConditionId: CONDITION_ID,
       currentPage: 1,
       pageSize: 10,
-    
       language: "en",
     });
   });

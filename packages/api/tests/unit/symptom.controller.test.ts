@@ -65,7 +65,10 @@ describe("GET /api/catalog/symptoms", () => {
       currentPage: 1,
       pageSize: 10,
       search: undefined,
-    
+      dateFrom: undefined,
+      dateTo: undefined,
+      sortBy: "name",
+      sortOrder: "asc",
       language: "en",
     });
   });
@@ -90,7 +93,10 @@ describe("GET /api/catalog/symptoms", () => {
       currentPage: 2,
       pageSize: 5,
       search: "Headache",
-    
+      dateFrom: undefined,
+      dateTo: undefined,
+      sortBy: "name",
+      sortOrder: "asc",
       language: "en",
     });
   });

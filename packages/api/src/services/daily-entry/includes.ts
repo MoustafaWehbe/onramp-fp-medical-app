@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, type Includeable } from "sequelize";
 import {
   Clinic,
   ConditionCatalog,
@@ -16,7 +16,7 @@ import {
   UserSymptom,
 } from "../../models";
 
-export function entryIncludes() {
+export function entryIncludes(): Includeable[] {
   return [
     {
       model: EntrySymptom,

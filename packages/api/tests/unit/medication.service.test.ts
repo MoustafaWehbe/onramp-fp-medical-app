@@ -55,11 +55,11 @@ describe("MedicationService.list", () => {
 
     expect(mockMedication.findAndCountAll).toHaveBeenCalledWith({
       attributes: ["id", "name", "strength", "category", "createdAt"],
-      where: undefined,
       order: [
-        ["name", "ASC"],
-        ["strength", "ASC"],
-      ],
+      ["name", "ASC"],
+      ["id", "ASC"],
+    ],
+    where: {},
       limit: 10,
       offset: 0,
     });
@@ -74,10 +74,14 @@ describe("MedicationService.list", () => {
     expect(mockMedication.findAndCountAll).toHaveBeenCalledWith(
       expect.objectContaining({
         where: {
-          [Op.or]: [
-            { name: { [Op.iLike]: "%aspirin%" } },
-            { strength: { [Op.iLike]: "%aspirin%" } },
-            { category: { [Op.iLike]: "%aspirin%" } },
+            [Op.and]: [
+            {
+              [Op.or]: [
+                { name: { [Op.iLike]: "%aspirin%" } },
+                { strength: { [Op.iLike]: "%aspirin%" } },
+                { category: { [Op.iLike]: "%aspirin%" } },
+              ],
+            },
           ],
         },
         limit: 5,

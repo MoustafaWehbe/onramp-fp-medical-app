@@ -74,7 +74,10 @@ describe("GET /api/conditions", () => {
       currentPage: 1,
       pageSize: 10,
       search: undefined,
-    
+      dateFrom: undefined,
+      dateTo: undefined,
+      sortBy: "name",
+      sortOrder: "asc",
       language: "en",
     });
   });
@@ -99,7 +102,11 @@ describe("GET /api/conditions", () => {
       currentPage: 2,
       pageSize: 5,
       search: "hyper",
-    
+      dateFrom: undefined,
+      dateTo: undefined,
+      sortBy: "name",
+      sortOrder: "asc",
+
       language: "en",
     });
   });

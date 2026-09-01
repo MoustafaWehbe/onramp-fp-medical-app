@@ -42,7 +42,7 @@ export async function reconcileConditions(
       await row.update(
         {
           status: row.status === "resolved" ? "resolved" : "active",
-          notes: condition.notes,
+          notes: condition.notes ?? undefined,
         },
         { transaction },
       );

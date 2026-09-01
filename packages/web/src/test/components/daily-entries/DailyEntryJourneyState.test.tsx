@@ -112,10 +112,6 @@ function renderApp() {
   return { client, unmount: rendered.unmount };
 }
 
-async function waitForList() {
-  await screen.findByText("dailyEntries.page.addEntry");
-}
-
 async function fillStepOne(user: ReturnType<typeof userEvent.setup>) {
   const journal = await screen.findByLabelText("dailyEntries.journey.journalNotes");
   await user.clear(journal);
@@ -142,7 +138,6 @@ describe("Daily Entry journey state persistence", () => {
   it("create mode: keeps step 1 values and current step after adding a symptom", async () => {
     const user = userEvent.setup();
     renderApp();
-    await waitForList();
 
     await user.click(screen.getByRole("button", { name: "open-create" }));
     await fillStepOne(user);
@@ -165,7 +160,6 @@ describe("Daily Entry journey state persistence", () => {
   it("create journey resumes (values + step) after leaving to add profile symptoms and returning", async () => {
     const user = userEvent.setup();
     const first = renderApp();
-    await waitForList();
 
     await user.click(screen.getByRole("button", { name: "open-create" }));
     await fillStepOne(user);
@@ -213,7 +207,6 @@ describe("Daily Entry journey state persistence", () => {
   it("edit mode: populates the entry once per session and mid-session refetches do not wipe edits", async () => {
     const user = userEvent.setup();
     const { client } = renderApp();
-    await waitForList();
 
     await user.click(screen.getByRole("button", { name: "open-edit" }));
 
