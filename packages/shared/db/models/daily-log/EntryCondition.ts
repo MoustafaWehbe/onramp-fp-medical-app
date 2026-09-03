@@ -7,7 +7,7 @@ export interface EntryConditionAttributes {
   entryId: string;
   userConditionId: string;
   status: ConditionStatus;
-  notes?: string;
+  notes?: string|null;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -25,7 +25,7 @@ export class EntryCondition
   declare entryId: string;
   declare userConditionId: string;
   declare status: ConditionStatus;
-  declare notes: string | undefined;
+  declare notes: string | null |undefined;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
 
